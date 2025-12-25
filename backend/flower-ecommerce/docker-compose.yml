@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  flower-app:
+    build: .
+    container_name: flower-ecommerce
+    ports:
+      - "8080:8080"
+    environment:
+      # Supabase Database
+      - SUPABASE_DB_URL=${jdbc:postgresql://aws-1-ap-south-1.pooler.supabase.com:5432/postgres?sslmode=require}
+      - SUPABASE_DB_USERNAME=${postgres.wauemillpmbgdyawbyfl}
+      - SUPABASE_DB_PASSWORD=${HollandFlowers@2025}
+
+      # Supabase Storage
+      - SUPABASE_URL=${https://lwnzopxexpygsttziwlu.supabase.co}
+      - SUPABASE_ANON_KEY=${eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3bnpvcHhleHB5Z3N0dHppd2x1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYzMDc4MTQsImV4cCI6MjA4MTg4MzgxNH0.MooLsSzvmeZ4ACXNPhICa-kfpYIp_XvayrEklYFIVxw}
+      - SUPABASE_SERVICE_KEY=${eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3bnpvcHhleHB5Z3N0dHppd2x1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjMwNzgxNCwiZXhwIjoyMDgxODgzODE0fQ.e1AYP3MV_BJ-lD5hEMuQQO5Kt51tUm7Q2uqdqajWGPg}
+      - SUPABASE_STORAGE_BUCKET=${SUPABASE_STORAGE_BUCKET:-holland-flowers}
+
+      # JWT
+      - JWT_SECRET=${aG9sbGFuZGZsb3dlcnNzZWNyZXRrZXlmb3Jqd3R0b2tlbnNpZ25pbmcyMDI1}
+      - JWT_EXPIRATION=${JWT_EXPIRATION:-86400000}
+
+      # Email
+      - MAIL_HOST=${MAIL_HOST:-smtp.gmail.com}
+      - MAIL_PORT=${MAIL_PORT:-587}
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+
+      # Hesabe Payment Gateway
+      - HESABE_MERCHANT_CODE=${129562425}
+      - HESABE_ACCESS_CODE=${70d835f1-e0e5-473d-8a37-8b1e67bfc36d}
+      - HESABE_SECRET_KEY=${nDreP2JpOqEkaEEO4K7a0x9vXdWAGyL3}
+      - HESABE_IV_KEY=${OqEkaEEO4K7a0x9v}
+      - HESABE_BASE_URL=${HESABE_BASE_URL:-https://api.hesabe.com}
+      - HESABE_CALLBACK_URL=${HESABE_CALLBACK_URL}
+      # Payment redirect URLs (flowerskw.com)
+      - HESABE_SUCCESS_URL=${HESABE_SUCCESS_URL:-https://www.flowerskw.com/payment/success}
+      - HESABE_FAILURE_URL=${HESABE_FAILURE_URL:-https://www.flowerskw.com/payment/failure}
+
+      # OTP Configuration
+      - OTP_EXPIRY_MINUTES=${OTP_EXPIRY_MINUTES:-5}
+      - OTP_LENGTH=${OTP_LENGTH:-4}
+
+      # Spring Profile (optional)
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-default}
+
+    restart: unless-stopped
+
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/api/v1/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+    networks:
+      - flower-network
+
+networks:
+  flower-network:
+    driver: bridge
