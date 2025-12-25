@@ -1,0 +1,672 @@
+/* ============================================
+   RAMADAN SPECIAL - FILTER SIDEBAR LAYOUT
+   Emerald/Gold Theme (#10b981, #fbbf24)
+   ============================================ */
+
+.ramadan-page {
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+.ramadan-page.rtl {
+  direction: rtl;
+}
+
+.ramadan-page .container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* HERO BANNER */
+.ramadan-page .hero-banner {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 50%, #ecfdf5 100%);
+  padding: 50px 0;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 2px solid #a7f3d0;
+}
+
+.ramadan-page .hero-bg-decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.ramadan-page .floating-icon {
+  position: absolute;
+  font-size: 40px;
+  opacity: 0.15;
+  animation: floatRamadan 15s ease-in-out infinite;
+}
+
+.ramadan-page .float-1 { top: 10%; left: 5%; }
+.ramadan-page .float-2 { top: 60%; right: 8%; font-size: 35px; animation-delay: -5s; }
+.ramadan-page .float-3 { bottom: 15%; left: 15%; font-size: 30px; animation-delay: -10s; }
+
+@keyframes floatRamadan {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(10deg); }
+}
+
+.ramadan-page .hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.ramadan-page .hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 22px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-radius: 50px;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 18px;
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.35);
+}
+
+.ramadan-page .hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 48px;
+  font-weight: 600;
+  color: #065f46;
+  margin: 0 0 14px;
+  line-height: 1.1;
+}
+
+.ramadan-page.rtl .hero-title {
+  font-family: 'Amiri', serif;
+  font-size: 42px;
+}
+
+.ramadan-page .hero-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  color: #047857;
+  margin: 0 auto;
+  line-height: 1.7;
+  max-width: 600px;
+}
+
+/* MAIN CONTENT */
+.ramadan-page .main-content {
+  padding: 40px 0 80px;
+}
+
+.ramadan-page .content-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 50px;
+  align-items: start;
+}
+
+/* FILTERS SIDEBAR */
+.ramadan-page .filters-sidebar {
+  position: sticky;
+  top: 20px;
+}
+
+.ramadan-page .filters-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.ramadan-page .filters-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2d2d2d;
+  margin: 0;
+}
+
+.ramadan-page .clear-filters {
+  background: none;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #10b981;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.ramadan-page .filter-section {
+  border-bottom: 1px solid #f0eded;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.ramadan-page .filter-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2d2d2d;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.ramadan-page .filter-header svg {
+  transition: transform 0.3s ease;
+  color: #999;
+}
+
+.ramadan-page .filter-header.open svg {
+  transform: rotate(180deg);
+}
+
+.ramadan-page .filter-content {
+  margin-top: 18px;
+}
+
+.ramadan-page .price-inputs {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ramadan-page .price-input-group {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  overflow: hidden;
+  flex: 1;
+}
+
+.ramadan-page .price-input-group .currency-label {
+  padding: 10px 12px;
+  background: #fafafa;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #999;
+  border-right: 1px solid #e5e5e5;
+}
+
+.ramadan-page .price-input-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #2d2d2d;
+  outline: none;
+}
+
+.ramadan-page .price-separator {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #999;
+}
+
+.ramadan-page .price-hint {
+  margin: 14px 0 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #999;
+}
+
+.ramadan-page .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+.ramadan-page .checkbox-label:hover {
+  color: #10b981;
+}
+
+.ramadan-page .checkbox-label input[type="checkbox"] {
+  display: none;
+}
+
+.ramadan-page .checkbox-label .checkmark {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.ramadan-page .checkbox-label input:checked + .checkmark {
+  background: #10b981;
+  border-color: #10b981;
+}
+
+.ramadan-page .checkbox-label input:checked + .checkmark::after {
+  content: '';
+  width: 5px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-bottom: 2px;
+}
+
+.ramadan-page .checkbox-label .label-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #4a4a4a;
+}
+
+/* PRODUCTS MAIN */
+.ramadan-page .products-main {
+  min-height: 500px;
+}
+
+.ramadan-page .products-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0eded;
+}
+
+.ramadan-page .items-count {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.ramadan-page .toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.ramadan-page .sort-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ramadan-page .sort-dropdown label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #666;
+}
+
+.ramadan-page .sort-dropdown select {
+  padding: 8px 32px 8px 14px;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #2d2d2d;
+  background: white;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  outline: none;
+}
+
+.ramadan-page .sort-dropdown select:focus {
+  border-color: #10b981;
+}
+
+.ramadan-page .view-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.ramadan-page .view-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  transition: all 0.2s ease;
+}
+
+.ramadan-page .view-btn.active {
+  background: white;
+  color: #10b981;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* PRODUCTS GRID */
+.ramadan-page .products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.ramadan-page .products-grid.list {
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+/* PRODUCT CARD */
+.ramadan-page .product-card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  animation: cardFadeIn 0.5s ease forwards;
+  opacity: 0;
+  border: 1px solid #ecfdf5;
+}
+
+@keyframes cardFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.ramadan-page .product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(16, 185, 129, 0.12);
+  border-color: #a7f3d0;
+}
+
+.ramadan-page .products-grid.list .product-card {
+  flex-direction: row;
+}
+
+.ramadan-page .products-grid.list .product-image-wrapper {
+  width: 300px;
+  height: 300px;
+  flex-shrink: 0;
+}
+
+.ramadan-page .products-grid.list .product-details {
+  flex: 1;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.ramadan-page .discount-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 10;
+  padding: 8px 14px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 50px;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+}
+
+.ramadan-page.rtl .discount-badge {
+  left: auto;
+  right: 14px;
+}
+
+.ramadan-page .product-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #ecfdf5 0%, #ecfdf5 100%);
+}
+
+.ramadan-page .product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  padding: 20px;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ramadan-page .product-card:hover .product-image {
+  transform: scale(1.08);
+}
+
+.ramadan-page .product-details {
+  padding: 18px 16px 16px;
+  background: #ffffff;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.ramadan-page .product-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2d2d2d;
+  margin: 0 0 8px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color 0.3s ease;
+}
+
+.ramadan-page .product-card:hover .product-name {
+  color: #10b981;
+}
+
+.ramadan-page .product-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #888;
+  margin: 0 0 12px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 40px;
+}
+
+.ramadan-page .product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+.ramadan-page .price-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ramadan-page .original-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #bbb;
+  text-decoration: line-through;
+}
+
+.ramadan-page .sale-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #10b981;
+}
+
+.ramadan-page .add-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: #ecfdf5;
+  color: #10b981;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.ramadan-page .add-btn:hover {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+.ramadan-page .add-btn.adding {
+  background: #27ae60;
+  color: #ffffff;
+}
+
+/* STATES */
+.ramadan-page .loading-state,
+.ramadan-page .error-state,
+.ramadan-page .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.ramadan-page .spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #d1fae5;
+  border-top-color: #10b981;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.ramadan-page .loading-state p,
+.ramadan-page .error-state p,
+.ramadan-page .empty-state p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  color: #666;
+  margin: 0;
+}
+
+.ramadan-page .empty-icon {
+  font-size: 50px;
+  margin-bottom: 16px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1200px) {
+  .ramadan-page .content-layout { grid-template-columns: 250px 1fr; gap: 40px; }
+  .ramadan-page .products-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .ramadan-page .product-image-wrapper { height: 280px; }
+  .ramadan-page .hero-title { font-size: 42px; }
+}
+
+@media (max-width: 992px) {
+  .ramadan-page .hero-banner { padding: 40px 0; }
+  .ramadan-page .hero-title { font-size: 38px; }
+  .ramadan-page .content-layout { grid-template-columns: 220px 1fr; gap: 30px; }
+  .ramadan-page .products-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .ramadan-page .product-image-wrapper { height: 260px; }
+}
+
+@media (max-width: 768px) {
+  .ramadan-page .hero-banner { padding: 35px 0; }
+  .ramadan-page .hero-title { font-size: 32px; }
+  .ramadan-page .hero-subtitle { font-size: 14px; }
+  .ramadan-page .floating-icon { display: none; }
+  .ramadan-page .main-content { padding: 30px 0 60px; }
+  .ramadan-page .content-layout { grid-template-columns: 1fr; gap: 24px; }
+  .ramadan-page .filters-sidebar { position: relative; top: 0; padding: 20px; background: #f0fdf4; border-radius: 12px; }
+  .ramadan-page .products-toolbar { flex-wrap: wrap; gap: 16px; }
+  .ramadan-page .toolbar-right { width: 100%; justify-content: space-between; }
+  .ramadan-page .products-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .ramadan-page .product-image-wrapper { height: 240px; }
+  .ramadan-page .product-image { padding: 0; }
+  .ramadan-page .product-details { padding: 14px; }
+  .ramadan-page .product-name { font-size: 15px; margin-bottom: 4px; }
+  .ramadan-page .product-desc { font-size: 11px; -webkit-line-clamp: 2; margin-bottom: 10px; }
+  .ramadan-page .sale-price { font-size: 16px; }
+  .ramadan-page .add-btn { width: 38px; height: 38px; }
+  .ramadan-page .discount-badge { padding: 6px 12px; font-size: 10px; }
+  .ramadan-page .products-grid.list .product-card { flex-direction: column; }
+  .ramadan-page .products-grid.list .product-image-wrapper { width: 100%; height: 240px; }
+}
+
+@media (max-width: 576px) {
+  .ramadan-page .container { padding: 0 16px; }
+  .ramadan-page .hero-title { font-size: 26px; }
+  .ramadan-page .products-grid { gap: 14px; }
+  .ramadan-page .product-image-wrapper { height: 200px; }
+  .ramadan-page .product-image { padding: 0; }
+  .ramadan-page .product-details { padding: 0; }
+  .ramadan-page .product-name { font-size: 13px; margin-bottom: 3px; }
+  .ramadan-page .product-desc { font-size: 10px; -webkit-line-clamp: 1; margin-bottom: 8px; }
+  .ramadan-page .sale-price { font-size: 14px; }
+  .ramadan-page .add-btn { width: 34px; height: 34px; }
+  .ramadan-page .discount-badge { padding: 5px 10px; font-size: 9px; top: 10px; left: 10px; }
+}
+
+@media (max-width: 400px) {
+  .ramadan-page .hero-title { font-size: 22px; }
+  .ramadan-page .product-image-wrapper { height: 130px; }
+  .ramadan-page .product-details { padding: 0; }
+  .ramadan-page .product-name { font-size: 12px; }
+  .ramadan-page .product-desc { font-size: 9px; margin-bottom: 6px; }
+  .ramadan-page .sale-price { font-size: 13px; }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .ramadan-page .product-card,
+  .ramadan-page .product-image,
+  .ramadan-page .add-btn,
+  .ramadan-page .floating-icon {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.ramadan-page .product-card:focus-visible,
+.ramadan-page .add-btn:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}

@@ -1,0 +1,767 @@
+/* ============================================
+   Flower Bouquets Page - Floral Design
+   ============================================ */
+
+/* Page Container */
+.bouquets-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-primary) 50%, #fef8fa 100%);
+  position: relative;
+  overflow-x: hidden;
+  padding-bottom: 80px;
+}
+
+.bouquets-page.rtl {
+  direction: rtl;
+}
+
+/* Decorative Background */
+.bouquet-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bloom {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+}
+
+.bloom-1 {
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+  top: -120px;
+  right: -80px;
+}
+
+.bloom-2 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, var(--primary-light) 0%, transparent 70%);
+  bottom: 15%;
+  left: -100px;
+}
+
+.floating-petal {
+  position: absolute;
+  font-size: 35px;
+  opacity: 0.15;
+  animation: petalFloat 20s ease-in-out infinite;
+}
+
+.petal-1 {
+  top: 12%;
+  left: 8%;
+  animation-delay: 0s;
+}
+
+.petal-2 {
+  top: 45%;
+  right: 10%;
+  animation-delay: -7s;
+  font-size: 45px;
+}
+
+.petal-3 {
+  bottom: 22%;
+  left: 18%;
+  animation-delay: -14s;
+  font-size: 30px;
+}
+
+@keyframes petalFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-20px) rotate(10deg); }
+  50% { transform: translateY(-8px) rotate(-8deg); }
+  75% { transform: translateY(-28px) rotate(5deg); }
+}
+
+/* Container */
+.bouquets-page .container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Breadcrumb */
+.bouquets-page .breadcrumb-nav {
+  padding: 20px 0;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(212, 165, 165, 0.12);
+}
+
+.bouquets-page .breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+}
+
+.bouquets-page.rtl .breadcrumb {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.bouquets-page .breadcrumb a {
+  color: #b06080;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.bouquets-page .breadcrumb a:hover {
+  color: var(--primary);
+}
+
+.bouquets-page .breadcrumb .separator {
+  color: #daa0b0;
+  display: flex;
+}
+
+.bouquets-page.rtl .breadcrumb .separator svg {
+  transform: scaleX(-1);
+}
+
+.bouquets-page .breadcrumb .current {
+  color: #7d3050;
+  font-weight: 500;
+}
+
+/* Hero Section */
+.bouquets-page .page-hero {
+  padding: 50px 0 40px;
+  text-align: center;
+}
+
+.bouquets-page .hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.bouquets-page .hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 24px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  border-radius: 50px;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 30px rgba(212, 165, 165, 0.35);
+}
+
+.bouquets-page.rtl .hero-badge {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.bouquets-page .hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 52px;
+  font-weight: 600;
+  color: #4a1528;
+  margin: 0 0 14px;
+  line-height: 1.2;
+  background: linear-gradient(135deg, #4a1528 0%, var(--primary) 50%, var(--primary-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bouquets-page.rtl .hero-title {
+  font-family: 'Amiri', serif;
+  font-size: 46px;
+}
+
+.bouquets-page .hero-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 17px;
+  font-weight: 300;
+  color: #7d4560;
+  margin: 0 0 28px;
+  line-height: 1.7;
+}
+
+.bouquets-page.rtl .hero-subtitle {
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* Hero Stats */
+.bouquets-page .hero-stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+  padding: 20px 40px;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 10px 40px rgba(212, 165, 165, 0.12);
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.bouquets-page .stat {
+  text-align: center;
+}
+
+.bouquets-page .stat-number {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1;
+}
+
+.bouquets-page.rtl .stat-number {
+  font-family: 'Amiri', serif;
+}
+
+.bouquets-page .stat-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  color: #a06080;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.bouquets-page.rtl .stat-label {
+  font-family: 'Tajawal', sans-serif;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.bouquets-page .stat-divider {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(180deg, transparent, #f0c0d0, transparent);
+}
+
+/* Products Section */
+.bouquets-page .products-section {
+  padding: 25px 0 60px;
+}
+
+.bouquets-page .products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+/* Product Card */
+.bouquets-page .product-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(74, 63, 63, 0.06), 0 1px 3px rgba(74, 63, 63, 0.04); border: 1px solid rgba(212, 165, 165, 0.12);
+  transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  animation: cardBloom 0.5s ease-out forwards;
+  opacity: 0;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+}
+
+@keyframes cardBloom {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.bouquets-page .product-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 50px rgba(212, 165, 165, 0.2), 0 8px 20px rgba(74, 63, 63, 0.08); border-color: rgba(212, 165, 165, 0.25);
+}
+
+/* Product Badge */
+.bouquets-page .product-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 10;
+  padding: 6px 14px;
+  border-radius: 18px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.bouquets-page.rtl .product-badge {
+  left: auto;
+  right: 14px;
+  font-family: 'Tajawal', sans-serif;
+  text-transform: none;
+}
+
+.bouquets-page .badge-trending {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(212, 165, 165, 0.4);
+}
+
+.bouquets-page .badge-new {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+}
+
+/* Product Image */
+.bouquets-page .product-image-wrapper {
+  position: relative;
+  height: 340px;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--bg-primary) 0%, #fff0f3 100%);
+}
+
+.bouquets-page .product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  padding: 0;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bouquets-page .product-card:hover .product-image {
+  transform: scale(1.08);
+}
+
+/* Product Overlay */
+.bouquets-page .product-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 18px;
+  background: linear-gradient(180deg, transparent 0%, rgba(74, 21, 40, 0.85) 100%);
+  opacity: 0;
+  transform: translateY(15px);
+  transition: all 0.35s ease;
+  display: flex;
+  justify-content: center;
+}
+
+.bouquets-page .product-card:hover .product-overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bouquets-page .quick-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 11px 22px;
+  background: white;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #7d3050;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.bouquets-page.rtl .quick-add-btn {
+  font-family: 'Tajawal', sans-serif;
+  flex-direction: row-reverse;
+}
+
+.bouquets-page .quick-add-btn:hover {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Product Details */
+.bouquets-page .product-details {
+  padding: 20px;
+}
+
+.bouquets-page .product-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #4a1528;
+  margin: 0 0 6px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.bouquets-page.rtl .product-name {
+  font-family: 'Amiri', serif;
+}
+
+.bouquets-page .product-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #a06080;
+  margin: 0 0 14px;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.bouquets-page.rtl .product-desc {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.bouquets-page .product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bouquets-page .price-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bouquets-page .original-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #c8a0b0;
+  text-decoration: line-through;
+}
+
+.bouquets-page.rtl .original-price {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.bouquets-page .sale-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.bouquets-page.rtl .sale-price {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.bouquets-page .cart-icon-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+  background: transparent;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.bouquets-page .product-card:hover .cart-icon-btn {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  border-color: transparent;
+  color: white;
+  transform: rotate(90deg);
+}
+
+/* Info Banner */
+.bouquets-page .info-banner {
+  padding: 0 0 40px;
+}
+
+.bouquets-page .banner-content {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 28px 35px;
+  background: linear-gradient(135deg, rgba(212, 165, 165, 0.08) 0%, rgba(244, 143, 177, 0.08) 100%);
+  border: 1px solid rgba(212, 165, 165, 0.18);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.bouquets-page.rtl .banner-content {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.bouquets-page .banner-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  flex-shrink: 0;
+  box-shadow: 0 8px 25px rgba(212, 165, 165, 0.3);
+}
+
+.bouquets-page .banner-text h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: #4a1528;
+  margin: 0 0 6px;
+}
+
+.bouquets-page.rtl .banner-text h3 {
+  font-family: 'Amiri', serif;
+}
+
+.bouquets-page .banner-text p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #7d4560;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.bouquets-page.rtl .banner-text p {
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .bouquets-page .hero-title {
+    font-size: 46px;
+  }
+  
+  .bouquets-page .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .bouquets-page .page-hero {
+    padding: 40px 0 30px;
+  }
+  
+  .bouquets-page .hero-title {
+    font-size: 36px;
+  }
+  
+  .bouquets-page.rtl .hero-title {
+    font-size: 32px;
+  }
+  
+  .bouquets-page .hero-subtitle {
+    font-size: 15px;
+  }
+  
+  .bouquets-page .hero-stats {
+    gap: 25px;
+    padding: 18px 28px;
+  }
+  
+  .bouquets-page .stat-number {
+    font-size: 25px;
+  }
+  
+  .bouquets-page .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  
+  .bouquets-page .product-image-wrapper {
+    height: 280px;
+  }
+  
+  .bouquets-page .product-details {
+    padding: 16px;
+  }
+  
+  .bouquets-page .product-name {
+    font-size: 16px;
+  }
+  
+  .bouquets-page .product-desc {
+    font-size: 11px;
+    -webkit-line-clamp: 1;
+    margin-bottom: 10px;
+  }
+  
+  .bouquets-page .sale-price {
+    font-size: 15px;
+  }
+  
+  .bouquets-page .cart-icon-btn {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .bouquets-page .banner-content {
+    flex-direction: column;
+    text-align: center;
+    padding: 22px;
+  }
+  
+  .bouquets-page.rtl .banner-content {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .bouquets-page .container {
+    padding: 0 12px;
+  }
+  
+  .bouquets-page .hero-badge {
+    padding: 6px 14px;
+    font-size: 10px;
+  }
+  
+  .bouquets-page .hero-title {
+    font-size: 24px;
+  }
+  
+  .bouquets-page .hero-stats {
+    flex-direction: column;
+    gap: 10px;
+    padding: 0;
+  }
+  
+  .bouquets-page .stat-divider {
+    width: 50px;
+    height: 1px;
+  }
+  
+  .bouquets-page .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .bouquets-page .product-card {
+    border-radius: 14px;
+  }
+  
+  .bouquets-page .product-badge {
+    padding: 4px 10px;
+    font-size: 9px;
+    top: 10px;
+    left: 10px;
+  }
+  
+  .bouquets-page.rtl .product-badge {
+    left: auto;
+    right: 10px;
+  }
+  
+  /* LARGER IMAGES */
+  .bouquets-page .product-image-wrapper {
+    height: 240px;
+  }
+  
+  .bouquets-page .product-overlay {
+    display: none;
+  }
+  
+  .bouquets-page .product-details {
+    padding: 14px;
+  }
+  
+  .bouquets-page .product-name {
+    font-size: 14px;
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .bouquets-page .product-desc {
+    display: none;
+  }
+  
+  .bouquets-page .original-price {
+    font-size: 10px;
+  }
+  
+  .bouquets-page .sale-price {
+    font-size: 15px;
+  }
+  
+  .bouquets-page .cart-icon-btn {
+    width: 34px;
+    height: 34px;
+  }
+  
+  .bouquets-page .cart-icon-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media (max-width: 360px) {
+  .bouquets-page .products-grid {
+    gap: 10px;
+  }
+  
+  .bouquets-page .product-image-wrapper {
+    height: 200px;
+  }
+  
+  .bouquets-page .product-details {
+    padding: 0;
+  }
+  
+  .bouquets-page .product-name {
+    font-size: 13px;
+  }
+  
+  .bouquets-page .sale-price {
+    font-size: 14px;
+  }
+  
+  .bouquets-page .cart-icon-btn {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .floating-petal,
+  .product-card,
+  .product-image,
+  .cart-icon-btn,
+  .banner-icon {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Focus States */
+.bouquets-page .quick-add-btn:focus-visible,
+.bouquets-page .cart-icon-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}

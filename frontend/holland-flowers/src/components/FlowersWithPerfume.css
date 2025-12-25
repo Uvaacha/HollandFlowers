@@ -1,0 +1,1200 @@
+/* ============================================
+   Flowers With Perfume Page - Luxury Design
+   ============================================ */
+
+/* Page Container */
+.flowers-perfume-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, var(--bg-primary) 0%, #fff8f5 50%, #fef5ff 100%);
+  position: relative;
+  overflow-x: hidden;
+  padding-bottom: 80px;
+}
+
+.flowers-perfume-page.rtl {
+  direction: rtl;
+}
+
+/* Decorative Background */
+.perfume-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.sparkle {
+  position: absolute;
+  font-size: 30px;
+  opacity: 0.2;
+  animation: sparkleFloat 8s ease-in-out infinite;
+}
+
+.sparkle-1 {
+  top: 15%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.sparkle-2 {
+  top: 45%;
+  right: 12%;
+  animation-delay: -3s;
+  font-size: 25px;
+}
+
+.sparkle-3 {
+  bottom: 25%;
+  left: 20%;
+  animation-delay: -6s;
+  font-size: 35px;
+}
+
+@keyframes sparkleFloat {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.2; }
+  50% { transform: translateY(-20px) scale(1.2); opacity: 0.4; }
+}
+
+.bg-gradient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.4;
+}
+
+.orb-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--secondary) 0%, transparent 70%);
+  top: -150px;
+  right: -100px;
+}
+
+.orb-2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, var(--warning) 0%, transparent 70%);
+  bottom: 10%;
+  left: -100px;
+}
+
+/* Container */
+.flowers-perfume-page .container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Breadcrumb */
+.flowers-perfume-page .breadcrumb-nav {
+  padding: 20px 0;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(155, 89, 182, 0.15);
+}
+
+.flowers-perfume-page .breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+}
+
+.flowers-perfume-page.rtl .breadcrumb {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.flowers-perfume-page .breadcrumb a {
+  color: #8e7a9e;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.flowers-perfume-page .breadcrumb a:hover {
+  color: var(--secondary);
+}
+
+.flowers-perfume-page .breadcrumb .separator {
+  color: #c9b8d8;
+  display: flex;
+}
+
+.flowers-perfume-page.rtl .breadcrumb .separator svg {
+  transform: scaleX(-1);
+}
+
+.flowers-perfume-page .breadcrumb .current {
+  color: #5d4a6d;
+  font-weight: 500;
+}
+
+/* Hero Section */
+.flowers-perfume-page .page-hero {
+  padding: 50px 0 40px;
+  text-align: center;
+}
+
+.flowers-perfume-page .hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.flowers-perfume-page .hero-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--warning) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  box-shadow: 0 10px 40px rgba(155, 89, 182, 0.4);
+  animation: iconPulse 3s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 10px 40px rgba(155, 89, 182, 0.4); }
+  50% { transform: scale(1.05); box-shadow: 0 15px 50px rgba(155, 89, 182, 0.5); }
+}
+
+.flowers-perfume-page .hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 52px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 14px;
+  line-height: 1.2;
+  background: linear-gradient(135deg, var(--text-dark) 0%, var(--secondary) 50%, var(--warning) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.flowers-perfume-page.rtl .hero-title {
+  font-family: 'Amiri', serif;
+  font-size: 46px;
+}
+
+.flowers-perfume-page .hero-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 17px;
+  font-weight: 300;
+  color: #6d5d7d;
+  margin: 0 0 30px;
+  line-height: 1.7;
+}
+
+.flowers-perfume-page.rtl .hero-subtitle {
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* Hero Stats */
+.flowers-perfume-page .hero-stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+  padding: 22px 40px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(155, 89, 182, 0.15);
+  max-width: 550px;
+  margin: 0 auto;
+}
+
+.flowers-perfume-page .stat {
+  text-align: center;
+}
+
+.flowers-perfume-page .stat-number {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--secondary);
+  line-height: 1;
+}
+
+.flowers-perfume-page.rtl .stat-number {
+  font-family: 'Amiri', serif;
+}
+
+.flowers-perfume-page .stat-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  color: #8d7d9d;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.flowers-perfume-page.rtl .stat-label {
+  font-family: 'Tajawal', sans-serif;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.flowers-perfume-page .stat-divider {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(180deg, transparent, #d8c8e8, transparent);
+}
+
+/* Products Section */
+.flowers-perfume-page .products-section {
+  padding: 30px 0 60px;
+}
+
+.flowers-perfume-page .products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+
+/* Product Card */
+.flowers-perfume-page .product-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 35px rgba(61, 45, 77, 0.08);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  animation: cardFadeIn 0.6s ease-out forwards;
+  opacity: 0;
+  text-decoration: none;
+  display: block;
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.flowers-perfume-page .product-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 55px rgba(155, 89, 182, 0.2);
+}
+
+/* Perfume Badge */
+.flowers-perfume-page .perfume-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary) 100%);
+  border-radius: 20px;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4);
+}
+
+.flowers-perfume-page.rtl .perfume-badge {
+  left: auto;
+  right: 16px;
+  font-family: 'Tajawal', sans-serif;
+  flex-direction: row-reverse;
+}
+
+/* Product Badge */
+.flowers-perfume-page .product-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.flowers-perfume-page.rtl .product-badge {
+  right: auto;
+  left: 16px;
+  font-family: 'Tajawal', sans-serif;
+  text-transform: none;
+}
+
+.flowers-perfume-page .badge-bestseller {
+  background: linear-gradient(135deg, var(--warning) 0%, #c9a227 100%);
+  color: #4a3f00;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+}
+
+.flowers-perfume-page .badge-new {
+  background: linear-gradient(135deg, var(--accent-light) 0%, #88d8b0 100%);
+  color: #1a5c3a;
+  box-shadow: 0 4px 15px rgba(168, 230, 207, 0.4);
+}
+
+/* Product Image */
+.flowers-perfume-page .product-image-wrapper {
+  position: relative;
+  height: 320px;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--bg-primary) 0%, #f5eafa 100%);
+}
+
+.flowers-perfume-page .product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  padding: 25px;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.flowers-perfume-page .product-card:hover .product-image {
+  transform: scale(1.08);
+}
+
+/* Product Overlay */
+.flowers-perfume-page .product-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  background: linear-gradient(180deg, transparent 0%, rgba(61, 45, 77, 0.85) 100%);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  justify-content: center;
+}
+
+.flowers-perfume-page .product-card:hover .product-overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.flowers-perfume-page .quick-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: white;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #5d4a6d;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.flowers-perfume-page.rtl .quick-add-btn {
+  font-family: 'Tajawal', sans-serif;
+  flex-direction: row-reverse;
+}
+
+.flowers-perfume-page .quick-add-btn:hover {
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--warning) 100%);
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Product Details */
+.flowers-perfume-page .product-details {
+  padding: 22px;
+}
+
+.flowers-perfume-page .product-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 8px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.flowers-perfume-page.rtl .product-name {
+  font-family: 'Amiri', serif;
+}
+
+.flowers-perfume-page .product-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #8d7d9d;
+  margin: 0 0 14px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.flowers-perfume-page.rtl .product-desc {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.flowers-perfume-page .product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flowers-perfume-page .price-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.flowers-perfume-page .original-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #b8a8c8;
+  text-decoration: line-through;
+}
+
+.flowers-perfume-page.rtl .original-price {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.flowers-perfume-page .sale-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--secondary);
+}
+
+.flowers-perfume-page.rtl .sale-price {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.flowers-perfume-page .cart-icon-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 2px solid var(--secondary);
+  background: transparent;
+  color: var(--secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.flowers-perfume-page .product-card:hover .cart-icon-btn {
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--warning) 100%);
+  border-color: transparent;
+  color: white;
+  transform: rotate(90deg);
+}
+
+/* Info Banner */
+.flowers-perfume-page .info-banner {
+  padding: 0 0 40px;
+}
+
+.flowers-perfume-page .banner-content {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 30px 40px;
+  background: linear-gradient(135deg, rgba(155, 89, 182, 0.1) 0%, rgba(212, 175, 55, 0.1) 100%);
+  border: 1px solid rgba(155, 89, 182, 0.2);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.flowers-perfume-page.rtl .banner-content {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.flowers-perfume-page .banner-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--warning) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+  animation: iconPulse 3s ease-in-out infinite;
+  box-shadow: 0 10px 30px rgba(155, 89, 182, 0.35);
+}
+
+.flowers-perfume-page .banner-text h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 8px;
+}
+
+.flowers-perfume-page.rtl .banner-text h3 {
+  font-family: 'Amiri', serif;
+}
+
+.flowers-perfume-page .banner-text p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #6d5d7d;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.flowers-perfume-page.rtl .banner-text p {
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN - 5 BREAKPOINTS
+   ============================================ */
+
+/* Large Desktop */
+@media (max-width: 1200px) {
+  .flowers-perfume-page .hero-title {
+    font-size: 46px;
+  }
+
+  .flowers-perfume-page .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .flowers-perfume-page .product-image-wrapper {
+    height: 280px;
+  }
+}
+
+/* Tablet Landscape */
+@media (max-width: 992px) {
+  .flowers-perfume-page .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .flowers-perfume-page .product-image-wrapper {
+    height: 240px;
+  }
+
+  .flowers-perfume-page .banner-content {
+    flex-direction: column;
+    text-align: center;
+    padding: 26px;
+  }
+
+  .flowers-perfume-page.rtl .banner-content {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* Tablet Portrait */
+@media (max-width: 768px) {
+  .flowers-perfume-page {
+    padding-bottom: 60px;
+  }
+
+  /* Floating decorations */
+  .sparkle {
+    font-size: 22px;
+    opacity: 0.15;
+  }
+
+  .sparkle-1 { font-size: 24px; }
+  .sparkle-2 { font-size: 20px; }
+  .sparkle-3 { font-size: 26px; }
+
+  /* Container */
+  .flowers-perfume-page .container {
+    padding: 0 16px;
+  }
+
+  /* Breadcrumb */
+  .flowers-perfume-page .breadcrumb-nav {
+    padding: 12px 0;
+  }
+
+  .flowers-perfume-page .breadcrumb {
+    font-size: 12px;
+    gap: 6px;
+  }
+
+  /* Hero */
+  .flowers-perfume-page .page-hero {
+    padding: 30px 0 25px;
+  }
+
+  .flowers-perfume-page .hero-icon {
+    width: 65px;
+    height: 65px;
+    font-size: 28px;
+    margin-bottom: 16px;
+  }
+
+  .flowers-perfume-page .hero-title {
+    font-size: 34px;
+    margin-bottom: 10px;
+  }
+
+  .flowers-perfume-page.rtl .hero-title {
+    font-size: 30px;
+  }
+
+  .flowers-perfume-page .hero-subtitle {
+    font-size: 14px;
+    margin-bottom: 22px;
+  }
+
+  .flowers-perfume-page .hero-stats {
+    gap: 22px;
+    padding: 18px 28px;
+    max-width: 480px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .flowers-perfume-page .stat-number {
+    font-size: 24px;
+  }
+
+  .flowers-perfume-page .stat-label {
+    font-size: 10px;
+  }
+
+  .flowers-perfume-page .stat-divider {
+    height: 32px;
+  }
+
+  /* Products */
+  .flowers-perfume-page .products-section {
+    padding: 20px 0 40px;
+  }
+
+  .flowers-perfume-page .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .flowers-perfume-page .product-card {
+    border-radius: 18px;
+  }
+
+  .flowers-perfume-page .product-card:hover {
+    transform: none;
+  }
+
+  .flowers-perfume-page .perfume-badge {
+    padding: 5px 10px;
+    font-size: 8px;
+    top: 10px;
+    left: 10px;
+    border-radius: 12px;
+  }
+
+  .flowers-perfume-page.rtl .perfume-badge {
+    left: auto;
+    right: 10px;
+  }
+
+  .flowers-perfume-page .product-badge {
+    padding: 4px 10px;
+    font-size: 8px;
+    top: 10px;
+    right: 10px;
+    border-radius: 12px;
+  }
+
+  .flowers-perfume-page.rtl .product-badge {
+    right: auto;
+    left: 10px;
+  }
+
+  .flowers-perfume-page .product-image-wrapper {
+    height: 280px;
+  }
+
+  .flowers-perfume-page .product-image {
+    padding: 16px;
+  }
+
+  .flowers-perfume-page .product-overlay {
+    display: none;
+  }
+
+  .flowers-perfume-page .product-details {
+    padding: 16px;
+  }
+
+  .flowers-perfume-page .product-name {
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+
+  .flowers-perfume-page .product-desc {
+    font-size: 11px;
+    -webkit-line-clamp: 1;
+    margin-bottom: 10px;
+  }
+
+  .flowers-perfume-page .original-price {
+    font-size: 10px;
+  }
+
+  .flowers-perfume-page .sale-price {
+    font-size: 16px;
+  }
+
+  .flowers-perfume-page .cart-icon-btn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .flowers-perfume-page .cart-icon-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Banner */
+  .flowers-perfume-page .info-banner {
+    padding: 0 0 30px;
+  }
+
+  .flowers-perfume-page .banner-content {
+    flex-direction: column;
+    text-align: center;
+    padding: 22px 18px;
+    gap: 16px;
+    border-radius: 16px;
+  }
+
+  .flowers-perfume-page .banner-icon {
+    width: 58px;
+    height: 58px;
+  }
+
+  .flowers-perfume-page .banner-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .flowers-perfume-page .banner-text h3 {
+    font-size: 19px;
+  }
+
+  .flowers-perfume-page .banner-text p {
+    font-size: 12px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .flowers-perfume-page {
+    padding-bottom: 50px;
+  }
+
+  /* Hide floating decorations */
+  .sparkle-3 {
+    display: none;
+  }
+
+  .orb-2 {
+    opacity: 0.25;
+  }
+
+  /* Container */
+  .flowers-perfume-page .container {
+    padding: 0 12px;
+  }
+
+  /* Breadcrumb */
+  .flowers-perfume-page .breadcrumb-nav {
+    padding: 10px 0;
+  }
+
+  .flowers-perfume-page .breadcrumb {
+    font-size: 11px;
+    gap: 4px;
+  }
+
+  .flowers-perfume-page .breadcrumb .separator svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  /* Hero */
+  .flowers-perfume-page .page-hero {
+    padding: 20px 0;
+  }
+
+  .flowers-perfume-page .hero-icon {
+    width: 55px;
+    height: 55px;
+    font-size: 24px;
+    margin-bottom: 14px;
+  }
+
+  .flowers-perfume-page .hero-title {
+    font-size: 28px;
+  }
+
+  .flowers-perfume-page.rtl .hero-title {
+    font-size: 26px;
+  }
+
+  .flowers-perfume-page .hero-subtitle {
+    font-size: 13px;
+    margin-bottom: 18px;
+  }
+
+  .flowers-perfume-page .hero-stats {
+    flex-direction: row;
+    gap: 14px;
+    padding: 14px 18px;
+    max-width: 100%;
+    border-radius: 14px;
+  }
+
+  .flowers-perfume-page .stat-number {
+    font-size: 20px;
+  }
+
+  .flowers-perfume-page .stat-label {
+    font-size: 8px;
+    letter-spacing: 0.5px;
+  }
+
+  .flowers-perfume-page .stat-divider {
+    height: 28px;
+  }
+
+  /* Products */
+  .flowers-perfume-page .products-section {
+    padding: 16px 0 30px;
+  }
+
+  .flowers-perfume-page .products-grid {
+    gap: 10px;
+  }
+
+  .flowers-perfume-page .product-card {
+    border-radius: 14px;
+  }
+
+  .flowers-perfume-page .perfume-badge {
+    padding: 4px 8px;
+    font-size: 7px;
+    top: 8px;
+    left: 8px;
+    border-radius: 10px;
+    gap: 4px;
+  }
+
+  .flowers-perfume-page.rtl .perfume-badge {
+    left: auto;
+    right: 8px;
+  }
+
+  .flowers-perfume-page .perfume-badge svg {
+    width: 10px;
+    height: 10px;
+  }
+
+  .flowers-perfume-page .product-badge {
+    padding: 3px 8px;
+    font-size: 7px;
+    top: 8px;
+    right: 8px;
+    border-radius: 10px;
+  }
+
+  .flowers-perfume-page.rtl .product-badge {
+    right: auto;
+    left: 8px;
+  }
+
+  .flowers-perfume-page .product-image-wrapper {
+    height: 160px;
+  }
+
+  .flowers-perfume-page .product-image {
+    padding: 0;
+  }
+
+  .flowers-perfume-page .product-details {
+    padding: 0;
+  }
+
+  .flowers-perfume-page .product-name {
+    font-size: 13px;
+    margin-bottom: 3px;
+  }
+
+  .flowers-perfume-page .product-desc {
+    display: none;
+  }
+
+  .flowers-perfume-page .original-price {
+    font-size: 9px;
+  }
+
+  .flowers-perfume-page .sale-price {
+    font-size: 13px;
+  }
+
+  .flowers-perfume-page .cart-icon-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .flowers-perfume-page .cart-icon-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Banner */
+  .flowers-perfume-page .info-banner {
+    padding: 0 0 20px;
+  }
+
+  .flowers-perfume-page .banner-content {
+    padding: 18px 14px;
+    gap: 12px;
+    border-radius: 14px;
+  }
+
+  .flowers-perfume-page .banner-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .flowers-perfume-page .banner-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .flowers-perfume-page .banner-text h3 {
+    font-size: 16px;
+  }
+
+  .flowers-perfume-page .banner-text p {
+    font-size: 11px;
+  }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 360px) {
+  .flowers-perfume-page .container {
+    padding: 0 10px;
+  }
+
+  .flowers-perfume-page .hero-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+
+  .flowers-perfume-page .hero-title {
+    font-size: 24px;
+  }
+
+  .flowers-perfume-page.rtl .hero-title {
+    font-size: 22px;
+  }
+
+  .flowers-perfume-page .hero-subtitle {
+    font-size: 12px;
+  }
+
+  .flowers-perfume-page .hero-stats {
+    gap: 10px;
+    padding: 12px 14px;
+  }
+
+  .flowers-perfume-page .stat-number {
+    font-size: 18px;
+  }
+
+  .flowers-perfume-page .stat-label {
+    font-size: 7px;
+  }
+
+  .flowers-perfume-page .stat-divider {
+    height: 24px;
+  }
+
+  .flowers-perfume-page .products-grid {
+    gap: 8px;
+  }
+
+  .flowers-perfume-page .product-image-wrapper {
+    height: 140px;
+  }
+
+  .flowers-perfume-page .product-details {
+    padding: 0;
+  }
+
+  .flowers-perfume-page .product-name {
+    font-size: 12px;
+  }
+
+  .flowers-perfume-page .original-price {
+    font-size: 8px;
+  }
+
+  .flowers-perfume-page .sale-price {
+    font-size: 12px;
+  }
+
+  .flowers-perfume-page .perfume-badge {
+    padding: 3px 6px;
+    font-size: 6px;
+  }
+
+  .flowers-perfume-page .product-badge {
+    padding: 2px 6px;
+    font-size: 6px;
+  }
+
+  .flowers-perfume-page .cart-icon-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .flowers-perfume-page .cart-icon-btn svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .flowers-perfume-page .banner-content {
+    padding: 14px 12px;
+  }
+
+  .flowers-perfume-page .banner-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .flowers-perfume-page .banner-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .flowers-perfume-page .banner-text h3 {
+    font-size: 14px;
+  }
+
+  .flowers-perfume-page .banner-text p {
+    font-size: 10px;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY & PRINT
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .sparkle,
+  .hero-icon,
+  .product-card,
+  .product-image,
+  .cart-icon-btn,
+  .banner-icon {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.flowers-perfume-page .product-card:focus-visible,
+.flowers-perfume-page .quick-add-btn:focus-visible,
+.flowers-perfume-page .cart-icon-btn:focus-visible {
+  outline: 2px solid var(--secondary);
+  outline-offset: 2px;
+}
+
+@media print {
+  .perfume-bg {
+    display: none;
+  }
+
+  .flowers-perfume-page .product-card {
+    box-shadow: none;
+    border: 1px solid var(--border-medium);
+    break-inside: avoid;
+  }
+
+  .flowers-perfume-page .info-banner {
+    display: none;
+  }
+}
+
+/* Filter Section */
+.flowers-perfume-page .filter-section {
+  padding: 25px 0 35px;
+}
+
+.flowers-perfume-page .filter-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.flowers-perfume-page .filter-btn {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 28px;
+  border: 2px solid rgba(155, 89, 182, 0.2);
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #5d4a6d;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+.flowers-perfume-page.rtl .filter-btn {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.flowers-perfume-page .filter-btn:hover {
+  border-color: var(--secondary);
+  color: var(--text-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(155, 89, 182, 0.2);
+}
+
+.flowers-perfume-page .filter-btn.active {
+  border-color: transparent;
+  color: white;
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary) 100%);
+  box-shadow: 0 8px 25px rgba(155, 89, 182, 0.35);
+}

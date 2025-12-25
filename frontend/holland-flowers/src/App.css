@@ -1,0 +1,1757 @@
+/* ============================================
+   🌺 HOLLAND FLOWERS - LUXURY BOUTIQUE DESIGN
+   Premium Edition - With Description & Add to Cart
+   ============================================ */
+
+/* ============================================
+   CSS Reset & Base Styles
+   ============================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: var(--text-dark);
+  background-color: var(--bg-primary);
+  overflow-x: hidden;
+}
+
+body.rtl, .app.rtl { direction: rtl; }
+body.rtl { font-family: 'Amiri', 'Tajawal', sans-serif; }
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app.ltr { direction: ltr; }
+.app.rtl { direction: rtl; }
+
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+main { flex: 1; padding-top: 0; }
+
+/* ============================================
+   HOME PAGE - LUXURY DESIGN
+   ============================================ */
+.home-page {
+  background: linear-gradient(180deg, #FFFBFB 0%, #FDF8F8 100%);
+  position: relative;
+}
+
+/* Floating Decorative Petals */
+.home-page::before {
+  content: '🌸';
+  position: fixed;
+  top: 15%;
+  left: 5%;
+  font-size: 30px;
+  opacity: 0.15;
+  animation: floatPetal1 15s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.home-page::after {
+  content: '🌷';
+  position: fixed;
+  top: 60%;
+  right: 8%;
+  font-size: 35px;
+  opacity: 0.12;
+  animation: floatPetal2 18s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes floatPetal1 {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-30px) rotate(15deg); }
+  50% { transform: translateY(-15px) rotate(-10deg); }
+  75% { transform: translateY(-40px) rotate(8deg); }
+}
+
+@keyframes floatPetal2 {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  33% { transform: translateY(-25px) rotate(-12deg); }
+  66% { transform: translateY(-45px) rotate(15deg); }
+}
+
+/* ============================================
+   SECTION HEADER - LUXURY TYPOGRAPHY
+   ============================================ */
+.section-header {
+  text-align: center;
+  margin-bottom: 70px;
+  position: relative;
+  z-index: 1;
+}
+
+.section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, rgba(212, 165, 165, 0.12) 0%, rgba(232, 201, 184, 0.12) 100%);
+  color: var(--primary-dark);
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  border-radius: 50px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(212, 165, 165, 0.25);
+  backdrop-filter: blur(10px);
+}
+
+.app.rtl .section-tag { font-family: 'Tajawal', sans-serif; letter-spacing: 0; }
+
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 52px;
+  font-weight: 500;
+  color: var(--text-dark);
+  margin-bottom: 24px;
+  line-height: 1.15;
+  letter-spacing: -1px;
+  position: relative;
+  display: inline-block;
+}
+
+.app.rtl .section-title { font-family: 'Amiri', serif; font-size: 46px; }
+
+/* Elegant Underline with Flower */
+.section-underline {
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary-light), var(--primary), var(--primary-light), transparent);
+  margin: 0 auto 24px;
+  position: relative;
+}
+
+.section-underline::before {
+  content: '❀';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  color: var(--primary);
+  background: linear-gradient(180deg, #FFFBFB, #FDF8F8);
+  padding: 0 16px;
+}
+
+.section-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--text-secondary);
+  max-width: 550px;
+  margin: 0 auto;
+  line-height: 1.9;
+}
+
+.app.rtl .section-subtitle { font-family: 'Tajawal', sans-serif; }
+
+/* ============================================
+   PRODUCT CAROUSEL SECTION
+   ============================================ */
+.product-carousel-section {
+  padding: 100px 0;
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(135deg, #fdf8f8 0%, #f8f0f0 50%, #fdf8f8 100%);
+  overflow: hidden;
+}
+
+/* ============================================
+   FLOATING DECORATIONS
+   ============================================ */
+.carousel-decorations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.floating-item {
+  position: absolute;
+  font-size: 30px;
+  opacity: 0.15;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  filter: grayscale(20%);
+}
+
+/* Flower 1 - Top Left */
+.floating-flower-1 {
+  top: 8%;
+  left: 5%;
+  font-size: 40px;
+  animation: float1 8s infinite;
+  opacity: 0.2;
+}
+
+/* Flower 2 - Top Right */
+.floating-flower-2 {
+  top: 12%;
+  right: 8%;
+  font-size: 35px;
+  animation: float2 10s infinite;
+  opacity: 0.18;
+}
+
+/* Flower 3 - Middle Left */
+.floating-flower-3 {
+  top: 45%;
+  left: 3%;
+  font-size: 45px;
+  animation: float3 9s infinite;
+  opacity: 0.15;
+}
+
+/* Flower 4 - Bottom Right */
+.floating-flower-4 {
+  bottom: 15%;
+  right: 5%;
+  font-size: 38px;
+  animation: float4 11s infinite;
+  opacity: 0.2;
+}
+
+/* Cake 1 - Top Center-Right */
+.floating-cake-1 {
+  top: 18%;
+  right: 25%;
+  font-size: 32px;
+  animation: float5 12s infinite;
+  opacity: 0.12;
+}
+
+/* Chocolate 1 - Middle Right */
+.floating-chocolate-1 {
+  top: 50%;
+  right: 2%;
+  font-size: 28px;
+  animation: float6 10s infinite;
+  opacity: 0.15;
+}
+
+/* Gift 1 - Bottom Left */
+.floating-gift-1 {
+  bottom: 20%;
+  left: 8%;
+  font-size: 32px;
+  animation: float7 9s infinite;
+  opacity: 0.18;
+}
+
+/* Heart 1 - Top Center-Left */
+.floating-heart-1 {
+  top: 10%;
+  left: 20%;
+  font-size: 25px;
+  animation: float8 8s infinite;
+  opacity: 0.12;
+}
+
+/* Flower 5 - Bottom Center */
+.floating-flower-5 {
+  bottom: 8%;
+  left: 45%;
+  font-size: 35px;
+  animation: float1 11s infinite;
+  opacity: 0.15;
+}
+
+/* Cake 2 - Middle Left */
+.floating-cake-2 {
+  top: 35%;
+  left: 12%;
+  font-size: 26px;
+  animation: float2 13s infinite;
+  opacity: 0.1;
+}
+
+/* Float Animations */
+@keyframes float1 {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-15px) rotate(5deg); }
+  50% { transform: translateY(-8px) rotate(-3deg); }
+  75% { transform: translateY(-20px) rotate(3deg); }
+}
+
+@keyframes float2 {
+  0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+  33% { transform: translateY(-12px) translateX(8px) rotate(-5deg); }
+  66% { transform: translateY(-18px) translateX(-5px) rotate(5deg); }
+}
+
+@keyframes float3 {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-25px) scale(1.05); }
+}
+
+@keyframes float4 {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-10px) rotate(-8deg); }
+  75% { transform: translateY(-20px) rotate(8deg); }
+}
+
+@keyframes float5 {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  25% { transform: translateY(-8px) translateX(5px); }
+  50% { transform: translateY(-15px) translateX(-5px); }
+  75% { transform: translateY(-5px) translateX(3px); }
+}
+
+@keyframes float6 {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(10deg); }
+}
+
+@keyframes float7 {
+  0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
+  33% { transform: translateY(-12px) scale(1.08) rotate(-5deg); }
+  66% { transform: translateY(-8px) scale(0.95) rotate(5deg); }
+}
+
+@keyframes float8 {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.15) rotate(10deg); }
+  50% { transform: scale(1) rotate(0deg); }
+  75% { transform: scale(1.1) rotate(-10deg); }
+}
+
+.product-carousel-wrapper {
+  position: relative;
+  padding: 0 70px;
+  z-index: 2;
+}
+
+.product-carousel {
+  display: flex;
+  gap: 28px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 20px 10px 30px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.product-carousel::-webkit-scrollbar { display: none; }
+
+/* ============================================
+   ELEGANT PRODUCT CARD - CLEAR WHITE
+   ============================================ */
+.carousel-product-card {
+  flex: 0 0 300px;
+  width: 300px;
+  height: 420px;
+  background: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.08),
+    0 10px 40px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.carousel-product-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.12),
+    0 25px 60px rgba(212, 165, 165, 0.15);
+}
+
+/* ============================================
+   BADGES - ELEGANT PILLS
+   ============================================ */
+.product-category-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: rgba(45, 45, 45, 0.92);
+  backdrop-filter: blur(10px);
+  color: #ffffff;
+  border-radius: 50px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.product-category-badge svg {
+  width: 11px;
+  height: 11px;
+  color: #FFD700;
+  flex-shrink: 0;
+}
+
+[dir="rtl"] .product-category-badge,
+.app.rtl .product-category-badge { 
+  left: auto; 
+  right: 16px;
+  flex-direction: row-reverse;
+}
+
+.carousel-discount-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: #e74c3c;
+  color: #ffffff;
+  padding: 10px 14px;
+  border-radius: 50px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  z-index: 10;
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+}
+
+[dir="rtl"] .carousel-discount-badge,
+.app.rtl .carousel-discount-badge { 
+  right: auto; 
+  left: 16px; 
+}
+
+.product-type-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  padding: 10px 14px;
+  border-radius: 50px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+[dir="rtl"] .product-type-badge,
+.app.rtl .product-type-badge { 
+  right: auto; 
+  left: 16px; 
+}
+
+.bestseller-badge-tag {
+  background: #2c3e50;
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(44, 62, 80, 0.3);
+}
+
+.new-arrival-badge-tag {
+  background: #27ae60;
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+}
+
+/* ============================================
+   PRODUCT IMAGE
+   ============================================ */
+.carousel-image-link {
+  display: block;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.carousel-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
+  background: #faf8f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.carousel-product-card:hover .carousel-product-image {
+  transform: scale(1.06);
+}
+
+/* ============================================
+   PRODUCT INFO - ELEGANT CENTER ALIGNED
+   ============================================ */
+.carousel-product-info {
+  padding: 22px 20px 20px;
+  background: #ffffff;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-info-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  text-align: center;
+  flex: 1;
+}
+
+/* Product Name */
+.carousel-product-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: #3d3d3d;
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.3s ease;
+}
+
+.product-info-link:hover .carousel-product-name {
+  color: #c9a0a0;
+}
+
+.app.rtl .carousel-product-name { 
+  font-family: 'Amiri', serif; 
+}
+
+/* Product Description */
+.carousel-product-description {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #999999;
+  margin: 0;
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-align: center;
+}
+
+.app.rtl .carousel-product-description { 
+  font-family: 'Tajawal', sans-serif; 
+}
+
+/* ============================================
+   PRICE ROW - ELEGANT BOTTOM
+   ============================================ */
+.carousel-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 18px;
+  margin-top: auto;
+}
+
+.carousel-price-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.carousel-original-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #bbbbbb;
+  text-decoration: line-through;
+  margin: 0;
+  line-height: 1;
+}
+
+.carousel-product-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #c9a0a0;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+
+/* ============================================
+   ADD TO CART BUTTON - ELEGANT CIRCLE
+   ============================================ */
+.carousel-add-to-cart {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  background: #f8f4f4;
+  color: #c9a0a0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  flex-shrink: 0;
+}
+
+.carousel-add-to-cart:hover {
+  background: linear-gradient(135deg, #d4a5a5, #c09090);
+  color: #ffffff;
+  transform: scale(1.1);
+  box-shadow: 0 8px 25px rgba(212, 165, 165, 0.45);
+}
+
+.carousel-add-to-cart:hover svg {
+  transform: rotate(90deg);
+}
+
+.carousel-add-to-cart.adding {
+  background: linear-gradient(135deg, #27ae60, #219a52);
+  color: #ffffff;
+  transform: scale(1.1);
+  box-shadow: 0 8px 25px rgba(39, 174, 96, 0.45);
+}
+
+.carousel-add-to-cart svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.35s ease;
+}
+
+/* ============================================
+   CAROUSEL NAVIGATION ARROWS
+   ============================================ */
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 54px;
+  height: 54px;
+  background: #ffffff;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: all 0.35s ease;
+  color: #4a3f3f;
+}
+
+.carousel-arrow:hover {
+  background: #d4a5a5;
+  color: #ffffff;
+  transform: translateY(-50%) scale(1.08);
+  box-shadow: 0 10px 30px rgba(212, 165, 165, 0.4);
+}
+
+.carousel-arrow svg {
+  width: 20px;
+  height: 20px;
+}
+
+.carousel-arrow-left { left: 8px; }
+.carousel-arrow-right { right: 8px; }
+
+.carousel-scroll-hint {
+  text-align: center;
+  margin-top: 32px;
+  color: #999999;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 2;
+}
+
+.carousel-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 0;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e8e0e0;
+  border-top-color: #d4a5a5;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin { 
+  to { transform: rotate(360deg); } 
+
+}
+
+/* Hide floating decorations on mobile */
+@media (max-width: 768px) {
+  .carousel-decorations {
+    display: none;
+  }
+}
+
+/* ============================================
+   🌸 SHOP BY OCCASION - BENTO GRID DESIGN
+   ============================================ */
+.occasions-section {
+  padding: 120px 0;
+  background: linear-gradient(180deg, #FDFAFA 0%, #F8F2F2 50%, #FDFAFA 100%);
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.occasions-section::before {
+  content: '';
+  position: absolute;
+  top: 10%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(212, 165, 165, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* BENTO GRID Layout */
+.occasions-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(2, 280px);
+  gap: 24px;
+}
+
+.occasion-card:nth-child(1) {
+  grid-column: span 5;
+  grid-row: span 2;
+}
+
+.occasion-card:nth-child(2) {
+  grid-column: span 4;
+  grid-row: span 1;
+}
+
+.occasion-card:nth-child(3) {
+  grid-column: span 3;
+  grid-row: span 1;
+}
+
+.occasion-card:nth-child(4) {
+  grid-column: span 3;
+  grid-row: span 1;
+}
+
+.occasion-card:nth-child(5) {
+  grid-column: span 4;
+  grid-row: span 1;
+}
+
+.occasion-card {
+  position: relative;
+  border-radius: 32px;
+  overflow: hidden;
+  text-decoration: none;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 15px 50px rgba(74, 63, 63, 0.1);
+}
+
+.occasion-card:hover {
+  transform: translateY(-15px) scale(1.02);
+  box-shadow: 0 35px 80px rgba(74, 63, 63, 0.2);
+  z-index: 10;
+}
+
+.occasion-image-wrapper {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.occasion-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.occasion-card:hover .occasion-image {
+  transform: scale(1.15);
+}
+
+.occasion-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.1) 30%,
+    rgba(0, 0, 0, 0.5) 70%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+  transition: background 0.5s ease;
+}
+
+.occasion-card:hover .occasion-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0.2) 30%,
+    rgba(0, 0, 0, 0.5) 70%,
+    rgba(0, 0, 0, 0.75) 100%
+  );
+}
+
+.occasion-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--occasion-color);
+  opacity: 0.15;
+  z-index: 1;
+  transition: opacity 0.5s ease;
+  mix-blend-mode: multiply;
+}
+
+.occasion-card:hover::before {
+  opacity: 0.25;
+}
+
+.occasion-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 40px;
+  z-index: 2;
+}
+
+.occasion-card:nth-child(1) .occasion-content {
+  padding: 50px;
+}
+
+.occasion-icon-wrapper {
+  width: 70px;
+  height: 70px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+}
+
+.occasion-card:hover .occasion-icon-wrapper {
+  transform: translateY(-8px) rotate(5deg);
+  background: var(--occasion-color);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+}
+
+.occasion-icon-wrapper svg {
+  width: 36px;
+  height: 36px;
+  color: var(--occasion-color);
+  transition: all 0.5s ease;
+}
+
+.occasion-card:hover .occasion-icon-wrapper svg {
+  color: white;
+}
+
+.occasion-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 16px;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+  line-height: 1.2;
+}
+
+.occasion-card:nth-child(1) .occasion-name {
+  font-size: 42px;
+}
+
+.app.rtl .occasion-name { font-family: 'Amiri', serif; }
+
+.occasion-shop-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 14px 28px;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  transition: all 0.4s ease;
+}
+
+.app.rtl .occasion-shop-btn { font-family: 'Tajawal', sans-serif; flex-direction: row-reverse; }
+
+.occasion-card:hover .occasion-shop-btn {
+  background: white;
+  color: var(--text-dark);
+  border-color: white;
+  transform: translateX(5px);
+}
+
+.app.rtl .occasion-card:hover .occasion-shop-btn {
+  transform: translateX(-5px);
+}
+
+.occasion-shop-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.occasion-card:hover .occasion-shop-btn svg {
+  transform: translateX(5px);
+}
+
+/* ============================================
+   🎯 WHY CHOOSE US - GLASSMORPHISM CARDS
+   ============================================ */
+.why-us-section {
+  padding: 120px 0;
+  background: linear-gradient(135deg, #FFFBFB 0%, #F8F2F2 50%, #FDF5F5 100%);
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.why-us-section::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  left: -100px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(184, 212, 190, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.why-us-section::after {
+  content: '';
+  position: absolute;
+  bottom: -150px;
+  right: -100px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(212, 165, 165, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  position: relative;
+}
+
+.feature-card {
+  position: relative;
+  text-align: center;
+  padding: 50px 30px 45px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, var(--feature-color), transparent, var(--feature-color));
+  border-radius: 34px;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.5s ease;
+}
+
+.feature-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--feature-color), var(--primary));
+  border-radius: 0 0 4px 4px;
+  transition: width 0.5s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-15px);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 
+    0 30px 60px rgba(74, 63, 63, 0.12),
+    0 15px 30px rgba(212, 165, 165, 0.1);
+}
+
+.feature-card:hover::before { opacity: 0.3; }
+.feature-card:hover::after { width: 100px; }
+
+.feature-icon-wrapper {
+  width: 110px;
+  height: 110px;
+  margin: 0 auto 30px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feature-icon-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px dashed var(--feature-color);
+  opacity: 0.3;
+  animation: rotateRing 20s linear infinite;
+}
+
+@keyframes rotateRing {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.feature-icon-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 240, 240, 0.9) 100%);
+  box-shadow: 
+    0 10px 40px rgba(74, 63, 63, 0.08),
+    inset 0 -5px 20px rgba(74, 63, 63, 0.03);
+  transition: all 0.5s ease;
+}
+
+.feature-card:hover .feature-icon-wrapper::after {
+  background: linear-gradient(135deg, var(--feature-color) 0%, var(--primary) 100%);
+  transform: scale(1.1);
+}
+
+.feature-icon-wrapper svg {
+  width: 48px;
+  height: 48px;
+  color: var(--feature-color);
+  position: relative;
+  z-index: 2;
+  transition: all 0.5s ease;
+}
+
+.feature-card:hover .feature-icon-wrapper svg {
+  color: white;
+  transform: scale(1.1);
+}
+
+.feature-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 14px;
+}
+
+.app.rtl .feature-title { font-family: 'Amiri', serif; }
+
+.feature-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin: 0;
+}
+
+.app.rtl .feature-desc { font-family: 'Tajawal', sans-serif; }
+
+/* ============================================
+   📦 BROWSE CATEGORIES - FLOATING CARDS
+   ============================================ */
+.categories-section {
+  padding: 120px 0;
+  background: linear-gradient(180deg, #F8F2F2 0%, #FFFBFB 50%, #FDF8F8 100%);
+  position: relative;
+  z-index: 1;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+.category-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 55px 30px;
+  background: white;
+  border-radius: 32px;
+  text-decoration: none;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(74, 63, 63, 0.06);
+}
+
+.category-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, var(--category-color) 0%, transparent 50%);
+  opacity: 0;
+  transition: all 0.6s ease;
+  transform: scale(0.5);
+}
+
+.category-card:hover::before {
+  opacity: 0.08;
+  transform: scale(1);
+}
+
+.category-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, var(--category-color) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  border-radius: 0 32px 0 100%;
+}
+
+.category-card:hover::after {
+  opacity: 0.15;
+}
+
+.category-card:hover {
+  transform: translateY(-18px);
+  box-shadow: 
+    0 35px 70px rgba(74, 63, 63, 0.12),
+    0 15px 35px rgba(212, 165, 165, 0.1);
+}
+
+.category-icon-wrapper {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 28px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.category-icon-wrapper::before {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 20px;
+  background: radial-gradient(ellipse, rgba(74, 63, 63, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  transition: all 0.5s ease;
+}
+
+.category-card:hover .category-icon-wrapper::before {
+  width: 80px;
+  bottom: -15px;
+  background: radial-gradient(ellipse, rgba(74, 63, 63, 0.2) 0%, transparent 70%);
+}
+
+.category-icon-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #ffffff 0%, #f0e8e8 100%);
+  box-shadow: 
+    0 15px 35px rgba(74, 63, 63, 0.1),
+    inset 0 -8px 20px rgba(74, 63, 63, 0.03),
+    inset 0 8px 20px rgba(255, 255, 255, 0.8);
+  transition: all 0.5s ease;
+}
+
+.category-card:hover .category-icon-wrapper::after {
+  background: linear-gradient(145deg, var(--category-color) 0%, var(--primary) 100%);
+  transform: translateY(-10px) rotate(10deg);
+  box-shadow: 
+    0 25px 50px rgba(212, 165, 165, 0.3),
+    inset 0 -5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.category-icon-wrapper svg {
+  width: 46px;
+  height: 46px;
+  color: var(--category-color);
+  position: relative;
+  z-index: 2;
+  transition: all 0.5s ease;
+}
+
+.category-card:hover .category-icon-wrapper svg {
+  color: white;
+  transform: translateY(-10px) scale(1.1);
+}
+
+.category-card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 16px;
+  position: relative;
+  z-index: 1;
+  transition: all 0.4s ease;
+}
+
+.app.rtl .category-card h3 { font-family: 'Amiri', serif; }
+
+.category-card:hover h3 {
+  color: var(--primary-dark);
+}
+
+.category-arrow {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.category-card:hover .category-arrow {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.category-arrow svg {
+  color: var(--category-color);
+  transition: transform 0.3s ease;
+}
+
+.category-card:hover .category-arrow svg {
+  transform: translateX(3px);
+}
+
+/* ============================================
+   💬 TESTIMONIALS
+   ============================================ */
+.testimonials-section {
+  padding: 120px 0;
+  background: linear-gradient(180deg, #FDF8F8 0%, #FFFBFB 50%, #F8F2F2 100%);
+  position: relative;
+  z-index: 1;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 35px;
+}
+
+.testimonial-card {
+  background: white;
+  padding: 45px;
+  border-radius: 32px;
+  text-align: center;
+  box-shadow: 0 15px 50px rgba(74, 63, 63, 0.06);
+  border: 1px solid rgba(212, 165, 165, 0.1);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.testimonial-card::before {
+  content: '"';
+  position: absolute;
+  top: 20px;
+  left: 30px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 120px;
+  color: var(--primary-light);
+  line-height: 1;
+  opacity: 0.3;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 30px 70px rgba(212, 165, 165, 0.18);
+}
+
+.testimonial-stars {
+  font-size: 20px;
+  margin-bottom: 24px;
+  letter-spacing: 6px;
+}
+
+.testimonial-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--text-secondary);
+  line-height: 1.9;
+  margin-bottom: 32px;
+  font-style: italic;
+  position: relative;
+  z-index: 1;
+}
+
+.app.rtl .testimonial-text { font-family: 'Tajawal', sans-serif; }
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.testimonial-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--primary-light);
+  box-shadow: 0 8px 25px rgba(212, 165, 165, 0.2);
+}
+
+.testimonial-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.app.rtl .testimonial-name { font-family: 'Amiri', serif; }
+
+/* ============================================
+   📧 NEWSLETTER
+   ============================================ */
+.newsletter-section {
+  padding: 120px 0;
+  background: linear-gradient(135deg, var(--primary-lighter) 0%, var(--primary-light) 40%, var(--primary) 100%);
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.newsletter-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 70%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.newsletter-section::after {
+  content: '✿';
+  position: absolute;
+  bottom: 30px;
+  left: 50px;
+  font-size: 80px;
+  opacity: 0.1;
+  color: white;
+}
+
+.newsletter-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 80px;
+  position: relative;
+  z-index: 1;
+}
+
+.newsletter-text { flex: 1; }
+
+.newsletter-text h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 46px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.app.rtl .newsletter-text h2 { font-family: 'Amiri', serif; }
+
+.newsletter-text p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  line-height: 1.7;
+}
+
+.app.rtl .newsletter-text p { font-family: 'Tajawal', sans-serif; }
+
+.newsletter-form {
+  display: flex;
+  gap: 16px;
+  flex: 1;
+  max-width: 550px;
+}
+
+.newsletter-input {
+  flex: 1;
+  padding: 20px 32px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  color: white;
+  transition: all 0.4s ease;
+}
+
+.newsletter-input::placeholder { color: rgba(255, 255, 255, 0.7); }
+
+.newsletter-input:focus {
+  outline: none;
+  border-color: white;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.newsletter-btn {
+  padding: 20px 45px;
+  background: white;
+  color: var(--primary-dark);
+  border: none;
+  border-radius: 50px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  white-space: nowrap;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.app.rtl .newsletter-btn { font-family: 'Tajawal', sans-serif; }
+
+.newsletter-btn:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+/* ============================================
+   PLACEHOLDER PAGE
+   ============================================ */
+.placeholder-page {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.placeholder-page h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 48px;
+  color: var(--text-dark);
+  margin-bottom: 20px;
+}
+
+.placeholder-page p {
+  color: var(--text-secondary);
+  font-size: 18px;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 1200px) {
+  .section-title { font-size: 44px; }
+  
+  .occasions-grid {
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(2, 250px);
+  }
+  
+  .occasion-card:nth-child(1) { grid-column: span 3; }
+  .occasion-card:nth-child(2) { grid-column: span 3; }
+  .occasion-card:nth-child(3) { grid-column: span 2; }
+  .occasion-card:nth-child(4) { grid-column: span 2; }
+  .occasion-card:nth-child(5) { grid-column: span 2; }
+  
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+  
+  .carousel-product-card { flex: 0 0 290px; width: 290px; height: 410px; }
+  .carousel-image-wrapper { height: 230px; }
+}
+
+@media (max-width: 992px) {
+  .section-title { font-size: 38px; }
+  
+  .product-carousel-wrapper { padding: 0 60px; }
+  .product-carousel { gap: 24px; }
+  .carousel-product-card { flex: 0 0 280px; width: 280px; height: 400px; }
+  .carousel-image-wrapper { height: 220px; }
+  
+  .occasions-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    gap: 20px;
+  }
+  
+  .occasion-card:nth-child(1),
+  .occasion-card:nth-child(2),
+  .occasion-card:nth-child(3),
+  .occasion-card:nth-child(4),
+  .occasion-card:nth-child(5) {
+    grid-column: span 1;
+    grid-row: span 1;
+    aspect-ratio: 4/5;
+  }
+  
+  .occasion-card:nth-child(1) .occasion-name { font-size: 28px; }
+  
+  .categories-grid { grid-template-columns: repeat(2, 1fr); }
+  .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+  
+  .newsletter-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .newsletter-form { max-width: 100%; width: 100%; }
+}
+
+@media (max-width: 768px) {
+  .section-header { margin-bottom: 50px; }
+  .section-title { font-size: 34px; }
+  
+  .product-carousel-section { padding: 80px 0; }
+  .product-carousel-wrapper { padding: 0 50px; }
+  .product-carousel { gap: 20px; }
+  .carousel-product-card { flex: 0 0 270px; width: 270px; height: 390px; }
+  .carousel-image-wrapper { height: 210px; }
+  .carousel-arrow { width: 48px; height: 48px; }
+  
+  .carousel-product-info { padding: 20px 18px 18px; }
+  .carousel-product-name { font-size: 20px; }
+  .carousel-product-description { font-size: 12px; }
+  .carousel-product-price { font-size: 20px; }
+  .carousel-original-price { font-size: 12px; }
+  .carousel-add-to-cart { width: 46px; height: 46px; }
+  
+  .product-category-badge { 
+    padding: 8px 14px; 
+    font-size: 10px;
+    top: 14px;
+    left: 14px;
+  }
+  
+  .carousel-discount-badge,
+  .product-type-badge {
+    top: 14px;
+    right: 14px;
+    padding: 8px 12px;
+    font-size: 10px;
+  }
+  
+  .occasions-section { padding: 80px 0; }
+  
+  .occasion-card { border-radius: 24px; }
+  .occasion-content { padding: 30px; }
+  .occasion-name { font-size: 24px; }
+  .occasion-card:nth-child(1) .occasion-name { font-size: 24px; }
+  .occasion-icon-wrapper { width: 55px; height: 55px; }
+  .occasion-icon-wrapper svg { width: 28px; height: 28px; }
+  .occasion-shop-btn { font-size: 10px; padding: 12px 20px; }
+  
+  .features-grid, .categories-grid { gap: 20px; }
+  .feature-card, .category-card { padding: 40px 25px; border-radius: 24px; }
+  .feature-icon-wrapper { width: 90px; height: 90px; }
+  .feature-icon-wrapper svg { width: 40px; height: 40px; }
+  .category-icon-wrapper { width: 85px; height: 85px; }
+  .category-icon-wrapper svg { width: 40px; height: 40px; }
+  
+  .testimonials-grid { grid-template-columns: 1fr; }
+  
+  .newsletter-form { flex-direction: column; }
+  .newsletter-btn { width: 100%; }
+}
+
+@media (max-width: 576px) {
+  .section-title { font-size: 30px; }
+  .section-underline::before { font-size: 14px; }
+  
+  .product-carousel-wrapper { padding: 0 15px; }
+  .product-carousel { gap: 18px; padding: 16px 5px 24px; }
+  .carousel-product-card { flex: 0 0 260px; width: 260px; height: 380px; }
+  .carousel-image-wrapper { height: 200px; }
+  .carousel-arrow { display: none; }
+  
+  .carousel-product-info { padding: 18px 16px 16px; }
+  .carousel-product-name { font-size: 19px; }
+  .carousel-product-description { font-size: 12px; }
+  .carousel-product-price { font-size: 19px; }
+  .carousel-original-price { font-size: 11px; }
+  .carousel-add-to-cart { width: 44px; height: 44px; }
+  .carousel-add-to-cart svg { width: 18px; height: 18px; }
+  
+  .product-category-badge { 
+    padding: 7px 12px; 
+    font-size: 9px;
+    top: 12px;
+    left: 12px;
+  }
+  
+  .carousel-discount-badge,
+  .product-type-badge {
+    top: 12px;
+    right: 12px;
+    padding: 7px 10px;
+    font-size: 9px;
+  }
+  
+  .occasions-grid { gap: 15px; }
+  .occasion-card { aspect-ratio: 1; border-radius: 20px; }
+  .occasion-content { padding: 20px; }
+  .occasion-name { font-size: 20px; }
+  .occasion-icon-wrapper { width: 45px; height: 45px; border-radius: 14px; margin-bottom: 14px; }
+  .occasion-icon-wrapper svg { width: 24px; height: 24px; }
+  .occasion-shop-btn { font-size: 9px; padding: 10px 16px; letter-spacing: 1px; }
+  
+  .features-grid, .categories-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
+  .feature-card, .category-card { padding: 30px 20px; border-radius: 20px; }
+  .feature-icon-wrapper { width: 75px; height: 75px; margin-bottom: 20px; }
+  .feature-icon-wrapper svg { width: 34px; height: 34px; }
+  .feature-title, .category-card h3 { font-size: 18px; }
+  .feature-desc { font-size: 13px; }
+  
+  .category-icon-wrapper { width: 70px; height: 70px; margin-bottom: 20px; }
+  .category-icon-wrapper svg { width: 34px; height: 34px; }
+  .category-arrow { width: 38px; height: 38px; }
+  
+  .testimonial-card { padding: 35px 25px; border-radius: 24px; }
+  .testimonial-card::before { font-size: 80px; }
+  
+  .newsletter-text h2 { font-size: 32px; }
+  .newsletter-input, .newsletter-btn { padding: 16px 28px; }
+}
+
+@media (max-width: 400px) {
+  .carousel-product-card { flex: 0 0 250px; width: 250px; height: 365px; }
+  .carousel-image-wrapper { height: 190px; }
+  
+  .carousel-product-info { padding: 16px 14px 14px; }
+  .carousel-product-name { font-size: 18px; }
+  .carousel-product-description { font-size: 11px; -webkit-line-clamp: 1; }
+  .carousel-product-price { font-size: 18px; }
+  .carousel-add-to-cart { width: 42px; height: 42px; }
+  .carousel-add-to-cart svg { width: 16px; height: 16px; }
+  
+  .product-category-badge { 
+    padding: 6px 10px; 
+    font-size: 8px;
+  }
+  
+  .occasions-grid { grid-template-columns: 1fr 1fr; }
+  .occasion-icon-wrapper { display: none; }
+  .occasion-name { font-size: 18px; }
+}
+
+/* ============================================
+   RTL SPECIFIC STYLES
+   ============================================ */
+[dir="rtl"] .product-carousel { direction: rtl; }
+[dir="rtl"] .carousel-arrow-left { left: auto; right: 0; }
+[dir="rtl"] .carousel-arrow-right { right: auto; left: 0; }
+[dir="rtl"] .carousel-arrow svg { transform: rotate(180deg); }
+[dir="rtl"] .occasion-shop-btn svg, [dir="rtl"] .category-arrow svg { transform: rotate(180deg); }
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.carousel-arrow:focus-visible,
+.occasion-card:focus-visible,
+.category-card:focus-visible,
+.newsletter-btn:focus-visible,
+.carousel-add-to-cart:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 3px;
+}

@@ -1,0 +1,1097 @@
+/* ============================================
+   Grand Bouquets Page - Elegant Pastel Theme
+   ============================================ */
+
+/* Page Container */
+.grand-bouquets-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fdf6f8 0%, #fef9f5 50%, #f8f5fd 100%);
+  position: relative;
+  overflow-x: hidden;
+  padding-bottom: 80px;
+}
+
+.grand-bouquets-page.rtl {
+  direction: rtl;
+}
+
+/* Decorative Background */
+.grand-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.luxury-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.5;
+}
+
+.glow-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--primary-lighter) 0%, transparent 70%);
+  top: -150px;
+  right: -100px;
+}
+
+.glow-2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #d4a5ff 0%, transparent 70%);
+  bottom: 10%;
+  left: -120px;
+  opacity: 0.4;
+}
+
+.floating-rose {
+  position: absolute;
+  font-size: 40px;
+  opacity: 0.25;
+  animation: roseFloat 18s ease-in-out infinite;
+}
+
+.fr-1 {
+  top: 12%;
+  left: 6%;
+  animation-delay: 0s;
+}
+
+.fr-2 {
+  top: 40%;
+  right: 8%;
+  animation-delay: -6s;
+  font-size: 50px;
+}
+
+.fr-3 {
+  bottom: 25%;
+  left: 15%;
+  animation-delay: -12s;
+  font-size: 35px;
+}
+
+@keyframes roseFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-18px) rotate(8deg); }
+  50% { transform: translateY(-6px) rotate(-6deg); }
+  75% { transform: translateY(-24px) rotate(4deg); }
+}
+
+/* Container */
+.grand-bouquets-page .container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Breadcrumb */
+.grand-bouquets-page .breadcrumb-nav {
+  padding: 20px 0;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(216, 180, 220, 0.3);
+}
+
+.grand-bouquets-page .breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+}
+
+.grand-bouquets-page.rtl .breadcrumb {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.grand-bouquets-page .breadcrumb a {
+  color: #b48eb5;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.grand-bouquets-page .breadcrumb a:hover {
+  color: #d4a5c9;
+}
+
+.grand-bouquets-page .breadcrumb .separator {
+  color: #dbb8dc;
+  display: flex;
+}
+
+.grand-bouquets-page.rtl .breadcrumb .separator svg {
+  transform: scaleX(-1);
+}
+
+.grand-bouquets-page .breadcrumb .current {
+  color: #9a6b9a;
+  font-weight: 500;
+}
+
+/* Hero Section */
+.grand-bouquets-page .page-hero {
+  padding: 50px 0 40px;
+  text-align: center;
+}
+
+.grand-bouquets-page .hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.grand-bouquets-page .hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 24px;
+  background: linear-gradient(135deg, var(--primary-lighter) 0%, var(--secondary-light) 100%);
+  border-radius: 50px;
+  color: #7b4d7b;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 30px rgba(216, 180, 220, 0.4);
+}
+
+.grand-bouquets-page.rtl .hero-badge {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.grand-bouquets-page .hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 56px;
+  font-weight: 600;
+  color: #8b5a8b;
+  margin: 0 0 14px;
+  line-height: 1.2;
+  background: linear-gradient(135deg, #9a6b9a 0%, var(--secondary-light) 50%, #d4a5c9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.grand-bouquets-page.rtl .hero-title {
+  font-family: 'Amiri', serif;
+  font-size: 50px;
+}
+
+.grand-bouquets-page .hero-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 17px;
+  font-weight: 300;
+  color: var(--secondary);
+  margin: 0 0 28px;
+  line-height: 1.7;
+}
+
+.grand-bouquets-page.rtl .hero-subtitle {
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* Hero Stats */
+.grand-bouquets-page .hero-stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+  padding: 20px 40px;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 10px 40px rgba(216, 180, 220, 0.2);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.grand-bouquets-page .stat {
+  text-align: center;
+}
+
+.grand-bouquets-page .stat-number {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--secondary-light);
+  line-height: 1;
+}
+
+.grand-bouquets-page.rtl .stat-number {
+  font-family: 'Amiri', serif;
+}
+
+.grand-bouquets-page .stat-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  color: var(--secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.grand-bouquets-page.rtl .stat-label {
+  font-family: 'Tajawal', sans-serif;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.grand-bouquets-page .stat-divider {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(180deg, transparent, var(--secondary-light), transparent);
+}
+
+/* Products Section */
+.grand-bouquets-page .products-section {
+  padding: 25px 0 60px;
+}
+
+.grand-bouquets-page .products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+/* Product Card */
+.grand-bouquets-page .product-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(180, 142, 181, 0.1);
+  transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  animation: cardReveal 0.6s ease-out forwards;
+  opacity: 0;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+  color: inherit;
+}
+
+@keyframes cardReveal {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.grand-bouquets-page .product-card:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 25px 60px rgba(196, 139, 196, 0.25);
+}
+
+/* Product Badge */
+.grand-bouquets-page .product-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 10;
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.grand-bouquets-page.rtl .product-badge {
+  left: auto;
+  right: 16px;
+  font-family: 'Tajawal', sans-serif;
+  text-transform: none;
+}
+
+.grand-bouquets-page .badge-premium {
+  background: linear-gradient(135deg, var(--primary-lighter) 0%, var(--primary-light) 100%);
+  color: var(--primary-darker);
+  box-shadow: 0 4px 15px rgba(244, 143, 177, 0.4);
+}
+
+.grand-bouquets-page .badge-luxury {
+  background: linear-gradient(135deg, var(--secondary-light) 0%, #ce93d8 100%);
+  color: #6a1b9a;
+  box-shadow: 0 4px 15px rgba(206, 147, 216, 0.4);
+}
+
+.grand-bouquets-page .badge-special {
+  background: linear-gradient(135deg, #b3e5fc 0%, #81d4fa 100%);
+  color: #01579b;
+  box-shadow: 0 4px 15px rgba(129, 212, 250, 0.4);
+}
+
+/* Product Image */
+.grand-bouquets-page .product-image-wrapper {
+  position: relative;
+  height: 320px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #fdf6f8 0%, #fef5f9 100%);
+}
+
+.grand-bouquets-page .product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  padding: 20px;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.grand-bouquets-page .product-card:hover .product-image {
+  transform: scale(1.1);
+}
+
+/* Product Overlay */
+.grand-bouquets-page .product-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  background: linear-gradient(180deg, transparent 0%, rgba(139, 90, 139, 0.9) 100%);
+  opacity: 0;
+  transform: translateY(15px);
+  transition: all 0.35s ease;
+  display: flex;
+  justify-content: center;
+}
+
+.grand-bouquets-page .product-card:hover .product-overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.grand-bouquets-page .quick-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 26px;
+  background: white;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #8b5a8b;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.grand-bouquets-page.rtl .quick-add-btn {
+  font-family: 'Tajawal', sans-serif;
+  flex-direction: row-reverse;
+}
+
+.grand-bouquets-page .quick-add-btn:hover {
+  background: linear-gradient(135deg, var(--primary-lighter) 0%, var(--secondary-light) 100%);
+  color: #6a1b6a;
+  transform: scale(1.05);
+}
+
+/* Product Details */
+.grand-bouquets-page .product-details {
+  padding: 22px;
+}
+
+.grand-bouquets-page .product-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #8b5a8b;
+  margin: 0 0 8px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.grand-bouquets-page.rtl .product-name {
+  font-family: 'Amiri', serif;
+}
+
+.grand-bouquets-page .product-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: var(--secondary);
+  margin: 0 0 16px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.grand-bouquets-page.rtl .product-desc {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.grand-bouquets-page .product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.grand-bouquets-page .price-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.grand-bouquets-page .original-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #d4b8d4;
+  text-decoration: line-through;
+}
+
+.grand-bouquets-page.rtl .original-price {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.grand-bouquets-page .sale-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--secondary-light);
+}
+
+.grand-bouquets-page.rtl .sale-price {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.grand-bouquets-page .cart-icon-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--secondary-light);
+  background: transparent;
+  color: var(--secondary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.grand-bouquets-page .product-card:hover .cart-icon-btn {
+  background: linear-gradient(135deg, var(--primary-lighter) 0%, var(--secondary-light) 100%);
+  border-color: transparent;
+  color: #6a1b6a;
+  transform: rotate(90deg);
+}
+
+/* Info Banner */
+.grand-bouquets-page .info-banner {
+  padding: 0 0 40px;
+}
+
+.grand-bouquets-page .banner-content {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 30px 38px;
+  background: linear-gradient(135deg, rgba(248, 187, 217, 0.15) 0%, rgba(225, 190, 231, 0.15) 100%);
+  border: 1px solid rgba(225, 190, 231, 0.3);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.grand-bouquets-page.rtl .banner-content {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.grand-bouquets-page .banner-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-lighter) 0%, var(--secondary-light) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  flex-shrink: 0;
+  box-shadow: 0 10px 30px rgba(216, 180, 220, 0.4);
+}
+
+.grand-bouquets-page .banner-text h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #8b5a8b;
+  margin: 0 0 8px;
+}
+
+.grand-bouquets-page.rtl .banner-text h3 {
+  font-family: 'Amiri', serif;
+}
+
+.grand-bouquets-page .banner-text p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: var(--secondary);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.grand-bouquets-page.rtl .banner-text p {
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN - 5 BREAKPOINTS
+   ============================================ */
+
+/* Large Desktop */
+@media (max-width: 1200px) {
+  .grand-bouquets-page .hero-title {
+    font-size: 48px;
+  }
+
+  .grand-bouquets-page .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .grand-bouquets-page .product-image-wrapper {
+    height: 290px;
+  }
+}
+
+/* Tablet Landscape */
+@media (max-width: 992px) {
+  .grand-bouquets-page .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .grand-bouquets-page .product-image-wrapper {
+    height: 340px;
+  }
+
+  .grand-bouquets-page .product-details {
+    padding: 18px;
+  }
+
+  .grand-bouquets-page .product-name {
+    font-size: 20px;
+  }
+
+  .grand-bouquets-page .sale-price {
+    font-size: 20px;
+  }
+
+  .grand-bouquets-page .banner-content {
+    flex-direction: column;
+    text-align: center;
+    padding: 26px;
+  }
+
+  .grand-bouquets-page.rtl .banner-content {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* Tablet Portrait */
+@media (max-width: 768px) {
+  .grand-bouquets-page {
+    padding-bottom: 60px;
+  }
+
+  /* Floating decorations */
+  .floating-rose {
+    font-size: 32px;
+    opacity: 0.18;
+  }
+
+  .fr-1 { font-size: 32px; }
+  .fr-2 { font-size: 40px; }
+  .fr-3 { font-size: 28px; }
+
+  /* Container */
+  .grand-bouquets-page .container {
+    padding: 0 16px;
+  }
+
+  /* Breadcrumb */
+  .grand-bouquets-page .breadcrumb-nav {
+    padding: 12px 0;
+  }
+
+  .grand-bouquets-page .breadcrumb {
+    font-size: 12px;
+    gap: 6px;
+  }
+
+  /* Hero */
+  .grand-bouquets-page .page-hero {
+    padding: 30px 0 25px;
+  }
+
+  .grand-bouquets-page .hero-badge {
+    padding: 8px 18px;
+    font-size: 12px;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .grand-bouquets-page .hero-title {
+    font-size: 36px;
+    margin-bottom: 10px;
+  }
+
+  .grand-bouquets-page.rtl .hero-title {
+    font-size: 32px;
+  }
+
+  .grand-bouquets-page .hero-subtitle {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .grand-bouquets-page .hero-stats {
+    gap: 22px;
+    padding: 16px 26px;
+    max-width: 420px;
+  }
+
+  .grand-bouquets-page .stat-number {
+    font-size: 25px;
+  }
+
+  .grand-bouquets-page .stat-label {
+    font-size: 10px;
+  }
+
+  .grand-bouquets-page .stat-divider {
+    height: 32px;
+  }
+
+  /* Products */
+  .grand-bouquets-page .products-section {
+    padding: 20px 0 40px;
+  }
+
+  .grand-bouquets-page .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .grand-bouquets-page .product-card {
+    border-radius: 18px;
+  }
+
+  .grand-bouquets-page .product-card:hover {
+    transform: none;
+  }
+
+  .grand-bouquets-page .product-badge {
+    padding: 5px 12px;
+    font-size: 9px;
+    top: 12px;
+    left: 12px;
+    border-radius: 14px;
+  }
+
+  .grand-bouquets-page.rtl .product-badge {
+    left: auto;
+    right: 12px;
+  }
+
+  .grand-bouquets-page .product-image-wrapper {
+    height: 220px;
+  }
+
+  .grand-bouquets-page .product-image {
+    padding: 14px;
+  }
+
+  .grand-bouquets-page .product-overlay {
+    display: none;
+  }
+
+  .grand-bouquets-page .product-details {
+    padding: 16px;
+  }
+
+  .grand-bouquets-page .product-name {
+    font-size: 17px;
+    margin-bottom: 5px;
+  }
+
+  .grand-bouquets-page .product-desc {
+    font-size: 11px;
+    -webkit-line-clamp: 1;
+    margin-bottom: 12px;
+  }
+
+  .grand-bouquets-page .original-price {
+    font-size: 11px;
+  }
+
+  .grand-bouquets-page .sale-price {
+    font-size: 17px;
+  }
+
+  .grand-bouquets-page .cart-icon-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .grand-bouquets-page .cart-icon-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Banner */
+  .grand-bouquets-page .info-banner {
+    padding: 0 0 30px;
+  }
+
+  .grand-bouquets-page .banner-content {
+    flex-direction: column;
+    text-align: center;
+    padding: 22px 18px;
+    gap: 16px;
+    border-radius: 18px;
+  }
+
+  .grand-bouquets-page .banner-icon {
+    width: 62px;
+    height: 62px;
+    font-size: 28px;
+  }
+
+  .grand-bouquets-page .banner-text h3 {
+    font-size: 20px;
+  }
+
+  .grand-bouquets-page .banner-text p {
+    font-size: 12px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .grand-bouquets-page {
+    padding-bottom: 50px;
+  }
+
+  /* Hide floating decorations */
+  .fr-3 {
+    display: none;
+  }
+
+  .glow-2 {
+    opacity: 0.3;
+  }
+
+  /* Container */
+  .grand-bouquets-page .container {
+    padding: 0 12px;
+  }
+
+  /* Breadcrumb */
+  .grand-bouquets-page .breadcrumb-nav {
+    padding: 10px 0;
+  }
+
+  .grand-bouquets-page .breadcrumb {
+    font-size: 11px;
+    gap: 4px;
+  }
+
+  .grand-bouquets-page .breadcrumb .separator svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  /* Hero */
+  .grand-bouquets-page .page-hero {
+    padding: 20px 0;
+  }
+
+  .grand-bouquets-page .hero-badge {
+    padding: 7px 14px;
+    font-size: 11px;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .grand-bouquets-page .hero-title {
+    font-size: 30px;
+  }
+
+  .grand-bouquets-page.rtl .hero-title {
+    font-size: 28px;
+  }
+
+  .grand-bouquets-page .hero-subtitle {
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+
+  .grand-bouquets-page .hero-stats {
+    gap: 16px;
+    padding: 14px 20px;
+    max-width: 100%;
+    border-radius: 14px;
+  }
+
+  .grand-bouquets-page .stat-number {
+    font-size: 22px;
+  }
+
+  .grand-bouquets-page .stat-label {
+    font-size: 9px;
+  }
+
+  .grand-bouquets-page .stat-divider {
+    height: 28px;
+  }
+
+  /* Products */
+  .grand-bouquets-page .products-section {
+    padding: 16px 0 30px;
+  }
+
+  .grand-bouquets-page .products-grid {
+    gap: 14px;
+  }
+
+  .grand-bouquets-page .product-card {
+    border-radius: 14px;
+  }
+
+  .grand-bouquets-page .product-badge {
+    padding: 4px 10px;
+    font-size: 8px;
+    top: 10px;
+    left: 10px;
+    border-radius: 12px;
+  }
+
+  .grand-bouquets-page.rtl .product-badge {
+    left: auto;
+    right: 10px;
+  }
+
+  .grand-bouquets-page .product-image-wrapper {
+    height: 240px;
+  }
+
+  .grand-bouquets-page .product-image {
+    padding: 0;
+  }
+
+  .grand-bouquets-page .product-details {
+    padding: 0;
+  }
+
+  .grand-bouquets-page .product-name {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  .grand-bouquets-page .product-desc {
+    display: none;
+  }
+
+  .grand-bouquets-page .original-price {
+    font-size: 10px;
+  }
+
+  .grand-bouquets-page .sale-price {
+    font-size: 15px;
+  }
+
+  .grand-bouquets-page .cart-icon-btn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .grand-bouquets-page .cart-icon-btn svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  /* Banner */
+  .grand-bouquets-page .info-banner {
+    padding: 0 0 20px;
+  }
+
+  .grand-bouquets-page .banner-content {
+    padding: 18px 14px;
+    gap: 12px;
+    border-radius: 14px;
+  }
+
+  .grand-bouquets-page .banner-icon {
+    width: 52px;
+    height: 52px;
+    font-size: 24px;
+  }
+
+  .grand-bouquets-page .banner-text h3 {
+    font-size: 17px;
+  }
+
+  .grand-bouquets-page .banner-text p {
+    font-size: 11px;
+  }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 360px) {
+  .grand-bouquets-page .container {
+    padding: 0 10px;
+  }
+
+  .grand-bouquets-page .hero-badge {
+    padding: 6px 12px;
+    font-size: 10px;
+  }
+
+  .grand-bouquets-page .hero-title {
+    font-size: 26px;
+  }
+
+  .grand-bouquets-page.rtl .hero-title {
+    font-size: 24px;
+  }
+
+  .grand-bouquets-page .hero-subtitle {
+    font-size: 12px;
+  }
+
+  .grand-bouquets-page .hero-stats {
+    gap: 12px;
+    padding: 12px 16px;
+  }
+
+  .grand-bouquets-page .stat-number {
+    font-size: 20px;
+  }
+
+  .grand-bouquets-page .stat-label {
+    font-size: 8px;
+  }
+
+  .grand-bouquets-page .stat-divider {
+    height: 24px;
+  }
+
+  .grand-bouquets-page .products-grid {
+    gap: 12px;
+  }
+
+  .grand-bouquets-page .product-image-wrapper {
+    height: 160px;
+  }
+
+  .grand-bouquets-page .product-details {
+    padding: 0;
+  }
+
+  .grand-bouquets-page .product-name {
+    font-size: 12px;
+  }
+
+  .grand-bouquets-page .original-price {
+    font-size: 9px;
+  }
+
+  .grand-bouquets-page .sale-price {
+    font-size: 13px;
+  }
+
+  .grand-bouquets-page .product-badge {
+    padding: 3px 8px;
+    font-size: 7px;
+  }
+
+  .grand-bouquets-page .cart-icon-btn {
+    width: 30px;
+    height: 30px;
+  }
+
+  .grand-bouquets-page .cart-icon-btn svg {
+    width: 10px;
+    height: 10px;
+  }
+
+  .grand-bouquets-page .banner-content {
+    padding: 14px 12px;
+  }
+
+  .grand-bouquets-page .banner-icon {
+    width: 46px;
+    height: 46px;
+    font-size: 20px;
+  }
+
+  .grand-bouquets-page .banner-text h3 {
+    font-size: 14px;
+  }
+
+  .grand-bouquets-page .banner-text p {
+    font-size: 10px;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY & PRINT
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .floating-rose,
+  .product-card,
+  .product-image,
+  .cart-icon-btn,
+  .banner-icon {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.grand-bouquets-page .product-card:focus-visible,
+.grand-bouquets-page .quick-add-btn:focus-visible,
+.grand-bouquets-page .cart-icon-btn:focus-visible {
+  outline: 2px solid var(--secondary-light);
+  outline-offset: 2px;
+}
+
+@media print {
+  .grand-bg {
+    display: none;
+  }
+
+  .grand-bouquets-page .product-card {
+    box-shadow: none;
+    border: 1px solid var(--border-medium);
+    break-inside: avoid;
+  }
+
+  .grand-bouquets-page .info-banner {
+    display: none;
+  }
+}

@@ -1,0 +1,1104 @@
+/* ============================================
+   Baby Roses - Soft Rose & Blush Theme
+   ============================================ */
+
+/* Page Container */
+.baby-roses-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fff1f2 0%, var(--primary-lightest) 50%, var(--primary-lightest) 100%);
+  position: relative;
+  overflow-x: hidden;
+  padding-bottom: 80px;
+}
+
+.baby-roses-page.rtl {
+  direction: rtl;
+}
+
+/* Decorative Background */
+.baby-roses-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.baby-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.4;
+}
+
+.glow-1 {
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, var(--primary-light) 0%, transparent 70%);
+  top: -140px;
+  right: -90px;
+}
+
+.glow-2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, var(--warm-light) 0%, transparent 70%);
+  bottom: 12%;
+  left: -100px;
+  opacity: 0.32;
+}
+
+.floating-rose {
+  position: absolute;
+  font-size: 30px;
+  opacity: 0.22;
+  animation: roseFloat 16s ease-in-out infinite;
+}
+
+.fr-1 {
+  top: 9%;
+  left: 6%;
+  animation-delay: 0s;
+  font-size: 36px;
+}
+
+.fr-2 {
+  top: 28%;
+  right: 8%;
+  animation-delay: -4s;
+  font-size: 30px;
+}
+
+.fr-3 {
+  bottom: 34%;
+  left: 11%;
+  animation-delay: -8s;
+  font-size: 32px;
+}
+
+.fr-4 {
+  bottom: 17%;
+  right: 13%;
+  animation-delay: -12s;
+  font-size: 26px;
+}
+
+@keyframes roseFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+  25% { transform: translateY(-16px) rotate(5deg) scale(1.06); }
+  50% { transform: translateY(-6px) rotate(-3deg) scale(1); }
+  75% { transform: translateY(-20px) rotate(3deg) scale(1.04); }
+}
+
+/* Container */
+.baby-roses-page .container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Breadcrumb */
+.baby-roses-page .breadcrumb-nav {
+  padding: 20px 0;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(212, 165, 165, 0.15);
+}
+
+.baby-roses-page .breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+}
+
+.baby-roses-page.rtl .breadcrumb {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.baby-roses-page .breadcrumb a {
+  color: var(--error);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.baby-roses-page .breadcrumb a:hover {
+  color: var(--error);
+}
+
+.baby-roses-page .breadcrumb .separator {
+  color: var(--primary-light);
+  display: flex;
+}
+
+.baby-roses-page.rtl .breadcrumb .separator svg {
+  transform: scaleX(-1);
+}
+
+.baby-roses-page .breadcrumb .current {
+  color: var(--error-dark);
+  font-weight: 500;
+}
+
+/* Hero Section */
+.baby-roses-page .page-hero {
+  padding: 50px 0 40px;
+  text-align: center;
+}
+
+.baby-roses-page .hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.baby-roses-page .hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 24px;
+  background: linear-gradient(135deg, var(--error) 0%, var(--error) 50%, #fb7185 100%);
+  border-radius: 50px;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 30px rgba(212, 165, 165, 0.35);
+}
+
+.baby-roses-page.rtl .hero-badge {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.baby-roses-page .hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 54px;
+  font-weight: 600;
+  color: var(--error-dark);
+  margin: 0 0 14px;
+  line-height: 1.2;
+  background: linear-gradient(135deg, var(--error-dark) 0%, var(--error) 50%, var(--error) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.baby-roses-page.rtl .hero-title {
+  font-family: 'Amiri', serif;
+  font-size: 48px;
+}
+
+.baby-roses-page .hero-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 17px;
+  font-weight: 300;
+  color: var(--primary-darker);
+  margin: 0 0 28px;
+  line-height: 1.7;
+}
+
+.baby-roses-page.rtl .hero-subtitle {
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* Hero Stats */
+.baby-roses-page .hero-stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+  padding: 20px 40px;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 10px 40px rgba(212, 165, 165, 0.12);
+  max-width: 460px;
+  margin: 0 auto;
+}
+
+.baby-roses-page .stat {
+  text-align: center;
+}
+
+.baby-roses-page .stat-number {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--error);
+  line-height: 1;
+}
+
+.baby-roses-page.rtl .stat-number {
+  font-family: 'Amiri', serif;
+}
+
+.baby-roses-page .stat-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  color: var(--primary-darker);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.baby-roses-page.rtl .stat-label {
+  font-family: 'Tajawal', sans-serif;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.baby-roses-page .stat-divider {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(180deg, transparent, var(--primary-light), transparent);
+}
+
+/* Products Section */
+.baby-roses-page .products-section {
+  padding: 25px 0 60px;
+}
+
+.baby-roses-page .products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 26px;
+}
+
+/* Product Card */
+.baby-roses-page .product-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(190, 18, 60, 0.06);
+  transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  animation: cardBaby 0.6s ease-out forwards;
+  opacity: 0;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+}
+
+@keyframes cardBaby {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.baby-roses-page .product-card:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 28px 65px rgba(212, 165, 165, 0.15);
+}
+
+/* Product Badge */
+.baby-roses-page .product-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 10;
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.baby-roses-page.rtl .product-badge {
+  left: auto;
+  right: 16px;
+  font-family: 'Tajawal', sans-serif;
+  text-transform: none;
+}
+
+.baby-roses-page .badge-pink {
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-light) 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+}
+
+.baby-roses-page .badge-peach {
+  background: linear-gradient(135deg, var(--warm) 0%, var(--warm-light) 100%);
+  color: #7c2d12;
+  box-shadow: 0 4px 15px rgba(251, 146, 60, 0.4);
+}
+
+.baby-roses-page .badge-mix {
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--secondary-light) 50%, var(--warm-light) 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(167, 139, 250, 0.4);
+}
+
+.baby-roses-page .badge-white {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--border-light) 100%);
+  color: var(--text-secondary);
+  box-shadow: 0 4px 15px rgba(148, 163, 184, 0.3);
+}
+
+.baby-roses-page .badge-premium {
+  background: linear-gradient(135deg, var(--warm) 0%, var(--warm-light) 100%);
+  color: var(--text-dark);
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+}
+
+/* Product Image */
+.baby-roses-page .product-image-wrapper {
+  position: relative;
+  height: 270px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #fff1f2 0%, var(--primary-lightest) 100%);
+}
+
+.baby-roses-page .product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  padding: 16px;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.baby-roses-page .product-card:hover .product-image {
+  transform: scale(1.08);
+}
+
+/* Product Overlay */
+.baby-roses-page .product-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  background: linear-gradient(180deg, transparent 0%, rgba(190, 18, 60, 0.9) 100%);
+  opacity: 0;
+  transform: translateY(15px);
+  transition: all 0.35s ease;
+  display: flex;
+  justify-content: center;
+}
+
+.baby-roses-page .product-card:hover .product-overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.baby-roses-page .quick-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 26px;
+  background: white;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--error-dark);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.baby-roses-page.rtl .quick-add-btn {
+  font-family: 'Tajawal', sans-serif;
+  flex-direction: row-reverse;
+}
+
+.baby-roses-page .quick-add-btn:hover {
+  background: linear-gradient(135deg, var(--error) 0%, #fb7185 100%);
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Product Details */
+.baby-roses-page .product-details {
+  padding: 22px;
+}
+
+.baby-roses-page .product-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--error-dark);
+  margin: 0 0 8px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.baby-roses-page.rtl .product-name {
+  font-family: 'Amiri', serif;
+}
+
+.baby-roses-page .product-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: var(--primary-darker);
+  margin: 0 0 16px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.baby-roses-page.rtl .product-desc {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.baby-roses-page .product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.baby-roses-page .price-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.baby-roses-page .price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--error);
+}
+
+.baby-roses-page.rtl .price {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.baby-roses-page .cart-icon-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid var(--primary-light);
+  background: transparent;
+  color: var(--error);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.baby-roses-page .product-card:hover .cart-icon-btn {
+  background: linear-gradient(135deg, var(--error) 0%, var(--error) 100%);
+  border-color: transparent;
+  color: white;
+  transform: rotate(90deg);
+}
+
+/* Info Banner */
+.baby-roses-page .info-banner {
+  padding: 0 0 40px;
+}
+
+.baby-roses-page .banner-content {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 28px 35px;
+  background: linear-gradient(135deg, rgba(253, 164, 175, 0.18) 0%, rgba(253, 186, 116, 0.12) 100%);
+  border: 1px solid rgba(253, 164, 175, 0.3);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.baby-roses-page.rtl .banner-content {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.baby-roses-page .banner-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--error) 0%, var(--error) 50%, #fb7185 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  flex-shrink: 0;
+  box-shadow: 0 10px 30px rgba(212, 165, 165, 0.35);
+}
+
+.baby-roses-page .banner-text h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--error-dark);
+  margin: 0 0 8px;
+}
+
+.baby-roses-page.rtl .banner-text h3 {
+  font-family: 'Amiri', serif;
+}
+
+.baby-roses-page .banner-text p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: var(--primary-darker);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.baby-roses-page.rtl .banner-text p {
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN - MOBILE OPTIMIZED
+   ============================================ */
+
+@media (max-width: 1200px) {
+  .baby-roses-page .hero-title {
+    font-size: 46px;
+  }
+  
+  .baby-roses-page .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+}
+
+@media (max-width: 992px) {
+  .baby-roses-page .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+
+  .baby-roses-page .product-image-wrapper {
+    height: 230px;
+  }
+
+  .baby-roses-page .banner-content {
+    flex-direction: column;
+    text-align: center;
+    padding: 24px;
+  }
+
+  .baby-roses-page.rtl .banner-content {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* ============================================
+   TABLET STYLES (768px)
+   ============================================ */
+@media (max-width: 768px) {
+  .baby-roses-page {
+    padding-bottom: 60px;
+  }
+
+  /* Reduce floating roses on mobile */
+  .floating-rose {
+    font-size: 24px;
+    opacity: 0.16;
+  }
+
+  .fr-1 { font-size: 28px; }
+  .fr-2 { font-size: 24px; }
+  .fr-3 { font-size: 26px; }
+  .fr-4 { font-size: 20px; }
+
+  /* Container */
+  .baby-roses-page .container {
+    padding: 0 16px;
+  }
+
+  /* Breadcrumb */
+  .baby-roses-page .breadcrumb-nav {
+    padding: 12px 0;
+  }
+
+  .baby-roses-page .breadcrumb {
+    font-size: 12px;
+    gap: 6px;
+  }
+
+  /* Hero Section */
+  .baby-roses-page .page-hero {
+    padding: 30px 0 25px;
+  }
+
+  .baby-roses-page .hero-badge {
+    padding: 8px 18px;
+    font-size: 12px;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  
+  .baby-roses-page .hero-title {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+  
+  .baby-roses-page.rtl .hero-title {
+    font-size: 28px;
+  }
+  
+  .baby-roses-page .hero-subtitle {
+    font-size: 14px;
+    margin-bottom: 20px;
+    padding: 0 10px;
+  }
+
+  /* Hero Stats */
+  .baby-roses-page .hero-stats {
+    gap: 20px;
+    padding: 16px 24px;
+    max-width: 360px;
+  }
+  
+  .baby-roses-page .stat-number {
+    font-size: 22px;
+  }
+
+  .baby-roses-page .stat-label {
+    font-size: 10px;
+  }
+
+  .baby-roses-page .stat-divider {
+    height: 30px;
+  }
+
+  /* Products Section */
+  .baby-roses-page .products-section {
+    padding: 20px 0 40px;
+  }
+  
+  .baby-roses-page .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  /* Product Card */
+  .baby-roses-page .product-card {
+    border-radius: 18px;
+  }
+
+  .baby-roses-page .product-card:hover {
+    transform: none;
+  }
+
+  /* Product Badge */
+  .baby-roses-page .product-badge {
+    padding: 5px 12px;
+    font-size: 8px;
+    top: 12px;
+    left: 12px;
+    border-radius: 14px;
+  }
+
+  .baby-roses-page.rtl .product-badge {
+    left: auto;
+    right: 12px;
+  }
+  
+  .baby-roses-page .product-image-wrapper {
+    height: 240px;
+  }
+
+  .baby-roses-page .product-image {
+    padding: 0;
+  }
+
+  .baby-roses-page .product-overlay {
+    display: none;
+  }
+  
+  .baby-roses-page .product-details {
+    padding: 14px;
+  }
+  
+  .baby-roses-page .product-name {
+    font-size: 15px;
+    margin-bottom: 5px;
+  }
+  
+  .baby-roses-page .product-desc {
+    font-size: 10px;
+    -webkit-line-clamp: 1;
+    margin-bottom: 10px;
+  }
+  
+  .baby-roses-page .price {
+    font-size: 15px;
+  }
+  
+  .baby-roses-page .cart-icon-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .baby-roses-page .cart-icon-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Info Banner */
+  .baby-roses-page .info-banner {
+    padding: 0 0 30px;
+  }
+  
+  .baby-roses-page .banner-content {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px 16px;
+    gap: 14px;
+    border-radius: 18px;
+  }
+
+  .baby-roses-page.rtl .banner-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .baby-roses-page .banner-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 26px;
+  }
+
+  .baby-roses-page .banner-text h3 {
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
+
+  .baby-roses-page .banner-text p {
+    font-size: 12px;
+  }
+}
+
+/* ============================================
+   MOBILE STYLES (480px)
+   ============================================ */
+@media (max-width: 480px) {
+  .baby-roses-page {
+    padding-bottom: 50px;
+  }
+
+  /* Hide some floating roses on small screens */
+  .fr-3,
+  .fr-4 {
+    display: none;
+  }
+
+  .glow-2 {
+    opacity: 0.22;
+  }
+
+  /* Container */
+  .baby-roses-page .container {
+    padding: 0 12px;
+  }
+
+  /* Breadcrumb */
+  .baby-roses-page .breadcrumb-nav {
+    padding: 10px 0;
+  }
+
+  .baby-roses-page .breadcrumb {
+    font-size: 11px;
+    gap: 4px;
+  }
+
+  .baby-roses-page .breadcrumb .separator svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  /* Hero Section */
+  .baby-roses-page .page-hero {
+    padding: 20px 0;
+  }
+  
+  .baby-roses-page .hero-badge {
+    padding: 7px 14px;
+    font-size: 11px;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  
+  .baby-roses-page .hero-title {
+    font-size: 26px;
+  }
+
+  .baby-roses-page.rtl .hero-title {
+    font-size: 24px;
+  }
+
+  .baby-roses-page .hero-subtitle {
+    font-size: 13px;
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+  
+  /* Hero Stats - Horizontal compact */
+  .baby-roses-page .hero-stats {
+    gap: 16px;
+    padding: 14px 20px;
+    max-width: 100%;
+    border-radius: 14px;
+  }
+
+  .baby-roses-page .stat-number {
+    font-size: 20px;
+  }
+
+  .baby-roses-page .stat-label {
+    font-size: 9px;
+    letter-spacing: 0.5px;
+  }
+  
+  .baby-roses-page .stat-divider {
+    height: 28px;
+  }
+
+  /* Products Section */
+  .baby-roses-page .products-section {
+    padding: 16px 0 30px;
+  }
+  
+  .baby-roses-page .products-grid {
+    gap: 12px;
+  }
+
+  /* Product Card */
+  .baby-roses-page .product-card {
+    border-radius: 16px;
+  }
+  
+  .baby-roses-page .product-badge {
+    padding: 4px 10px;
+    font-size: 7px;
+    top: 10px;
+    left: 10px;
+    border-radius: 12px;
+  }
+  
+  .baby-roses-page.rtl .product-badge {
+    left: auto;
+    right: 10px;
+  }
+  
+  .baby-roses-page .product-image-wrapper {
+    height: 200px;
+  }
+
+  .baby-roses-page .product-image {
+    padding: 0;
+  }
+  
+  .baby-roses-page .product-details {
+    padding: 0;
+  }
+  
+  .baby-roses-page .product-name {
+    font-size: 13px;
+    margin-bottom: 3px;
+  }
+  
+  .baby-roses-page .product-desc {
+    display: none;
+  }
+  
+  .baby-roses-page .price {
+    font-size: 13px;
+  }
+  
+  .baby-roses-page .cart-icon-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .baby-roses-page .cart-icon-btn svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  /* Info Banner */
+  .baby-roses-page .info-banner {
+    padding: 0 0 20px;
+  }
+
+  .baby-roses-page .banner-content {
+    padding: 18px 14px;
+    gap: 12px;
+    border-radius: 14px;
+  }
+
+  .baby-roses-page .banner-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 22px;
+  }
+
+  .baby-roses-page .banner-text h3 {
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  .baby-roses-page .banner-text p {
+    font-size: 11px;
+    line-height: 1.5;
+  }
+}
+
+/* ============================================
+   EXTRA SMALL MOBILE (360px)
+   ============================================ */
+@media (max-width: 360px) {
+  .baby-roses-page .container {
+    padding: 0 10px;
+  }
+
+  /* Hero */
+  .baby-roses-page .hero-badge {
+    padding: 6px 12px;
+    font-size: 10px;
+  }
+
+  .baby-roses-page .hero-title {
+    font-size: 22px;
+  }
+
+  .baby-roses-page.rtl .hero-title {
+    font-size: 20px;
+  }
+
+  .baby-roses-page .hero-subtitle {
+    font-size: 12px;
+  }
+
+  .baby-roses-page .hero-stats {
+    gap: 12px;
+    padding: 12px 16px;
+  }
+
+  .baby-roses-page .stat-number {
+    font-size: 18px;
+  }
+
+  .baby-roses-page .stat-label {
+    font-size: 8px;
+  }
+
+  .baby-roses-page .stat-divider {
+    height: 24px;
+  }
+
+  /* Products */
+  .baby-roses-page .products-grid {
+    gap: 10px;
+  }
+
+  .baby-roses-page .product-image-wrapper {
+    height: 130px;
+  }
+
+  .baby-roses-page .product-details {
+    padding: 0;
+  }
+
+  .baby-roses-page .product-name {
+    font-size: 12px;
+  }
+
+  .baby-roses-page .price {
+    font-size: 12px;
+  }
+
+  .baby-roses-page .product-badge {
+    padding: 3px 8px;
+    font-size: 6px;
+  }
+
+  .baby-roses-page .cart-icon-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .baby-roses-page .cart-icon-btn svg {
+    width: 10px;
+    height: 10px;
+  }
+
+  /* Banner */
+  .baby-roses-page .banner-content {
+    padding: 14px 12px;
+  }
+
+  .baby-roses-page .banner-icon {
+    width: 42px;
+    height: 42px;
+    font-size: 18px;
+  }
+
+  .baby-roses-page .banner-text h3 {
+    font-size: 14px;
+  }
+
+  .baby-roses-page .banner-text p {
+    font-size: 10px;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .floating-rose,
+  .product-card,
+  .product-image,
+  .cart-icon-btn,
+  .banner-icon {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Focus States */
+.baby-roses-page .product-card:focus-visible,
+.baby-roses-page .quick-add-btn:focus-visible,
+.baby-roses-page .cart-icon-btn:focus-visible {
+  outline: 2px solid var(--error);
+  outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+  .baby-roses-bg {
+    display: none;
+  }
+
+  .baby-roses-page .product-card {
+    box-shadow: none;
+    border: 1px solid var(--border-medium);
+    break-inside: avoid;
+  }
+
+  .baby-roses-page .info-banner {
+    display: none;
+  }
+}

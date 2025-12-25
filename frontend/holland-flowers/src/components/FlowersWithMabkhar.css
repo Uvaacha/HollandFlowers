@@ -1,0 +1,1060 @@
+/* ============================================
+   Flowers With Mabkhar - Deep Gold & Bronze Arabian Theme
+   ============================================ */
+
+/* Page Container */
+.flowers-mabkhar-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, var(--bg-primary) 0%, var(--warm-light) 50%, #fde68a 100%);
+  position: relative;
+  overflow-x: hidden;
+  padding-bottom: 80px;
+}
+
+.flowers-mabkhar-page.rtl {
+  direction: rtl;
+}
+
+/* Decorative Background */
+.flowers-mabkhar-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.fm-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.45;
+}
+
+.flowers-mabkhar-page .glow-1 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, var(--warm-light) 0%, transparent 70%);
+  top: -100px;
+  right: -60px;
+}
+
+.flowers-mabkhar-page .glow-2 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, var(--warm-dark) 0%, transparent 70%);
+  bottom: 18%;
+  left: -80px;
+}
+
+.floating-fm {
+  position: absolute;
+  font-size: 30px;
+  opacity: 0.22;
+  animation: fmFloat 15s ease-in-out infinite;
+}
+
+.ffm-1 {
+  top: 12%;
+  left: 7%;
+  animation-delay: 0s;
+  font-size: 36px;
+}
+
+.ffm-2 {
+  top: 32%;
+  right: 9%;
+  animation-delay: -4s;
+}
+
+.ffm-3 {
+  bottom: 30%;
+  left: 10%;
+  animation-delay: -8s;
+}
+
+.ffm-4 {
+  bottom: 16%;
+  right: 12%;
+  animation-delay: -12s;
+}
+
+@keyframes fmFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-16px) rotate(6deg); }
+}
+
+/* Container */
+.flowers-mabkhar-page .container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Breadcrumb */
+.flowers-mabkhar-page .breadcrumb-nav {
+  padding: 20px 0;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(217, 119, 6, 0.2);
+}
+
+.flowers-mabkhar-page .breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+}
+
+.flowers-mabkhar-page.rtl .breadcrumb {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.flowers-mabkhar-page .breadcrumb a {
+  color: var(--warm-dark);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.flowers-mabkhar-page .breadcrumb a:hover {
+  color: var(--warm-dark);
+}
+
+.flowers-mabkhar-page .breadcrumb .separator {
+  color: var(--warning);
+  display: flex;
+}
+
+.flowers-mabkhar-page.rtl .breadcrumb .separator svg {
+  transform: scaleX(-1);
+}
+
+.flowers-mabkhar-page .breadcrumb .current {
+  color: var(--text-dark);
+  font-weight: 500;
+}
+
+/* Hero Section */
+.flowers-mabkhar-page .page-hero {
+  padding: 55px 0 45px;
+  text-align: center;
+}
+
+.flowers-mabkhar-page .hero-content {
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+.flowers-mabkhar-page .hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, var(--text-dark) 0%, var(--warm-dark) 50%, var(--warm-dark) 100%);
+  border-radius: 50px;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 22px;
+  box-shadow: 0 10px 35px rgba(180, 83, 9, 0.4);
+}
+
+.flowers-mabkhar-page.rtl .hero-badge {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.flowers-mabkhar-page .hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 54px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 16px;
+  line-height: 1.2;
+  background: linear-gradient(135deg, var(--text-dark) 0%, var(--text-dark) 50%, var(--warm-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.flowers-mabkhar-page.rtl .hero-title {
+  font-family: 'Amiri', serif;
+  font-size: 48px;
+}
+
+.flowers-mabkhar-page .hero-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 17px;
+  font-weight: 300;
+  color: var(--text-dark);
+  margin: 0 0 30px;
+  line-height: 1.7;
+}
+
+.flowers-mabkhar-page.rtl .hero-subtitle {
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* Hero Stats */
+.flowers-mabkhar-page .hero-stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+  padding: 22px 45px;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 12px 45px rgba(180, 83, 9, 0.15);
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+.flowers-mabkhar-page .stat {
+  text-align: center;
+}
+
+.flowers-mabkhar-page .stat-number {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--warm-dark);
+  line-height: 1;
+}
+
+.flowers-mabkhar-page.rtl .stat-number {
+  font-family: 'Amiri', serif;
+}
+
+.flowers-mabkhar-page .stat-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.flowers-mabkhar-page.rtl .stat-label {
+  font-family: 'Tajawal', sans-serif;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.flowers-mabkhar-page .stat-divider {
+  width: 1px;
+  height: 42px;
+  background: linear-gradient(180deg, transparent, var(--warning), transparent);
+}
+
+/* Products Section */
+.flowers-mabkhar-page .products-section {
+  padding: 30px 0 65px;
+}
+
+.flowers-mabkhar-page .products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+/* Product Card */
+.flowers-mabkhar-page .product-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(146, 64, 14, 0.08);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  animation: cardFM 0.65s ease-out forwards;
+  opacity: 0;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+}
+
+@keyframes cardFM {
+  from {
+    opacity: 0;
+    transform: translateY(35px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.flowers-mabkhar-page .product-card:hover {
+  transform: translateY(-14px);
+  box-shadow: 0 32px 70px rgba(180, 83, 9, 0.18);
+}
+
+/* Product Badge */
+.flowers-mabkhar-page .product-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 10;
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.flowers-mabkhar-page.rtl .product-badge {
+  left: auto;
+  right: 16px;
+  font-family: 'Tajawal', sans-serif;
+  text-transform: none;
+}
+
+.flowers-mabkhar-page .badge-tray {
+  background: linear-gradient(135deg, var(--text-secondary) 0%, var(--text-muted) 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(71, 85, 105, 0.4);
+}
+
+.flowers-mabkhar-page .badge-box {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(30, 41, 59, 0.4);
+}
+
+.flowers-mabkhar-page .badge-premium {
+  background: linear-gradient(135deg, var(--warm-dark) 0%, var(--warm) 100%);
+  color: var(--text-dark);
+  box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4);
+}
+
+/* Product Image */
+.flowers-mabkhar-page .product-image-wrapper {
+  position: relative;
+  height: 290px;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--bg-primary) 0%, var(--warm-light) 100%);
+}
+
+.flowers-mabkhar-page .product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  padding: 18px;
+  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.flowers-mabkhar-page .product-card:hover .product-image {
+  transform: scale(1.1);
+}
+
+/* Product Overlay */
+.flowers-mabkhar-page .product-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  background: linear-gradient(180deg, transparent 0%, rgba(120, 53, 15, 0.92) 100%);
+  opacity: 0;
+  transform: translateY(15px);
+  transition: all 0.4s ease;
+  display: flex;
+  justify-content: center;
+}
+
+.flowers-mabkhar-page .product-card:hover .product-overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.flowers-mabkhar-page .quick-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 13px 28px;
+  background: white;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.flowers-mabkhar-page.rtl .quick-add-btn {
+  font-family: 'Tajawal', sans-serif;
+  flex-direction: row-reverse;
+}
+
+.flowers-mabkhar-page .quick-add-btn:hover {
+  background: linear-gradient(135deg, var(--warm-dark) 0%, var(--warm) 100%);
+  color: var(--text-dark);
+}
+
+/* Product Details */
+.flowers-mabkhar-page .product-details {
+  padding: 24px;
+}
+
+.flowers-mabkhar-page .product-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 21px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 8px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.flowers-mabkhar-page.rtl .product-name {
+  font-family: 'Amiri', serif;
+}
+
+.flowers-mabkhar-page .product-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: var(--text-dark);
+  margin: 0 0 16px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.flowers-mabkhar-page.rtl .product-desc {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.flowers-mabkhar-page .product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flowers-mabkhar-page .price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--warm-dark);
+}
+
+.flowers-mabkhar-page.rtl .price {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.flowers-mabkhar-page .cart-icon-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 2px solid var(--warning);
+  background: transparent;
+  color: var(--warm-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.flowers-mabkhar-page .product-card:hover .cart-icon-btn {
+  background: linear-gradient(135deg, var(--warm-dark) 0%, var(--warm-dark) 100%);
+  border-color: transparent;
+  color: white;
+  transform: rotate(90deg);
+}
+
+/* Info Banner */
+.flowers-mabkhar-page .info-banner {
+  padding: 0 0 45px;
+}
+
+.flowers-mabkhar-page .banner-content {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  padding: 32px 40px;
+  background: linear-gradient(135deg, rgba(252, 211, 77, 0.2) 0%, rgba(217, 119, 6, 0.12) 100%);
+  border: 1px solid rgba(252, 211, 77, 0.35);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.flowers-mabkhar-page.rtl .banner-content {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.flowers-mabkhar-page .banner-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--text-dark) 0%, var(--warm-dark) 50%, var(--warm-dark) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  flex-shrink: 0;
+  box-shadow: 0 10px 30px rgba(180, 83, 9, 0.35);
+}
+
+.flowers-mabkhar-page .banner-text h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 8px;
+}
+
+.flowers-mabkhar-page.rtl .banner-text h3 {
+  font-family: 'Amiri', serif;
+}
+
+.flowers-mabkhar-page .banner-text p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: var(--text-dark);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.flowers-mabkhar-page.rtl .banner-text p {
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN - 5 BREAKPOINTS
+   ============================================ */
+
+/* Large Desktop */
+@media (max-width: 1200px) {
+  .flowers-mabkhar-page .hero-title {
+    font-size: 48px;
+  }
+
+  .flowers-mabkhar-page .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+}
+
+/* Tablet Landscape */
+@media (max-width: 992px) {
+  .flowers-mabkhar-page .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .flowers-mabkhar-page .product-image-wrapper {
+    height: 250px;
+  }
+
+  .flowers-mabkhar-page .banner-content {
+    flex-direction: column;
+    text-align: center;
+    padding: 26px;
+  }
+
+  .flowers-mabkhar-page.rtl .banner-content {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* Tablet Portrait */
+@media (max-width: 768px) {
+  .flowers-mabkhar-page {
+    padding-bottom: 60px;
+  }
+
+  /* Floating decorations */
+  .floating-fm {
+    font-size: 26px;
+    opacity: 0.16;
+  }
+
+  .ffm-1 { font-size: 30px; }
+  .ffm-2 { font-size: 24px; }
+
+  /* Container */
+  .flowers-mabkhar-page .container {
+    padding: 0 16px;
+  }
+
+  /* Breadcrumb */
+  .flowers-mabkhar-page .breadcrumb-nav {
+    padding: 12px 0;
+  }
+
+  .flowers-mabkhar-page .breadcrumb {
+    font-size: 12px;
+    gap: 6px;
+  }
+
+  /* Hero */
+  .flowers-mabkhar-page .page-hero {
+    padding: 35px 0 30px;
+  }
+
+  .flowers-mabkhar-page .hero-badge {
+    padding: 10px 20px;
+    font-size: 12px;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+
+  .flowers-mabkhar-page .hero-title {
+    font-size: 36px;
+    margin-bottom: 12px;
+  }
+
+  .flowers-mabkhar-page.rtl .hero-title {
+    font-size: 32px;
+  }
+
+  .flowers-mabkhar-page .hero-subtitle {
+    font-size: 14px;
+    margin-bottom: 22px;
+  }
+
+  .flowers-mabkhar-page .hero-stats {
+    gap: 25px;
+    padding: 18px 30px;
+    max-width: 380px;
+  }
+
+  .flowers-mabkhar-page .stat-number {
+    font-size: 24px;
+  }
+
+  .flowers-mabkhar-page .stat-label {
+    font-size: 10px;
+  }
+
+  .flowers-mabkhar-page .stat-divider {
+    height: 34px;
+  }
+
+  /* Products */
+  .flowers-mabkhar-page .products-section {
+    padding: 25px 0 45px;
+  }
+
+  .flowers-mabkhar-page .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .flowers-mabkhar-page .product-card {
+    border-radius: 18px;
+  }
+
+  .flowers-mabkhar-page .product-card:hover {
+    transform: none;
+  }
+
+  .flowers-mabkhar-page .product-badge {
+    padding: 5px 12px;
+    font-size: 9px;
+    top: 12px;
+    left: 12px;
+    border-radius: 14px;
+  }
+
+  .flowers-mabkhar-page.rtl .product-badge {
+    left: auto;
+    right: 12px;
+  }
+
+  .flowers-mabkhar-page .product-image-wrapper {
+    height: 190px;
+  }
+
+  .flowers-mabkhar-page .product-image {
+    padding: 0;
+  }
+
+  .flowers-mabkhar-page .product-overlay {
+    display: none;
+  }
+
+  .flowers-mabkhar-page .product-details {
+    padding: 16px;
+  }
+
+  .flowers-mabkhar-page .product-name {
+    font-size: 17px;
+    margin-bottom: 6px;
+  }
+
+  .flowers-mabkhar-page .product-desc {
+    font-size: 11px;
+    -webkit-line-clamp: 1;
+    margin-bottom: 12px;
+  }
+
+  .flowers-mabkhar-page .price {
+    font-size: 17px;
+  }
+
+  .flowers-mabkhar-page .cart-icon-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .flowers-mabkhar-page .cart-icon-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Banner */
+  .flowers-mabkhar-page .info-banner {
+    padding: 0 0 35px;
+  }
+
+  .flowers-mabkhar-page .banner-content {
+    flex-direction: column;
+    text-align: center;
+    padding: 22px 18px;
+    gap: 16px;
+    border-radius: 18px;
+  }
+
+  .flowers-mabkhar-page .banner-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 28px;
+  }
+
+  .flowers-mabkhar-page .banner-text h3 {
+    font-size: 20px;
+  }
+
+  .flowers-mabkhar-page .banner-text p {
+    font-size: 12px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .flowers-mabkhar-page {
+    padding-bottom: 50px;
+  }
+
+  /* Hide floating decorations */
+  .ffm-3,
+  .ffm-4 {
+    display: none;
+  }
+
+  .flowers-mabkhar-page .glow-2 {
+    opacity: 0.3;
+  }
+
+  /* Container */
+  .flowers-mabkhar-page .container {
+    padding: 0 12px;
+  }
+
+  /* Breadcrumb */
+  .flowers-mabkhar-page .breadcrumb-nav {
+    padding: 10px 0;
+  }
+
+  .flowers-mabkhar-page .breadcrumb {
+    font-size: 11px;
+    gap: 4px;
+  }
+
+  .flowers-mabkhar-page .breadcrumb .separator svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  /* Hero */
+  .flowers-mabkhar-page .page-hero {
+    padding: 25px 0;
+  }
+
+  .flowers-mabkhar-page .hero-badge {
+    padding: 8px 16px;
+    font-size: 11px;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .flowers-mabkhar-page .hero-title {
+    font-size: 28px;
+  }
+
+  .flowers-mabkhar-page.rtl .hero-title {
+    font-size: 26px;
+  }
+
+  .flowers-mabkhar-page .hero-subtitle {
+    font-size: 13px;
+    margin-bottom: 18px;
+  }
+
+  .flowers-mabkhar-page .hero-stats {
+    gap: 18px;
+    padding: 14px 22px;
+    max-width: 100%;
+    border-radius: 14px;
+  }
+
+  .flowers-mabkhar-page .stat-number {
+    font-size: 22px;
+  }
+
+  .flowers-mabkhar-page .stat-label {
+    font-size: 9px;
+  }
+
+  .flowers-mabkhar-page .stat-divider {
+    height: 30px;
+  }
+
+  /* Products - Single column for 6 products */
+  .flowers-mabkhar-page .products-section {
+    padding: 20px 0 35px;
+  }
+
+  .flowers-mabkhar-page .products-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    max-width: 380px;
+    margin: 0 auto;
+  }
+
+  .flowers-mabkhar-page .product-card {
+    border-radius: 16px;
+  }
+
+  .flowers-mabkhar-page .product-badge {
+    padding: 5px 12px;
+    font-size: 8px;
+    top: 10px;
+    left: 10px;
+    border-radius: 12px;
+  }
+
+  .flowers-mabkhar-page.rtl .product-badge {
+    left: auto;
+    right: 10px;
+  }
+
+  .flowers-mabkhar-page .product-image-wrapper {
+    height: 280px;
+  }
+
+  .flowers-mabkhar-page .product-image {
+    padding: 14px;
+  }
+
+  .flowers-mabkhar-page .product-details {
+    padding: 16px;
+  }
+
+  .flowers-mabkhar-page .product-name {
+    font-size: 17px;
+    margin-bottom: 5px;
+  }
+
+  .flowers-mabkhar-page .product-desc {
+    font-size: 11px;
+    margin-bottom: 12px;
+  }
+
+  .flowers-mabkhar-page .price {
+    font-size: 17px;
+  }
+
+  .flowers-mabkhar-page .cart-icon-btn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .flowers-mabkhar-page .cart-icon-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Banner */
+  .flowers-mabkhar-page .info-banner {
+    padding: 0 0 25px;
+  }
+
+  .flowers-mabkhar-page .banner-content {
+    padding: 18px 14px;
+    gap: 12px;
+    border-radius: 14px;
+  }
+
+  .flowers-mabkhar-page .banner-icon {
+    width: 52px;
+    height: 52px;
+    font-size: 24px;
+  }
+
+  .flowers-mabkhar-page .banner-text h3 {
+    font-size: 17px;
+  }
+
+  .flowers-mabkhar-page .banner-text p {
+    font-size: 11px;
+  }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 360px) {
+  .flowers-mabkhar-page .container {
+    padding: 0 10px;
+  }
+
+  .flowers-mabkhar-page .hero-badge {
+    padding: 7px 14px;
+    font-size: 10px;
+  }
+
+  .flowers-mabkhar-page .hero-title {
+    font-size: 24px;
+  }
+
+  .flowers-mabkhar-page.rtl .hero-title {
+    font-size: 22px;
+  }
+
+  .flowers-mabkhar-page .hero-subtitle {
+    font-size: 12px;
+  }
+
+  .flowers-mabkhar-page .hero-stats {
+    gap: 14px;
+    padding: 12px 18px;
+  }
+
+  .flowers-mabkhar-page .stat-number {
+    font-size: 20px;
+  }
+
+  .flowers-mabkhar-page .stat-label {
+    font-size: 8px;
+  }
+
+  .flowers-mabkhar-page .stat-divider {
+    height: 26px;
+  }
+
+  .flowers-mabkhar-page .products-grid {
+    gap: 14px;
+    max-width: 100%;
+  }
+
+  .flowers-mabkhar-page .product-image-wrapper {
+    height: 240px;
+  }
+
+  .flowers-mabkhar-page .product-details {
+    padding: 14px;
+  }
+
+  .flowers-mabkhar-page .product-name {
+    font-size: 15px;
+  }
+
+  .flowers-mabkhar-page .product-desc {
+    display: none;
+  }
+
+  .flowers-mabkhar-page .price {
+    font-size: 15px;
+  }
+
+  .flowers-mabkhar-page .product-badge {
+    padding: 4px 10px;
+    font-size: 7px;
+  }
+
+  .flowers-mabkhar-page .cart-icon-btn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .flowers-mabkhar-page .cart-icon-btn svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .flowers-mabkhar-page .banner-content {
+    padding: 14px 12px;
+  }
+
+  .flowers-mabkhar-page .banner-icon {
+    width: 46px;
+    height: 46px;
+    font-size: 20px;
+  }
+
+  .flowers-mabkhar-page .banner-text h3 {
+    font-size: 15px;
+  }
+
+  .flowers-mabkhar-page .banner-text p {
+    font-size: 10px;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY & PRINT
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .floating-fm,
+  .product-card,
+  .product-image,
+  .cart-icon-btn,
+  .banner-icon {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.flowers-mabkhar-page .product-card:focus-visible,
+.flowers-mabkhar-page .cart-icon-btn:focus-visible {
+  outline: 2px solid var(--warm-dark);
+  outline-offset: 2px;
+}
+
+@media print {
+  .flowers-mabkhar-bg {
+    display: none;
+  }
+
+  .flowers-mabkhar-page .product-card {
+    box-shadow: none;
+    border: 1px solid var(--border-medium);
+    break-inside: avoid;
+  }
+
+  .flowers-mabkhar-page .info-banner {
+    display: none;
+  }
+}

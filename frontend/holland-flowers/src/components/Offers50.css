@@ -1,0 +1,1234 @@
+/* ============================================
+   50% OFFERS PAGE - FILTER SIDEBAR LAYOUT
+   ============================================ */
+
+.offers-50-page {
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+.offers-50-page.rtl {
+  direction: rtl;
+}
+
+.offers-50-page .container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ============================================
+   HERO BANNER - SALE THEME
+   ============================================ */
+.offers-50-page .hero-banner {
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 50%, #fff0f0 100%);
+  padding: 50px 0;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 2px solid #ffdddd;
+}
+
+.hero-bg-decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.floating-50 {
+  position: absolute;
+  font-family: 'Poppins', sans-serif;
+  font-size: 150px;
+  font-weight: 900;
+  color: rgba(220, 38, 38, 0.04);
+  animation: floatSale 15s ease-in-out infinite;
+}
+
+.float-1 {
+  top: -20px;
+  left: -50px;
+  transform: rotate(-15deg);
+}
+
+.float-2 {
+  bottom: -30px;
+  right: -50px;
+  transform: rotate(15deg);
+  animation-delay: -7s;
+}
+
+@keyframes floatSale {
+  0%, 100% { transform: translateY(0) rotate(-15deg); }
+  50% { transform: translateY(-20px) rotate(-10deg); }
+}
+
+.offers-50-page .hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Mega Discount Badge */
+.mega-discount-badge {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  padding: 18px 35px;
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  border-radius: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 12px 40px rgba(220, 38, 38, 0.35);
+  animation: pulseBadge 2s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.mega-discount-badge::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.2) 50%,
+    transparent 70%
+  );
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) rotate(45deg); }
+}
+
+@keyframes pulseBadge {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+.discount-number {
+  font-family: 'Poppins', sans-serif;
+  font-size: 60px;
+  font-weight: 900;
+  color: white;
+  line-height: 1;
+}
+
+.percent-sign {
+  font-family: 'Poppins', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.off-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  margin-left: 5px;
+}
+
+.offers-50-page .hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 48px;
+  font-weight: 600;
+  color: #2d2d2d;
+  margin: 0 0 14px;
+  line-height: 1.1;
+}
+
+.offers-50-page.rtl .hero-title {
+  font-family: 'Amiri', serif;
+  font-size: 42px;
+}
+
+.offers-50-page .hero-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  color: #666;
+  margin: 0 0 28px;
+  line-height: 1.7;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.offers-50-page.rtl .hero-subtitle {
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* Countdown Timer */
+.countdown-section {
+  margin-top: 20px;
+}
+
+.countdown-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #dc2626;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.offers-50-page.rtl .countdown-label {
+  font-family: 'Tajawal', sans-serif;
+  letter-spacing: 0;
+}
+
+.countdown-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 28px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(220, 38, 38, 0.12);
+}
+
+.time-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 60px;
+}
+
+.time-number {
+  font-family: 'Poppins', sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: #dc2626;
+  line-height: 1;
+}
+
+.time-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: #888;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.offers-50-page.rtl .time-label {
+  font-family: 'Tajawal', sans-serif;
+  text-transform: none;
+}
+
+.time-separator {
+  font-family: 'Poppins', sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: #dc2626;
+  margin-top: -12px;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ============================================
+   MAIN CONTENT LAYOUT
+   ============================================ */
+.offers-50-page .main-content {
+  padding: 40px 0 80px;
+}
+
+.offers-50-page .content-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 50px;
+  align-items: start;
+}
+
+/* ============================================
+   FILTERS SIDEBAR
+   ============================================ */
+.offers-50-page .filters-sidebar {
+  position: sticky;
+  top: 20px;
+}
+
+.offers-50-page .filters-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.offers-50-page .filters-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2d2d2d;
+  margin: 0;
+}
+
+.offers-50-page.rtl .filters-title {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.offers-50-page .clear-filters {
+  background: none;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #dc2626;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.offers-50-page .clear-filters:hover {
+  color: #b91c1c;
+}
+
+/* Filter Section */
+.offers-50-page .filter-section {
+  border-bottom: 1px solid #f0eded;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.offers-50-page .filter-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2d2d2d;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.offers-50-page.rtl .filter-header {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.offers-50-page .filter-header svg {
+  transition: transform 0.3s ease;
+  color: #999;
+}
+
+.offers-50-page .filter-header.open svg {
+  transform: rotate(180deg);
+}
+
+.offers-50-page .filter-content {
+  margin-top: 18px;
+}
+
+/* Price Inputs */
+.offers-50-page .price-inputs {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.offers-50-page .price-input-group {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  overflow: hidden;
+  flex: 1;
+}
+
+.offers-50-page .price-input-group .currency-label {
+  padding: 10px 12px;
+  background: #fafafa;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #999;
+  border-right: 1px solid #e5e5e5;
+}
+
+.offers-50-page.rtl .price-input-group .currency-label {
+  border-right: none;
+  border-left: 1px solid #e5e5e5;
+}
+
+.offers-50-page .price-input-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #2d2d2d;
+  outline: none;
+}
+
+.offers-50-page .price-separator {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #999;
+}
+
+.offers-50-page .price-hint {
+  margin: 14px 0 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #999;
+}
+
+/* Checkbox Labels */
+.offers-50-page .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.offers-50-page .checkbox-label:hover {
+  color: #dc2626;
+}
+
+.offers-50-page .checkbox-label input[type="checkbox"] {
+  display: none;
+}
+
+.offers-50-page .checkbox-label .checkmark {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.offers-50-page .checkbox-label input:checked + .checkmark {
+  background: #dc2626;
+  border-color: #dc2626;
+}
+
+.offers-50-page .checkbox-label input:checked + .checkmark::after {
+  content: '';
+  width: 5px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-bottom: 2px;
+}
+
+.offers-50-page .checkbox-label .label-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #4a4a4a;
+}
+
+.offers-50-page.rtl .checkbox-label .label-text {
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* ============================================
+   PRODUCTS MAIN AREA
+   ============================================ */
+.offers-50-page .products-main {
+  min-height: 500px;
+}
+
+/* Toolbar */
+.offers-50-page .products-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0eded;
+}
+
+.offers-50-page .items-count {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.offers-50-page .toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Sort Dropdown */
+.offers-50-page .sort-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.offers-50-page .sort-dropdown label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.offers-50-page .sort-dropdown select {
+  padding: 8px 32px 8px 14px;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #2d2d2d;
+  background: white;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.offers-50-page .sort-dropdown select:focus {
+  border-color: #dc2626;
+}
+
+/* View Toggle */
+.offers-50-page .view-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.offers-50-page .view-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  transition: all 0.2s ease;
+}
+
+.offers-50-page .view-btn:hover {
+  color: #666;
+}
+
+.offers-50-page .view-btn.active {
+  background: white;
+  color: #dc2626;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* ============================================
+   PRODUCTS GRID - 3 COLUMNS
+   ============================================ */
+.offers-50-page .products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.offers-50-page .products-grid.list {
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+/* ============================================
+   PRODUCT CARD
+   ============================================ */
+.offers-50-page .product-card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  animation: cardFadeIn 0.5s ease forwards;
+  opacity: 0;
+  border: 1px solid #fff0f0;
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.offers-50-page .product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(220, 38, 38, 0.12);
+  border-color: #ffdddd;
+}
+
+/* List View Card */
+.offers-50-page .products-grid.list .product-card {
+  flex-direction: row;
+  border-radius: 12px;
+}
+
+.offers-50-page .products-grid.list .product-image-wrapper {
+  width: 300px;
+  height: 300px;
+  flex-shrink: 0;
+}
+
+.offers-50-page .products-grid.list .product-info {
+  flex: 1;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Discount Badge */
+.offers-50-page .product-card .discount-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 10;
+  padding: 8px 14px;
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: #ffffff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 50px;
+  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+}
+
+.offers-50-page.rtl .discount-badge {
+  left: auto;
+  right: 14px;
+}
+
+/* Product Image - BIG */
+.offers-50-page .product-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 350px;
+  overflow: hidden;
+  background: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.offers-50-page .product-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.offers-50-page .product-card:hover .product-image {
+  transform: scale(1.05);
+}
+
+/* Product Info */
+.offers-50-page .product-info {
+  padding: 18px 16px 16px;
+  background: #ffffff;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.offers-50-page .product-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2d2d2d;
+  margin: 0 0 8px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color 0.3s ease;
+}
+
+.offers-50-page .product-card:hover .product-name {
+  color: #dc2626;
+}
+
+.offers-50-page.rtl .product-name {
+  font-family: 'Amiri', serif;
+}
+
+/* Product Description */
+.offers-50-page .product-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #888;
+  margin: 0 0 12px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 40px;
+}
+
+.offers-50-page.rtl .product-desc {
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* Product Footer */
+.offers-50-page .product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+.offers-50-page .price-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.offers-50-page .original-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #bbb;
+  text-decoration: line-through;
+  line-height: 1;
+}
+
+.offers-50-page .sale-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #dc2626;
+  line-height: 1.2;
+}
+
+/* Add to Cart Button */
+.offers-50-page .add-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: #fff0f0;
+  color: #dc2626;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.offers-50-page .add-btn:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+.offers-50-page .add-btn.adding {
+  background: #27ae60;
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+.offers-50-page .add-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.offers-50-page .add-btn:hover svg {
+  transform: rotate(90deg);
+}
+
+/* ============================================
+   STATES
+   ============================================ */
+.offers-50-page .loading-state,
+.offers-50-page .error-state,
+.offers-50-page .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.offers-50-page .spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #ffe4e4;
+  border-top-color: #dc2626;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.offers-50-page .loading-state p,
+.offers-50-page .error-state p,
+.offers-50-page .empty-state p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  color: #666;
+  margin: 0;
+}
+
+.offers-50-page .error-details {
+  font-size: 13px !important;
+  color: #999 !important;
+  margin-top: 8px !important;
+}
+
+.offers-50-page .empty-icon {
+  font-size: 50px;
+  margin-bottom: 16px;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 1200px) {
+  .offers-50-page .content-layout {
+    grid-template-columns: 250px 1fr;
+    gap: 40px;
+  }
+  
+  .offers-50-page .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  
+  .offers-50-page .product-image-wrapper {
+    height: 320px;
+  }
+  
+  .discount-number {
+    font-size: 50px;
+  }
+  
+  .offers-50-page .hero-title {
+    font-size: 42px;
+  }
+}
+
+@media (max-width: 992px) {
+  .offers-50-page .hero-banner {
+    padding: 40px 0;
+  }
+  
+  .offers-50-page .hero-title {
+    font-size: 38px;
+  }
+  
+  .offers-50-page .content-layout {
+    grid-template-columns: 220px 1fr;
+    gap: 30px;
+  }
+  
+  .offers-50-page .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .offers-50-page .product-image-wrapper {
+    height: 300px;
+  }
+  
+  .floating-50 {
+    font-size: 100px;
+  }
+}
+
+@media (max-width: 768px) {
+  .offers-50-page .hero-banner {
+    padding: 35px 0;
+  }
+  
+  .offers-50-page .hero-title {
+    font-size: 32px;
+  }
+  
+  .offers-50-page.rtl .hero-title {
+    font-size: 28px;
+  }
+  
+  .offers-50-page .hero-subtitle {
+    font-size: 14px;
+  }
+  
+  .mega-discount-badge {
+    padding: 14px 28px;
+  }
+  
+  .discount-number {
+    font-size: 42px;
+  }
+  
+  .percent-sign {
+    font-size: 24px;
+  }
+  
+  .off-text {
+    font-size: 18px;
+  }
+  
+  .countdown-timer {
+    padding: 12px 20px;
+    gap: 6px;
+  }
+  
+  .time-block {
+    min-width: 45px;
+  }
+  
+  .time-number {
+    font-size: 26px;
+  }
+  
+  .time-label {
+    font-size: 9px;
+  }
+  
+  .time-separator {
+    font-size: 22px;
+  }
+  
+  .floating-50 {
+    display: none;
+  }
+  
+  .offers-50-page .main-content {
+    padding: 30px 0 60px;
+  }
+  
+  .offers-50-page .content-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  
+  .offers-50-page .filters-sidebar {
+    position: relative;
+    top: 0;
+    padding: 20px;
+    background: #fff8f8;
+    border-radius: 12px;
+  }
+  
+  .offers-50-page .filters-header {
+    margin-bottom: 20px;
+  }
+  
+  .offers-50-page .filter-section {
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .offers-50-page .products-toolbar {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .offers-50-page .toolbar-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .offers-50-page .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  
+  .offers-50-page .product-image-wrapper {
+    height: 280px;
+  }
+  
+  .offers-50-page .product-info {
+    padding: 14px 12px 12px;
+  }
+  
+  .offers-50-page .product-name {
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+  
+  .offers-50-page .product-desc {
+    font-size: 12px;
+    min-height: 36px;
+    margin-bottom: 10px;
+  }
+  
+  .offers-50-page .sale-price {
+    font-size: 16px;
+  }
+  
+  .offers-50-page .add-btn {
+    width: 38px;
+    height: 38px;
+  }
+  
+  .offers-50-page .discount-badge {
+    padding: 6px 12px;
+    font-size: 10px;
+  }
+  
+  /* List view on mobile */
+  .offers-50-page .products-grid.list .product-card {
+    flex-direction: column;
+  }
+  
+  .offers-50-page .products-grid.list .product-image-wrapper {
+    width: 100%;
+    height: 280px;
+  }
+  
+  .offers-50-page .products-grid.list .product-info {
+    padding: 14px 12px 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .offers-50-page .container {
+    padding: 0 16px;
+  }
+  
+  .offers-50-page .hero-banner {
+    padding: 28px 0;
+  }
+  
+  .offers-50-page .hero-title {
+    font-size: 26px;
+  }
+  
+  .offers-50-page .hero-subtitle {
+    font-size: 13px;
+  }
+  
+  .mega-discount-badge {
+    padding: 12px 22px;
+  }
+  
+  .discount-number {
+    font-size: 36px;
+  }
+  
+  .percent-sign {
+    font-size: 20px;
+  }
+  
+  .off-text {
+    font-size: 16px;
+  }
+  
+  .countdown-timer {
+    padding: 10px 16px;
+    gap: 5px;
+  }
+  
+  .time-block {
+    min-width: 40px;
+  }
+  
+  .time-number {
+    font-size: 22px;
+  }
+  
+  .time-label {
+    font-size: 8px;
+  }
+  
+  .time-separator {
+    font-size: 18px;
+  }
+  
+  .offers-50-page .products-grid {
+    gap: 14px;
+  }
+  
+  .offers-50-page .product-image-wrapper {
+    height: 250px;
+  }
+  
+  .offers-50-page .product-info {
+    padding: 12px 10px 10px;
+  }
+  
+  .offers-50-page .product-name {
+    font-size: 15px;
+    margin-bottom: 5px;
+  }
+  
+  .offers-50-page .product-desc {
+    font-size: 11px;
+    min-height: 34px;
+    margin-bottom: 8px;
+  }
+  
+  .offers-50-page .sale-price {
+    font-size: 15px;
+  }
+  
+  .offers-50-page .original-price {
+    font-size: 11px;
+  }
+  
+  .offers-50-page .add-btn {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .offers-50-page .add-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .offers-50-page .discount-badge {
+    padding: 5px 10px;
+    font-size: 9px;
+    top: 10px;
+    left: 10px;
+  }
+  
+  .offers-50-page .sort-dropdown select {
+    padding: 6px 28px 6px 10px;
+    font-size: 13px;
+  }
+  
+  .offers-50-page .view-btn {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (max-width: 400px) {
+  .offers-50-page .hero-title {
+    font-size: 22px;
+  }
+  
+  .mega-discount-badge {
+    padding: 10px 18px;
+  }
+  
+  .discount-number {
+    font-size: 30px;
+  }
+  
+  .percent-sign {
+    font-size: 18px;
+  }
+  
+  .off-text {
+    font-size: 14px;
+  }
+  
+  .countdown-timer {
+    padding: 8px 12px;
+    gap: 4px;
+  }
+  
+  .time-block {
+    min-width: 35px;
+  }
+  
+  .time-number {
+    font-size: 18px;
+  }
+  
+  .time-separator {
+    font-size: 14px;
+  }
+  
+  .offers-50-page .products-grid {
+    gap: 12px;
+  }
+  
+  .offers-50-page .product-image-wrapper {
+    height: 220px;
+  }
+  
+  .offers-50-page .product-info {
+    padding: 10px 8px 8px;
+  }
+  
+  .offers-50-page .product-name {
+    font-size: 14px;
+  }
+  
+  .offers-50-page .product-desc {
+    font-size: 10px;
+    min-height: 30px;
+    -webkit-line-clamp: 1;
+  }
+  
+  .offers-50-page .sale-price {
+    font-size: 14px;
+  }
+  
+  .offers-50-page .add-btn {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .offers-50-page .product-card,
+  .offers-50-page .add-btn,
+  .offers-50-page .filter-header svg,
+  .mega-discount-badge,
+  .floating-50 {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .offers-50-page .product-card {
+    opacity: 1;
+  }
+}
+
+.offers-50-page .add-btn:focus-visible,
+.offers-50-page .view-btn:focus-visible,
+.offers-50-page .filter-header:focus-visible {
+  outline: 2px solid #dc2626;
+  outline-offset: 2px;
+}

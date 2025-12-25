@@ -1,0 +1,1084 @@
+/* ============================================
+   Orchid Plants Page - Purple/Green Theme
+   ============================================ */
+
+/* Page Container */
+.orchid-plants-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f8f5ff 0%, #f5f0ff 50%, #f9f7ff 100%);
+  position: relative;
+  overflow-x: hidden;
+  padding-bottom: 80px;
+}
+
+.orchid-plants-page.rtl {
+  direction: rtl;
+}
+
+/* Decorative Background */
+.orchid-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.orchid-bloom {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.3;
+}
+
+.orchid-1 {
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, var(--secondary) 0%, transparent 70%);
+  top: -120px;
+  right: -80px;
+}
+
+.orchid-2 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+  bottom: 15%;
+  left: -100px;
+}
+
+.floating-orchid {
+  position: absolute;
+  font-size: 35px;
+  opacity: 0.15;
+  animation: orchidFloat 20s ease-in-out infinite;
+}
+
+.fo-1 {
+  top: 12%;
+  left: 8%;
+  animation-delay: 0s;
+}
+
+.fo-2 {
+  top: 45%;
+  right: 10%;
+  animation-delay: -7s;
+  font-size: 45px;
+}
+
+.fo-3 {
+  bottom: 22%;
+  left: 18%;
+  animation-delay: -14s;
+  font-size: 30px;
+}
+
+@keyframes orchidFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-20px) rotate(10deg); }
+  50% { transform: translateY(-8px) rotate(-8deg); }
+  75% { transform: translateY(-28px) rotate(5deg); }
+}
+
+/* Container */
+.orchid-plants-page .container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Breadcrumb */
+.orchid-plants-page .breadcrumb-nav {
+  padding: 20px 0;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(156, 39, 176, 0.12);
+}
+
+.orchid-plants-page .breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+}
+
+.orchid-plants-page.rtl .breadcrumb {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.orchid-plants-page .breadcrumb a {
+  color: #9060a0;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.orchid-plants-page .breadcrumb a:hover {
+  color: var(--secondary);
+}
+
+.orchid-plants-page .breadcrumb .separator {
+  color: #d0a0e0;
+  display: flex;
+}
+
+.orchid-plants-page.rtl .breadcrumb .separator svg {
+  transform: scaleX(-1);
+}
+
+.orchid-plants-page .breadcrumb .current {
+  color: #6a1b7a;
+  font-weight: 500;
+}
+
+/* Hero Section */
+.orchid-plants-page .page-hero {
+  padding: 50px 0 40px;
+  text-align: center;
+}
+
+.orchid-plants-page .hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.orchid-plants-page .hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 24px;
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary) 100%);
+  border-radius: 50px;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 30px rgba(156, 39, 176, 0.35);
+}
+
+.orchid-plants-page.rtl .hero-badge {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.orchid-plants-page .hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 52px;
+  font-weight: 600;
+  color: #4a1560;
+  margin: 0 0 14px;
+  line-height: 1.2;
+  background: linear-gradient(135deg, #4a1560 0%, var(--secondary) 50%, var(--secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.orchid-plants-page.rtl .hero-title {
+  font-family: 'Amiri', serif;
+  font-size: 46px;
+}
+
+.orchid-plants-page .hero-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 17px;
+  font-weight: 300;
+  color: #6a4580;
+  margin: 0 0 28px;
+  line-height: 1.7;
+}
+
+.orchid-plants-page.rtl .hero-subtitle {
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* Hero Stats */
+.orchid-plants-page .hero-stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+  padding: 20px 40px;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 10px 40px rgba(156, 39, 176, 0.12);
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.orchid-plants-page .stat {
+  text-align: center;
+}
+
+.orchid-plants-page .stat-number {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--secondary);
+  line-height: 1;
+}
+
+.orchid-plants-page.rtl .stat-number {
+  font-family: 'Amiri', serif;
+}
+
+.orchid-plants-page .stat-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  color: #9060a0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.orchid-plants-page.rtl .stat-label {
+  font-family: 'Tajawal', sans-serif;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.orchid-plants-page .stat-divider {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(180deg, transparent, #e0c0f0, transparent);
+}
+
+/* Products Section */
+.orchid-plants-page .products-section {
+  padding: 25px 0 60px;
+}
+
+.orchid-plants-page .products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+
+/* Product Card */
+.orchid-plants-page .product-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(74, 21, 96, 0.08);
+  transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  animation: cardGrow 0.6s ease-out forwards;
+  opacity: 0;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+}
+
+@keyframes cardGrow {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.orchid-plants-page .product-card:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 25px 60px rgba(156, 39, 176, 0.2);
+}
+
+/* Product Badge */
+.orchid-plants-page .product-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 10;
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.orchid-plants-page.rtl .product-badge {
+  left: auto;
+  right: 16px;
+  font-family: 'Tajawal', sans-serif;
+  text-transform: none;
+}
+
+.orchid-plants-page .badge-premium {
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary) 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(156, 39, 176, 0.4);
+}
+
+.orchid-plants-page .badge-new {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+}
+
+.orchid-plants-page .badge-double {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 137, 123, 0.4);
+}
+
+/* Product Image */
+.orchid-plants-page .product-image-wrapper {
+  position: relative;
+  height: 300px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #f8f5ff 0%, #f0ebff 100%);
+}
+
+.orchid-plants-page .product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  padding: 20px;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.orchid-plants-page .product-card:hover .product-image {
+  transform: scale(1.1);
+}
+
+/* Product Overlay */
+.orchid-plants-page .product-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  background: linear-gradient(180deg, transparent 0%, rgba(74, 21, 96, 0.85) 100%);
+  opacity: 0;
+  transform: translateY(15px);
+  transition: all 0.35s ease;
+  display: flex;
+  justify-content: center;
+}
+
+.orchid-plants-page .product-card:hover .product-overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.orchid-plants-page .quick-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 26px;
+  background: white;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6a1b7a;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.orchid-plants-page.rtl .quick-add-btn {
+  font-family: 'Tajawal', sans-serif;
+  flex-direction: row-reverse;
+}
+
+.orchid-plants-page .quick-add-btn:hover {
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary) 100%);
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Product Details */
+.orchid-plants-page .product-details {
+  padding: 22px;
+}
+
+.orchid-plants-page .product-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: #4a1560;
+  margin: 0 0 8px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.orchid-plants-page.rtl .product-name {
+  font-family: 'Amiri', serif;
+}
+
+.orchid-plants-page .product-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #8060a0;
+  margin: 0 0 16px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.orchid-plants-page.rtl .product-desc {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.orchid-plants-page .product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.orchid-plants-page .price-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.orchid-plants-page .original-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #c8a0d8;
+  text-decoration: line-through;
+}
+
+.orchid-plants-page.rtl .original-price {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.orchid-plants-page .sale-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--secondary);
+}
+
+.orchid-plants-page.rtl .sale-price {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.orchid-plants-page .cart-icon-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 2px solid var(--secondary);
+  background: transparent;
+  color: var(--secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.orchid-plants-page .product-card:hover .cart-icon-btn {
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary) 100%);
+  border-color: transparent;
+  color: white;
+  transform: rotate(90deg);
+}
+
+/* Info Banner */
+.orchid-plants-page .info-banner {
+  padding: 0 0 40px;
+}
+
+.orchid-plants-page .banner-content {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 30px 38px;
+  background: linear-gradient(135deg, rgba(156, 39, 176, 0.08) 0%, rgba(76, 175, 80, 0.08) 100%);
+  border: 1px solid rgba(156, 39, 176, 0.18);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.orchid-plants-page.rtl .banner-content {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.orchid-plants-page .banner-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  flex-shrink: 0;
+  box-shadow: 0 10px 30px rgba(156, 39, 176, 0.3);
+}
+
+.orchid-plants-page .banner-text h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #4a1560;
+  margin: 0 0 8px;
+}
+
+.orchid-plants-page.rtl .banner-text h3 {
+  font-family: 'Amiri', serif;
+}
+
+.orchid-plants-page .banner-text p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #6a4580;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.orchid-plants-page.rtl .banner-text p {
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN - 5 BREAKPOINTS
+   ============================================ */
+
+/* Large Desktop */
+@media (max-width: 1200px) {
+  .orchid-plants-page .hero-title {
+    font-size: 46px;
+  }
+
+  .orchid-plants-page .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+
+  .orchid-plants-page .product-image-wrapper {
+    height: 270px;
+  }
+}
+
+/* Tablet Landscape */
+@media (max-width: 992px) {
+  .orchid-plants-page .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+
+  .orchid-plants-page .product-image-wrapper {
+    height: 240px;
+  }
+
+  .orchid-plants-page .banner-content {
+    flex-direction: column;
+    text-align: center;
+    padding: 26px;
+  }
+
+  .orchid-plants-page.rtl .banner-content {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* Tablet Portrait */
+@media (max-width: 768px) {
+  .orchid-plants-page {
+    padding-bottom: 60px;
+  }
+
+  /* Floating decorations */
+  .floating-orchid {
+    font-size: 28px;
+    opacity: 0.12;
+  }
+
+  .fo-1 { font-size: 30px; }
+  .fo-2 { font-size: 35px; }
+  .fo-3 { font-size: 24px; }
+
+  /* Container */
+  .orchid-plants-page .container {
+    padding: 0 16px;
+  }
+
+  /* Breadcrumb */
+  .orchid-plants-page .breadcrumb-nav {
+    padding: 12px 0;
+  }
+
+  .orchid-plants-page .breadcrumb {
+    font-size: 12px;
+    gap: 6px;
+  }
+
+  /* Hero */
+  .orchid-plants-page .page-hero {
+    padding: 30px 0 25px;
+  }
+
+  .orchid-plants-page .hero-badge {
+    padding: 8px 18px;
+    font-size: 12px;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .orchid-plants-page .hero-title {
+    font-size: 34px;
+    margin-bottom: 10px;
+  }
+
+  .orchid-plants-page.rtl .hero-title {
+    font-size: 30px;
+  }
+
+  .orchid-plants-page .hero-subtitle {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .orchid-plants-page .hero-stats {
+    gap: 22px;
+    padding: 16px 26px;
+    max-width: 380px;
+  }
+
+  .orchid-plants-page .stat-number {
+    font-size: 24px;
+  }
+
+  .orchid-plants-page .stat-label {
+    font-size: 10px;
+  }
+
+  .orchid-plants-page .stat-divider {
+    height: 32px;
+  }
+
+  /* Products */
+  .orchid-plants-page .products-section {
+    padding: 20px 0 40px;
+  }
+
+  .orchid-plants-page .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .orchid-plants-page .product-card {
+    border-radius: 18px;
+  }
+
+  .orchid-plants-page .product-card:hover {
+    transform: none;
+  }
+
+  .orchid-plants-page .product-badge {
+    padding: 5px 12px;
+    font-size: 9px;
+    top: 12px;
+    left: 12px;
+    border-radius: 14px;
+  }
+
+  .orchid-plants-page.rtl .product-badge {
+    left: auto;
+    right: 12px;
+  }
+
+  .orchid-plants-page .product-image-wrapper {
+    height: 280px;
+  }
+
+  .orchid-plants-page .product-image {
+    padding: 14px;
+  }
+
+  .orchid-plants-page .product-overlay {
+    display: none;
+  }
+
+  .orchid-plants-page .product-details {
+    padding: 16px;
+  }
+
+  .orchid-plants-page .product-name {
+    font-size: 17px;
+    -webkit-line-clamp: 1;
+    margin-bottom: 5px;
+  }
+
+  .orchid-plants-page .product-desc {
+    font-size: 11px;
+    -webkit-line-clamp: 1;
+    margin-bottom: 12px;
+  }
+
+  .orchid-plants-page .original-price {
+    font-size: 11px;
+  }
+
+  .orchid-plants-page .sale-price {
+    font-size: 16px;
+  }
+
+  .orchid-plants-page .cart-icon-btn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .orchid-plants-page .cart-icon-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Banner */
+  .orchid-plants-page .info-banner {
+    padding: 0 0 30px;
+  }
+
+  .orchid-plants-page .banner-content {
+    flex-direction: column;
+    text-align: center;
+    padding: 22px 18px;
+    gap: 16px;
+    border-radius: 18px;
+  }
+
+  .orchid-plants-page .banner-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 28px;
+  }
+
+  .orchid-plants-page .banner-text h3 {
+    font-size: 20px;
+  }
+
+  .orchid-plants-page .banner-text p {
+    font-size: 12px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .orchid-plants-page {
+    padding-bottom: 50px;
+  }
+
+  /* Hide floating decorations */
+  .fo-3 {
+    display: none;
+  }
+
+  .orchid-2 {
+    opacity: 0.2;
+  }
+
+  /* Container */
+  .orchid-plants-page .container {
+    padding: 0 12px;
+  }
+
+  /* Breadcrumb */
+  .orchid-plants-page .breadcrumb-nav {
+    padding: 10px 0;
+  }
+
+  .orchid-plants-page .breadcrumb {
+    font-size: 11px;
+    gap: 4px;
+  }
+
+  .orchid-plants-page .breadcrumb .separator svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  /* Hero */
+  .orchid-plants-page .page-hero {
+    padding: 20px 0;
+  }
+
+  .orchid-plants-page .hero-badge {
+    padding: 7px 14px;
+    font-size: 11px;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .orchid-plants-page .hero-title {
+    font-size: 28px;
+  }
+
+  .orchid-plants-page.rtl .hero-title {
+    font-size: 26px;
+  }
+
+  .orchid-plants-page .hero-subtitle {
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+
+  .orchid-plants-page .hero-stats {
+    gap: 16px;
+    padding: 14px 20px;
+    max-width: 100%;
+    border-radius: 14px;
+  }
+
+  .orchid-plants-page .stat-number {
+    font-size: 22px;
+  }
+
+  .orchid-plants-page .stat-label {
+    font-size: 9px;
+  }
+
+  .orchid-plants-page .stat-divider {
+    height: 28px;
+  }
+
+  /* Products */
+  .orchid-plants-page .products-section {
+    padding: 16px 0 30px;
+  }
+
+  .orchid-plants-page .products-grid {
+    gap: 12px;
+  }
+
+  .orchid-plants-page .product-card {
+    border-radius: 14px;
+  }
+
+  .orchid-plants-page .product-badge {
+    padding: 4px 10px;
+    font-size: 8px;
+    top: 10px;
+    left: 10px;
+    border-radius: 12px;
+  }
+
+  .orchid-plants-page.rtl .product-badge {
+    left: auto;
+    right: 10px;
+  }
+
+  .orchid-plants-page .product-image-wrapper {
+    height: 170px;
+  }
+
+  .orchid-plants-page .product-image {
+    padding: 0;
+  }
+
+  .orchid-plants-page .product-details {
+    padding: 0;
+  }
+
+  .orchid-plants-page .product-name {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  .orchid-plants-page .product-desc {
+    display: none;
+  }
+
+  .orchid-plants-page .original-price {
+    font-size: 10px;
+  }
+
+  .orchid-plants-page .sale-price {
+    font-size: 14px;
+  }
+
+  .orchid-plants-page .cart-icon-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .orchid-plants-page .cart-icon-btn svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  /* Banner */
+  .orchid-plants-page .info-banner {
+    padding: 0 0 20px;
+  }
+
+  .orchid-plants-page .banner-content {
+    padding: 18px 14px;
+    gap: 12px;
+    border-radius: 14px;
+  }
+
+  .orchid-plants-page .banner-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+  }
+
+  .orchid-plants-page .banner-text h3 {
+    font-size: 17px;
+  }
+
+  .orchid-plants-page .banner-text p {
+    font-size: 11px;
+  }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 360px) {
+  .orchid-plants-page .container {
+    padding: 0 10px;
+  }
+
+  .orchid-plants-page .hero-badge {
+    padding: 6px 12px;
+    font-size: 10px;
+  }
+
+  .orchid-plants-page .hero-title {
+    font-size: 24px;
+  }
+
+  .orchid-plants-page.rtl .hero-title {
+    font-size: 22px;
+  }
+
+  .orchid-plants-page .hero-subtitle {
+    font-size: 12px;
+  }
+
+  .orchid-plants-page .hero-stats {
+    gap: 12px;
+    padding: 12px 16px;
+  }
+
+  .orchid-plants-page .stat-number {
+    font-size: 20px;
+  }
+
+  .orchid-plants-page .stat-label {
+    font-size: 8px;
+  }
+
+  .orchid-plants-page .stat-divider {
+    height: 24px;
+  }
+
+  .orchid-plants-page .products-grid {
+    gap: 10px;
+  }
+
+  .orchid-plants-page .product-image-wrapper {
+    height: 200px;
+  }
+
+  .orchid-plants-page .product-details {
+    padding: 0;
+  }
+
+  .orchid-plants-page .product-name {
+    font-size: 12px;
+  }
+
+  .orchid-plants-page .original-price {
+    font-size: 9px;
+  }
+
+  .orchid-plants-page .sale-price {
+    font-size: 12px;
+  }
+
+  .orchid-plants-page .product-badge {
+    padding: 3px 8px;
+    font-size: 7px;
+  }
+
+  .orchid-plants-page .cart-icon-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .orchid-plants-page .cart-icon-btn svg {
+    width: 10px;
+    height: 10px;
+  }
+
+  .orchid-plants-page .banner-content {
+    padding: 14px 12px;
+  }
+
+  .orchid-plants-page .banner-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+  }
+
+  .orchid-plants-page .banner-text h3 {
+    font-size: 14px;
+  }
+
+  .orchid-plants-page .banner-text p {
+    font-size: 10px;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY & PRINT
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .floating-orchid,
+  .product-card,
+  .product-image,
+  .cart-icon-btn,
+  .banner-icon {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.orchid-plants-page .product-card:focus-visible,
+.orchid-plants-page .quick-add-btn:focus-visible,
+.orchid-plants-page .cart-icon-btn:focus-visible {
+  outline: 2px solid var(--secondary);
+  outline-offset: 2px;
+}
+
+@media print {
+  .orchid-bg {
+    display: none;
+  }
+
+  .orchid-plants-page .product-card {
+    box-shadow: none;
+    border: 1px solid var(--border-medium);
+    break-inside: avoid;
+  }
+
+  .orchid-plants-page .info-banner {
+    display: none;
+  }
+}

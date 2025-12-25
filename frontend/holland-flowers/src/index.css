@@ -1,0 +1,118 @@
+/* ============================================
+   🌺 DUSTY ROSE PASTEL THEME - CSS Variables
+   ============================================ */
+:root {
+  /* Primary Colors - Dusty Rose */
+  --primary: #D4A5A5;
+  --primary-dark: #C08E8E;
+  --primary-darker: #A67676;
+  --primary-light: #E8C4C4;
+  --primary-lighter: #F5E6E6;
+  --primary-lightest: #FDF8F8;
+  
+  /* Accent Color - Sage Green (complementary) */
+  --accent: #B8D4BE;
+  --accent-dark: #9BC4A3;
+  --accent-light: #D4E8D8;
+  --accent-lighter: #EDF5EF;
+  
+  /* Secondary Accent - Soft Lavender */
+  --secondary: #C9B8D4;
+  --secondary-dark: #B5A0C4;
+  --secondary-light: #E0D6E8;
+  
+  /* Warm Accent - Soft Peach */
+  --warm: #E8C9B8;
+  --warm-dark: #D4B5A0;
+  --warm-light: #F5E6DC;
+  
+  /* Text Colors */
+  --text-dark: #4A3F3F;
+  --text-primary: #5C4F4F;
+  --text-secondary: #7A6B6B;
+  --text-muted: #9A8B8B;
+  --text-light: #B8A8A8;
+  
+  /* Background Colors */
+  --bg-primary: #FFFBFB;
+  --bg-secondary: #FDF8F8;
+  --bg-tertiary: #F8F0F0;
+  --bg-card: #FFFFFF;
+  --bg-hover: #F5EDED;
+  
+  /* Border Colors */
+  --border-light: #F0E4E4;
+  --border-medium: #E0D0D0;
+  --border-dark: #D0C0C0;
+  
+  /* Status Colors - Pastel versions */
+  --success: #A8D4A8;
+  --success-dark: #8BC48B;
+  --success-light: #D4EED4;
+  
+  --warning: #E8D4A8;
+  --warning-dark: #D4C08B;
+  --warning-light: #F5EED4;
+  
+  --error: #E8A8A8;
+  --error-dark: #D48B8B;
+  --error-light: #F5D4D4;
+  
+  --info: #A8C4D4;
+  --info-dark: #8BB0C4;
+  --info-light: #D4E4EE;
+  
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(74, 63, 63, 0.06);
+  --shadow-md: 0 4px 16px rgba(74, 63, 63, 0.08);
+  --shadow-lg: 0 8px 32px rgba(74, 63, 63, 0.10);
+  --shadow-xl: 0 16px 48px rgba(74, 63, 63, 0.12);
+  --shadow-primary: 0 4px 16px rgba(212, 165, 165, 0.3);
+  --shadow-primary-lg: 0 8px 32px rgba(212, 165, 165, 0.4);
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  --gradient-primary-light: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+  --gradient-soft: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-tertiary) 100%);
+  --gradient-card: linear-gradient(180deg, #FFFFFF 0%, var(--bg-secondary) 100%);
+  --gradient-accent: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+  --gradient-warm: linear-gradient(135deg, var(--warm) 0%, var(--warm-dark) 100%);
+  
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+  
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  --transition-bounce: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection color */
+::selection {
+  background-color: var(--primary-light);
+  color: var(--text-dark);
+}
