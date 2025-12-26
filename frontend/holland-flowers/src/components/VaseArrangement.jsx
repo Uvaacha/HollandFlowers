@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useCart } from './CartContext';
 import categoryService from '../services/categoryService';
 import productService from '../services/productService';
+import MobileFilterBar from './MobileFilterBar';
+import MobileFilterDrawer, { FilterSection, PriceRangeFilter, CheckboxFilter } from './MobileFilterDrawer';
 import './VaseArrangement.css';
 
 const VaseArrangement = () => {
@@ -10,506 +12,299 @@ const VaseArrangement = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [addingToCart, setAddingToCart] = useState({});
   const { addToCart } = useCart();
 
-  // Filter states
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
+  const [priceRange, setPriceRange] = useState({ min: '', max: '' });
   const [selectedArrangements, setSelectedArrangements] = useState([]);
   const [sortBy, setSortBy] = useState('default');
-  const [viewMode, setViewMode] = useState('grid');
+  const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState({ price: true, arrangement: true });
 
   useEffect(() => {
     const savedLang = localStorage.getItem('preferredLanguage') || 'en';
     setCurrentLang(savedLang);
-
-    const handleLangChange = (e) => {
-      setCurrentLang(e.detail);
-    };
-
+    const handleLangChange = (e) => setCurrentLang(e.detail);
     window.addEventListener('languageChange', handleLangChange);
     return () => window.removeEventListener('languageChange', handleLangChange);
   }, []);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  // Fetch products from database
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const categoriesResponse = await categoryService.getAllCategories();
-        let categories = [];
-        if (categoriesResponse.success && categoriesResponse.data) {
-          categories = categoriesResponse.data.content || categoriesResponse.data || [];
-        }
-
-        const vaseCategory = categories.find(cat => {
-          const name = (cat.categoryName || cat.nameEn || cat.name || '').toLowerCase();
-          return name === 'vase' || name === 'vase arrangements' || name === 'vase arrangement' || 
-                 name === 'vase' || name.includes('vase');
-        });
-
-        if (!vaseCategory) {
-          console.warn('Category not found. Available:', categories.map(c => c.categoryName));
-          setError('Category not found. Please create "Vase" category in admin.');
-          setProducts([]);
-          setLoading(false);
-          return;
-        }
-
-        const productsResponse = await productService.getProductsByCategory(vaseCategory.categoryId, {
-          page: 0,
-          size: 100,
-          sort: 'createdAt,desc'
-        });
-
-        let productsList = [];
-        if (productsResponse.success && productsResponse.data) {
-          productsList = productsResponse.data.content || productsResponse.data || [];
-        }
-
-        const activeProducts = productsList.filter(p => p.isActive !== false);
-        setProducts(activeProducts);
-
-      } catch (err) {
-        console.error('Error fetching products:', err);
-        setError('Failed to load products. Please try again later.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
+  useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const translations = {
     en: {
-      pageTitle: "Vase Arrangements",
-      pageSubtitle: "Elegant vase in stunning colors and arrangements",
-      filters: "Filters",
-      priceRange: "PRICE RANGE",
-      highestPrice: "Highest price:",
-      arrangement: "ARRANGEMENT",
-      bouquet: "Bouquet",
-      box: "Box",
-      vase: "Vase",
-      sortBy: "Sort by:",
-      sortDefault: "Default",
-      sortPriceLow: "Price: Low to High",
-      sortPriceHigh: "Price: High to Low",
-      sortNewest: "Newest",
-      items: "items",
-      min: "Min",
-      max: "Max",
-      addToCart: "Add to Cart",
-      loading: "Loading vase collection...",
-      noProducts: "No vase products available yet.",
-      error: "Something went wrong",
-      freshBanner: "Fresh Vase from Holland",
-      freshBannerDesc: "Premium imported vase in vibrant colors. Perfect for any occasion with same-day delivery available."
+      title: "Vase Arrangements", subtitle: "Stunning flower arrangements in premium vases", badge: "VASE ARRANGEMENTS",
+      filters: "Filters", clearAll: "Clear All", priceRange: "Price Range", arrangement: "Arrangement",
+      minPrice: "Min", maxPrice: "Max", sortBy: "Sort by:", default: "Default",
+      priceLow: "Price: Low to High", priceHigh: "Price: High to Low", newest: "Newest First", nameAZ: "Name: A-Z",
+      items: "items", bouquet: "Bouquet", box: "Box", basket: "Basket", vase: "Vase", tray: "Tray", stand: "Stand",
+      kd: "KD", addToCart: "Add to Cart",
+      loading: "Loading products...", error: "Failed to load products", noProducts: "No products found", highestPrice: "Highest price"
     },
     ar: {
-      pageTitle: "مجموعة التوليب",
-      pageSubtitle: "زهور توليب أنيقة بألوان وترتيبات مذهلة",
-      filters: "التصفية",
-      priceRange: "نطاق السعر",
-      highestPrice: "أعلى سعر:",
-      arrangement: "نوع الترتيب",
-      bouquet: "باقة",
-      box: "صندوق",
-      vase: "مزهرية",
-      sortBy: "ترتيب حسب:",
-      sortDefault: "الافتراضي",
-      sortPriceLow: "السعر: من الأقل للأعلى",
-      sortPriceHigh: "السعر: من الأعلى للأقل",
-      sortNewest: "الأحدث",
-      items: "منتج",
-      min: "الحد الأدنى",
-      max: "الحد الأقصى",
-      addToCart: "أضف للسلة",
-      loading: "جاري تحميل مجموعة التوليب...",
-      noProducts: "لا توجد منتجات توليب متاحة حالياً.",
-      error: "حدث خطأ ما",
-      freshBanner: "توليب طازج من هولندا",
-      freshBannerDesc: "توليب مستورد فاخر بألوان نابضة بالحياة. مثالي لجميع المناسبات مع توصيل في نفس اليوم."
+      title: "تنسيقات المزهريات", subtitle: "تنسيقات زهور مذهلة في مزهريات فاخرة", badge: "تنسيقات مزهريات",
+      filters: "التصفية", clearAll: "مسح الكل", priceRange: "نطاق السعر", arrangement: "التنسيق",
+      minPrice: "الحد الأدنى", maxPrice: "الحد الأقصى", sortBy: "ترتيب حسب:", default: "افتراضي",
+      priceLow: "السعر: من الأقل للأعلى", priceHigh: "السعر: من الأعلى للأقل", newest: "الأحدث أولاً", nameAZ: "الاسم: أ-ي",
+      items: "منتج", bouquet: "باقة", box: "صندوق", basket: "سلة", vase: "مزهرية", tray: "صينية", stand: "حامل",
+      kd: "د.ك", addToCart: "أضف للسلة",
+      loading: "جاري تحميل المنتجات...", error: "فشل في تحميل المنتجات", noProducts: "لا توجد منتجات", highestPrice: "أعلى سعر"
     }
   };
+  const t = translations[currentLang] || translations.en;
 
-  const t = translations[currentLang];
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true); setError(null);
+        const categoriesResponse = await categoryService.getAllCategories();
+        let categories = [];
+        if (categoriesResponse.success && categoriesResponse.data) categories = categoriesResponse.data.content || categoriesResponse.data || [];
+        const targetCategory = categories.find(cat => {
+          const name = (cat.categoryName || cat.nameEn || cat.name || '').toLowerCase();
+          return name === 'vase arrangement' || name.includes('vase');
+        });
+        if (!targetCategory) { setError('Category not found.'); setProducts([]); setLoading(false); return; }
+        const productsResponse = await productService.getProductsByCategory(targetCategory.categoryId, { page: 0, size: 100, sort: 'createdAt,desc' });
+        let productsList = [];
+        if (productsResponse.success && productsResponse.data) productsList = productsResponse.data.content || productsResponse.data || [];
+        setProducts(productsList.filter(p => p.isActive !== false));
+      } catch (err) { setError('Failed to load products.'); } finally { setLoading(false); }
+    };
+    fetchProducts();
+  }, []);
 
-  // Helper functions
   const getProductName = (product) => {
-    if (currentLang === 'ar') {
-      return product.productNameAr || product.nameAr || product.productName || product.name || 'Unknown';
-    }
+    if (currentLang === 'ar') return product.productNameAr || product.nameAr || product.productName || product.name || 'Unknown';
     return product.productName || product.nameEn || product.name || 'Unknown';
   };
 
-  const getProductImage = (product) => {
-    return product.imageUrl || product.primaryImageUrl || product.image || '/images/placeholder.webp';
+  const getProductImage = (product) => product.imageUrl || product.primaryImageUrl || product.image || '/images/placeholder.webp';
+  const getOriginalPrice = (product) => product.actualPrice || product.originalPrice || product.price || 0;
+  const getFinalPrice = (product) => product.finalPrice || product.salePrice || product.price || product.actualPrice || 0;
+  const hasDiscount = (product) => { const o = getOriginalPrice(product); const f = getFinalPrice(product); return o > 0 && f > 0 && o > f; };
+  const getProductSlug = (product) => product.productId || product.sku || product.slug || product.id;
+
+  const getProductDescription = (product) => {
+    const dbDesc = product.shortDescriptionEn || product.shortDescription || product.descriptionEn || product.description;
+    const dbDescAr = product.shortDescriptionAr || product.descriptionAr;
+    if (currentLang === 'ar' && dbDescAr) return String(dbDescAr);
+    if (dbDesc) return String(dbDesc);
+    const name = (product.productName || product.name || '').toLowerCase();
+    if (name.includes('rose')) return currentLang === 'ar' ? 'ورود طازجة وجميلة' : 'Fresh beautiful roses';
+    if (name.includes('orchid')) return currentLang === 'ar' ? 'أوركيد أنيق وفاخر' : 'Elegant premium orchids';
+    if (name.includes('tulip')) return currentLang === 'ar' ? 'توليب طازج وملون' : 'Fresh colorful tulips';
+    if (name.includes('lily') || name.includes('lilium')) return currentLang === 'ar' ? 'ليليوم عطري وجميل' : 'Fragrant beautiful lilium';
+    if (name.includes('bouquet')) return currentLang === 'ar' ? 'باقة زهور مرتبة بعناية' : 'Carefully arranged flower bouquet';
+    if (name.includes('vase')) return currentLang === 'ar' ? 'تنسيق زهور في مزهرية أنيقة' : 'Flower arrangement in elegant vase';
+    if (name.includes('box')) return currentLang === 'ar' ? 'زهور في صندوق فاخر' : 'Flowers in luxury box';
+    if (name.includes('basket')) return currentLang === 'ar' ? 'سلة زهور طازجة' : 'Fresh flower basket';
+    return currentLang === 'ar' ? 'تنسيق زهور طازجة وأنيقة' : 'Fresh elegant flower arrangement';
   };
 
-  const getOriginalPrice = (product) => {
-    return product.actualPrice || product.originalPrice || product.price || 0;
-  };
+  const maxPrice = useMemo(() => products.length === 0 ? 100 : Math.ceil(Math.max(...products.map(p => getFinalPrice(p)))), [products]);
 
-  const getFinalPrice = (product) => {
-    return product.finalPrice || product.salePrice || product.price || product.actualPrice || 0;
-  };
-
-  const hasDiscount = (product) => {
-    const original = getOriginalPrice(product);
-    const final = getFinalPrice(product);
-    return original > 0 && final > 0 && original > final;
-  };
-
-  const getDiscountPercent = (product) => {
-    const original = getOriginalPrice(product);
-    const final = getFinalPrice(product);
-    if (original > 0 && final > 0 && original > final) {
-      return Math.round(((original - final) / original) * 100);
-    }
-    return 0;
-  };
-
-  const getProductSlug = (product) => {
-    return product.productId || product.sku || product.slug || product.id;
-  };
-
-  const getArrangementType = (product) => {
-    const name = getProductName(product).toLowerCase();
-    const tags = (product.tags || '').toLowerCase();
-    
-    if (tags.includes('bouquet') || name.includes('bouquet')) return 'bouquet';
-    if (tags.includes('box') || name.includes('box')) return 'box';
-    if (tags.includes('vase') || name.includes('vase')) return 'vase';
-    return 'bouquet';
-  };
-
-  const getProductBadge = (product) => {
-    const tags = (product.tags || '').toLowerCase();
-    const name = getProductName(product).toLowerCase();
-    
-    if (tags.includes('premium') || product.isPremium) return 'premium';
-    if (tags.includes('mix') || name.includes('mix') || name.includes('hydrangea')) return 'mix';
-    if (tags.includes('pink') || name.includes('pink')) return 'pink';
-    if (tags.includes('purple') || name.includes('purple')) return 'purple';
-    if (tags.includes('white') || name.includes('white')) return 'white';
-    if (tags.includes('yellow') || name.includes('yellow')) return 'yellow';
-    return null;
-  };
-
-  // Calculate highest price
-  const highestPrice = useMemo(() => {
-    if (products.length === 0) return 0;
-    return Math.max(...products.map(p => getFinalPrice(p)));
-  }, [products]);
-
-  // Filter and sort products
-  const filteredProducts = useMemo(() => {
+  const filteredAndSortedProducts = useMemo(() => {
     let result = [...products];
-
-    // Price filter
-    if (minPrice !== '') {
-      result = result.filter(p => getFinalPrice(p) >= parseFloat(minPrice));
-    }
-    if (maxPrice !== '') {
-      result = result.filter(p => getFinalPrice(p) <= parseFloat(maxPrice));
-    }
-
-    // Arrangement filter
-    if (selectedArrangements.length > 0) {
-      result = result.filter(p => selectedArrangements.includes(getArrangementType(p)));
-    }
-
-    // Sort
+    if (priceRange.min !== '') result = result.filter(p => getFinalPrice(p) >= Number(priceRange.min));
+    if (priceRange.max !== '') result = result.filter(p => getFinalPrice(p) <= Number(priceRange.max));
+    if (selectedArrangements.length > 0) result = result.filter(p => selectedArrangements.some(arr => getProductName(p).toLowerCase().includes(arr.toLowerCase())));
     switch (sortBy) {
-      case 'priceLow':
-        result.sort((a, b) => getFinalPrice(a) - getFinalPrice(b));
-        break;
-      case 'priceHigh':
-        result.sort((a, b) => getFinalPrice(b) - getFinalPrice(a));
-        break;
-      case 'newest':
-        result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        break;
-      default:
-        break;
+      case 'priceLow': result.sort((a, b) => getFinalPrice(a) - getFinalPrice(b)); break;
+      case 'priceHigh': result.sort((a, b) => getFinalPrice(b) - getFinalPrice(a)); break;
+      case 'newest': result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); break;
+      case 'nameAZ': result.sort((a, b) => getProductName(a).localeCompare(getProductName(b))); break;
+      default: break;
     }
-
     return result;
-  }, [products, minPrice, maxPrice, selectedArrangements, sortBy]);
+  }, [products, priceRange, selectedArrangements, sortBy, currentLang]);
 
-  // Handle arrangement checkbox
-  const handleArrangementChange = (type) => {
-    setSelectedArrangements(prev => 
-      prev.includes(type) 
-        ? prev.filter(t => t !== type)
-        : [...prev, type]
-    );
-  };
-
-  // Handle add to cart
   const handleAddToCart = (e, product) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    
-    const finalPrice = getFinalPrice(product);
-    const originalPrice = getOriginalPrice(product);
-    
-    const cartItem = {
+    e.preventDefault(); e.stopPropagation();
+    const pid = getProductSlug(product);
+    setAddingToCart(prev => ({ ...prev, [pid]: true }));
+    addToCart({
       id: product.productId || product.id,
       name: getProductName(product),
       nameEn: product.productName || product.nameEn || product.name,
       nameAr: product.productNameAr || product.nameAr || product.productName,
-      price: finalPrice,
-      salePrice: finalPrice,
-      finalPrice: finalPrice,
-      originalPrice: originalPrice,
-      actualPrice: originalPrice,
+      price: getFinalPrice(product),
+      salePrice: getFinalPrice(product),
+      finalPrice: getFinalPrice(product),
+      originalPrice: getOriginalPrice(product),
+      actualPrice: getOriginalPrice(product),
       image: getProductImage(product),
-      quantity: 1
-    };
-    
-    addToCart(cartItem);
+      quantity: 1,
+    });
+    setTimeout(() => setAddingToCart(prev => ({ ...prev, [pid]: false })), 800);
   };
 
-  return (
-    <div className={`vase-page ${currentLang === 'ar' ? 'rtl' : ''}`}>
-      {/* Decorative Background */}
-      <div className="vase-bg">
-        <div className="vase-glow glow-1"></div>
-        <div className="vase-glow glow-2"></div>
-        <div className="floating-vase fv-1">🏺</div>
-        <div className="floating-vase fv-2">💐</div>
-        <div className="floating-vase fv-3">🏺</div>
-        <div className="floating-vase fv-4">🌺</div>
-      </div>
+  const clearFilters = () => { setPriceRange({ min: '', max: '' }); setSelectedArrangements([]); setSortBy('default'); };
+  const toggleArrangement = (arr) => setSelectedArrangements(prev => prev.includes(arr) ? prev.filter(a => a !== arr) : [...prev, arr]);
+  const hasActiveFilters = priceRange.min !== '' || priceRange.max !== '' || selectedArrangements.length > 0;
+  const arrangementTypes = [{ key: 'bouquet', label: t.bouquet }, { key: 'box', label: t.box }, { key: 'basket', label: t.basket }, { key: 'vase', label: t.vase }, { key: 'tray', label: t.tray }, { key: 'stand', label: t.stand }];
 
-      {/* Hero Section */}
-      <section className="vase-hero">
+  return (
+    <div className={`vasearrangement-page ${currentLang === 'ar' ? 'rtl' : ''}`}>
+      <section className="hero-banner">
+        <div className="hero-bg-decoration">
+          <span className="floating-icon float-1">🏺</span>
+          <span className="floating-icon float-2">✨</span>
+          <span className="floating-icon float-3">🌸</span>
+        </div>
         <div className="container">
-          <div className="hero-badge">
-            <span>🏺</span>
-            <span>{currentLang === 'ar' ? 'توليب طازج' : 'FRESH TULIPS'}</span>
+          <div className="hero-content">
+            <span className="hero-badge"><span>🏺</span>{t.badge}</span>
+            <h1 className="hero-title">{t.title}</h1>
+            <p className="hero-subtitle">{t.subtitle}</p>
           </div>
-          <h1 className="hero-title">{t.pageTitle}</h1>
-          <p className="hero-subtitle">{t.pageSubtitle}</p>
         </div>
       </section>
 
-      {/* Main Content with Sidebar */}
-      <section className="vase-content">
+
+      {/* Mobile Filter/Sort Toolbar */}
+      <MobileFilterBar
+        currentLang={currentLang}
+        onFilterClick={() => setMobileFilterOpen(true)}
+        sortBy={sortBy}
+        onSortChange={setSortBy}
+        filterCount={(selectedArrangements.length > 0 ? 1 : 0) + (priceRange.min !== '' || priceRange.max !== '' ? 1 : 0)}
+        sortOptions={[
+          { value: 'default', labelEn: t.default || 'Default', labelAr: 'افتراضي' },
+          { value: 'priceLow', labelEn: t.priceLow || 'Price: Low to High', labelAr: 'السعر: من الأقل للأعلى' },
+          { value: 'priceHigh', labelEn: t.priceHigh || 'Price: High to Low', labelAr: 'السعر: من الأعلى للأقل' },
+          { value: 'newest', labelEn: t.newest || 'Newest First', labelAr: 'الأحدث أولاً' },
+          { value: 'nameAZ', labelEn: t.nameAZ || 'Name: A-Z', labelAr: 'الاسم: أ-ي' },
+        ]}
+      />
+
+      {/* Mobile Filter Drawer */}
+      <MobileFilterDrawer
+        isOpen={mobileFilterOpen}
+        onClose={() => setMobileFilterOpen(false)}
+        currentLang={currentLang}
+        onClearAll={clearFilters}
+        itemCount={filteredAndSortedProducts.length}
+      >
+        <FilterSection 
+          title={t.priceRange || t.price || 'Price Range'} 
+          isOpen={filtersOpen.price} 
+          onToggle={() => setFiltersOpen(prev => ({ ...prev, price: !prev.price }))}
+        >
+          <PriceRangeFilter
+            minValue={priceRange.min}
+            maxValue={priceRange.max}
+            onMinChange={(val) => setPriceRange(prev => ({ ...prev, min: val }))}
+            onMaxChange={(val) => setPriceRange(prev => ({ ...prev, max: val }))}
+            currency={t.kd || t.currency || 'KD'}
+            highestPriceLabel={t.highestPrice || 'Highest price'}
+            highestPrice={maxPrice}
+          />
+        </FilterSection>
+        
+        <FilterSection 
+          title={t.arrangement || 'Arrangement'} 
+          isOpen={filtersOpen.arrangement} 
+          onToggle={() => setFiltersOpen(prev => ({ ...prev, arrangement: !prev.arrangement }))}
+        >
+          <CheckboxFilter
+            options={arrangementTypes.map ? arrangementTypes.map(arr => ({ value: arr.key || arr.value, label: arr.label })) : arrangementTypes}
+            selectedValues={selectedArrangements}
+            onChange={setSelectedArrangements}
+            currentLang={currentLang}
+          />
+        </FilterSection>
+      </MobileFilterDrawer>
+
+      <section className="main-content">
         <div className="container">
-          <div className="content-wrapper">
-            {/* Left Sidebar - Filters */}
-            <aside className="filters-sidebar">
-              <h2 className="filters-title">{t.filters}</h2>
-
-              {/* Price Range Filter */}
-              <div className="filter-section">
-                <h3 className="filter-heading">{t.priceRange}</h3>
-                <div className="price-inputs">
-                  <div className="price-input-group">
-                    <span className="currency-label">KD</span>
-                    <input
-                      type="number"
-                      placeholder={t.min}
-                      value={minPrice}
-                      onChange={(e) => setMinPrice(e.target.value)}
-                      className="price-input"
-                    />
-                  </div>
-                  <span className="price-separator">-</span>
-                  <div className="price-input-group">
-                    <span className="currency-label">KD</span>
-                    <input
-                      type="number"
-                      placeholder={t.max}
-                      value={maxPrice}
-                      onChange={(e) => setMaxPrice(e.target.value)}
-                      className="price-input"
-                    />
-                  </div>
-                </div>
-                <p className="highest-price">{t.highestPrice} {highestPrice.toFixed(0)} KD</p>
+          <div className="content-layout">
+            <aside className={`filters-sidebar ${mobileFilterOpen ? "open" : ""}`}>
+              <div className="filters-header">
+                <h3 className="filters-title">{t.filters}</h3>
+                <button className="mobile-filter-close" onClick={() => setMobileFilterOpen(false)} aria-label="Close filters">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+                {hasActiveFilters && <button className="clear-filters" onClick={clearFilters}>{t.clearAll}</button>}
               </div>
-
-              {/* Arrangement Filter */}
               <div className="filter-section">
-                <h3 className="filter-heading">{t.arrangement}</h3>
-                <div className="checkbox-group">
-                  <label className="checkbox-item">
-                    <input
-                      type="checkbox"
-                      checked={selectedArrangements.includes('bouquet')}
-                      onChange={() => handleArrangementChange('bouquet')}
-                    />
-                    <span className="checkmark"></span>
-                    <span className="checkbox-label">{t.bouquet}</span>
-                  </label>
-                  <label className="checkbox-item">
-                    <input
-                      type="checkbox"
-                      checked={selectedArrangements.includes('box')}
-                      onChange={() => handleArrangementChange('box')}
-                    />
-                    <span className="checkmark"></span>
-                    <span className="checkbox-label">{t.box}</span>
-                  </label>
-                  <label className="checkbox-item">
-                    <input
-                      type="checkbox"
-                      checked={selectedArrangements.includes('vase')}
-                      onChange={() => handleArrangementChange('vase')}
-                    />
-                    <span className="checkmark"></span>
-                    <span className="checkbox-label">{t.vase}</span>
-                  </label>
-                </div>
+                <button className={`filter-header ${filtersOpen.price ? 'open' : ''}`} onClick={() => setFiltersOpen(prev => ({ ...prev, price: !prev.price }))}>
+                  <span>{t.priceRange}</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                {filtersOpen.price && (
+                  <div className="filter-content">
+                    <div className="price-inputs">
+                      <div className="price-input-group"><span className="currency-label">{t.kd}</span><input type="number" placeholder={t.minPrice} value={priceRange.min} onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))} min="0"/></div>
+                      <span className="price-separator">-</span>
+                      <div className="price-input-group"><span className="currency-label">{t.kd}</span><input type="number" placeholder={t.maxPrice} value={priceRange.max} onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))} min="0"/></div>
+                    </div>
+                    <p className="price-hint">{t.highestPrice}: {maxPrice} {t.kd}</p>
+                  </div>
+                )}
+              </div>
+              <div className="filter-section">
+                <button className={`filter-header ${filtersOpen.arrangement ? 'open' : ''}`} onClick={() => setFiltersOpen(prev => ({ ...prev, arrangement: !prev.arrangement }))}>
+                  <span>{t.arrangement}</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                {filtersOpen.arrangement && (
+                  <div className="filter-content">
+                    {arrangementTypes.map(({ key, label }) => (
+                      <label key={key} className="checkbox-label">
+                        <input type="checkbox" checked={selectedArrangements.includes(key)} onChange={() => toggleArrangement(key)}/>
+                        <span className="checkmark"></span>
+                        <span className="label-text">{label}</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
               </div>
             </aside>
-
-            {/* Right Content - Products */}
-            <div className="products-area">
-              {/* Toolbar */}
+            <div className="products-main">
               <div className="products-toolbar">
-                <span className="items-count">{filteredProducts.length} {t.items}</span>
-                
+                <span className="items-count">{filteredAndSortedProducts.length} {t.items}</span>
                 <div className="toolbar-right">
-                  <div className="sort-wrapper">
-                    <label>{t.sortBy}</label>
-                    <select 
-                      value={sortBy} 
-                      onChange={(e) => setSortBy(e.target.value)}
-                      className="sort-select"
-                    >
-                      <option value="default">{t.sortDefault}</option>
-                      <option value="priceLow">{t.sortPriceLow}</option>
-                      <option value="priceHigh">{t.sortPriceHigh}</option>
-                      <option value="newest">{t.sortNewest}</option>
-                    </select>
+                  <div className="sort-dropdown"><label>{t.sortBy}</label><select value={sortBy} onChange={(e) => setSortBy(e.target.value)}><option value="default">{t.default}</option><option value="priceLow">{t.priceLow}</option><option value="priceHigh">{t.priceHigh}</option><option value="newest">{t.newest}</option><option value="nameAZ">{t.nameAZ}</option></select></div>
                   </div>
-
-                  <div className="view-toggle">
-                    <button 
-                      className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
-                      onClick={() => setViewMode('grid')}
-                      aria-label="Grid view"
-                    >
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                        <rect x="3" y="3" width="7" height="7" rx="1"/>
-                        <rect x="14" y="3" width="7" height="7" rx="1"/>
-                        <rect x="3" y="14" width="7" height="7" rx="1"/>
-                        <rect x="14" y="14" width="7" height="7" rx="1"/>
-                      </svg>
-                    </button>
-                    <button 
-                      className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
-                      onClick={() => setViewMode('list')}
-                      aria-label="List view"
-                    >
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                        <rect x="3" y="4" width="18" height="4" rx="1"/>
-                        <rect x="3" y="10" width="18" height="4" rx="1"/>
-                        <rect x="3" y="16" width="18" height="4" rx="1"/>
-                      </svg>
-                    </button>
-                  </div>
-                </div>
               </div>
 
-              {/* Loading State */}
-              {loading && (
-                <div className="loading-state">
-                  <div className="spinner"></div>
-                  <p>{t.loading}</p>
-                </div>
-              )}
-
-              {/* Error State */}
-              {error && !loading && (
-                <div className="error-state">
-                  <p className="error-title">{t.error}</p>
-                  <p className="error-message">{error}</p>
-                </div>
-              )}
-
-              {/* Empty State */}
-              {!loading && !error && filteredProducts.length === 0 && (
-                <div className="empty-state">
-                  <div className="empty-icon">🏺</div>
-                  <p>{t.noProducts}</p>
-                </div>
-              )}
-
-              {/* Products Grid */}
-              {!loading && !error && filteredProducts.length > 0 && (
-                <div className={`products-grid ${viewMode}`}>
-                  {filteredProducts.map((product, index) => {
+              {loading ? (
+                <div className="loading-state"><div className="spinner"></div><p>{t.loading}</p></div>
+              ) : error ? (
+                <div className="error-state"><p>{t.error}</p></div>
+              ) : filteredAndSortedProducts.length === 0 ? (
+                <div className="empty-state"><span className="empty-icon">🏺</span><p>{t.noProducts}</p></div>
+              ) : (
+                <div className="products-grid">
+                  {filteredAndSortedProducts.map((product, index) => {
                     const productName = getProductName(product);
                     const productImage = getProductImage(product);
                     const originalPrice = getOriginalPrice(product);
                     const finalPrice = getFinalPrice(product);
                     const showDiscount = hasDiscount(product);
-                    const discountPercent = getDiscountPercent(product);
-                    const badge = getProductBadge(product);
                     const productSlug = getProductSlug(product);
-
                     return (
-                      <Link 
-                        to={`/product/${productSlug}`}
-                        key={product.productId || product.id} 
-                        className="product-card"
-                        style={{ animationDelay: `${index * 0.05}s` }}
-                      >
-                        {showDiscount && (
-                          <span className="discount-badge">-{discountPercent}%</span>
-                        )}
-
-                        {badge && (
-                          <span className={`product-badge badge-${badge}`}>
-                            {badge.charAt(0).toUpperCase() + badge.slice(1)}
-                          </span>
-                        )}
-                        
-                        <div className="product-image-wrapper">
-                          <img 
-                            src={productImage} 
-                            alt={productName}
-                            className="product-image"
-                            loading="lazy"
-                            onError={(e) => { e.target.src = '/images/placeholder.webp'; }}
-                          />
-                          <button 
-                            className="quick-add-btn"
-                            onClick={(e) => handleAddToCart(e, product)}
-                            aria-label={t.addToCart}
-                          >
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                              <path d="M12 5v14M5 12h14"/>
-                            </svg>
-                          </button>
-                        </div>
-                        
-                        <div className="product-details">
+                      <Link to={`/product/${productSlug}`} className="product-card" key={productSlug} style={{ animationDelay: `${index * 0.05}s` }}>
+                        {showDiscount && <span className="discount-badge">-{Math.round((1 - finalPrice / originalPrice) * 100)}%</span>}
+                        <div className="product-image-wrapper"><img src={productImage} alt={productName} className="product-image" loading="lazy" onError={(e) => { e.target.src = '/images/placeholder.webp'; }}/></div>
+                        <div className="product-info">
                           <h3 className="product-name">{productName}</h3>
-                          <div className="price-wrapper">
-                            {showDiscount && (
-                              <span className="original-price">
-                                {originalPrice.toFixed(3)} KD
-                              </span>
-                            )}
-                            <span className="final-price">
-                              {finalPrice.toFixed(3)} KD
-                            </span>
+                          <div className="product-footer">
+                            <div className="price-wrapper">
+                              {showDiscount && <span className="original-price">{parseFloat(originalPrice).toFixed(3)} KWD</span>}
+                              <span className="sale-price">{parseFloat(finalPrice).toFixed(3)} KWD</span>
+                            </div>
+                            
+                            <button className={`add-btn ${addingToCart[productSlug] ? 'adding' : ''}`} onClick={(e) => handleAddToCart(e, product)}>
+                              {addingToCart[productSlug] ? (
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+                              ) : (
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                              )}
+                            </button>
                           </div>
                         </div>
                       </Link>
@@ -517,19 +312,6 @@ const VaseArrangement = () => {
                   })}
                 </div>
               )}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Info Banner */}
-      <section className="info-banner">
-        <div className="container">
-          <div className="banner-content">
-            <div className="banner-icon">🏺</div>
-            <div className="banner-text">
-              <h3>{t.freshBanner}</h3>
-              <p>{t.freshBannerDesc}</p>
             </div>
           </div>
         </div>

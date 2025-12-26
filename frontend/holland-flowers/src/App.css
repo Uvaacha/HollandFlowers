@@ -1591,140 +1591,713 @@ main { flex: 1; padding-top: 0; }
   .newsletter-form { max-width: 100%; width: 100%; }
 }
 
+/* ============================================
+   MOBILE OPTIMIZED STYLES (768px and below)
+   ============================================ */
 @media (max-width: 768px) {
-  .section-header { margin-bottom: 50px; }
-  .section-title { font-size: 34px; }
+  /* Hide floating decorations on mobile */
+  .home-page::before,
+  .home-page::after,
+  .carousel-decorations {
+    display: none !important;
+  }
   
-  .product-carousel-section { padding: 80px 0; }
-  .product-carousel-wrapper { padding: 0 50px; }
-  .product-carousel { gap: 20px; }
-  .carousel-product-card { flex: 0 0 270px; width: 270px; height: 390px; }
-  .carousel-image-wrapper { height: 210px; }
-  .carousel-arrow { width: 48px; height: 48px; }
+  /* Container padding */
+  .container {
+    padding: 0 16px;
+  }
   
-  .carousel-product-info { padding: 20px 18px 18px; }
-  .carousel-product-name { font-size: 20px; }
-  .carousel-product-description { font-size: 12px; }
-  .carousel-product-price { font-size: 20px; }
-  .carousel-original-price { font-size: 12px; }
-  .carousel-add-to-cart { width: 46px; height: 46px; }
+  /* Section Headers */
+  .section-header { 
+    margin-bottom: 32px; 
+  }
+  .section-title { 
+    font-size: 28px; 
+    margin-bottom: 16px;
+  }
+  .section-underline {
+    width: 80px;
+    margin-bottom: 16px;
+  }
+  .section-underline::before { 
+    font-size: 14px; 
+    padding: 0 10px;
+  }
+  .section-subtitle {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .section-tag {
+    padding: 8px 16px;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    margin-bottom: 16px;
+  }
   
+  /* ============================================
+     PRODUCT CAROUSEL - MOBILE OPTIMIZED
+     ============================================ */
+  .product-carousel-section { 
+    padding: 50px 0; 
+  }
+  
+  .product-carousel-wrapper { 
+    padding: 0 16px; 
+  }
+  
+  .product-carousel { 
+    gap: 12px; 
+    padding: 10px 0 20px;
+    scroll-snap-type: x mandatory;
+  }
+  
+  /* Smaller product cards for mobile - 2 visible at a time */
+  .carousel-product-card { 
+    flex: 0 0 calc(50vw - 22px);
+    width: calc(50vw - 22px);
+    min-width: 160px;
+    max-width: 200px;
+    height: auto;
+    border-radius: 16px;
+    scroll-snap-align: start;
+  }
+  
+  .carousel-image-wrapper { 
+    height: 150px; 
+  }
+  
+  .carousel-product-image {
+    object-fit: cover;
+  }
+  
+  /* Hide navigation arrows on mobile */
+  .carousel-arrow { 
+    display: none !important; 
+  }
+  
+  /* Product info - FIX spacing issues */
+  .carousel-product-info { 
+    padding: 10px 10px 12px;
+    flex: none !important; /* Remove flex expansion */
+  }
+  
+  .product-info-link {
+    flex: none !important; /* Remove flex expansion that pushes price down */
+    text-align: left;
+  }
+  
+  .carousel-product-name { 
+    font-size: 13px; 
+    margin-bottom: 4px;
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+  }
+  
+  /* Show description on mobile */
+  .carousel-product-description { 
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 11px; 
+    line-height: 1.4;
+    margin-bottom: 0;
+    color: #888;
+    text-align: left;
+  }
+  
+  .carousel-price-row {
+    padding-top: 8px;
+    margin-top: 0 !important; /* Remove auto margin that pushes to bottom */
+  }
+  
+  .carousel-price-wrapper {
+    gap: 2px;
+  }
+  
+  .carousel-product-price { 
+    font-size: 14px; 
+    font-weight: 600;
+  }
+  
+  .carousel-original-price { 
+    font-size: 10px; 
+  }
+  
+  .carousel-add-to-cart { 
+    width: 34px; 
+    height: 34px; 
+  }
+  
+  .carousel-add-to-cart svg { 
+    width: 15px; 
+    height: 15px; 
+  }
+  
+  /* Badges compact */
   .product-category-badge { 
+    padding: 5px 8px; 
+    font-size: 8px;
+    top: 8px;
+    left: 8px;
+    gap: 4px;
+  }
+  
+  .product-category-badge svg {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .carousel-discount-badge,
+  .product-type-badge {
+    top: 8px;
+    right: 8px;
+    padding: 5px 8px;
+    font-size: 9px;
+  }
+  
+  .carousel-scroll-hint {
+    margin-top: 16px;
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+  
+  /* ============================================
+     OCCASIONS SECTION - MOBILE GRID
+     ============================================ */
+  .occasions-section { 
+    padding: 50px 0; 
+  }
+  
+  .occasions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    gap: 12px;
+  }
+  
+  .occasion-card {
+    aspect-ratio: 1;
+    border-radius: 16px;
+    min-height: 150px;
+  }
+  
+  .occasion-card:nth-child(1),
+  .occasion-card:nth-child(2),
+  .occasion-card:nth-child(3),
+  .occasion-card:nth-child(4),
+  .occasion-card:nth-child(5) {
+    grid-column: span 1;
+    grid-row: span 1;
+    aspect-ratio: 1;
+  }
+  
+  /* Make first card span full width on mobile */
+  .occasion-card:nth-child(1) {
+    grid-column: span 2;
+    aspect-ratio: 2/1;
+    min-height: 160px;
+  }
+  
+  .occasion-content { 
+    padding: 16px; 
+    justify-content: flex-end;
+  }
+  
+  .occasion-icon-wrapper { 
+    width: 40px; 
+    height: 40px; 
+    border-radius: 12px; 
+    margin-bottom: 10px; 
+  }
+  
+  .occasion-icon-wrapper svg { 
+    width: 20px; 
+    height: 20px; 
+  }
+  
+  .occasion-name { 
+    font-size: 16px; 
+    margin-bottom: 8px;
+  }
+  
+  .occasion-card:nth-child(1) .occasion-name { 
+    font-size: 20px; 
+  }
+  
+  .occasion-shop-btn { 
+    font-size: 9px; 
     padding: 8px 14px; 
+    letter-spacing: 0.5px;
+    gap: 6px;
+  }
+  
+  .occasion-shop-btn svg {
+    width: 12px;
+    height: 12px;
+  }
+  
+  /* ============================================
+     WHY CHOOSE US - MOBILE GRID
+     ============================================ */
+  .why-us-section {
+    padding: 50px 0;
+  }
+  
+  .why-us-section::before,
+  .why-us-section::after {
+    display: none;
+  }
+  
+  .features-grid { 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 12px; 
+  }
+  
+  .feature-card { 
+    padding: 24px 16px; 
+    border-radius: 16px; 
+  }
+  
+  .feature-icon-wrapper { 
+    width: 60px; 
+    height: 60px; 
+    margin-bottom: 16px; 
+  }
+  
+  .feature-icon-wrapper::before {
+    display: none;
+  }
+  
+  .feature-icon-wrapper svg { 
+    width: 28px; 
+    height: 28px; 
+  }
+  
+  .feature-title { 
+    font-size: 15px; 
+    margin-bottom: 8px;
+  }
+  
+  .feature-desc { 
+    font-size: 12px; 
+    line-height: 1.5;
+  }
+  
+  .feature-card::after {
+    display: none;
+  }
+  
+  /* ============================================
+     BROWSE CATEGORIES - MOBILE GRID
+     ============================================ */
+  .categories-section {
+    padding: 50px 0;
+  }
+  
+  .categories-grid { 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 12px; 
+  }
+  
+  .category-card { 
+    padding: 24px 16px; 
+    border-radius: 16px; 
+  }
+  
+  .category-icon-wrapper { 
+    width: 60px; 
+    height: 60px; 
+    margin-bottom: 16px; 
+  }
+  
+  .category-icon-wrapper::before {
+    display: none;
+  }
+  
+  .category-icon-wrapper svg { 
+    width: 28px; 
+    height: 28px; 
+  }
+  
+  .category-card h3 { 
+    font-size: 14px; 
+    margin-bottom: 12px;
+  }
+  
+  .category-arrow { 
+    width: 32px; 
+    height: 32px;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .category-arrow svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  /* ============================================
+     TESTIMONIALS - MOBILE
+     ============================================ */
+  .testimonials-section {
+    padding: 50px 0;
+  }
+  
+  .testimonials-grid { 
+    grid-template-columns: 1fr; 
+    gap: 16px;
+  }
+  
+  .testimonial-card { 
+    padding: 24px 20px; 
+    border-radius: 16px; 
+  }
+  
+  .testimonial-card::before { 
+    font-size: 60px;
+    top: 10px;
+    left: 20px;
+  }
+  
+  .testimonial-stars {
+    font-size: 16px;
+    margin-bottom: 16px;
+    letter-spacing: 4px;
+  }
+  
+  .testimonial-text {
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+  
+  .testimonial-avatar {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .testimonial-name {
+    font-size: 16px;
+  }
+  
+  /* ============================================
+     NEWSLETTER - MOBILE
+     ============================================ */
+  .newsletter-section {
+    padding: 50px 0;
+  }
+  
+  .newsletter-section::after {
+    display: none;
+  }
+  
+  .newsletter-content {
+    gap: 24px;
+  }
+  
+  .newsletter-text h2 { 
+    font-size: 26px; 
+    margin-bottom: 12px;
+  }
+  
+  .newsletter-text p {
+    font-size: 14px;
+  }
+  
+  .newsletter-form { 
+    flex-direction: column; 
+    gap: 12px;
+  }
+  
+  .newsletter-input {
+    padding: 16px 20px;
+    font-size: 14px;
+  }
+  
+  .newsletter-btn { 
+    width: 100%; 
+    padding: 16px 24px;
+    font-size: 14px;
+  }
+}
+
+/* ============================================
+   EXTRA SMALL MOBILE (480px and below)
+   ============================================ */
+@media (max-width: 480px) {
+  .section-title { 
+    font-size: 24px; 
+  }
+  
+  .section-tag {
+    padding: 6px 12px;
+    font-size: 9px;
+  }
+  
+  /* Compact product cards */
+  .carousel-product-card { 
+    flex: 0 0 calc(50vw - 20px);
+    width: calc(50vw - 20px);
+    min-width: 150px;
+    max-width: 175px;
+    border-radius: 14px;
+  }
+  
+  .carousel-image-wrapper { 
+    height: 130px; 
+  }
+  
+  .carousel-product-info { 
+    padding: 8px 8px 10px; 
+  }
+  
+  .carousel-product-name { 
+    font-size: 12px;
+    margin-bottom: 3px;
+  }
+  
+  .carousel-product-description { 
     font-size: 10px;
-    top: 14px;
-    left: 14px;
+    -webkit-line-clamp: 2;
+    line-height: 1.35;
+  }
+  
+  .carousel-price-row {
+    padding-top: 6px;
+  }
+  
+  .carousel-price-wrapper {
+    gap: 1px;
+  }
+  
+  .carousel-product-price { 
+    font-size: 13px; 
+  }
+  
+  .carousel-original-price {
+    font-size: 9px;
+  }
+  
+  .carousel-add-to-cart { 
+    width: 30px; 
+    height: 30px; 
+  }
+  
+  .carousel-add-to-cart svg { 
+    width: 14px; 
+    height: 14px; 
+  }
+  
+  .product-category-badge { 
+    padding: 4px 6px; 
+    font-size: 7px;
+    top: 6px;
+    left: 6px;
   }
   
   .carousel-discount-badge,
   .product-type-badge {
-    top: 14px;
-    right: 14px;
-    padding: 8px 12px;
-    font-size: 10px;
-  }
-  
-  .occasions-section { padding: 80px 0; }
-  
-  .occasion-card { border-radius: 24px; }
-  .occasion-content { padding: 30px; }
-  .occasion-name { font-size: 24px; }
-  .occasion-card:nth-child(1) .occasion-name { font-size: 24px; }
-  .occasion-icon-wrapper { width: 55px; height: 55px; }
-  .occasion-icon-wrapper svg { width: 28px; height: 28px; }
-  .occasion-shop-btn { font-size: 10px; padding: 12px 20px; }
-  
-  .features-grid, .categories-grid { gap: 20px; }
-  .feature-card, .category-card { padding: 40px 25px; border-radius: 24px; }
-  .feature-icon-wrapper { width: 90px; height: 90px; }
-  .feature-icon-wrapper svg { width: 40px; height: 40px; }
-  .category-icon-wrapper { width: 85px; height: 85px; }
-  .category-icon-wrapper svg { width: 40px; height: 40px; }
-  
-  .testimonials-grid { grid-template-columns: 1fr; }
-  
-  .newsletter-form { flex-direction: column; }
-  .newsletter-btn { width: 100%; }
-}
-
-@media (max-width: 576px) {
-  .section-title { font-size: 30px; }
-  .section-underline::before { font-size: 14px; }
-  
-  .product-carousel-wrapper { padding: 0 15px; }
-  .product-carousel { gap: 18px; padding: 16px 5px 24px; }
-  .carousel-product-card { flex: 0 0 260px; width: 260px; height: 380px; }
-  .carousel-image-wrapper { height: 200px; }
-  .carousel-arrow { display: none; }
-  
-  .carousel-product-info { padding: 18px 16px 16px; }
-  .carousel-product-name { font-size: 19px; }
-  .carousel-product-description { font-size: 12px; }
-  .carousel-product-price { font-size: 19px; }
-  .carousel-original-price { font-size: 11px; }
-  .carousel-add-to-cart { width: 44px; height: 44px; }
-  .carousel-add-to-cart svg { width: 18px; height: 18px; }
-  
-  .product-category-badge { 
-    padding: 7px 12px; 
-    font-size: 9px;
-    top: 12px;
-    left: 12px;
-  }
-  
-  .carousel-discount-badge,
-  .product-type-badge {
-    top: 12px;
-    right: 12px;
-    padding: 7px 10px;
-    font-size: 9px;
-  }
-  
-  .occasions-grid { gap: 15px; }
-  .occasion-card { aspect-ratio: 1; border-radius: 20px; }
-  .occasion-content { padding: 20px; }
-  .occasion-name { font-size: 20px; }
-  .occasion-icon-wrapper { width: 45px; height: 45px; border-radius: 14px; margin-bottom: 14px; }
-  .occasion-icon-wrapper svg { width: 24px; height: 24px; }
-  .occasion-shop-btn { font-size: 9px; padding: 10px 16px; letter-spacing: 1px; }
-  
-  .features-grid, .categories-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
-  .feature-card, .category-card { padding: 30px 20px; border-radius: 20px; }
-  .feature-icon-wrapper { width: 75px; height: 75px; margin-bottom: 20px; }
-  .feature-icon-wrapper svg { width: 34px; height: 34px; }
-  .feature-title, .category-card h3 { font-size: 18px; }
-  .feature-desc { font-size: 13px; }
-  
-  .category-icon-wrapper { width: 70px; height: 70px; margin-bottom: 20px; }
-  .category-icon-wrapper svg { width: 34px; height: 34px; }
-  .category-arrow { width: 38px; height: 38px; }
-  
-  .testimonial-card { padding: 35px 25px; border-radius: 24px; }
-  .testimonial-card::before { font-size: 80px; }
-  
-  .newsletter-text h2 { font-size: 32px; }
-  .newsletter-input, .newsletter-btn { padding: 16px 28px; }
-}
-
-@media (max-width: 400px) {
-  .carousel-product-card { flex: 0 0 250px; width: 250px; height: 365px; }
-  .carousel-image-wrapper { height: 190px; }
-  
-  .carousel-product-info { padding: 16px 14px 14px; }
-  .carousel-product-name { font-size: 18px; }
-  .carousel-product-description { font-size: 11px; -webkit-line-clamp: 1; }
-  .carousel-product-price { font-size: 18px; }
-  .carousel-add-to-cart { width: 42px; height: 42px; }
-  .carousel-add-to-cart svg { width: 16px; height: 16px; }
-  
-  .product-category-badge { 
-    padding: 6px 10px; 
+    top: 6px;
+    right: 6px;
+    padding: 4px 6px;
     font-size: 8px;
   }
   
-  .occasions-grid { grid-template-columns: 1fr 1fr; }
-  .occasion-icon-wrapper { display: none; }
-  .occasion-name { font-size: 18px; }
+  /* Occasions grid */
+  .occasions-grid {
+    gap: 10px;
+  }
+  
+  .occasion-card {
+    border-radius: 14px;
+    min-height: 130px;
+  }
+  
+  .occasion-card:nth-child(1) {
+    min-height: 140px;
+  }
+  
+  .occasion-content { 
+    padding: 12px; 
+  }
+  
+  .occasion-icon-wrapper { 
+    width: 36px; 
+    height: 36px;
+    margin-bottom: 8px;
+  }
+  
+  .occasion-icon-wrapper svg { 
+    width: 18px; 
+    height: 18px; 
+  }
+  
+  .occasion-name { 
+    font-size: 14px; 
+    margin-bottom: 6px;
+  }
+  
+  .occasion-card:nth-child(1) .occasion-name { 
+    font-size: 18px; 
+  }
+  
+  .occasion-shop-btn { 
+    font-size: 8px; 
+    padding: 6px 10px;
+  }
+  
+  /* Features & Categories */
+  .features-grid,
+  .categories-grid { 
+    gap: 10px; 
+  }
+  
+  .feature-card,
+  .category-card { 
+    padding: 20px 12px; 
+    border-radius: 14px;
+  }
+  
+  .feature-icon-wrapper,
+  .category-icon-wrapper { 
+    width: 50px; 
+    height: 50px; 
+    margin-bottom: 12px;
+  }
+  
+  .feature-icon-wrapper svg,
+  .category-icon-wrapper svg { 
+    width: 24px; 
+    height: 24px; 
+  }
+  
+  .feature-title { 
+    font-size: 13px; 
+  }
+  
+  .feature-desc { 
+    font-size: 11px; 
+  }
+  
+  .category-card h3 { 
+    font-size: 13px; 
+  }
+  
+  .category-arrow { 
+    width: 28px; 
+    height: 28px; 
+  }
+  
+  /* Testimonials */
+  .testimonial-card { 
+    padding: 20px 16px; 
+  }
+  
+  .testimonial-text {
+    font-size: 13px;
+  }
+  
+  .testimonial-avatar {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .testimonial-name {
+    font-size: 14px;
+  }
+  
+  /* Newsletter */
+  .newsletter-text h2 { 
+    font-size: 22px; 
+  }
+  
+  .newsletter-text p {
+    font-size: 13px;
+  }
+  
+  .newsletter-input,
+  .newsletter-btn { 
+    padding: 14px 18px;
+    font-size: 13px;
+  }
+}
+
+/* ============================================
+   VERY SMALL SCREENS (360px and below)
+   ============================================ */
+@media (max-width: 360px) {
+  .container {
+    padding: 0 12px;
+  }
+  
+  .section-title { 
+    font-size: 22px; 
+  }
+  
+  .carousel-product-card { 
+    flex: 0 0 calc(50vw - 18px);
+    min-width: 140px;
+  }
+  
+  .carousel-image-wrapper { 
+    height: 115px; 
+  }
+  
+  .carousel-product-info { 
+    padding: 6px 6px 8px; 
+  }
+  
+  .carousel-product-name { 
+    font-size: 11px; 
+  }
+  
+  .carousel-product-description { 
+    font-size: 9px;
+    -webkit-line-clamp: 2;
+  }
+  
+  .carousel-product-price { 
+    font-size: 12px; 
+  }
+  
+  .carousel-original-price {
+    font-size: 8px;
+  }
+  
+  .carousel-add-to-cart { 
+    width: 28px; 
+    height: 28px; 
+  }
+  
+  .carousel-add-to-cart svg { 
+    width: 12px; 
+    height: 12px; 
+  }
+  
+  .occasion-name { 
+    font-size: 13px; 
+  }
+  
+  .occasion-card:nth-child(1) .occasion-name { 
+    font-size: 16px; 
+  }
+  
+  .occasion-shop-btn { 
+    display: none; /* Hide shop btn on very small screens */
+  }
+  
+  .feature-title,
+  .category-card h3 { 
+    font-size: 12px; 
+  }
+  
+  .feature-desc { 
+    font-size: 10px; 
+  }
 }
 
 /* ============================================

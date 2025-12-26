@@ -1,0 +1,213 @@
+/* ============================================
+   MOBILE FILTER BAR - Reusable Component
+   ============================================ */
+
+/* Hide on desktop */
+.mobile-filter-bar {
+  display: none;
+}
+
+/* Show only on mobile */
+@media (max-width: 768px) {
+  .mobile-filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #fff;
+    border-bottom: 1px solid #f0f0f0;
+    position: sticky;
+    top: 60px;
+    z-index: 100;
+  }
+  
+  .mobile-filter-bar.rtl {
+    direction: rtl;
+  }
+  
+  /* Filter Button */
+  .mobile-filter-bar__filter-btn,
+  .mobile-filter-bar__sort-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .mobile-filter-bar__filter-btn:active,
+  .mobile-filter-bar__sort-btn:active {
+    background: #f9f9f9;
+    transform: scale(0.98);
+  }
+  
+  .mobile-filter-bar__filter-btn svg,
+  .mobile-filter-bar__sort-btn svg {
+    color: #555;
+    flex-shrink: 0;
+  }
+  
+  /* Filter Count Badge */
+  .mobile-filter-bar__badge {
+    background: #e91e63;
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+    line-height: 1.3;
+  }
+  
+  /* RTL adjustments */
+  .mobile-filter-bar.rtl .mobile-filter-bar__filter-btn,
+  .mobile-filter-bar.rtl .mobile-filter-bar__sort-btn {
+    flex-direction: row-reverse;
+  }
+}
+
+/* ============================================
+   SORT DRAWER OVERLAY
+   ============================================ */
+.mobile-filter-bar__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10000;
+  animation: mfb-fadeIn 0.2s ease;
+}
+
+@keyframes mfb-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Sort Drawer */
+.mobile-filter-bar__drawer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 20px 20px 0 0;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  animation: mfb-slideUp 0.3s ease;
+  z-index: 10001;
+}
+
+.mobile-filter-bar__drawer.rtl {
+  direction: rtl;
+}
+
+@keyframes mfb-slideUp {
+  from { 
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to { 
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Drawer Header */
+.mobile-filter-bar__drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.mobile-filter-bar__drawer-header h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.mobile-filter-bar__close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: #f3f4f6;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #6b7280;
+  transition: all 0.2s ease;
+}
+
+.mobile-filter-bar__close-btn:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+/* Drawer Content */
+.mobile-filter-bar__drawer-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 16px 24px;
+}
+
+/* Sort Options */
+.mobile-filter-bar__sort-options {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mobile-filter-bar__sort-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 14px 16px;
+  background: none;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  color: #374151;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.mobile-filter-bar__drawer.rtl .mobile-filter-bar__sort-option {
+  text-align: right;
+  flex-direction: row-reverse;
+}
+
+.mobile-filter-bar__sort-option:hover {
+  background: #f9fafb;
+}
+
+.mobile-filter-bar__sort-option.active {
+  background: #fce4ec;
+  color: #e91e63;
+  font-weight: 500;
+}
+
+.mobile-filter-bar__sort-option.active svg {
+  color: #e91e63;
+}

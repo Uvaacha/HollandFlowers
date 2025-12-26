@@ -115,6 +115,7 @@ const Checkout = () => {
   const [selectedShipping, setSelectedShipping] = useState('');
   const [billingAddress, setBillingAddress] = useState('same');
   const [deliveryInstructions, setDeliveryInstructions] = useState('');
+  const [discountCode, setDiscountCode] = useState('');
   
   // Billing address state (for different billing address)
   const [billingDetails, setBillingDetails] = useState({
@@ -255,7 +256,6 @@ const Checkout = () => {
       };
 
       // Check if user is logged in
-      // Check if user is logged in - Use 'accessToken' to match auth system
       const authToken = localStorage.getItem('accessToken') || localStorage.getItem('adminToken');
       
       let orderResponse;
@@ -276,16 +276,13 @@ const Checkout = () => {
         
         orderResponse = await PaymentService.createOrder(orderData);
         
-        // Debug: Log the full response to see its structure
         console.log('Order API Response:', JSON.stringify(orderResponse, null, 2));
         
-        // Extract orderId - handle multiple response formats
-        // Backend may return: { data: { orderId: X } } or { orderId: X } or { data: { id: X } }
         const orderId = orderResponse?.data?.orderId || 
                         orderResponse?.data?.id || 
                         orderResponse?.orderId || 
                         orderResponse?.id ||
-                        orderResponse?.data?.orderNumber;  // Fallback to orderNumber if orderId not available
+                        orderResponse?.data?.orderNumber;
         
         if (!orderId) {
           console.error('Order response structure:', orderResponse);
@@ -297,7 +294,7 @@ const Checkout = () => {
         // Then initiate payment
         const paymentResponse = await PaymentService.initiatePayment({
           orderId: orderId,
-          paymentMethod: 'KNET', // Default, user selects on Hesabe page
+          paymentMethod: 'KNET',
           email: contact.emailOrPhone,
           phone: delivery.phone,
           customerName: `${delivery.firstName || ''} ${delivery.lastName}`.trim(),
@@ -305,7 +302,6 @@ const Checkout = () => {
         });
 
         if (paymentResponse.success && paymentResponse.checkoutUrl) {
-          // Save order info for callback handling
           localStorage.setItem('pendingOrder', JSON.stringify({
             orderId: orderId,
             paymentReference: paymentResponse.paymentReference,
@@ -313,7 +309,6 @@ const Checkout = () => {
             items: cartItems.length
           }));
           
-          // Redirect to Hesabe checkout
           window.location.href = paymentResponse.checkoutUrl;
         } else {
           throw new Error(paymentResponse.message || 'Failed to initiate payment');
@@ -323,7 +318,6 @@ const Checkout = () => {
         orderResponse = await PaymentService.guestCheckout(checkoutData);
         
         if (orderResponse.success && orderResponse.checkoutUrl) {
-          // Save order info for callback handling
           localStorage.setItem('pendingOrder', JSON.stringify({
             orderId: orderResponse.orderId,
             paymentReference: orderResponse.paymentReference,
@@ -331,10 +325,8 @@ const Checkout = () => {
             items: cartItems.length
           }));
           
-          // Redirect to Hesabe checkout
           window.location.href = orderResponse.checkoutUrl;
         } else if (orderResponse.data && orderResponse.data.checkoutUrl) {
-          // Alternative response format
           localStorage.setItem('pendingOrder', JSON.stringify({
             orderId: orderResponse.data.orderId,
             paymentReference: orderResponse.data.paymentReference,
@@ -381,7 +373,7 @@ const Checkout = () => {
       phoneOptional: 'Phone (optional)',
       textOffers: 'Text me with news and offers',
       shippingMethod: 'Shipping method',
-      selectGovFirst: 'Please select a governorate to see shipping options',
+      selectGovFirst: 'Enter your shipping address to view available shipping methods.',
       payment: 'Payment',
       paymentSecure: 'All transactions are secure and encrypted.',
       hesabeGateway: 'HESABE PAYMENT GATEWAY',
@@ -402,7 +394,14 @@ const Checkout = () => {
       billingLastName: 'Recipient Last Name',
       billingAddress2: 'Recipient Address: Area, Block, Street, Jeddah, House No...',
       selectCountry: 'Select Country',
-      error: 'Error'
+      error: 'Error',
+      deliveryDate: 'Delivery Date',
+      deliveryTime: 'Delivery Time',
+      cardMessage: 'Card Message',
+      senderInfo: 'Sender',
+      discountCode: 'Discount code',
+      apply: 'Apply',
+      saveInfo: 'Save this information for next time'
     },
     ar: {
       checkout: 'الدفع',
@@ -426,7 +425,7 @@ const Checkout = () => {
       phoneOptional: 'الهاتف (اختياري)',
       textOffers: 'أرسل لي العروض والأخبار عبر الرسائل',
       shippingMethod: 'طريقة الشحن',
-      selectGovFirst: 'يرجى اختيار المحافظة لعرض خيارات الشحن',
+      selectGovFirst: 'أدخل عنوان الشحن لعرض طرق الشحن المتاحة.',
       payment: 'الدفع',
       paymentSecure: 'جميع المعاملات آمنة ومشفرة.',
       hesabeGateway: 'بوابة الدفع حسابي',
@@ -447,7 +446,14 @@ const Checkout = () => {
       billingLastName: 'اسم العائلة للمستلم',
       billingAddress2: 'عنوان المستلم: المنطقة، القطعة، الشارع، الجادة، رقم المنزل...',
       selectCountry: 'اختر الدولة',
-      error: 'خطأ'
+      error: 'خطأ',
+      deliveryDate: 'تاريخ التوصيل',
+      deliveryTime: 'وقت التوصيل',
+      cardMessage: 'رسالة البطاقة',
+      senderInfo: 'المرسل',
+      discountCode: 'كود الخصم',
+      apply: 'تطبيق',
+      saveInfo: 'احفظ هذه المعلومات للمرة القادمة'
     }
   };
 
@@ -474,9 +480,14 @@ const Checkout = () => {
       <div className="checkout-container">
         {/* Left Column - Form */}
         <div className="checkout-form-column">
-          <div className="checkout-logo">
-            <Link to="/">
-              <img src="/Holland Logo.png" alt="Holland Flowers" />
+          <div className="checkout-header">
+            <div className="checkout-logo">
+              <Link to="/">
+                <img src="/Holland Logo.png" alt="Holland Flowers" />
+              </Link>
+            </div>
+            <Link to="/cart" className="back-to-cart-link">
+              {text.backToCart}
             </Link>
           </div>
 
@@ -494,7 +505,6 @@ const Checkout = () => {
             <section className="checkout-section">
               <div className="section-header-row">
                 <h2>{text.contact}</h2>
-                {/* Only show Sign in link if user is NOT authenticated */}
                 {!isAuthenticated && (
                   <Link to="/account" className="sign-in-link">{text.signIn}</Link>
                 )}
@@ -530,7 +540,7 @@ const Checkout = () => {
               <div className="form-group">
                 <label className="input-label">{text.countryRegion}</label>
                 <div className="country-select-wrapper">
-                  <span className="country-flag">🇰🇼</span>
+                  <span className="country-code">KW</span>
                   <select 
                     className="checkout-select country-select"
                     value={delivery.country}
@@ -619,7 +629,7 @@ const Checkout = () => {
                   required
                   className="checkout-select governorate-select"
                 >
-                  <option value="">{text.selectGovernorate}</option>
+                  <option value="">{text.governorate}</option>
                   {governorates.map(gov => (
                     <option key={gov.id} value={gov.id}>
                       {currentLang === 'ar' ? gov.nameAr : gov.name}
@@ -630,9 +640,6 @@ const Checkout = () => {
 
               <div className="form-group phone-group">
                 <div className="phone-input-wrapper">
-                  <div className="country-flag-box">
-                    <span className="flag">🇰🇼</span>
-                  </div>
                   <input
                     type="tel"
                     name="phone"
@@ -655,11 +662,9 @@ const Checkout = () => {
               <label className="checkbox-label">
                 <input
                   type="checkbox"
-                  name="textOffers"
-                  checked={contact.textOffers}
-                  onChange={handleContactChange}
+                  name="saveInfo"
                 />
-                <span>{text.textOffers}</span>
+                <span>{text.saveInfo}</span>
               </label>
             </section>
 
@@ -699,13 +704,12 @@ const Checkout = () => {
                 </div>
               ) : (
                 <div className="shipping-placeholder">
-                  <div className="placeholder-icon">📍</div>
                   <p>{text.selectGovFirst}</p>
                 </div>
               )}
             </section>
 
-            {/* Delivery Instructions */}
+            {/* Delivery Instructions Section */}
             {deliveryInstructions && (
               <section className="checkout-section delivery-instructions-section">
                 <h2>{text.deliveryInstructions}</h2>
@@ -717,69 +721,41 @@ const Checkout = () => {
             )}
 
             {/* Payment Section */}
-            <section className="checkout-section">
+            <section className="checkout-section payment-section">
               <h2>{text.payment}</h2>
               <div className="payment-secure-row">
                 <p className="payment-secure-text">{text.paymentSecure}</p>
-                <div className="payment-badges-top">
-                  <div className="payment-badge visa">
-                    <svg viewBox="0 0 48 32" width="36" height="24">
-                      <rect fill="#1A1F71" width="48" height="32" rx="4"/>
-                      <text x="24" y="20" fill="white" fontSize="12" fontWeight="bold" textAnchor="middle" fontFamily="Arial">VISA</text>
-                    </svg>
-                  </div>
-                  <div className="payment-badge amex">
-                    <svg viewBox="0 0 48 32" width="36" height="24">
-                      <rect fill="#006FCF" width="48" height="32" rx="4"/>
-                      <text x="24" y="14" fill="white" fontSize="7" fontWeight="bold" textAnchor="middle" fontFamily="Arial">AMERICAN</text>
-                      <text x="24" y="23" fill="white" fontSize="7" fontWeight="bold" textAnchor="middle" fontFamily="Arial">EXPRESS</text>
-                    </svg>
-                  </div>
-                </div>
               </div>
               
               <div className="payment-box">
                 <div className="payment-header">
                   <span className="payment-name">{text.hesabeGateway}</span>
                   <div className="payment-icons">
-                    {/* K-NET Logo */}
-                    <div className="payment-icon knet">
-                      <svg viewBox="0 0 40 24" width="40" height="24">
-                        <rect fill="#003366" width="40" height="24" rx="3"/>
-                        <text x="20" y="10" fill="#FFD700" fontSize="5" fontWeight="bold" textAnchor="middle" fontFamily="Arial">بطاقات</text>
-                        <text x="20" y="18" fill="white" fontSize="8" fontWeight="bold" textAnchor="middle" fontFamily="Arial">K-NET</text>
+                    <span className="payment-icon">
+                      <svg width="34" height="22" viewBox="0 0 34 22" fill="none">
+                        <rect width="34" height="22" rx="3" fill="#1A1F71"/>
+                        <path d="M13.5 15.5L15 6.5H17.5L16 15.5H13.5Z" fill="white"/>
+                        <path d="M22 6.5L20 12.5L19.5 6.5H17L18.5 15.5H21L25 6.5H22Z" fill="white"/>
+                        <path d="M12 6.5L9.5 12.5L9.25 11.25C8.75 10 7.5 8.5 6 7.5L8 15.5H10.5L14.5 6.5H12Z" fill="white"/>
+                        <path d="M7.5 6.5H4L4 6.75C7 7.5 9 9.5 9.5 11.25L8.75 7.25C8.625 6.75 8.25 6.5 7.5 6.5Z" fill="#F9A533"/>
                       </svg>
-                    </div>
-                    {/* K-FAST Logo */}
-                    <div className="payment-icon kfast">
-                      <svg viewBox="0 0 40 24" width="40" height="24">
-                        <rect fill="#1E3A5F" width="40" height="24" rx="3"/>
-                        <text x="10" y="16" fill="#FFD700" fontSize="10" fontWeight="bold" fontFamily="Arial">K</text>
-                        <text x="22" y="16" fill="white" fontSize="8" fontWeight="bold" fontFamily="Arial">FAST</text>
+                    </span>
+                    <span className="payment-icon">
+                      <svg width="34" height="22" viewBox="0 0 34 22" fill="none">
+                        <rect width="34" height="22" rx="3" fill="#000"/>
+                        <circle cx="13" cy="11" r="7" fill="#EB001B"/>
+                        <circle cx="21" cy="11" r="7" fill="#F79E1B"/>
+                        <path d="M17 5.5C18.5 6.75 19.5 8.75 19.5 11C19.5 13.25 18.5 15.25 17 16.5C15.5 15.25 14.5 13.25 14.5 11C14.5 8.75 15.5 6.75 17 5.5Z" fill="#FF5F00"/>
                       </svg>
-                    </div>
-                    {/* Mastercard Logo */}
-                    <div className="payment-icon mastercard">
-                      <svg viewBox="0 0 40 24" width="40" height="24">
-                        <rect fill="#f5f5f5" width="40" height="24" rx="3" stroke="#ddd"/>
-                        <circle cx="15" cy="12" r="7" fill="#EB001B"/>
-                        <circle cx="25" cy="12" r="7" fill="#F79E1B"/>
-                        <path d="M20 6.5a7 7 0 0 0 0 11" fill="#FF5F00"/>
-                      </svg>
-                    </div>
-                    <span className="more-payment">+2</span>
+                    </span>
+                    <span className="more-payment">+4</span>
                   </div>
                 </div>
                 <div className="payment-body">
                   <div className="payment-redirect-icon">
-                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-                      <rect x="2" y="3" width="20" height="18" rx="2"/>
-                      <line x1="2" y1="8" x2="22" y2="8"/>
-                      <circle cx="6" cy="5.5" r="0.5" fill="currentColor"/>
-                      <circle cx="8.5" cy="5.5" r="0.5" fill="currentColor"/>
-                      <circle cx="11" cy="5.5" r="0.5" fill="currentColor"/>
-                      <path d="M12 14l3 0" strokeWidth="1.5"/>
-                      <path d="M13 12l2 2-2 2" strokeWidth="1.5"/>
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                      <line x1="1" y1="10" x2="23" y2="10"/>
                     </svg>
                   </div>
                   <p className="payment-desc">{text.hesabeDesc}</p>
@@ -798,42 +774,38 @@ const Checkout = () => {
                     name="billingAddress"
                     value="same"
                     checked={billingAddress === 'same'}
-                    onChange={(e) => setBillingAddress(e.target.value)}
+                    onChange={() => setBillingAddress('same')}
                   />
                   <span>{text.sameAsShipping}</span>
                 </label>
+                
                 <label className={`billing-option ${billingAddress === 'different' ? 'selected' : ''}`}>
                   <input
                     type="radio"
                     name="billingAddress"
                     value="different"
                     checked={billingAddress === 'different'}
-                    onChange={(e) => setBillingAddress(e.target.value)}
+                    onChange={() => setBillingAddress('different')}
                   />
                   <span>{text.differentBilling}</span>
                 </label>
               </div>
 
-              {/* Different Billing Address Form */}
               {billingAddress === 'different' && (
                 <div className="billing-form">
                   <div className="form-group">
-                    <label className="input-label">{text.countryRegion}</label>
-                    <div className="country-select-wrapper">
-                      <span className="country-flag">{getSelectedCountryFlag()}</span>
-                      <select 
-                        name="country"
-                        value={billingDetails.country}
-                        onChange={handleBillingChange}
-                        className="checkout-select country-select"
-                      >
-                        {countries.map(country => (
-                          <option key={country.code} value={country.code}>
-                            {currentLang === 'ar' ? country.nameAr : country.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                    <select
+                      name="country"
+                      value={billingDetails.country}
+                      onChange={handleBillingChange}
+                      className="checkout-select"
+                    >
+                      {countries.map(country => (
+                        <option key={country.code} value={country.code}>
+                          {country.flag} {currentLang === 'ar' ? country.nameAr : country.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
 
                   <div className="form-row">
@@ -964,51 +936,60 @@ const Checkout = () => {
         {/* Right Column - Order Summary */}
         <div className="checkout-summary-column">
           <div className="order-summary">
-            <h3>{text.orderSummary}</h3>
             
+            {/* Product Items */}
             <div className="summary-items">
               {cartItems.map((item, index) => (
-                <div key={`${item.id}-${index}`} className="summary-item">
-                  <div className="item-image-wrapper">
+                <div key={`${item.id}-${index}`} className="summary-product">
+                  <div className="product-image-wrap">
                     <img src={item.image} alt={currentLang === 'ar' ? item.nameAr : item.nameEn} />
-                    <span className="item-quantity">{item.quantity}</span>
+                    <span className="product-qty-badge">{item.quantity}</span>
                   </div>
-                  <div className="item-details">
-                    <span className="item-name">
+                  <div className="product-info">
+                    <span className="product-name">
                       {currentLang === 'ar' ? item.nameAr : item.nameEn}
                     </span>
-                    {item.selectedVariant && (
-                      <span className="item-variant">{item.selectedVariant}</span>
+                    {item.deliveryDate && (
+                      <span className="product-delivery-info">
+                        {text.deliveryDate} :: {item.deliveryDate}
+                      </span>
+                    )}
+                    {item.deliveryTime && (
+                      <span className="product-delivery-info">
+                        {text.deliveryTime} :: {item.deliveryTime}
+                      </span>
+                    )}
+                    {item.cardMessage && (
+                      <div className="product-card-message">
+                        <span className="message-icon">💌</span>
+                        <span className="message-label">{text.cardMessage}:</span>
+                        <span className="message-text">"{item.cardMessage}"</span>
+                      </div>
                     )}
                   </div>
-                  <span className="item-price">{text.kwd} {(item.price * item.quantity).toFixed(3)}</span>
+                  <div className="product-price-col">
+                    {item.originalPrice && item.originalPrice > item.price && (
+                      <span className="price-original">{text.kwd} {(item.originalPrice * item.quantity).toFixed(3)}</span>
+                    )}
+                    <span className="price-current">{text.kwd} {(item.price * item.quantity).toFixed(3)}</span>
+                  </div>
                 </div>
               ))}
             </div>
 
-            <div className="summary-totals">
-              <div className="summary-row">
-                <span>{text.subtotal}</span>
-                <span>{text.kwd} {subtotal.toFixed(3)}</span>
-              </div>
-              <div className="summary-row">
-                <span>{text.shipping}</span>
-                <span>
-                  {delivery.governorate 
-                    ? `${text.kwd} ${shippingCost.toFixed(3)}` 
-                    : '—'
-                  }
-                </span>
-              </div>
-              <div className="summary-row total-row">
-                <span>{text.total}</span>
-                <span className="total-amount">{text.kwd} {total.toFixed(3)}</span>
-              </div>
+            {/* Discount Code */}
+            <div className="discount-code-section">
+              <input 
+                type="text" 
+                placeholder={text.discountCode}
+                value={discountCode}
+                onChange={(e) => setDiscountCode(e.target.value)}
+                className="discount-input"
+              />
+              <button type="button" className="discount-apply-btn">
+                {text.apply}
+              </button>
             </div>
-
-            <Link to="/cart" className="back-to-cart-link">
-              {text.backToCart}
-            </Link>
           </div>
         </div>
       </div>

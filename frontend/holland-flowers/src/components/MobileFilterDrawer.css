@@ -1,0 +1,310 @@
+/* ============================================
+   MOBILE FILTER DRAWER - Reusable Component
+   ============================================ */
+
+/* Overlay */
+.mobile-filter-drawer__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10000;
+  animation: mfd-fadeIn 0.2s ease;
+}
+
+@keyframes mfd-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Drawer */
+.mobile-filter-drawer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 20px 20px 0 0;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  animation: mfd-slideUp 0.3s ease;
+  z-index: 10001;
+}
+
+.mobile-filter-drawer.rtl {
+  direction: rtl;
+}
+
+@keyframes mfd-slideUp {
+  from { 
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to { 
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Header */
+.mobile-filter-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+.mobile-filter-drawer__header h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.mobile-filter-drawer__close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: #222;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #fff;
+  transition: all 0.2s ease;
+}
+
+.mobile-filter-drawer__close-btn:active {
+  transform: scale(0.95);
+}
+
+/* Content */
+.mobile-filter-drawer__content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+}
+
+/* Filter Section */
+.mobile-filter-drawer__section {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.mobile-filter-drawer__section:last-child {
+  border-bottom: none;
+}
+
+.mobile-filter-drawer__section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 18px 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  text-align: left;
+}
+
+.mobile-filter-drawer.rtl .mobile-filter-drawer__section-header {
+  text-align: right;
+  flex-direction: row-reverse;
+}
+
+.mobile-filter-drawer__chevron {
+  transition: transform 0.3s ease;
+  color: #999;
+}
+
+.mobile-filter-drawer__chevron.open {
+  transform: rotate(180deg);
+}
+
+.mobile-filter-drawer__section-content {
+  padding: 0 20px 20px;
+}
+
+/* Price Filter */
+.mobile-filter-drawer__price-inputs {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mobile-filter-drawer__price-input-group {
+  display: flex;
+  align-items: center;
+  background: #f9f9f9;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  overflow: hidden;
+  flex: 1;
+}
+
+.mobile-filter-drawer__currency {
+  padding: 12px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #999;
+  background: #f3f3f3;
+  border-right: 1px solid #e5e5e5;
+}
+
+.mobile-filter-drawer.rtl .mobile-filter-drawer__currency {
+  border-right: none;
+  border-left: 1px solid #e5e5e5;
+}
+
+.mobile-filter-drawer__price-input-group input {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  background: transparent;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+  width: 100%;
+  min-width: 0;
+}
+
+.mobile-filter-drawer__price-input-group input::placeholder {
+  color: #bbb;
+}
+
+.mobile-filter-drawer__price-separator {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #999;
+}
+
+.mobile-filter-drawer__price-hint {
+  margin: 12px 0 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #999;
+}
+
+/* Checkbox Filter */
+.mobile-filter-drawer__checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mobile-filter-drawer__checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.mobile-filter-drawer__checkbox-item input {
+  display: none;
+}
+
+.mobile-filter-drawer__checkmark {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  position: relative;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.mobile-filter-drawer__checkmark.checked {
+  background: #e91e63;
+  border-color: #e91e63;
+}
+
+.mobile-filter-drawer__checkmark.checked::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 6px;
+  height: 11px;
+  border: solid white;
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(45deg);
+}
+
+.mobile-filter-drawer__checkbox-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  color: #333;
+}
+
+/* RTL checkbox */
+.mobile-filter-drawer.rtl .mobile-filter-drawer__checkbox-item {
+  flex-direction: row-reverse;
+}
+
+/* Footer */
+.mobile-filter-drawer__footer {
+  display: flex;
+  gap: 12px;
+  padding: 16px 20px;
+  border-top: 1px solid #f0f0f0;
+  background: white;
+  flex-shrink: 0;
+}
+
+.mobile-filter-drawer__clear-btn {
+  flex: 1;
+  padding: 14px 20px;
+  background: white;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mobile-filter-drawer__clear-btn:active {
+  background: #f9f9f9;
+}
+
+.mobile-filter-drawer__apply-btn {
+  flex: 2;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #e91e63 0%, #c2185b 100%);
+  border: none;
+  border-radius: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+}
+
+.mobile-filter-drawer__apply-btn:active {
+  transform: scale(0.98);
+}
+
+/* Hide desktop sidebar on mobile when using this component */
+@media (max-width: 768px) {
+  .filters-sidebar:not(.mobile-filter-drawer) {
+    display: none !important;
+  }
+}

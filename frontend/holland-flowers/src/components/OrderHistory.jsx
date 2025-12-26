@@ -1,12 +1,12 @@
 /**
  * Order History Component - Holland Flowers
- * Displays user's order history with status and details
+ * Displays user's order history with delivery and payment status
  */
 
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import orderService, { ORDER_STATUS } from '../services/orderService';
+import orderService, { DELIVERY_STATUS } from '../services/orderService';
 import './OrderHistory.css';
 
 const OrderHistory = () => {
@@ -44,7 +44,7 @@ const OrderHistory = () => {
       if (filter === 'ALL') {
         response = await orderService.getUserOrders({ page: currentPage, size: 10 });
       } else {
-        response = await orderService.getOrdersByStatus(filter, { page: currentPage, size: 10 });
+        response = await orderService.getOrdersByDeliveryStatus(filter, { page: currentPage, size: 10 });
       }
       
       if (response.success) {
@@ -58,7 +58,7 @@ const OrderHistory = () => {
     }
   };
 
-  const getStatusColor = (status) => {
+  const getDeliveryStatusColor = (status) => {
     const colors = {
       PENDING: '#f59e0b',
       CONFIRMED: '#3b82f6',
@@ -71,13 +71,39 @@ const OrderHistory = () => {
     return colors[status] || '#666';
   };
 
-  const getStatusLabel = (status) => {
+  const getPaymentStatusColor = (status) => {
+    const colors = {
+      PENDING: '#f59e0b',
+      PROCESSING: '#3b82f6',
+      COMPLETED: '#10b981',
+      CAPTURED: '#10b981',
+      FAILED: '#ef4444',
+      CANCELLED: '#6b7280',
+      REFUNDED: '#8b5cf6',
+    };
+    return colors[status] || '#666';
+  };
+
+  const getDeliveryStatusLabel = (status) => {
     const labels = {
       PENDING: { en: 'Pending', ar: 'قيد الانتظار' },
       CONFIRMED: { en: 'Confirmed', ar: 'مؤكد' },
       PROCESSING: { en: 'Processing', ar: 'قيد التحضير' },
       OUT_FOR_DELIVERY: { en: 'Out for Delivery', ar: 'قيد التوصيل' },
       DELIVERED: { en: 'Delivered', ar: 'تم التوصيل' },
+      CANCELLED: { en: 'Cancelled', ar: 'ملغي' },
+      REFUNDED: { en: 'Refunded', ar: 'مسترد' },
+    };
+    return labels[status]?.[currentLang] || status;
+  };
+
+  const getPaymentStatusLabel = (status) => {
+    const labels = {
+      PENDING: { en: 'Pending', ar: 'قيد الانتظار' },
+      PROCESSING: { en: 'Processing', ar: 'قيد المعالجة' },
+      COMPLETED: { en: 'Paid', ar: 'مدفوع' },
+      CAPTURED: { en: 'Paid', ar: 'مدفوع' },
+      FAILED: { en: 'Failed', ar: 'فشل' },
       CANCELLED: { en: 'Cancelled', ar: 'ملغي' },
       REFUNDED: { en: 'Refunded', ar: 'مسترد' },
     };
@@ -130,6 +156,12 @@ const OrderHistory = () => {
             onClick={() => { setFilter('PROCESSING'); setCurrentPage(0); }}
           >
             {currentLang === 'ar' ? 'قيد التحضير' : 'Processing'}
+          </button>
+          <button 
+            className={`filter-btn ${filter === 'OUT_FOR_DELIVERY' ? 'active' : ''}`}
+            onClick={() => { setFilter('OUT_FOR_DELIVERY'); setCurrentPage(0); }}
+          >
+            {currentLang === 'ar' ? 'قيد التوصيل' : 'Out for Delivery'}
           </button>
           <button 
             className={`filter-btn ${filter === 'DELIVERED' ? 'active' : ''}`}
@@ -192,16 +224,30 @@ const OrderHistory = () => {
                     </span>
                     <span className="order-date">{formatDate(order.createdAt)}</span>
                   </div>
-                  <span 
-                    className="order-status"
-                    style={{ 
-                      backgroundColor: `${getStatusColor(order.orderStatus)}20`,
-                      color: getStatusColor(order.orderStatus),
-                      borderColor: getStatusColor(order.orderStatus)
-                    }}
-                  >
-                    {getStatusLabel(order.orderStatus)}
-                  </span>
+                  <div className="order-statuses">
+                    {/* Delivery Status */}
+                    <span 
+                      className="order-status delivery-status"
+                      style={{ 
+                        backgroundColor: `${getDeliveryStatusColor(order.deliveryStatus)}20`,
+                        color: getDeliveryStatusColor(order.deliveryStatus),
+                        borderColor: getDeliveryStatusColor(order.deliveryStatus)
+                      }}
+                    >
+                      🚚 {getDeliveryStatusLabel(order.deliveryStatus)}
+                    </span>
+                    {/* Payment Status */}
+                    <span 
+                      className="order-status payment-status"
+                      style={{ 
+                        backgroundColor: `${getPaymentStatusColor(order.paymentStatus)}20`,
+                        color: getPaymentStatusColor(order.paymentStatus),
+                        borderColor: getPaymentStatusColor(order.paymentStatus)
+                      }}
+                    >
+                      💳 {getPaymentStatusLabel(order.paymentStatus)}
+                    </span>
+                  </div>
                 </div>
 
                 <div className="order-card-body">
@@ -237,7 +283,7 @@ const OrderHistory = () => {
                     </svg>
                   </Link>
                   
-                  {order.orderStatus === 'PENDING' && (
+                  {order.deliveryStatus === 'PENDING' && (
                     <button 
                       className="cancel-order-btn"
                       onClick={async () => {

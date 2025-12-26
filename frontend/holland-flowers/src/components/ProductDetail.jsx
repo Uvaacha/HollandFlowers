@@ -18,6 +18,7 @@ const ProductDetail = () => {
   const [dbProduct, setDbProduct] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState(null);
+  const [formErrors, setFormErrors] = useState({ deliveryDate: false, deliveryTime: false });
 
   useEffect(() => {
     const savedLang = localStorage.getItem('preferredLanguage') || 'en';
@@ -67,6 +68,15 @@ const ProductDetail = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [productId]);
+
+  // Reset delivery time when date changes (Friday vs non-Friday)
+  useEffect(() => {
+    if (deliveryDate) {
+      const selectedDay = new Date(deliveryDate).getDay();
+      // Reset time if switching between Friday and other days
+      setDeliveryTime('');
+    }
+  }, [deliveryDate]);
 
   // Product database
   const products = {
@@ -8402,22 +8412,33 @@ const ProductDetail = () => {
       deliveryDate: 'Delivery Date :',
       deliveryTime: 'Delivery Time :',
       selectTime: 'Select delivery time',
-      time1: 'Between 10.00 am and 1.00 pm',
-      time2: 'Between 1.00 pm and 4.00 pm',
-      time3: 'Between 4.00 pm and 7.00 pm',
-      time4: 'Between 7.00 pm and 10.00 pm',
+      // Regular days (8:30am - 9pm)
+      time1: '8:30 AM - 11:00 AM',
+      time2: '11:00 AM - 1:30 PM',
+      time3: '1:30 PM - 4:00 PM',
+      time4: '4:00 PM - 6:30 PM',
+      time5: '6:30 PM - 9:00 PM',
+      // Friday slots (1:30pm - 10pm)
+      fridayTime1: '1:30 PM - 4:00 PM',
+      fridayTime2: '4:00 PM - 6:30 PM',
+      fridayTime3: '6:30 PM - 8:00 PM',
+      fridayTime4: '8:00 PM - 10:00 PM',
       cardMessage: 'Card Message :',
       senderInfo: 'Sender Name and Mobile Number :',
       addToCart: 'Add to cart',
       adding: 'Adding...',
       sale: 'Sale',
-      delivery: 'Delivery',
+      delivery: 'Delivery & Returns',
       share: 'Share',
       home: 'Home',
       products: 'Products',
       outOfStock: 'Out of Stock',
       productNotFound: 'Product not found',
       backToShop: 'Back to Shop',
+      fridayNote: 'Friday: 1:30 PM - 10:00 PM',
+      regularNote: 'Sat - Thu: 8:30 AM - 9:00 PM',
+      deliveryDateRequired: 'Please select a delivery date',
+      deliveryTimeRequired: 'Please select a delivery time',
     },
     ar: {
       shipping: 'الشحن',
@@ -8426,22 +8447,33 @@ const ProductDetail = () => {
       deliveryDate: 'تاريخ التوصيل :',
       deliveryTime: 'وقت التوصيل :',
       selectTime: 'اختر وقت التوصيل',
-      time1: 'بين 10.00 صباحاً و 1.00 مساءً',
-      time2: 'بين 1.00 مساءً و 4.00 مساءً',
-      time3: 'بين 4.00 مساءً و 7.00 مساءً',
-      time4: 'بين 7.00 مساءً و 10.00 مساءً',
+      // Regular days (8:30am - 9pm)
+      time1: '٨:٣٠ ص - ١١:٠٠ ص',
+      time2: '١١:٠٠ ص - ١:٣٠ م',
+      time3: '١:٣٠ م - ٤:٠٠ م',
+      time4: '٤:٠٠ م - ٦:٣٠ م',
+      time5: '٦:٣٠ م - ٩:٠٠ م',
+      // Friday slots (1:30pm - 10pm)
+      fridayTime1: '١:٣٠ م - ٤:٠٠ م',
+      fridayTime2: '٤:٠٠ م - ٦:٣٠ م',
+      fridayTime3: '٦:٣٠ م - ٨:٠٠ م',
+      fridayTime4: '٨:٠٠ م - ١٠:٠٠ م',
       cardMessage: 'رسالة البطاقة :',
       senderInfo: 'اسم المرسل ورقم الهاتف :',
       addToCart: 'أضف إلى السلة',
       adding: 'جاري الإضافة...',
       sale: 'تخفيض',
-      delivery: 'التوصيل',
+      delivery: 'التوصيل والإرجاع',
       share: 'مشاركة',
       home: 'الرئيسية',
       products: 'المنتجات',
       outOfStock: 'غير متوفر',
       productNotFound: 'المنتج غير موجود',
       backToShop: 'العودة للمتجر',
+      fridayNote: 'الجمعة: ١:٣٠ م - ١٠:٠٠ م',
+      regularNote: 'السبت - الخميس: ٨:٣٠ ص - ٩:٠٠ م',
+      deliveryDateRequired: 'يرجى اختيار تاريخ التوصيل',
+      deliveryTimeRequired: 'يرجى اختيار وقت التوصيل',
     }
   };
 
@@ -8475,6 +8507,25 @@ const ProductDetail = () => {
 
   const handleAddToCart = () => {
     if (!product.inStock) return;
+    
+    // Validate required fields
+    const errors = {
+      deliveryDate: !deliveryDate,
+      deliveryTime: !deliveryTime
+    };
+    
+    setFormErrors(errors);
+    
+    // If there are errors, don't proceed
+    if (errors.deliveryDate || errors.deliveryTime) {
+      // Scroll to the first error field
+      const firstErrorField = document.querySelector('.form-input.error, .form-select.error');
+      if (firstErrorField) {
+        firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        firstErrorField.focus();
+      }
+      return;
+    }
     
     setIsAddingToCart(true);
     
@@ -8567,33 +8618,64 @@ const ProductDetail = () => {
             {/* Delivery Date */}
             <div className="form-group">
               <label className="form-label">
-                {text.deliveryDate} <span className="optional-icon">⊙</span>
+                {text.deliveryDate} <span className="required-icon">*</span>
               </label>
               <input
                 type="date"
-                className="form-input"
+                className={`form-input ${formErrors.deliveryDate ? 'error' : ''}`}
                 value={deliveryDate}
-                onChange={(e) => setDeliveryDate(e.target.value)}
+                onChange={(e) => {
+                  setDeliveryDate(e.target.value);
+                  if (e.target.value) setFormErrors(prev => ({ ...prev, deliveryDate: false }));
+                }}
                 min={today}
               />
+              {formErrors.deliveryDate && (
+                <span className="field-error-message">{text.deliveryDateRequired}</span>
+              )}
             </div>
 
             {/* Delivery Time */}
             <div className="form-group">
               <label className="form-label">
-                {text.deliveryTime} <span className="optional-icon">⊙</span>
+                {text.deliveryTime} <span className="required-icon">*</span>
               </label>
               <select
-                className="form-select"
+                className={`form-select ${formErrors.deliveryTime ? 'error' : ''}`}
                 value={deliveryTime}
-                onChange={(e) => setDeliveryTime(e.target.value)}
+                onChange={(e) => {
+                  setDeliveryTime(e.target.value);
+                  if (e.target.value) setFormErrors(prev => ({ ...prev, deliveryTime: false }));
+                }}
               >
                 <option value="">{text.selectTime}</option>
-                <option value="10-13">{text.time1}</option>
-                <option value="13-16">{text.time2}</option>
-                <option value="16-19">{text.time3}</option>
-                <option value="19-22">{text.time4}</option>
+                {deliveryDate && new Date(deliveryDate).getDay() === 5 ? (
+                  // Friday time slots (1:30pm - 10pm)
+                  <>
+                    <option value="13:30-16:00">{text.fridayTime1}</option>
+                    <option value="16:00-18:30">{text.fridayTime2}</option>
+                    <option value="18:30-20:00">{text.fridayTime3}</option>
+                    <option value="20:00-22:00">{text.fridayTime4}</option>
+                  </>
+                ) : (
+                  // Regular day time slots (8:30am - 9pm)
+                  <>
+                    <option value="08:30-11:00">{text.time1}</option>
+                    <option value="11:00-13:30">{text.time2}</option>
+                    <option value="13:30-16:00">{text.time3}</option>
+                    <option value="16:00-18:30">{text.time4}</option>
+                    <option value="18:30-21:00">{text.time5}</option>
+                  </>
+                )}
               </select>
+              {formErrors.deliveryTime && (
+                <span className="field-error-message">{text.deliveryTimeRequired}</span>
+              )}
+              {deliveryDate && !formErrors.deliveryTime && (
+                <p className="time-note">
+                  {new Date(deliveryDate).getDay() === 5 ? text.fridayNote : text.regularNote}
+                </p>
+              )}
             </div>
 
             {/* Card Message */}
@@ -8668,10 +8750,30 @@ const ProductDetail = () => {
               </button>
               {isDeliveryOpen && (
                 <div className="accordion-content">
-                  <p>{currentLang === 'ar' 
-                    ? 'نقدم خدمة التوصيل في نفس اليوم للطلبات قبل الساعة 2 مساءً. التوصيل مجاني للطلبات فوق 25 د.ك.'
-                    : 'We offer same-day delivery for orders placed before 2 PM. Free delivery on orders above KD 25.'
-                  }</p>
+                  <div className="delivery-info-grid">
+                    <div className="delivery-info-item">
+                      <span className="delivery-icon">🕐</span>
+                      <div>
+                        <strong>{currentLang === 'ar' ? 'ساعات التوصيل' : 'Delivery Hours'}</strong>
+                        <p>{currentLang === 'ar' ? 'السبت - الخميس: ٨:٣٠ ص - ٩:٠٠ م' : 'Sat - Thu: 8:30 AM - 9:00 PM'}</p>
+                        <p>{currentLang === 'ar' ? 'الجمعة: ١:٣٠ م - ١٠:٠٠ م' : 'Friday: 1:30 PM - 10:00 PM'}</p>
+                      </div>
+                    </div>
+                    <div className="delivery-info-item">
+                      <span className="delivery-icon">🚚</span>
+                      <div>
+                        <strong>{currentLang === 'ar' ? 'التوصيل في نفس اليوم' : 'Same Day Delivery'}</strong>
+                        <p>{currentLang === 'ar' ? 'للطلبات قبل الساعة ٢ مساءً' : 'For orders placed before 2:00 PM'}</p>
+                      </div>
+                    </div>
+                    <div className="delivery-info-item">
+                      <span className="delivery-icon">📍</span>
+                      <div>
+                        <strong>{currentLang === 'ar' ? 'مناطق التوصيل' : 'Delivery Areas'}</strong>
+                        <p>{currentLang === 'ar' ? 'جميع مناطق الكويت' : 'All areas in Kuwait'}</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>

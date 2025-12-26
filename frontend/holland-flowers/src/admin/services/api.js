@@ -7,8 +7,6 @@
 // ============================================
 // API BASE URL CONFIGURATION
 // ============================================
-// In production, this will use the REACT_APP_API_URL from .env.production
-// In development, it falls back to localhost
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api/v1';
 
 // Log the API URL in development for debugging
@@ -62,7 +60,7 @@ export const authAPI = {
     
     if (response.success && response.data) {
       localStorage.setItem('adminToken', response.data.accessToken);
-      localStorage.setItem('accessToken', response.data.accessToken); // Also set accessToken for compatibility
+      localStorage.setItem('accessToken', response.data.accessToken);
       localStorage.setItem('refreshToken', response.data.refreshToken);
       localStorage.setItem('adminUser', JSON.stringify(response.data.user));
     }
@@ -117,7 +115,8 @@ export const authAPI = {
       'view_categories',
       'view_orders',
       'view_customers',
-      'view_dashboard'
+      'view_dashboard',
+      'update_delivery_status'  // Admin can now update delivery status
     ];
     
     return user.roleName === 'ADMIN' && adminViewPermissions.includes(permission);
@@ -125,6 +124,11 @@ export const authAPI = {
 
   canWrite: () => {
     return authAPI.isSuperAdmin();
+  },
+
+  // New: Both Admin and Super Admin can update delivery status
+  canUpdateDeliveryStatus: () => {
+    return authAPI.isAdmin(); // Returns true for both ADMIN and SUPER_ADMIN
   },
 
   canManageAdmins: () => {
@@ -258,9 +262,9 @@ export const ordersAPI = {
     return apiCall(`/admin/orders/${id}`);
   },
   
-  getByStatus: async (status, params = {}) => {
+  getByDeliveryStatus: async (status, params = {}) => {
     const { page = 0, size = 10 } = params;
-    return apiCall(`/admin/orders/status/${status}?page=${page}&size=${size}`);
+    return apiCall(`/admin/orders/delivery-status/${status}?page=${page}&size=${size}`);
   },
   
   getByDateRange: async (startDate, endDate, params = {}) => {
@@ -268,10 +272,10 @@ export const ordersAPI = {
     return apiCall(`/admin/orders/date-range?startDate=${startDate}&endDate=${endDate}&page=${page}&size=${size}`);
   },
   
-  updateStatus: async (id, orderStatus) => {
-    return apiCall(`/admin/orders/${id}/status`, {
+  updateDeliveryStatus: async (id, deliveryStatus) => {
+    return apiCall(`/admin/orders/${id}/delivery-status`, {
       method: 'PUT',
-      body: JSON.stringify({ orderStatus }),
+      body: JSON.stringify({ deliveryStatus }),
     });
   },
   
@@ -498,7 +502,7 @@ export const uploadAPI = {
 // ============================================
 // CONSTANTS
 // ============================================
-export const ORDER_STATUS = {
+export const DELIVERY_STATUS = {
   PENDING: 'PENDING',
   CONFIRMED: 'CONFIRMED',
   PROCESSING: 'PROCESSING',
@@ -540,7 +544,7 @@ const api = {
   settings: settingsAPI,
   dashboard: dashboardAPI,
   upload: uploadAPI,
-  ORDER_STATUS,
+  DELIVERY_STATUS,
   PAYMENT_STATUS,
   USER_ROLES,
 };

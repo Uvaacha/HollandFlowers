@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useCart } from './CartContext';
 import categoryService from '../services/categoryService';
 import productService from '../services/productService';
+import MobileFilterBar from './MobileFilterBar';
+import MobileFilterDrawer, { FilterSection, PriceRangeFilter, CheckboxFilter } from './MobileFilterDrawer';
 import './EidCollection.css';
 
 const EidCollection = () => {
@@ -16,7 +18,7 @@ const EidCollection = () => {
   const [priceRange, setPriceRange] = useState({ min: '', max: '' });
   const [selectedArrangements, setSelectedArrangements] = useState([]);
   const [sortBy, setSortBy] = useState('default');
-  const [viewMode, setViewMode] = useState('grid');
+  const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState({ price: true, arrangement: true });
 
   useEffect(() => {
@@ -151,11 +153,73 @@ const EidCollection = () => {
         <div className="hero-bg-decoration"><span className="floating-icon float-1">🌙</span><span className="floating-icon float-2">⭐</span><span className="floating-icon float-3">🎊</span></div>
         <div className="container"><div className="hero-content"><span className="hero-badge"><span>🌙</span>{t.badge}</span><h1 className="hero-title">{t.title}</h1><p className="hero-subtitle">{t.subtitle}</p></div></div>
       </section>
+
+      {/* Mobile Filter/Sort Toolbar */}
+      <MobileFilterBar
+        currentLang={currentLang}
+        onFilterClick={() => setMobileFilterOpen(true)}
+        sortBy={sortBy}
+        onSortChange={setSortBy}
+        filterCount={(selectedArrangements.length > 0 ? 1 : 0) + (priceRange.min !== '' || priceRange.max !== '' ? 1 : 0)}
+        sortOptions={[
+          { value: 'default', labelEn: t.default || 'Default', labelAr: 'افتراضي' },
+          { value: 'priceLow', labelEn: t.priceLow || 'Price: Low to High', labelAr: 'السعر: من الأقل للأعلى' },
+          { value: 'priceHigh', labelEn: t.priceHigh || 'Price: High to Low', labelAr: 'السعر: من الأعلى للأقل' },
+          { value: 'newest', labelEn: t.newest || 'Newest First', labelAr: 'الأحدث أولاً' },
+          { value: 'nameAZ', labelEn: t.nameAZ || 'Name: A-Z', labelAr: 'الاسم: أ-ي' },
+        ]}
+      />
+
+      {/* Mobile Filter Drawer */}
+      <MobileFilterDrawer
+        isOpen={mobileFilterOpen}
+        onClose={() => setMobileFilterOpen(false)}
+        currentLang={currentLang}
+        onClearAll={clearFilters}
+        itemCount={filteredAndSortedProducts.length}
+      >
+        <FilterSection 
+          title={t.priceRange || t.price || 'Price Range'} 
+          isOpen={filtersOpen.price} 
+          onToggle={() => setFiltersOpen(prev => ({ ...prev, price: !prev.price }))}
+        >
+          <PriceRangeFilter
+            minValue={priceRange.min}
+            maxValue={priceRange.max}
+            onMinChange={(val) => setPriceRange(prev => ({ ...prev, min: val }))}
+            onMaxChange={(val) => setPriceRange(prev => ({ ...prev, max: val }))}
+            currency={t.kd || t.currency || 'KD'}
+            highestPriceLabel={t.highestPrice || 'Highest price'}
+            highestPrice={maxPrice}
+          />
+        </FilterSection>
+        
+        <FilterSection 
+          title={t.arrangement || 'Arrangement'} 
+          isOpen={filtersOpen.arrangement} 
+          onToggle={() => setFiltersOpen(prev => ({ ...prev, arrangement: !prev.arrangement }))}
+        >
+          <CheckboxFilter
+            options={arrangementTypes.map ? arrangementTypes.map(arr => ({ value: arr.key || arr.value, label: arr.label })) : arrangementTypes}
+            selectedValues={selectedArrangements}
+            onChange={setSelectedArrangements}
+            currentLang={currentLang}
+          />
+        </FilterSection>
+      </MobileFilterDrawer>
+
       <section className="main-content">
         <div className="container">
           <div className="content-layout">
-            <aside className="filters-sidebar">
-              <div className="filters-header"><h3 className="filters-title">{t.filters}</h3>{hasActiveFilters && <button className="clear-filters" onClick={clearFilters}>{t.clearAll}</button>}</div>
+            <aside className={`filters-sidebar ${mobileFilterOpen ? "open" : ""}`}>
+              <div className="filters-header">
+                <h3 className="filters-title">{t.filters}</h3>
+                <button className="mobile-filter-close" onClick={() => setMobileFilterOpen(false)} aria-label="Close filters">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+                {hasActiveFilters && <button className="clear-filters" onClick={clearFilters}>{t.clearAll}</button>}</div>
               <div className="filter-section">
                 <button className={`filter-header ${filtersOpen.price ? 'open' : ''}`} onClick={() => setFiltersOpen(prev => ({ ...prev, price: !prev.price }))}><span>{t.priceRange}</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6"/></svg></button>
                 {filtersOpen.price && <div className="filter-content"><div className="price-inputs"><div className="price-input-group"><span className="currency-label">{t.kd}</span><input type="number" placeholder={t.minPrice} value={priceRange.min} onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))} min="0"/></div><span className="price-separator">-</span><div className="price-input-group"><span className="currency-label">{t.kd}</span><input type="number" placeholder={t.maxPrice} value={priceRange.max} onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))} min="0"/></div></div><p className="price-hint">{t.highestPrice}: {maxPrice} {t.kd}</p></div>}
@@ -170,11 +234,10 @@ const EidCollection = () => {
                 <span className="items-count">{filteredAndSortedProducts.length} {t.items}</span>
                 <div className="toolbar-right">
                   <div className="sort-dropdown"><label>{t.sortBy}</label><select value={sortBy} onChange={(e) => setSortBy(e.target.value)}><option value="default">{t.default}</option><option value="priceLow">{t.priceLow}</option><option value="priceHigh">{t.priceHigh}</option><option value="newest">{t.newest}</option><option value="nameAZ">{t.nameAZ}</option></select></div>
-                  <div className="view-toggle"><button className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`} onClick={() => setViewMode('grid')}><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></button><button className={`view-btn ${viewMode === 'list' ? 'active' : ''}`} onClick={() => setViewMode('list')}><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="10" width="18" height="4" rx="1"/><rect x="3" y="16" width="18" height="4" rx="1"/></svg></button></div>
-                </div>
+                  </div>
               </div>
               {loading ? <div className="loading-state"><div className="spinner"></div><p>{t.loading}</p></div> : error ? <div className="error-state"><p>{t.error}</p></div> : filteredAndSortedProducts.length === 0 ? <div className="empty-state"><span className="empty-icon">🌙</span><p>{t.noProducts}</p></div> : (
-                <div className={`products-grid ${viewMode}`}>
+                <div className="products-grid">
                   {filteredAndSortedProducts.map((product, index) => {
                     const productName = getProductName(product);
                     const productImage = getProductImage(product);
@@ -195,16 +258,21 @@ const EidCollection = () => {
                             onError={(e) => { e.target.src = '/images/placeholder.webp'; }}
                           />
                         </div>
-                        <div className="product-details">
+                        <div className="product-info">
                           <h3 className="product-name">{productName}</h3>
                           <p className="product-desc">{currentLang === 'ar' ? 'هدية عيد جميلة' : 'Beautiful Eid gift'}</p>
                           <div className="product-footer">
                             <div className="price-wrapper">
-                              {showDiscount && <span className="original-price">KD {parseFloat(originalPrice).toFixed(3)}</span>}
-                              <span className="sale-price">KD {parseFloat(finalPrice).toFixed(3)}</span>
+                              {showDiscount && <span className="original-price">{parseFloat(originalPrice).toFixed(3)} KWD</span>}
+                              <span className="sale-price">{parseFloat(finalPrice).toFixed(3)} KWD</span>
                             </div>
+                            
                             <button className={`add-btn ${addingToCart[productSlug] ? 'adding' : ''}`} onClick={(e) => handleAddToCart(e, product)}>
-                              {addingToCart[productSlug] ? <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg> : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>}
+                              {addingToCart[productSlug] ? (
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+                              ) : (
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                              )}
                             </button>
                           </div>
                         </div>

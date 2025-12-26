@@ -1,456 +1,495 @@
 /* ============================================
-   Baby Roses - Soft Rose & Blush Theme
+   Baby Roses - STYLED PAGE
+   Theme: #f48fb1
    ============================================ */
 
-/* Page Container */
-.baby-roses-page {
+.babyroses-page {
   min-height: 100vh;
-  background: linear-gradient(180deg, #fff1f2 0%, var(--primary-lightest) 50%, var(--primary-lightest) 100%);
-  position: relative;
-  overflow-x: hidden;
-  padding-bottom: 80px;
+  background: #ffffff;
 }
 
-.baby-roses-page.rtl {
+.babyroses-page.rtl {
   direction: rtl;
 }
 
-/* Decorative Background */
-.baby-roses-bg {
-  position: fixed;
+.babyroses-page .container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* HERO BANNER */
+.babyroses-page .hero-banner {
+  background: linear-gradient(135deg, #fce4ec 0%, #fdf1f5 50%, #fce4ec 100%);
+  padding: 50px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.babyroses-page .hero-bg-decoration {
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
 }
 
-.baby-glow {
+.babyroses-page .floating-icon {
   position: absolute;
-  border-radius: 50%;
-  filter: blur(100px);
-  opacity: 0.4;
+  font-size: 40px;
+  opacity: 0.15;
+  animation: floatBabyRoses 15s ease-in-out infinite;
 }
 
-.glow-1 {
-  width: 480px;
-  height: 480px;
-  background: radial-gradient(circle, var(--primary-light) 0%, transparent 70%);
-  top: -140px;
-  right: -90px;
+.babyroses-page .float-1 { top: 10%; left: 5%; }
+.babyroses-page .float-2 { top: 60%; right: 8%; font-size: 35px; animation-delay: -5s; }
+.babyroses-page .float-3 { bottom: 15%; left: 15%; font-size: 30px; animation-delay: -10s; }
+
+@keyframes floatBabyRoses {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(10deg); }
 }
 
-.glow-2 {
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, var(--warm-light) 0%, transparent 70%);
-  bottom: 12%;
-  left: -100px;
-  opacity: 0.32;
-}
-
-.floating-rose {
-  position: absolute;
-  font-size: 30px;
-  opacity: 0.22;
-  animation: roseFloat 16s ease-in-out infinite;
-}
-
-.fr-1 {
-  top: 9%;
-  left: 6%;
-  animation-delay: 0s;
-  font-size: 36px;
-}
-
-.fr-2 {
-  top: 28%;
-  right: 8%;
-  animation-delay: -4s;
-  font-size: 30px;
-}
-
-.fr-3 {
-  bottom: 34%;
-  left: 11%;
-  animation-delay: -8s;
-  font-size: 32px;
-}
-
-.fr-4 {
-  bottom: 17%;
-  right: 13%;
-  animation-delay: -12s;
-  font-size: 26px;
-}
-
-@keyframes roseFloat {
-  0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
-  25% { transform: translateY(-16px) rotate(5deg) scale(1.06); }
-  50% { transform: translateY(-6px) rotate(-3deg) scale(1); }
-  75% { transform: translateY(-20px) rotate(3deg) scale(1.04); }
-}
-
-/* Container */
-.baby-roses-page .container {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 24px;
+.babyroses-page .hero-content {
   position: relative;
-  z-index: 1;
-}
-
-/* Breadcrumb */
-.baby-roses-page .breadcrumb-nav {
-  padding: 20px 0;
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(212, 165, 165, 0.15);
-}
-
-.baby-roses-page .breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  font-family: 'Poppins', sans-serif;
-  font-size: 14px;
-}
-
-.baby-roses-page.rtl .breadcrumb {
-  font-family: 'Tajawal', sans-serif;
-}
-
-.baby-roses-page .breadcrumb a {
-  color: var(--error);
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.baby-roses-page .breadcrumb a:hover {
-  color: var(--error);
-}
-
-.baby-roses-page .breadcrumb .separator {
-  color: var(--primary-light);
-  display: flex;
-}
-
-.baby-roses-page.rtl .breadcrumb .separator svg {
-  transform: scaleX(-1);
-}
-
-.baby-roses-page .breadcrumb .current {
-  color: var(--error-dark);
-  font-weight: 500;
-}
-
-/* Hero Section */
-.baby-roses-page .page-hero {
-  padding: 50px 0 40px;
+  z-index: 2;
   text-align: center;
-}
-
-.baby-roses-page .hero-content {
   max-width: 800px;
   margin: 0 auto;
 }
 
-.baby-roses-page .hero-badge {
+.babyroses-page .hero-badge {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 24px;
-  background: linear-gradient(135deg, var(--error) 0%, var(--error) 50%, #fb7185 100%);
+  gap: 10px;
+  padding: 10px 22px;
+  background: linear-gradient(135deg, #f48fb1 0%, #cf7996 100%);
   border-radius: 50px;
   color: white;
   font-family: 'Poppins', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  margin-bottom: 20px;
-  box-shadow: 0 8px 30px rgba(212, 165, 165, 0.35);
+  margin-bottom: 18px;
+  box-shadow: 0 8px 25px rgba(244, 143, 177, 0.35);
 }
 
-.baby-roses-page.rtl .hero-badge {
-  font-family: 'Tajawal', sans-serif;
-}
-
-.baby-roses-page .hero-title {
+.babyroses-page .hero-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 54px;
-  font-weight: 600;
-  color: var(--error-dark);
-  margin: 0 0 14px;
-  line-height: 1.2;
-  background: linear-gradient(135deg, var(--error-dark) 0%, var(--error) 50%, var(--error) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.baby-roses-page.rtl .hero-title {
-  font-family: 'Amiri', serif;
   font-size: 48px;
+  font-weight: 600;
+  font-style: italic;
+  color: #2d2d2d;
+  margin: 0 0 14px;
+  line-height: 1.1;
 }
 
-.baby-roses-page .hero-subtitle {
-  font-family: 'Poppins', sans-serif;
-  font-size: 17px;
-  font-weight: 300;
-  color: var(--primary-darker);
-  margin: 0 0 28px;
-  line-height: 1.7;
-}
-
-.baby-roses-page.rtl .hero-subtitle {
-  font-family: 'Tajawal', sans-serif;
-}
-
-/* Hero Stats */
-.baby-roses-page .hero-stats {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 35px;
-  padding: 20px 40px;
-  background: white;
-  border-radius: 18px;
-  box-shadow: 0 10px 40px rgba(212, 165, 165, 0.12);
-  max-width: 460px;
-  margin: 0 auto;
-}
-
-.baby-roses-page .stat {
-  text-align: center;
-}
-
-.baby-roses-page .stat-number {
-  display: block;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--error);
-  line-height: 1;
-}
-
-.baby-roses-page.rtl .stat-number {
+.babyroses-page.rtl .hero-title {
   font-family: 'Amiri', serif;
+  font-size: 42px;
 }
 
-.baby-roses-page .stat-label {
+.babyroses-page .hero-subtitle {
   font-family: 'Poppins', sans-serif;
-  font-size: 11px;
-  color: var(--primary-darker);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  font-size: 15px;
+  color: #666;
+  margin: 0 auto;
+  line-height: 1.7;
+  max-width: 600px;
 }
 
-.baby-roses-page.rtl .stat-label {
-  font-family: 'Tajawal', sans-serif;
-  text-transform: none;
-  letter-spacing: 0;
+/* MAIN CONTENT */
+.babyroses-page .main-content {
+  padding: 40px 0 80px;
 }
 
-.baby-roses-page .stat-divider {
-  width: 1px;
-  height: 40px;
-  background: linear-gradient(180deg, transparent, var(--primary-light), transparent);
-}
-
-/* Products Section */
-.baby-roses-page .products-section {
-  padding: 25px 0 60px;
-}
-
-.baby-roses-page .products-grid {
+.babyroses-page .content-layout {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 26px;
+  grid-template-columns: 280px 1fr;
+  gap: 50px;
+  align-items: start;
 }
 
-/* Product Card */
-.baby-roses-page .product-card {
-  background: white;
-  border-radius: 20px;
+/* FILTERS SIDEBAR */
+.babyroses-page .filters-sidebar {
+  position: sticky;
+  top: 20px;
+}
+
+.babyroses-page .filters-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.babyroses-page .filters-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2d2d2d;
+  margin: 0;
+}
+
+.babyroses-page .clear-filters {
+  background: none;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #f48fb1;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.babyroses-page .filter-section {
+  border-bottom: 1px solid #f0eded;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.babyroses-page .filter-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2d2d2d;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.babyroses-page .filter-header svg {
+  transition: transform 0.3s ease;
+  color: #999;
+}
+
+.babyroses-page .filter-header.open svg {
+  transform: rotate(180deg);
+}
+
+.babyroses-page .filter-content {
+  margin-top: 18px;
+}
+
+.babyroses-page .price-inputs {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.babyroses-page .price-input-group {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(190, 18, 60, 0.06);
-  transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  animation: cardBaby 0.6s ease-out forwards;
-  opacity: 0;
-  text-decoration: none;
-  display: block;
+  flex: 1;
+}
+
+.babyroses-page .price-input-group .currency-label {
+  padding: 10px 12px;
+  background: #fafafa;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #999;
+  border-right: 1px solid #e5e5e5;
+}
+
+.babyroses-page .price-input-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #2d2d2d;
+  outline: none;
+}
+
+.babyroses-page .price-separator {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #999;
+}
+
+.babyroses-page .price-hint {
+  margin: 14px 0 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #999;
+}
+
+.babyroses-page .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
   cursor: pointer;
 }
 
-@keyframes cardBaby {
-  from {
-    opacity: 0;
-    transform: translateY(30px) scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+.babyroses-page .checkbox-label:hover {
+  color: #f48fb1;
 }
 
-.baby-roses-page .product-card:hover {
-  transform: translateY(-12px);
-  box-shadow: 0 28px 65px rgba(212, 165, 165, 0.15);
+.babyroses-page .checkbox-label input[type="checkbox"] {
+  display: none;
 }
 
-/* Product Badge */
-.baby-roses-page .product-badge {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  z-index: 10;
-  padding: 7px 16px;
-  border-radius: 20px;
+.babyroses-page .checkbox-label .checkmark {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.babyroses-page .checkbox-label input:checked + .checkmark {
+  background: #f48fb1;
+  border-color: #f48fb1;
+}
+
+.babyroses-page .checkbox-label input:checked + .checkmark::after {
+  content: '';
+  width: 5px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-bottom: 2px;
+}
+
+.babyroses-page .checkbox-label .label-text {
   font-family: 'Poppins', sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-size: 14px;
+  color: #4a4a4a;
 }
 
-.baby-roses-page.rtl .product-badge {
-  left: auto;
-  right: 16px;
-  font-family: 'Tajawal', sans-serif;
-  text-transform: none;
+/* PRODUCTS MAIN */
+.babyroses-page .products-main {
+  min-height: 500px;
 }
 
-.baby-roses-page .badge-pink {
-  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-light) 100%);
-  color: white;
-  box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+.babyroses-page .products-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0eded;
 }
 
-.baby-roses-page .badge-peach {
-  background: linear-gradient(135deg, var(--warm) 0%, var(--warm-light) 100%);
-  color: #7c2d12;
-  box-shadow: 0 4px 15px rgba(251, 146, 60, 0.4);
+.babyroses-page .items-count {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
 }
 
-.baby-roses-page .badge-mix {
-  background: linear-gradient(135deg, var(--primary-light) 0%, var(--secondary-light) 50%, var(--warm-light) 100%);
-  color: white;
-  box-shadow: 0 4px 15px rgba(167, 139, 250, 0.4);
+.babyroses-page .toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
-.baby-roses-page .badge-white {
-  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--border-light) 100%);
-  color: var(--text-secondary);
-  box-shadow: 0 4px 15px rgba(148, 163, 184, 0.3);
+.babyroses-page .sort-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.baby-roses-page .badge-premium {
-  background: linear-gradient(135deg, var(--warm) 0%, var(--warm-light) 100%);
-  color: var(--text-dark);
-  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+.babyroses-page .sort-dropdown label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #666;
 }
 
-/* Product Image */
-.baby-roses-page .product-image-wrapper {
-  position: relative;
-  height: 270px;
+.babyroses-page .sort-dropdown select {
+  padding: 8px 32px 8px 14px;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #2d2d2d;
+  background: white;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  outline: none;
+}
+
+.babyroses-page .sort-dropdown select:focus {
+  border-color: #f48fb1;
+}
+
+.babyroses-page .view-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.babyroses-page .view-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  transition: all 0.2s ease;
+}
+
+.babyroses-page .view-btn.active {
+  background: white;
+  color: #f48fb1;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* PRODUCTS GRID */
+.babyroses-page .products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.babyroses-page .products-grid.list {
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+/* PRODUCT CARD */
+.babyroses-page .product-card {
+  background: #ffffff;
+  border-radius: 16px;
   overflow: hidden;
-  background: linear-gradient(180deg, #fff1f2 0%, var(--primary-lightest) 100%);
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  animation: cardFadeInBabyRoses 0.5s ease forwards;
+  opacity: 0;
+  border: 1px solid #f5f5f5;
 }
 
-.baby-roses-page .product-image {
+@keyframes cardFadeInBabyRoses {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.babyroses-page .product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(244, 143, 177, 0.12);
+  border-color: #fce4ec;
+}
+
+.babyroses-page .products-grid.list .product-card {
+  flex-direction: row;
+}
+
+.babyroses-page .products-grid.list .product-image-wrapper {
+  width: 300px;
+  height: 280px;
+  flex-shrink: 0;
+}
+
+.babyroses-page .products-grid.list .product-info {
+  flex: 1;
+  padding: 12px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.babyroses-page .discount-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 10;
+  padding: 8px 14px;
+  background: linear-gradient(135deg, #f48fb1 0%, #cf7996 100%);
+  color: #ffffff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 50px;
+  box-shadow: 0 4px 15px rgba(244, 143, 177, 0.35);
+}
+
+.babyroses-page.rtl .discount-badge {
+  left: auto;
+  right: 14px;
+}
+
+.babyroses-page .product-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #fce4ec 0%, #fff 100%);
+}
+
+.babyroses-page .product-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  padding: 16px;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.baby-roses-page .product-card:hover .product-image {
+.babyroses-page .product-card:hover .product-image {
   transform: scale(1.08);
 }
 
-/* Product Overlay */
-.baby-roses-page .product-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 20px;
-  background: linear-gradient(180deg, transparent 0%, rgba(190, 18, 60, 0.9) 100%);
-  opacity: 0;
-  transform: translateY(15px);
-  transition: all 0.35s ease;
+.babyroses-page .product-info {
+  padding: 12px 0 0 0;
+  background: #ffffff;
+  flex: 1;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
 }
 
-.baby-roses-page .product-card:hover .product-overlay {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.baby-roses-page .quick-add-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 26px;
-  background: white;
-  border: none;
-  border-radius: 50px;
+.babyroses-page .product-name {
   font-family: 'Poppins', sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--error-dark);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.baby-roses-page.rtl .quick-add-btn {
-  font-family: 'Tajawal', sans-serif;
-  flex-direction: row-reverse;
-}
-
-.baby-roses-page .quick-add-btn:hover {
-  background: linear-gradient(135deg, var(--error) 0%, #fb7185 100%);
-  color: white;
-  transform: scale(1.05);
-}
-
-/* Product Details */
-.baby-roses-page .product-details {
-  padding: 22px;
-}
-
-.baby-roses-page .product-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--error-dark);
-  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #2d2d2d;
+  margin: 0 0 6px;
   line-height: 1.3;
   display: -webkit-box;
-  -webkit-line-clamp: 1;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  transition: color 0.3s ease;
 }
 
-.baby-roses-page.rtl .product-name {
-  font-family: 'Amiri', serif;
+.babyroses-page .product-card:hover .product-name {
+  color: #f48fb1;
 }
 
-.baby-roses-page .product-desc {
+.babyroses-page .product-desc {
   font-family: 'Poppins', sans-serif;
   font-size: 13px;
-  color: var(--primary-darker);
-  margin: 0 0 16px;
+  color: #888;
+  margin: 0 0 6px;
   line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -458,40 +497,41 @@
   overflow: hidden;
 }
 
-.baby-roses-page.rtl .product-desc {
-  font-family: 'Tajawal', sans-serif;
-}
-
-.baby-roses-page .product-footer {
+.babyroses-page .product-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-top: auto;
 }
 
-.baby-roses-page .price-wrapper {
+.babyroses-page .price-wrapper {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.baby-roses-page .price {
+.babyroses-page .original-price {
   font-family: 'Poppins', sans-serif;
-  font-size: 19px;
+  font-size: 12px;
+  color: #bbb;
+  text-decoration: line-through;
+}
+
+.babyroses-page .sale-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
   font-weight: 700;
-  color: var(--error);
+  color: #f48fb1;
 }
 
-.baby-roses-page.rtl .price {
-  font-family: 'Tajawal', sans-serif;
-}
-
-.baby-roses-page .cart-icon-btn {
-  width: 44px;
-  height: 44px;
+.babyroses-page .add-btn {
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
-  border: 2px solid var(--primary-light);
-  background: transparent;
-  color: var(--error);
+  border: none;
+  background: #fce4ec;
+  color: #f48fb1;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -499,606 +539,2665 @@
   flex-shrink: 0;
 }
 
-.baby-roses-page .product-card:hover .cart-icon-btn {
-  background: linear-gradient(135deg, var(--error) 0%, var(--error) 100%);
-  border-color: transparent;
-  color: white;
-  transform: rotate(90deg);
+.babyroses-page .add-btn:hover {
+  background: linear-gradient(135deg, #f48fb1 0%, #cf7996 100%);
+  color: #ffffff;
+  transform: scale(1.08);
 }
 
-/* Info Banner */
-.baby-roses-page .info-banner {
-  padding: 0 0 40px;
+.babyroses-page .add-btn.adding {
+  background: #f48fb1;
+  color: #ffffff;
 }
 
-.baby-roses-page .banner-content {
+/* STATES */
+.babyroses-page .loading-state,
+.babyroses-page .error-state,
+.babyroses-page .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.babyroses-page .spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #fce4ec;
+  border-top-color: #f48fb1;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.babyroses-page .loading-state p,
+.babyroses-page .error-state p,
+.babyroses-page .empty-state p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  color: #666;
+  margin: 0;
+}
+
+.babyroses-page .empty-icon {
+  font-size: 50px;
+  margin-bottom: 16px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1200px) {
+  .babyroses-page .content-layout { grid-template-columns: 250px 1fr; gap: 40px; }
+  .babyroses-page .products-grid { grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .babyroses-page .product-image-wrapper { height: 280px; }
+  .babyroses-page .hero-title { font-size: 42px; }
+}
+
+@media (max-width: 992px) {
+  .babyroses-page .hero-banner { padding: 40px 0; }
+  .babyroses-page .hero-title { font-size: 38px; }
+  .babyroses-page .content-layout { grid-template-columns: 220px 1fr; gap: 30px; }
+  .babyroses-page .products-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .babyroses-page .product-image-wrapper { height: 260px; }
+}
+
+@media (max-width: 768px) {
+  .babyroses-page .hero-banner { padding: 35px 0; }
+  .babyroses-page .hero-title { font-size: 32px; }
+  .babyroses-page .hero-subtitle { font-size: 14px; }
+  .babyroses-page .floating-icon { display: none; }
+  .babyroses-page .main-content { padding: 30px 0 60px; }
+  .babyroses-page .content-layout { grid-template-columns: 1fr; gap: 24px; }
+  .babyroses-page .filters-sidebar { position: relative; top: 0; padding: 20px; background: #fce4ec; border-radius: 12px; }
+  .babyroses-page .products-toolbar { flex-wrap: wrap; gap: 16px; }
+  .babyroses-page .toolbar-right { width: 100%; justify-content: space-between; }
+  .babyroses-page .products-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .babyroses-page .product-image-wrapper { height: 240px; }
+  .babyroses-page .product-info { padding: 12px 0 0 0; }
+  .babyroses-page .product-name { font-size: 14px; margin-bottom: 4px; }
+  .babyroses-page .product-desc { font-size: 11px; margin-bottom: 10px; }
+  .babyroses-page .sale-price { font-size: 16px; }
+  .babyroses-page .add-btn { width: 38px; height: 38px; }
+  .babyroses-page .discount-badge { padding: 6px 12px; font-size: 10px; }
+  .babyroses-page .products-grid.list .product-card { flex-direction: column; }
+  .babyroses-page .products-grid.list .product-image-wrapper { width: 100%; height: 240px; }
+}
+
+@media (max-width: 576px) {
+  .babyroses-page .container { padding: 0 16px; }
+  .babyroses-page .hero-title { font-size: 26px; }
+  .babyroses-page .products-grid { gap: 14px; }
+  .babyroses-page .product-image-wrapper { height: 200px; }
+  .babyroses-page .product-info { padding: 12px 0 0 0; }
+  .babyroses-page .product-name { font-size: 14px; margin-bottom: 3px; }
+  .babyroses-page .product-desc { font-size: 10px; margin-bottom: 8px; }
+  .babyroses-page .sale-price { font-size: 16px; }
+  .babyroses-page .add-btn { width: 34px; height: 34px; }
+  .babyroses-page .discount-badge { padding: 5px 10px; font-size: 9px; top: 10px; left: 10px; }
+}
+
+
+/* ============================================
+   IMPROVED CARD LAYOUT
+   ============================================ */
+
+.babyroses-page .product-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  border: 1px solid #f0f0f0;
+}
+
+.babyroses-page .product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.babyroses-page .product-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100%; /* 1:1 Aspect Ratio */
+  overflow: hidden;
+  background: #f8f8f8;
+}
+
+.babyroses-page .product-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.babyroses-page .product-card:hover .product-image {
+  transform: scale(1.05);
+}
+
+.babyroses-page .product-info {
+  padding: 14px;
+}
+
+.babyroses-page .product-name {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.babyroses-page .product-footer {
   display: flex;
   align-items: center;
-  gap: 24px;
-  padding: 28px 35px;
-  background: linear-gradient(135deg, rgba(253, 164, 175, 0.18) 0%, rgba(253, 186, 116, 0.12) 100%);
-  border: 1px solid rgba(253, 164, 175, 0.3);
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  justify-content: space-between;
+  gap: 10px;
 }
 
-.baby-roses-page.rtl .banner-content {
-  flex-direction: row-reverse;
-  text-align: right;
+.babyroses-page .price-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
-.baby-roses-page .banner-icon {
-  width: 70px;
-  height: 70px;
+.babyroses-page .original-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.babyroses-page .sale-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #e91e63;
+}
+
+.babyroses-page .add-btn {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--error) 0%, var(--error) 50%, #fb7185 100%);
+  border: none;
+  background: #fce4ec;
+  color: #e91e63;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 32px;
+  transition: all 0.3s ease;
   flex-shrink: 0;
-  box-shadow: 0 10px 30px rgba(212, 165, 165, 0.35);
 }
 
-.baby-roses-page .banner-text h3 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--error-dark);
-  margin: 0 0 8px;
+.babyroses-page .add-btn:hover {
+  background: #e91e63;
+  color: #fff;
 }
 
-.baby-roses-page.rtl .banner-text h3 {
-  font-family: 'Amiri', serif;
+.babyroses-page .add-btn.adding {
+  background: #4caf50;
+  color: #fff;
 }
 
-.baby-roses-page .banner-text p {
+.babyroses-page .discount-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 5;
+  padding: 6px 12px;
+  background: #e91e63;
+  color: #fff;
   font-family: 'Poppins', sans-serif;
-  font-size: 14px;
-  color: var(--primary-darker);
-  margin: 0;
-  line-height: 1.6;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 20px;
 }
 
-.baby-roses-page.rtl .banner-text p {
-  font-family: 'Tajawal', sans-serif;
+.babyroses-page.rtl .discount-badge {
+  left: auto;
+  right: 12px;
 }
+
 
 /* ============================================
-   RESPONSIVE DESIGN - MOBILE OPTIMIZED
+   PREMIUM DESIGN OVERRIDES
    ============================================ */
 
+/* Page Background - Elegant soft gray */
+.babyroses-page {
+  background: #f5f5f5 !important;
+  min-height: 100vh;
+}
+
+.babyroses-page .main-content {
+  background: #f5f5f5;
+  padding: 40px 0 80px;
+}
+
+/* Filter Sidebar - White card with shadow */
+.babyroses-page .filters-sidebar {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  border: none;
+}
+
+.babyroses-page .filters-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #f5f5f5;
+}
+
+.babyroses-page .filters-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.babyroses-page .clear-filters {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #e91e63;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.babyroses-page .clear-filters:hover {
+  text-decoration: underline;
+}
+
+/* Filter Sections */
+.babyroses-page .filter-section {
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.babyroses-page .filter-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.babyroses-page .filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-bottom: 0;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.babyroses-page .filter-content {
+  margin-top: 20px;
+}
+
+/* Checkbox Labels - PROPER SPACING */
+.babyroses-page .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  cursor: pointer;
+  border-bottom: 1px solid #f8f8f8;
+  transition: all 0.2s ease;
+}
+
+.babyroses-page .checkbox-label:last-child {
+  border-bottom: none;
+}
+
+.babyroses-page .checkbox-label:hover {
+  padding-left: 8px;
+}
+
+.babyroses-page .checkbox-label input[type="checkbox"] {
+  display: none;
+}
+
+.babyroses-page .checkbox-label .checkmark {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  background: #fff;
+}
+
+.babyroses-page .checkbox-label:hover .checkmark {
+  border-color: #e91e63;
+}
+
+.babyroses-page .checkbox-label input:checked + .checkmark {
+  background: #e91e63;
+  border-color: #e91e63;
+}
+
+.babyroses-page .checkbox-label input:checked + .checkmark::after {
+  content: '';
+  width: 6px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(45deg);
+  margin-bottom: 2px;
+}
+
+.babyroses-page .checkbox-label .label-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  color: #444;
+  font-weight: 400;
+}
+
+.babyroses-page .checkbox-label:hover .label-text {
+  color: #e91e63;
+}
+
+/* Price Inputs */
+.babyroses-page .price-inputs {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.babyroses-page .price-input-group {
+  display: flex;
+  align-items: center;
+  background: #fafafa;
+  border: 2px solid #eee;
+  border-radius: 10px;
+  overflow: hidden;
+  flex: 1;
+  transition: border-color 0.2s ease;
+}
+
+.babyroses-page .price-input-group:focus-within {
+  border-color: #e91e63;
+}
+
+.babyroses-page .price-input-group .currency-label {
+  padding: 12px 14px;
+  background: #f5f5f5;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #888;
+  font-weight: 500;
+  border-right: 1px solid #eee;
+}
+
+.babyroses-page .price-input-group input {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #333;
+  background: transparent;
+  outline: none;
+}
+
+.babyroses-page .price-separator {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #ccc;
+  font-weight: 500;
+}
+
+.babyroses-page .price-hint {
+  margin: 14px 0 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #999;
+}
+
+/* Product Cards - White with subtle shadow */
+.babyroses-page .product-card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  border: none;
+}
+
+.babyroses-page .product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 35px rgba(0,0,0,0.1);
+}
+
+/* Product Image */
+.babyroses-page .product-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  overflow: hidden;
+  background: #f9f9f9;
+}
+
+.babyroses-page .product-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.babyroses-page .product-card:hover .product-image {
+  transform: scale(1.05);
+}
+
+/* Product Info */
+.babyroses-page .product-info {
+  padding: 16px;
+}
+
+.babyroses-page .product-name {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #222;
+  margin: 0 0 10px 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.babyroses-page .product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.babyroses-page .price-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.babyroses-page .original-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #aaa;
+  text-decoration: line-through;
+}
+
+.babyroses-page .sale-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: #e91e63;
+}
+
+.babyroses-page .add-btn {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  border-radius: 50%;
+  border: none;
+  background: #fce4ec;
+  color: #e91e63;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.babyroses-page .add-btn:hover {
+  background: #e91e63;
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.babyroses-page .add-btn.adding {
+  background: #4caf50;
+  color: #fff;
+}
+
+/* Discount Badge */
+.babyroses-page .discount-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 5;
+  padding: 6px 14px;
+  background: #e91e63;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 25px;
+  box-shadow: 0 3px 10px rgba(233, 30, 99, 0.3);
+}
+
+.babyroses-page.rtl .discount-badge {
+  left: auto;
+  right: 14px;
+}
+
+/* Toolbar */
+.babyroses-page .products-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.babyroses-page .items-count {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  color: #666;
+  font-weight: 500;
+}
+
+.babyroses-page .toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.babyroses-page .sort-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.babyroses-page .sort-dropdown label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.babyroses-page .sort-dropdown select {
+  padding: 10px 36px 10px 16px;
+  border: 2px solid #eee;
+  border-radius: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #333;
+  background: #fff;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.babyroses-page .sort-dropdown select:focus {
+  border-color: #e91e63;
+}
+
+/* Hide view toggle */
+.babyroses-page .view-toggle {
+  display: none !important;
+}
+
+/* Products Grid - Always 4 columns */
+.babyroses-page .products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+/* Responsive */
 @media (max-width: 1200px) {
-  .baby-roses-page .hero-title {
-    font-size: 46px;
-  }
-  
-  .baby-roses-page .products-grid {
+  .babyroses-page .products-grid {
     grid-template-columns: repeat(3, 1fr);
-    gap: 22px;
+    gap: 20px;
   }
 }
 
 @media (max-width: 992px) {
-  .baby-roses-page .products-grid {
+  .babyroses-page .products-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 18px;
   }
-
-  .baby-roses-page .product-image-wrapper {
-    height: 230px;
-  }
-
-  .baby-roses-page .banner-content {
-    flex-direction: column;
-    text-align: center;
-    padding: 24px;
-  }
-
-  .baby-roses-page.rtl .banner-content {
-    flex-direction: column;
-    text-align: center;
-  }
 }
 
-/* ============================================
-   TABLET STYLES (768px)
-   ============================================ */
 @media (max-width: 768px) {
-  .baby-roses-page {
-    padding-bottom: 60px;
-  }
-
-  /* Reduce floating roses on mobile */
-  .floating-rose {
-    font-size: 24px;
-    opacity: 0.16;
-  }
-
-  .fr-1 { font-size: 28px; }
-  .fr-2 { font-size: 24px; }
-  .fr-3 { font-size: 26px; }
-  .fr-4 { font-size: 20px; }
-
-  /* Container */
-  .baby-roses-page .container {
-    padding: 0 16px;
-  }
-
-  /* Breadcrumb */
-  .baby-roses-page .breadcrumb-nav {
-    padding: 12px 0;
-  }
-
-  .baby-roses-page .breadcrumb {
-    font-size: 12px;
-    gap: 6px;
-  }
-
-  /* Hero Section */
-  .baby-roses-page .page-hero {
-    padding: 30px 0 25px;
-  }
-
-  .baby-roses-page .hero-badge {
-    padding: 8px 18px;
-    font-size: 12px;
-    gap: 8px;
-    margin-bottom: 16px;
-  }
-  
-  .baby-roses-page .hero-title {
-    font-size: 32px;
-    margin-bottom: 10px;
-  }
-  
-  .baby-roses-page.rtl .hero-title {
-    font-size: 28px;
-  }
-  
-  .baby-roses-page .hero-subtitle {
-    font-size: 14px;
-    margin-bottom: 20px;
-    padding: 0 10px;
-  }
-
-  /* Hero Stats */
-  .baby-roses-page .hero-stats {
-    gap: 20px;
-    padding: 16px 24px;
-    max-width: 360px;
-  }
-  
-  .baby-roses-page .stat-number {
-    font-size: 22px;
-  }
-
-  .baby-roses-page .stat-label {
-    font-size: 10px;
-  }
-
-  .baby-roses-page .stat-divider {
-    height: 30px;
-  }
-
-  /* Products Section */
-  .baby-roses-page .products-section {
-    padding: 20px 0 40px;
-  }
-  
-  .baby-roses-page .products-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-  }
-
-  /* Product Card */
-  .baby-roses-page .product-card {
-    border-radius: 18px;
-  }
-
-  .baby-roses-page .product-card:hover {
-    transform: none;
-  }
-
-  /* Product Badge */
-  .baby-roses-page .product-badge {
-    padding: 5px 12px;
-    font-size: 8px;
-    top: 12px;
-    left: 12px;
-    border-radius: 14px;
-  }
-
-  .baby-roses-page.rtl .product-badge {
-    left: auto;
-    right: 12px;
-  }
-  
-  .baby-roses-page .product-image-wrapper {
-    height: 240px;
-  }
-
-  .baby-roses-page .product-image {
-    padding: 0;
-  }
-
-  .baby-roses-page .product-overlay {
-    display: none;
-  }
-  
-  .baby-roses-page .product-details {
-    padding: 14px;
-  }
-  
-  .baby-roses-page .product-name {
-    font-size: 15px;
-    margin-bottom: 5px;
-  }
-  
-  .baby-roses-page .product-desc {
-    font-size: 10px;
-    -webkit-line-clamp: 1;
-    margin-bottom: 10px;
-  }
-  
-  .baby-roses-page .price {
-    font-size: 15px;
-  }
-  
-  .baby-roses-page .cart-icon-btn {
-    width: 36px;
-    height: 36px;
-  }
-
-  .baby-roses-page .cart-icon-btn svg {
-    width: 14px;
-    height: 14px;
-  }
-
-  /* Info Banner */
-  .baby-roses-page .info-banner {
-    padding: 0 0 30px;
-  }
-  
-  .baby-roses-page .banner-content {
-    flex-direction: column;
-    text-align: center;
-    padding: 20px 16px;
-    gap: 14px;
-    border-radius: 18px;
-  }
-
-  .baby-roses-page.rtl .banner-content {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .baby-roses-page .banner-icon {
-    width: 56px;
-    height: 56px;
-    font-size: 26px;
-  }
-
-  .baby-roses-page .banner-text h3 {
-    font-size: 18px;
-    margin-bottom: 6px;
-  }
-
-  .baby-roses-page .banner-text p {
-    font-size: 12px;
-  }
-}
-
-/* ============================================
-   MOBILE STYLES (480px)
-   ============================================ */
-@media (max-width: 480px) {
-  .baby-roses-page {
-    padding-bottom: 50px;
-  }
-
-  /* Hide some floating roses on small screens */
-  .fr-3,
-  .fr-4 {
-    display: none;
-  }
-
-  .glow-2 {
-    opacity: 0.22;
-  }
-
-  /* Container */
-  .baby-roses-page .container {
-    padding: 0 12px;
-  }
-
-  /* Breadcrumb */
-  .baby-roses-page .breadcrumb-nav {
-    padding: 10px 0;
-  }
-
-  .baby-roses-page .breadcrumb {
-    font-size: 11px;
-    gap: 4px;
-  }
-
-  .baby-roses-page .breadcrumb .separator svg {
-    width: 12px;
-    height: 12px;
-  }
-
-  /* Hero Section */
-  .baby-roses-page .page-hero {
-    padding: 20px 0;
-  }
-  
-  .baby-roses-page .hero-badge {
-    padding: 7px 14px;
-    font-size: 11px;
-    gap: 6px;
-    margin-bottom: 14px;
-  }
-  
-  .baby-roses-page .hero-title {
-    font-size: 26px;
-  }
-
-  .baby-roses-page.rtl .hero-title {
-    font-size: 24px;
-  }
-
-  .baby-roses-page .hero-subtitle {
-    font-size: 13px;
-    margin-bottom: 16px;
-    line-height: 1.5;
-  }
-  
-  /* Hero Stats - Horizontal compact */
-  .baby-roses-page .hero-stats {
-    gap: 16px;
-    padding: 14px 20px;
-    max-width: 100%;
-    border-radius: 14px;
-  }
-
-  .baby-roses-page .stat-number {
-    font-size: 20px;
-  }
-
-  .baby-roses-page .stat-label {
-    font-size: 9px;
-    letter-spacing: 0.5px;
-  }
-  
-  .baby-roses-page .stat-divider {
-    height: 28px;
-  }
-
-  /* Products Section */
-  .baby-roses-page .products-section {
-    padding: 16px 0 30px;
-  }
-  
-  .baby-roses-page .products-grid {
-    gap: 12px;
-  }
-
-  /* Product Card */
-  .baby-roses-page .product-card {
-    border-radius: 16px;
-  }
-  
-  .baby-roses-page .product-badge {
-    padding: 4px 10px;
-    font-size: 7px;
-    top: 10px;
-    left: 10px;
+  .babyroses-page .filters-sidebar {
+    padding: 20px;
     border-radius: 12px;
   }
   
-  .baby-roses-page.rtl .product-badge {
-    left: auto;
-    right: 10px;
+  .babyroses-page .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
   }
   
-  .baby-roses-page .product-image-wrapper {
-    height: 200px;
-  }
-
-  .baby-roses-page .product-image {
-    padding: 0;
-  }
-  
-  .baby-roses-page .product-details {
-    padding: 0;
-  }
-  
-  .baby-roses-page .product-name {
-    font-size: 13px;
-    margin-bottom: 3px;
-  }
-  
-  .baby-roses-page .product-desc {
-    display: none;
-  }
-  
-  .baby-roses-page .price {
-    font-size: 13px;
-  }
-  
-  .baby-roses-page .cart-icon-btn {
-    width: 32px;
-    height: 32px;
-  }
-
-  .baby-roses-page .cart-icon-btn svg {
-    width: 12px;
-    height: 12px;
-  }
-
-  /* Info Banner */
-  .baby-roses-page .info-banner {
-    padding: 0 0 20px;
-  }
-
-  .baby-roses-page .banner-content {
-    padding: 18px 14px;
-    gap: 12px;
-    border-radius: 14px;
-  }
-
-  .baby-roses-page .banner-icon {
-    width: 48px;
-    height: 48px;
-    font-size: 22px;
-  }
-
-  .baby-roses-page .banner-text h3 {
-    font-size: 16px;
-    margin-bottom: 4px;
-  }
-
-  .baby-roses-page .banner-text p {
-    font-size: 11px;
-    line-height: 1.5;
+  .babyroses-page .checkbox-label {
+    padding: 12px 0;
   }
 }
 
-/* ============================================
-   EXTRA SMALL MOBILE (360px)
-   ============================================ */
-@media (max-width: 360px) {
-  .baby-roses-page .container {
-    padding: 0 10px;
-  }
-
-  /* Hero */
-  .baby-roses-page .hero-badge {
-    padding: 6px 12px;
-    font-size: 10px;
-  }
-
-  .baby-roses-page .hero-title {
-    font-size: 22px;
-  }
-
-  .baby-roses-page.rtl .hero-title {
-    font-size: 20px;
-  }
-
-  .baby-roses-page .hero-subtitle {
-    font-size: 12px;
-  }
-
-  .baby-roses-page .hero-stats {
+@media (max-width: 576px) {
+  .babyroses-page .products-grid {
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
-    padding: 12px 16px;
   }
-
-  .baby-roses-page .stat-number {
-    font-size: 18px;
+  
+  .babyroses-page .product-info {
+    padding: 12px;
   }
-
-  .baby-roses-page .stat-label {
-    font-size: 8px;
+  
+  .babyroses-page .product-name {
+    font-size: 13px;
   }
-
-  .baby-roses-page .stat-divider {
-    height: 24px;
+  
+  .babyroses-page .sale-price {
+    font-size: 15px;
   }
+  
+  .babyroses-page .add-btn {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+  }
+}
 
-  /* Products */
-  .baby-roses-page .products-grid {
+
+/* ============================================
+   FINAL DESIGN FIXES
+   ============================================ */
+
+/* Cool Background - Light blue-gray */
+.babyroses-page {
+  background: #f8f9fa !important;
+  min-height: 100vh;
+}
+
+.babyroses-page .main-content {
+  background: #f8f9fa;
+  padding: 40px 0 80px;
+}
+
+/* Content Layout - More space on left */
+.babyroses-page .content-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 40px;
+  align-items: start;
+  padding-left: 20px;
+}
+
+/* Filter Sidebar */
+.babyroses-page .filters-sidebar {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px 20px;
+  box-shadow: 0 2px 15px rgba(0,0,0,0.04);
+  border: 1px solid #eef0f2;
+}
+
+.babyroses-page .filters-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #eef0f2;
+}
+
+.babyroses-page .filters-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+/* Filter Sections */
+.babyroses-page .filter-section {
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eef0f2;
+}
+
+.babyroses-page .filter-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.babyroses-page .filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.babyroses-page .filter-content {
+  margin-top: 16px;
+}
+
+/* Price Inputs - Like reference */
+.babyroses-page .price-inputs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.babyroses-page .price-input-group {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+  flex: 1;
+}
+
+.babyroses-page .price-input-group:focus-within {
+  border-color: #999;
+}
+
+.babyroses-page .price-input-group .currency-label {
+  padding: 10px 12px;
+  background: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #666;
+  border-right: 1px solid #eee;
+}
+
+.babyroses-page .price-input-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #333;
+  background: transparent;
+  outline: none;
+  text-align: right;
+}
+
+.babyroses-page .price-separator {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #999;
+}
+
+.babyroses-page .price-hint {
+  margin: 12px 0 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #888;
+}
+
+/* Checkbox Labels - WITH LEFT PADDING like reference */
+.babyroses-page .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  padding-left: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.babyroses-page .checkbox-label:hover {
+  color: #e91e63;
+}
+
+.babyroses-page .checkbox-label input[type="checkbox"] {
+  display: none;
+}
+
+.babyroses-page .checkbox-label .checkmark {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  border: 1.5px solid #ccc;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  background: #fff;
+}
+
+.babyroses-page .checkbox-label:hover .checkmark {
+  border-color: #e91e63;
+}
+
+.babyroses-page .checkbox-label input:checked + .checkmark {
+  background: #e91e63;
+  border-color: #e91e63;
+}
+
+.babyroses-page .checkbox-label input:checked + .checkmark::after {
+  content: '';
+  width: 5px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-bottom: 2px;
+}
+
+.babyroses-page .checkbox-label .label-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #444;
+  font-weight: 400;
+}
+
+/* Product Cards - SQUARE Images */
+.babyroses-page .product-card {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  border: 1px solid #eef0f2;
+}
+
+.babyroses-page .product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+/* SQUARE Product Image */
+.babyroses-page .product-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100%; /* 1:1 Square Ratio */
+  overflow: hidden;
+  background: #f5f5f5;
+}
+
+.babyroses-page .product-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.babyroses-page .product-card:hover .product-image {
+  transform: scale(1.03);
+}
+
+/* Product Info */
+.babyroses-page .product-info {
+  padding: 14px 16px 16px;
+  background: #fff;
+}
+
+.babyroses-page .product-name {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #222;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.babyroses-page .product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.babyroses-page .price-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.babyroses-page .original-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.babyroses-page .sale-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #e91e63;
+}
+
+.babyroses-page .add-btn {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #fce4ec;
+  color: #e91e63;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.babyroses-page .add-btn:hover {
+  background: #e91e63;
+  color: #fff;
+}
+
+.babyroses-page .add-btn.adding {
+  background: #4caf50;
+  color: #fff;
+}
+
+/* Discount Badge */
+.babyroses-page .discount-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 5;
+  padding: 5px 12px;
+  background: #e91e63;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 20px;
+}
+
+.babyroses-page.rtl .discount-badge {
+  left: auto;
+  right: 12px;
+}
+
+/* Toolbar */
+.babyroses-page .products-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.babyroses-page .items-count {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #666;
+}
+
+.babyroses-page .sort-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.babyroses-page .sort-dropdown label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #666;
+}
+
+.babyroses-page .sort-dropdown select {
+  padding: 10px 35px 10px 14px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #333;
+  background: #fff;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  outline: none;
+  min-width: 140px;
+}
+
+/* Products Grid - 4 columns */
+.babyroses-page .products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* Responsive */
+@media (max-width: 1400px) {
+  .babyroses-page .content-layout {
+    grid-template-columns: 260px 1fr;
+    gap: 30px;
+    padding-left: 10px;
+  }
+  .babyroses-page .products-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .babyroses-page .content-layout {
+    grid-template-columns: 240px 1fr;
+    gap: 24px;
+    padding-left: 0;
+  }
+  .babyroses-page .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 992px) {
+  .babyroses-page .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .babyroses-page .content-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .babyroses-page .filters-sidebar {
+    padding: 20px 16px;
+  }
+  .babyroses-page .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .babyroses-page .products-grid {
+    grid-template-columns: repeat(2, 1fr);
     gap: 10px;
   }
-
-  .baby-roses-page .product-image-wrapper {
-    height: 130px;
+  .babyroses-page .product-info {
+    padding: 10px 12px 12px;
   }
-
-  .baby-roses-page .product-details {
-    padding: 0;
+  .babyroses-page .product-name {
+    font-size: 13px;
   }
-
-  .baby-roses-page .product-name {
-    font-size: 12px;
-  }
-
-  .baby-roses-page .price {
-    font-size: 12px;
-  }
-
-  .baby-roses-page .product-badge {
-    padding: 3px 8px;
-    font-size: 6px;
-  }
-
-  .baby-roses-page .cart-icon-btn {
-    width: 28px;
-    height: 28px;
-  }
-
-  .baby-roses-page .cart-icon-btn svg {
-    width: 10px;
-    height: 10px;
-  }
-
-  /* Banner */
-  .baby-roses-page .banner-content {
-    padding: 14px 12px;
-  }
-
-  .baby-roses-page .banner-icon {
-    width: 42px;
-    height: 42px;
-    font-size: 18px;
-  }
-
-  .baby-roses-page .banner-text h3 {
+  .babyroses-page .sale-price {
     font-size: 14px;
   }
-
-  .baby-roses-page .banner-text p {
-    font-size: 10px;
+  .babyroses-page .add-btn {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
   }
 }
+
 
 /* ============================================
-   ACCESSIBILITY
+   CLEAN CLASSIC FILTER DESIGN
    ============================================ */
-@media (prefers-reduced-motion: reduce) {
-  .floating-rose,
-  .product-card,
-  .product-image,
-  .cart-icon-btn,
-  .banner-icon {
-    animation: none !important;
-    transition: none !important;
+
+/* Page Background */
+.babyroses-page {
+  background: #f8f9fa !important;
+}
+
+.babyroses-page .main-content {
+  background: #f8f9fa;
+  padding: 40px 0 80px;
+}
+
+/* Container */
+.babyroses-page .container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Content Layout */
+.babyroses-page .content-layout {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* Filter Sidebar - Clean White */
+.babyroses-page .filters-sidebar {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  border: 1px solid #eee;
+  position: sticky;
+  top: 20px;
+}
+
+.babyroses-page .filters-header {
+  margin-bottom: 20px;
+}
+
+.babyroses-page .filters-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #222;
+  margin: 0;
+}
+
+.babyroses-page .clear-filters {
+  font-size: 13px;
+  color: #e91e63;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-top: 8px;
+  padding: 0;
+}
+
+/* Filter Sections */
+.babyroses-page .filter-section {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.babyroses-page .filter-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.babyroses-page .filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.babyroses-page .filter-header svg {
+  width: 10px;
+  height: 10px;
+  color: #999;
+  transition: transform 0.2s;
+}
+
+.babyroses-page .filter-header.open svg {
+  transform: rotate(180deg);
+}
+
+.babyroses-page .filter-content {
+  margin-top: 0;
+}
+
+/* Price Inputs - Compact */
+.babyroses-page .price-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.babyroses-page .price-input-group {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  flex: 1;
+}
+
+.babyroses-page .price-input-group .currency-label {
+  padding: 8px 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #666;
+  background: #fafafa;
+  border-right: 1px solid #eee;
+}
+
+.babyroses-page .price-input-group input {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #333;
+  outline: none;
+}
+
+.babyroses-page .price-separator {
+  font-size: 12px;
+  color: #999;
+}
+
+.babyroses-page .price-hint {
+  margin: 10px 0 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  color: #999;
+}
+
+/* CLEAN CHECKBOX - No boxes, simple list */
+.babyroses-page .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  cursor: pointer;
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.babyroses-page .checkbox-label:hover .label-text {
+  color: #e91e63;
+}
+
+.babyroses-page .checkbox-label input[type="checkbox"] {
+  display: none;
+}
+
+.babyroses-page .checkbox-label .checkmark {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  border: 1.5px solid #ccc;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  transition: all 0.2s;
+}
+
+.babyroses-page .checkbox-label:hover .checkmark {
+  border-color: #e91e63;
+}
+
+.babyroses-page .checkbox-label input:checked + .checkmark {
+  background: #e91e63;
+  border-color: #e91e63;
+}
+
+.babyroses-page .checkbox-label input:checked + .checkmark::after {
+  content: '';
+  width: 4px;
+  height: 7px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-bottom: 1px;
+}
+
+.babyroses-page .checkbox-label .label-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #555;
+}
+
+/* Products Section */
+.babyroses-page .products-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.babyroses-page .items-count {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #666;
+}
+
+.babyroses-page .sort-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.babyroses-page .sort-dropdown label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #666;
+}
+
+.babyroses-page .sort-dropdown select {
+  padding: 8px 30px 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #333;
+  background: #fff;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  outline: none;
+}
+
+/* Product Grid */
+.babyroses-page .products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* Product Card */
+.babyroses-page .product-card {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid #eee;
+}
+
+.babyroses-page .product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+/* Square Image */
+.babyroses-page .product-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  background: #f5f5f5;
+  overflow: hidden;
+}
+
+.babyroses-page .product-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.babyroses-page .product-card:hover .product-image {
+  transform: scale(1.03);
+}
+
+.babyroses-page .product-info {
+  padding: 12px 14px 14px;
+}
+
+.babyroses-page .product-name {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #222;
+  margin: 0 0 8px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.babyroses-page .product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.babyroses-page .price-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.babyroses-page .original-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.babyroses-page .sale-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #e91e63;
+}
+
+.babyroses-page .add-btn {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #fce4ec;
+  color: #e91e63;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.babyroses-page .add-btn:hover {
+  background: #e91e63;
+  color: #fff;
+}
+
+.babyroses-page .add-btn.adding {
+  background: #4caf50;
+  color: #fff;
+}
+
+.babyroses-page .discount-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 5;
+  padding: 4px 10px;
+  background: #e91e63;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+.babyroses-page.rtl .discount-badge {
+  left: auto;
+  right: 10px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .babyroses-page .content-layout { grid-template-columns: 220px 1fr; gap: 30px; }
+  .babyroses-page .products-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 992px) {
+  .babyroses-page .products-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+}
+
+@media (max-width: 768px) {
+  .babyroses-page .content-layout { grid-template-columns: 1fr; }
+  .babyroses-page .filters-sidebar { margin-bottom: 20px; }
+  .babyroses-page .products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+}
+
+@media (max-width: 480px) {
+  .babyroses-page .products-grid { gap: 10px; }
+  .babyroses-page .product-info { padding: 10px 12px; }
+  .babyroses-page .product-name { font-size: 13px; }
+  .babyroses-page .sale-price { font-size: 14px; }
+  .babyroses-page .add-btn { width: 32px; height: 32px; min-width: 32px; }
+}
+
+
+/* ============================================
+   MOBILE FILTER DRAWER
+   ============================================ */
+
+/* Mobile Filter Toggle Button - Hidden on desktop */
+.babyroses-page .mobile-filter-toggle {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+.babyroses-page .mobile-filter-toggle svg {
+  color: #666;
+}
+
+/* Mobile Filter Overlay */
+.babyroses-page .mobile-filter-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+}
+
+/* Mobile Close Button - Hidden on desktop */
+.babyroses-page .mobile-filter-close {
+  display: none;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: #f5f5f5;
+  border-radius: 50%;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  z-index: 10;
+}
+
+.babyroses-page .mobile-filter-close:hover {
+  background: #eee;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  /* Show mobile filter toggle */
+  .babyroses-page .mobile-filter-toggle {
+    display: flex;
+  }
+  
+  /* Show overlay when filter is open */
+  .babyroses-page .mobile-filter-overlay {
+    display: block;
+  }
+  
+  /* Filter Sidebar - Slide in drawer */
+  .babyroses-page .filters-sidebar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 85%;
+    max-width: 320px;
+    height: 100vh;
+    z-index: 999;
+    border-radius: 0;
+    padding: 70px 20px 20px;
+    overflow-y: auto;
+    transition: left 0.3s ease;
+    box-shadow: 2px 0 20px rgba(0,0,0,0.15);
+  }
+  
+  .babyroses-page .filters-sidebar.open {
+    left: 0;
+  }
+  
+  /* Show close button on mobile */
+  .babyroses-page .mobile-filter-close {
+    display: flex;
+  }
+  
+  /* Content layout - single column */
+  .babyroses-page .content-layout {
+    grid-template-columns: 1fr;
   }
 }
 
-/* Focus States */
-.baby-roses-page .product-card:focus-visible,
-.baby-roses-page .quick-add-btn:focus-visible,
-.baby-roses-page .cart-icon-btn:focus-visible {
-  outline: 2px solid var(--error);
-  outline-offset: 2px;
+/* RTL Support for mobile drawer */
+.babyroses-page.rtl .filters-sidebar {
+  left: auto;
+  right: -100%;
 }
 
-/* Print Styles */
-@media print {
-  .baby-roses-bg {
+.babyroses-page.rtl .filters-sidebar.open {
+  right: 0;
+  left: auto;
+}
+
+.babyroses-page.rtl .mobile-filter-close {
+  right: auto;
+  left: 16px;
+}
+
+
+/* ============================================
+   FORCE SQUARE IMAGES
+   ============================================ */
+
+/* Product Image Wrapper - SQUARE 1:1 */
+.babyroses-page .product-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100% !important; /* Force 1:1 square ratio */
+  height: 0 !important;
+  overflow: hidden;
+  background: #f8f8f8;
+}
+
+.babyroses-page .product-image {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center;
+}
+
+
+/* ============================================
+   EXPANDED FILTER WIDTH
+   ============================================ */
+
+.babyroses-page .content-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr !important;
+  gap: 40px;
+  align-items: start;
+}
+
+.babyroses-page .filters-sidebar {
+  width: 100%;
+  min-width: 280px;
+  padding: 24px;
+}
+
+@media (max-width: 1400px) {
+  .babyroses-page .content-layout {
+    grid-template-columns: 260px 1fr !important;
+    gap: 30px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .babyroses-page .content-layout {
+    grid-template-columns: 250px 1fr !important;
+    gap: 24px;
+  }
+}
+
+@media (max-width: 992px) {
+  .babyroses-page .content-layout {
+    grid-template-columns: 230px 1fr !important;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .babyroses-page .content-layout {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* ============================================
+   FILTER TO FAR LEFT
+   ============================================ */
+
+.babyroses-page .main-content {
+  padding: 40px 0 80px;
+}
+
+.babyroses-page .main-content .container {
+  max-width: 100%;
+  padding: 0 40px 0 20px;
+  margin: 0;
+}
+
+.babyroses-page .content-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr !important;
+  gap: 30px;
+  align-items: start;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.babyroses-page .filters-sidebar {
+  margin-left: 0;
+  position: sticky;
+  top: 20px;
+}
+
+@media (max-width: 1400px) {
+  .babyroses-page .main-content .container {
+    padding: 0 30px 0 15px;
+  }
+  .babyroses-page .content-layout {
+    grid-template-columns: 260px 1fr !important;
+    gap: 25px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .babyroses-page .main-content .container {
+    padding: 0 20px 0 10px;
+  }
+  .babyroses-page .content-layout {
+    grid-template-columns: 250px 1fr !important;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .babyroses-page .main-content .container {
+    padding: 0 16px;
+  }
+  .babyroses-page .content-layout {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* ============================================
+   MOBILE FILTER - COMPLETE FIX
+   ============================================ */
+
+/* Mobile Filter Toggle Button */
+.babyroses-page .mobile-filter-toggle {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.babyroses-page .mobile-filter-toggle:active {
+  background: #f5f5f5;
+}
+
+/* Mobile Filter Overlay */
+.babyroses-page .mobile-filter-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+}
+
+/* Mobile Close Button */
+.babyroses-page .mobile-filter-close {
+  display: none;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: #f0f0f0;
+  border-radius: 50%;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  z-index: 10;
+  padding: 0;
+}
+
+.babyroses-page .mobile-filter-close:active {
+  background: #e0e0e0;
+}
+
+.babyroses-page .mobile-filter-close svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Mobile Responsive - 768px and below */
+@media (max-width: 768px) {
+  /* Show mobile toggle button */
+  .babyroses-page .mobile-filter-toggle {
+    display: flex !important;
+  }
+  
+  /* Show overlay when open */
+  .babyroses-page .mobile-filter-overlay {
+    display: block !important;
+  }
+  
+  /* Filter Sidebar - Fixed drawer */
+  .babyroses-page .filters-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 85% !important;
+    max-width: 320px !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    z-index: 9999 !important;
+    border-radius: 0 !important;
+    padding: 70px 20px 30px !important;
+    overflow-y: auto !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.3s ease !important;
+    box-shadow: 2px 0 20px rgba(0,0,0,0.15) !important;
+    background: #fff !important;
+  }
+  
+  /* Open state */
+  .babyroses-page .filters-sidebar.open {
+    transform: translateX(0) !important;
+  }
+  
+  /* Show close button */
+  .babyroses-page .mobile-filter-close {
+    display: flex !important;
+  }
+  
+  /* Hide overlay when filter closed */
+  .babyroses-page .filters-sidebar:not(.open) + .mobile-filter-overlay,
+  .babyroses-page .mobile-filter-overlay:not(:has(~ .filters-sidebar.open)) {
     display: none;
   }
-
-  .baby-roses-page .product-card {
-    box-shadow: none;
-    border: 1px solid var(--border-medium);
-    break-inside: avoid;
+  
+  /* Content layout single column */
+  .babyroses-page .content-layout {
+    grid-template-columns: 1fr !important;
   }
+  
+  /* Products grid 2 columns on mobile */
+  .babyroses-page .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+}
 
-  .baby-roses-page .info-banner {
+/* RTL Support */
+.babyroses-page.rtl .filters-sidebar {
+  left: auto !important;
+  right: 0 !important;
+  transform: translateX(100%) !important;
+}
+
+.babyroses-page.rtl .filters-sidebar.open {
+  transform: translateX(0) !important;
+}
+
+.babyroses-page.rtl .mobile-filter-close {
+  right: auto !important;
+  left: 15px !important;
+}
+
+
+/* ============================================
+   MOBILE FILTER BUTTON - FINAL FIX
+   ============================================ */
+
+/* Hide on desktop */
+.babyroses-page .mobile-filter-toggle {
+  display: none;
+}
+
+/* Show on mobile */
+@media (max-width: 768px) {
+  .babyroses-page .mobile-filter-toggle {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    width: fit-content;
+  }
+  
+  .babyroses-page .mobile-filter-toggle svg {
+    color: #666;
+  }
+  
+  .babyroses-page .mobile-filter-toggle:active {
+    background: #f5f5f5;
+  }
+}
+
+
+/* ============================================
+   MOBILE FILTER - TOP POSITION FIX
+   ============================================ */
+
+@media (max-width: 768px) {
+  /* Filter drawer - start below header */
+  .babyroses-page .filters-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 85% !important;
+    max-width: 320px !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    z-index: 9999 !important;
+    border-radius: 0 !important;
+    padding: 20px !important;
+    padding-top: 100px !important; /* Space for header + close button */
+    overflow-y: auto !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.3s ease !important;
+    box-shadow: 4px 0 25px rgba(0,0,0,0.15) !important;
+    background: #fff !important;
+  }
+  
+  .babyroses-page .filters-sidebar.open {
+    transform: translateX(0) !important;
+  }
+  
+  /* Close button - fixed at top */
+  .babyroses-page .mobile-filter-close {
+    display: flex !important;
+    position: fixed !important;
+    top: 50px !important; /* Below header */
+    left: 260px !important; /* Near right edge of drawer */
+    width: 36px !important;
+    height: 36px !important;
+    border: none !important;
+    background: #f0f0f0 !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #333 !important;
+    z-index: 10000 !important;
+    padding: 0 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease !important;
+  }
+  
+  /* Show close button when filter is open */
+  .babyroses-page .filters-sidebar.open ~ .mobile-filter-close,
+  .babyroses-page .filters-sidebar.open + * + .mobile-filter-close {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .babyroses-page .mobile-filter-close svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  /* Filters title */
+  .babyroses-page .filters-sidebar .filters-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+}
+
+/* RTL support */
+@media (max-width: 768px) {
+  .babyroses-page.rtl .filters-sidebar {
+    left: auto !important;
+    right: 0 !important;
+    transform: translateX(100%) !important;
+  }
+  
+  .babyroses-page.rtl .filters-sidebar.open {
+    transform: translateX(0) !important;
+  }
+  
+  .babyroses-page.rtl .mobile-filter-close {
+    left: auto !important;
+    right: 260px !important;
+  }
+}
+
+
+/* ============================================
+   MOBILE FILTER - COMPLETE FINAL FIX
+   ============================================ */
+
+/* Desktop - hide close button */
+.babyroses-page .mobile-filter-close {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* Filter sidebar drawer */
+  .babyroses-page .filters-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 85% !important;
+    max-width: 320px !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    z-index: 9999 !important;
+    border-radius: 0 !important;
+    padding: 20px !important;
+    overflow-y: auto !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.3s ease !important;
+    box-shadow: 4px 0 25px rgba(0,0,0,0.15) !important;
+    background: #fff !important;
+  }
+  
+  .babyroses-page .filters-sidebar.open {
+    transform: translateX(0) !important;
+  }
+  
+  /* Filters header with close button */
+  .babyroses-page .filters-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-bottom: 24px !important;
+    padding-bottom: 16px !important;
+    border-bottom: 1px solid #eee !important;
+    margin-top: 40px !important; /* Space from top */
+  }
+  
+  /* Close button */
+  .babyroses-page .mobile-filter-close {
+    display: flex !important;
+    width: 36px !important;
+    height: 36px !important;
+    border: none !important;
+    background: #f5f5f5 !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #333 !important;
+    padding: 0 !important;
+    order: 2 !important; /* Put after title */
+    flex-shrink: 0 !important;
+  }
+  
+  .babyroses-page .mobile-filter-close:active {
+    background: #e5e5e5 !important;
+  }
+  
+  .babyroses-page .mobile-filter-close svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  /* Filters title */
+  .babyroses-page .filters-title {
+    font-size: 18px !important;
+    order: 1 !important;
+  }
+  
+  /* Clear filters button */
+  .babyroses-page .clear-filters {
+    display: none !important; /* Hide on mobile header, can add elsewhere */
+  }
+}
+
+/* RTL support */
+@media (max-width: 768px) {
+  .babyroses-page.rtl .filters-sidebar {
+    left: auto !important;
+    right: 0 !important;
+    transform: translateX(100%) !important;
+  }
+  
+  .babyroses-page.rtl .filters-sidebar.open {
+    transform: translateX(0) !important;
+  }
+}
+
+
+/* ============================================
+   MOBILE FILTER - REFERENCE DESIGN
+   ============================================ */
+
+/* Hide mobile toolbar on desktop */
+.babyroses-page .mobile-toolbar {
+  display: none;
+}
+
+/* Hide old mobile filter toggle */
+.babyroses-page .mobile-filter-toggle {
+  display: none;
+}
+
+/* Desktop - hide mobile close button */
+.babyroses-page .mobile-filter-close {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* Mobile Toolbar - Filter + Sort side by side */
+  .babyroses-page .mobile-toolbar {
+    display: flex !important;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  /* Filter Button */
+  .babyroses-page .mobile-toolbar .mobile-filter-toggle {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  
+  .babyroses-page .mobile-toolbar .mobile-filter-toggle svg {
+    color: #555;
+  }
+  
+  /* Sort Dropdown */
+  .babyroses-page .mobile-sort {
+    flex: 1;
+  }
+  
+  .babyroses-page .mobile-sort select {
+    width: 100%;
+    padding: 12px 35px 12px 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    color: #333;
+    background: #fff;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  
+  /* Hide desktop toolbar on mobile */
+  .babyroses-page .products-toolbar {
+    display: none !important;
+  }
+  
+  /* Filter Drawer - Full screen like reference */
+  .babyroses-page .filters-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    z-index: 9999 !important;
+    border-radius: 0 !important;
+    padding: 24px !important;
+    padding-top: 80px !important;
+    overflow-y: auto !important;
+    transform: translateY(100%) !important;
+    transition: transform 0.3s ease !important;
+    box-shadow: none !important;
+    background: #fff !important;
+  }
+  
+  .babyroses-page .filters-sidebar.open {
+    transform: translateY(0) !important;
+  }
+  
+  /* Filter Header */
+  .babyroses-page .filters-sidebar .filters-header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 20px 24px !important;
+    background: #fff !important;
+    border-bottom: 1px solid #eee !important;
+    z-index: 10 !important;
+    margin: 0 !important;
+  }
+  
+  .babyroses-page .filters-sidebar .filters-title {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 22px !important;
+    font-weight: 600 !important;
+    color: #000 !important;
+    margin: 0 !important;
+  }
+  
+  /* Close Button - Circle with X like reference */
+  .babyroses-page .mobile-filter-close {
+    display: flex !important;
+    width: 40px !important;
+    height: 40px !important;
+    border: none !important;
+    background: #222 !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #fff !important;
+    padding: 0 !important;
+  }
+  
+  .babyroses-page .mobile-filter-close svg {
+    width: 18px !important;
+    height: 18px !important;
+    stroke: #fff !important;
+  }
+  
+  /* Hide clear all on mobile header */
+  .babyroses-page .filters-sidebar .clear-filters {
+    display: none !important;
+  }
+  
+  /* Filter Sections */
+  .babyroses-page .filter-section {
+    padding: 20px 0 !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+  }
+  
+  .babyroses-page .filter-header {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+    text-transform: capitalize !important;
+    letter-spacing: 0 !important;
+  }
+  
+  /* Checkboxes */
+  .babyroses-page .checkbox-label {
+    padding: 12px 0 !important;
+  }
+  
+  .babyroses-page .checkbox-label .checkmark {
+    width: 20px !important;
+    height: 20px !important;
+    border: 2px solid #ddd !important;
+    border-radius: 4px !important;
+  }
+  
+  .babyroses-page .checkbox-label input:checked + .checkmark {
+    background: #e91e63 !important;
+    border-color: #e91e63 !important;
+    border-radius: 4px !important;
+  }
+  
+  /* Overlay */
+  .babyroses-page .mobile-filter-overlay {
+    display: block !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0,0,0,0.5) !important;
+    z-index: 9998 !important;
+  }
+}
+
+
+/* ============================================
+   MOBILE FILTER - COMPLETE FINAL FIX
+   ============================================ */
+
+/* Desktop: Hide mobile elements */
+.babyroses-page .mobile-filter-btn {
+  display: none;
+}
+
+.babyroses-page .mobile-filter-close {
+  display: none;
+}
+
+.babyroses-page .mobile-filter-overlay {
+  display: none;
+}
+
+.babyroses-page .mobile-toolbar {
+  display: none;
+}
+
+/* ===== MOBILE STYLES (<= 768px) ===== */
+@media (max-width: 768px) {
+
+  /* Hide filters sidebar by default on mobile */
+  .babyroses-page .filters-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    z-index: 99999 !important; /* Above everything including header */
+    background: #fff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow-y: auto !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.3s ease-in-out !important;
+    visibility: hidden;
+  }
+  
+  .babyroses-page .filters-sidebar.open {
+    transform: translateX(0) !important;
+    visibility: visible;
+  }
+  
+  /* Filter Header - Fixed at top */
+  .babyroses-page .filters-sidebar .filters-header {
+    position: sticky !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 20px 20px !important;
+    background: #fff !important;
+    border-bottom: 1px solid #eee !important;
+    margin: 0 !important;
+    z-index: 10 !important;
+  }
+  
+  .babyroses-page .filters-sidebar .filters-title {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 20px !important;
+    font-weight: 600 !important;
+    color: #000 !important;
+    margin: 0 !important;
+  }
+  
+  /* Close Button - Black circle with X */
+  .babyroses-page .mobile-filter-close {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    background: #222 !important;
+    border: none !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+  }
+  
+  .babyroses-page .mobile-filter-close svg {
+    stroke: #fff !important;
+    width: 14px !important;
+    height: 14px !important;
+  }
+  
+  /* Filter Content */
+  .babyroses-page .filters-sidebar .filter-section {
+    padding: 20px !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+    margin: 0 !important;
+  }
+  
+  .babyroses-page .filters-sidebar .filter-header {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+    text-transform: capitalize !important;
+    letter-spacing: 0 !important;
+    margin-bottom: 15px !important;
+    padding: 0 !important;
+  }
+  
+  /* Price inputs */
+  .babyroses-page .filters-sidebar .price-inputs {
+    gap: 10px !important;
+  }
+  
+  .babyroses-page .filters-sidebar .price-input-group {
+    flex: 1 !important;
+    border: 1px solid #ddd !important;
+    border-radius: 6px !important;
+    overflow: hidden !important;
+  }
+  
+  .babyroses-page .filters-sidebar .price-input-group input {
+    padding: 12px 10px !important;
+    font-size: 14px !important;
+  }
+  
+  /* Checkboxes - rounded squares like reference */
+  .babyroses-page .filters-sidebar .checkbox-label {
+    padding: 14px 0 !important;
+    background: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+  }
+  
+  .babyroses-page .filters-sidebar .checkbox-label .checkmark {
+    width: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
+    border: 2px solid #ddd !important;
+    border-radius: 6px !important;
+    background: #fff !important;
+  }
+  
+  .babyroses-page .filters-sidebar .checkbox-label input:checked + .checkmark {
+    background: #e91e63 !important;
+    border-color: #e91e63 !important;
+  }
+  
+  .babyroses-page .filters-sidebar .checkbox-label .label-text {
+    font-size: 15px !important;
+    color: #333 !important;
+  }
+  
+  /* Hide clear all in header on mobile */
+  .babyroses-page .filters-sidebar .clear-filters {
+    display: none !important;
+  }
+  
+  /* Overlay */
+  .babyroses-page .mobile-filter-overlay {
     display: none;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0,0,0,0.5) !important;
+    z-index: 99998 !important;
+  }
+  
+  .babyroses-page .filters-sidebar.open ~ .mobile-filter-overlay {
+    display: block !important;
+  }
+  
+  /* Mobile Filter Button in toolbar */
+  .babyroses-page .mobile-filter-btn {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 10px 16px !important;
+    background: #fff !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 6px !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    color: #333 !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+  }
+  
+  .babyroses-page .mobile-filter-btn svg {
+    color: #555 !important;
+    flex-shrink: 0 !important;
+  }
+  
+  /* Products toolbar adjustments */
+  .babyroses-page .products-toolbar {
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+  }
+  
+  .babyroses-page .items-count {
+    order: 2 !important;
+    width: 100% !important;
+  }
+  
+  .babyroses-page .sort-dropdown {
+    order: 3 !important;
+    flex: 1 !important;
+  }
+  
+  .babyroses-page .sort-dropdown select {
+    width: 100% !important;
+  }
+  
+  /* Hide desktop sort label */
+  .babyroses-page .sort-dropdown label {
+    display: none !important;
+  }
+  
+  /* Content layout - single column */
+  .babyroses-page .content-layout {
+    display: block !important;
+  }
+  
+  /* Products grid */
+  .babyroses-page .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+}
+
+
+/* ============================================
+   HIDE OLD MOBILE FILTER ELEMENTS - FINAL FIX
+   Use new MobileFilterBar and MobileFilterDrawer instead
+   ============================================ */
+
+/* Hide old mobile filter buttons on ALL screens */
+.baby-roses-page .mobile-filter-btn,
+.baby-roses-page .mobile-filter-toggle,
+.baby-roses-page .mobile-filter-close,
+.baby-roses-page .mobile-toolbar {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  /* Hide desktop sidebar on mobile */
+  .baby-roses-page .filters-sidebar {
+    display: none !important;
+  }
+  
+  /* Hide desktop sort dropdown */
+  .baby-roses-page .products-toolbar .sort-dropdown,
+  .baby-roses-page .products-toolbar .toolbar-right {
+    display: none !important;
+  }
+  
+  /* Simplify toolbar - only show items count */
+  .baby-roses-page .products-toolbar {
+    justify-content: center !important;
+    padding: 12px 16px !important;
+  }
+  
+  .baby-roses-page .products-toolbar .items-count {
+    width: auto !important;
+    order: 0 !important;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  /* Ensure content layout is single column */
+  .baby-roses-page .content-layout {
+    display: block !important;
   }
 }

@@ -617,25 +617,6 @@ const Header = () => {
       {/* Mobile Menu Overlay */}
       <div className={`mobile-menu-overlay ${isMobileMenuOpen ? 'active' : ''}`}>
         <div className="mobile-menu-content">
-          {/* Mobile User Section at Top */}
-          {isAuthenticated && (
-            <div className="mobile-user-section">
-              <div className="mobile-user-info">
-                <div className="user-avatar">
-                  {user?.profileImageUrl ? (
-                    <img src={user.profileImageUrl} alt={user.name} />
-                  ) : (
-                    <span>{getUserInitials()}</span>
-                  )}
-                </div>
-                <div className="mobile-user-details">
-                  <span className="mobile-user-name">{user?.name}</span>
-                  <span className="mobile-user-email">{user?.email}</span>
-                </div>
-              </div>
-            </div>
-          )}
-
           <ul className="mobile-nav-list">
             <li>
               <Link to="/" onClick={handleLinkClick}>{t.home}</Link>
@@ -753,6 +734,21 @@ const Header = () => {
 
           {/* Mobile Menu Footer */}
           <div className="mobile-menu-footer">
+            {isAuthenticated && (
+              <div className="mobile-user-info-footer">
+                <div className="user-avatar">
+                  {user?.profileImageUrl ? (
+                    <img src={user.profileImageUrl} alt={user.name} />
+                  ) : (
+                    <span>{getUserInitials()}</span>
+                  )}
+                </div>
+                <div className="mobile-user-details">
+                  <span className="mobile-user-name">{user?.name}</span>
+                  <span className="mobile-user-email">{user?.email}</span>
+                </div>
+              </div>
+            )}
             {isAuthenticated ? (
               <button className="mobile-logout-btn" onClick={handleLogout}>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

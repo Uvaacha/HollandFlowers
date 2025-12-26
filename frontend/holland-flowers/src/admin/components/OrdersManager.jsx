@@ -12,8 +12,8 @@ const OrdersManager = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
-  // Check if user is Super Admin (can write)
-  const isSuperAdmin = authAPI.isSuperAdmin();
+  // Both Admin and Super Admin can update delivery status
+  const canUpdateDeliveryStatus = authAPI.isAdmin(); // Returns true for both ADMIN and SUPER_ADMIN
 
   const fetchOrders = useCallback(async () => {
     try {
@@ -21,7 +21,7 @@ const OrdersManager = () => {
       let response;
       
       if (statusFilter !== 'all') {
-        response = await ordersAPI.getByStatus(statusFilter.toUpperCase(), { page: currentPage, size: 10 });
+        response = await ordersAPI.getByDeliveryStatus(statusFilter.toUpperCase(), { page: currentPage, size: 10 });
       } else {
         response = await ordersAPI.getAll({ page: currentPage, size: 10 });
       }
@@ -41,24 +41,20 @@ const OrdersManager = () => {
     fetchOrders();
   }, [fetchOrders]);
 
-  const handleStatusUpdate = async (orderId, newStatus) => {
-    if (!isSuperAdmin) {
-      alert('You do not have permission to update order status.');
-      return;
-    }
+  const handleDeliveryStatusUpdate = async (orderId, newStatus) => {
     try {
-      const response = await ordersAPI.updateStatus(orderId, newStatus);
+      const response = await ordersAPI.updateDeliveryStatus(orderId, newStatus);
       if (response.success) {
         setOrders(orders.map(order => 
-          order.orderId === orderId ? { ...order, orderStatus: newStatus } : order
+          order.orderId === orderId ? { ...order, deliveryStatus: newStatus } : order
         ));
         if (selectedOrder?.orderId === orderId) {
-          setSelectedOrder({ ...selectedOrder, orderStatus: newStatus });
+          setSelectedOrder({ ...selectedOrder, deliveryStatus: newStatus });
         }
       }
     } catch (error) {
-      console.error('Failed to update status:', error);
-      alert('Failed to update status. You may not have permission.');
+      console.error('Failed to update delivery status:', error);
+      alert('Failed to update delivery status: ' + (error.message || 'Unknown error'));
     }
   };
 
@@ -70,7 +66,7 @@ const OrdersManager = () => {
     return matchesSearch;
   });
 
-  const getStatusClass = (status) => {
+  const getDeliveryStatusClass = (status) => {
     const statusMap = {
       'PENDING': 'status-pending',
       'CONFIRMED': 'status-confirmed',
@@ -83,6 +79,19 @@ const OrdersManager = () => {
     return statusMap[status?.toUpperCase()] || 'status-pending';
   };
 
+  const getPaymentStatusClass = (status) => {
+    const statusMap = {
+      'PENDING': 'payment-pending',
+      'PROCESSING': 'payment-processing',
+      'COMPLETED': 'payment-completed',
+      'CAPTURED': 'payment-completed',
+      'FAILED': 'payment-failed',
+      'CANCELLED': 'payment-cancelled',
+      'REFUNDED': 'payment-refunded',
+    };
+    return statusMap[status?.toUpperCase()] || 'payment-pending';
+  };
+
   const formatStatus = (status) => {
     return status?.replace(/_/g, ' ') || 'Pending';
   };
@@ -92,7 +101,9 @@ const OrdersManager = () => {
     return new Date(dateString).toLocaleDateString('en-GB', {
       day: '2-digit',
       month: 'short',
-      year: 'numeric'
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     });
   };
 
@@ -128,23 +139,9 @@ const OrdersManager = () => {
       <div className="page-header">
         <div>
           <h1 className="page-title">Orders Management</h1>
-          <p className="page-subtitle">
-            {isSuperAdmin ? 'View and manage customer orders' : 'View customer orders (Read-only access)'}
-          </p>
+          <p className="page-subtitle">View and manage customer orders</p>
         </div>
       </div>
-
-      {/* Read-only notice for Admin */}
-      {!isSuperAdmin && (
-        <div className="read-only-notice">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="8" x2="12" y2="12"/>
-            <line x1="12" y1="16" x2="12.01" y2="16"/>
-          </svg>
-          <span>You have view-only access. Contact a Super Admin to update order status.</span>
-        </div>
-      )}
 
       <div className="filters-bar">
         <div className="search-box">
@@ -164,7 +161,7 @@ const OrdersManager = () => {
           onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(0); }}
           className="filter-select"
         >
-          <option value="all">All Status</option>
+          <option value="all">All Delivery Status</option>
           <option value="PENDING">Pending</option>
           <option value="CONFIRMED">Confirmed</option>
           <option value="PROCESSING">Processing</option>
@@ -184,7 +181,8 @@ const OrdersManager = () => {
               <th>Area</th>
               <th>Amount</th>
               <th>Date</th>
-              <th>Status</th>
+              <th>Delivery Status</th>
+              <th>Payment Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -199,8 +197,13 @@ const OrdersManager = () => {
                   <td className="amount">{formatCurrency(order.totalAmount)}</td>
                   <td>{formatDate(order.createdAt)}</td>
                   <td>
-                    <span className={`status-badge ${getStatusClass(order.orderStatus)}`}>
-                      {formatStatus(order.orderStatus)}
+                    <span className={`status-badge ${getDeliveryStatusClass(order.deliveryStatus)}`}>
+                      {formatStatus(order.deliveryStatus)}
+                    </span>
+                  </td>
+                  <td>
+                    <span className={`status-badge ${getPaymentStatusClass(order.paymentStatus)}`}>
+                      {formatStatus(order.paymentStatus)}
                     </span>
                   </td>
                   <td>
@@ -219,7 +222,7 @@ const OrdersManager = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="8" className="empty-message">No orders found</td>
+                <td colSpan="9" className="empty-message">No orders found</td>
               </tr>
             )}
           </tbody>
@@ -261,6 +264,7 @@ const OrdersManager = () => {
               </button>
             </div>
             <div className="modal-body">
+              {/* Order Information */}
               <div className="detail-section">
                 <h3>📦 Order Information</h3>
                 <div className="detail-grid">
@@ -269,15 +273,15 @@ const OrdersManager = () => {
                     <span>{selectedOrder.orderNumber}</span>
                   </div>
                   <div className="detail-item">
-                    <label>Status</label>
-                    <span className={`status-badge ${getStatusClass(selectedOrder.orderStatus)}`}>
-                      {formatStatus(selectedOrder.orderStatus)}
+                    <label>Delivery Status</label>
+                    <span className={`status-badge ${getDeliveryStatusClass(selectedOrder.deliveryStatus)}`}>
+                      {formatStatus(selectedOrder.deliveryStatus)}
                     </span>
                   </div>
                   <div className="detail-item">
                     <label>Payment Status</label>
-                    <span className={`payment-status ${selectedOrder.paymentStatus?.toLowerCase()}`}>
-                      {selectedOrder.paymentStatus}
+                    <span className={`status-badge ${getPaymentStatusClass(selectedOrder.paymentStatus)}`}>
+                      {formatStatus(selectedOrder.paymentStatus)}
                     </span>
                   </div>
                   <div className="detail-item">
@@ -287,15 +291,37 @@ const OrdersManager = () => {
                 </div>
               </div>
 
+              {/* Customer Information */}
+              {selectedOrder.user && (
+                <div className="detail-section">
+                  <h3>👤 Customer Information</h3>
+                  <div className="detail-grid">
+                    <div className="detail-item">
+                      <label>Name</label>
+                      <span>{selectedOrder.user.name}</span>
+                    </div>
+                    <div className="detail-item">
+                      <label>Email</label>
+                      <span>{selectedOrder.user.email}</span>
+                    </div>
+                    <div className="detail-item">
+                      <label>Phone</label>
+                      <span>{selectedOrder.user.phone}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Recipient/Delivery Information */}
               <div className="detail-section">
-                <h3>👤 Recipient Information</h3>
+                <h3>🚚 Delivery Information</h3>
                 <div className="detail-grid">
                   <div className="detail-item">
-                    <label>Name</label>
+                    <label>Recipient Name</label>
                     <span>{selectedOrder.recipientName}</span>
                   </div>
                   <div className="detail-item">
-                    <label>Phone</label>
+                    <label>Recipient Phone</label>
                     <span>{selectedOrder.recipientPhone}</span>
                   </div>
                   <div className="detail-item full-width">
@@ -310,9 +336,66 @@ const OrdersManager = () => {
                     <label>Governorate</label>
                     <span>{selectedOrder.deliveryCity}</span>
                   </div>
+                  {selectedOrder.preferredDeliveryDate && (
+                    <div className="detail-item">
+                      <label>Preferred Delivery Date</label>
+                      <span>{formatDate(selectedOrder.preferredDeliveryDate)}</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
+              {/* ========== ORDER ITEMS / PRODUCTS SECTION ========== */}
+              <div className="detail-section">
+                <h3>🛒 Order Items ({selectedOrder.items?.length || 0} products)</h3>
+                {selectedOrder.items && selectedOrder.items.length > 0 ? (
+                  <div className="order-items-list">
+                    {selectedOrder.items.map((item, index) => (
+                      <div key={item.orderItemId || index} className="order-item-card">
+                        <div className="item-image">
+                          {item.productImageUrl ? (
+                            <img 
+                              src={item.productImageUrl} 
+                              alt={item.productName}
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = '/images/placeholder.jpg';
+                              }}
+                            />
+                          ) : (
+                            <div className="no-image">
+                              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                <polyline points="21 15 16 10 5 21"/>
+                              </svg>
+                            </div>
+                          )}
+                        </div>
+                        <div className="item-details">
+                          <h4 className="item-name">{item.productName}</h4>
+                          {item.specialInstructions && (
+                            <p className="item-instructions">
+                              <strong>Note:</strong> {item.specialInstructions}
+                            </p>
+                          )}
+                          <div className="item-pricing">
+                            <span className="item-quantity">Qty: {item.quantity}</span>
+                            <span className="item-unit-price">{formatCurrency(item.unitPrice)} each</span>
+                          </div>
+                        </div>
+                        <div className="item-total">
+                          {formatCurrency(item.totalPrice)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="no-items-message">No items found for this order.</p>
+                )}
+              </div>
+
+              {/* Card Message */}
               {selectedOrder.cardMessage && (
                 <div className="detail-section">
                   <h3>💌 Card Message</h3>
@@ -322,6 +405,7 @@ const OrdersManager = () => {
                 </div>
               )}
 
+              {/* Delivery Notes */}
               {selectedOrder.deliveryNotes && (
                 <div className="detail-section">
                   <h3>📝 Delivery Notes</h3>
@@ -331,6 +415,7 @@ const OrdersManager = () => {
                 </div>
               )}
 
+              {/* Order Summary */}
               <div className="detail-section">
                 <h3>💰 Order Summary</h3>
                 <div className="order-summary">
@@ -344,7 +429,7 @@ const OrdersManager = () => {
                   </div>
                   {selectedOrder.discountAmount > 0 && (
                     <div className="summary-row discount">
-                      <span>Discount</span>
+                      <span>Discount {selectedOrder.couponCode && `(${selectedOrder.couponCode})`}</span>
                       <span>-{formatCurrency(selectedOrder.discountAmount)}</span>
                     </div>
                   )}
@@ -355,17 +440,17 @@ const OrdersManager = () => {
                 </div>
               </div>
 
-              {/* Only show Update Status section for Super Admin */}
-              {isSuperAdmin && (
+              {/* Update Delivery Status - Both Admin and Super Admin can update */}
+              {canUpdateDeliveryStatus && (
                 <div className="detail-section">
-                  <h3>🔄 Update Status</h3>
+                  <h3>🚚 Update Delivery Status</h3>
                   <div className="status-buttons">
                     {['PENDING', 'CONFIRMED', 'PROCESSING', 'OUT_FOR_DELIVERY', 'DELIVERED', 'CANCELLED'].map((status) => (
                       <button
                         key={status}
-                        className={`status-btn ${selectedOrder.orderStatus === status ? 'active' : ''} ${getStatusClass(status)}`}
-                        onClick={() => handleStatusUpdate(selectedOrder.orderId, status)}
-                        disabled={selectedOrder.orderStatus === status}
+                        className={`status-btn ${selectedOrder.deliveryStatus === status ? 'active' : ''} ${getDeliveryStatusClass(status)}`}
+                        onClick={() => handleDeliveryStatusUpdate(selectedOrder.orderId, status)}
+                        disabled={selectedOrder.deliveryStatus === status}
                       >
                         {formatStatus(status)}
                       </button>
@@ -374,19 +459,26 @@ const OrdersManager = () => {
                 </div>
               )}
 
-              {/* Show read-only message for Admin */}
-              {!isSuperAdmin && (
-                <div className="detail-section">
-                  <div className="read-only-modal-notice">
+              {/* Payment Status Info (Read-only) */}
+              <div className="detail-section">
+                <h3>💳 Payment Information</h3>
+                <div className="payment-info-box">
+                  <div className="payment-info-item">
+                    <label>Payment Status</label>
+                    <span className={`status-badge ${getPaymentStatusClass(selectedOrder.paymentStatus)}`}>
+                      {formatStatus(selectedOrder.paymentStatus)}
+                    </span>
+                  </div>
+                  <p className="payment-note">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <circle cx="12" cy="12" r="10"/>
                       <line x1="12" y1="8" x2="12" y2="12"/>
                       <line x1="12" y1="16" x2="12.01" y2="16"/>
                     </svg>
-                    <span>Contact a Super Admin to update order status.</span>
-                  </div>
+                    Payment status is automatically updated by the payment gateway.
+                  </p>
                 </div>
-              )}
+              </div>
             </div>
           </div>
         </div>

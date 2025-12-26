@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from './CartContext';
 import categoryService from '../services/categoryService';
 import productService from '../services/productService';
+import MobileFilterBar from './MobileFilterBar';
+import MobileFilterDrawer, { FilterSection, PriceRangeFilter, CheckboxFilter } from './MobileFilterDrawer';
 import './AcrylicToppers.css';
 
 const AcrylicToppers = () => {
@@ -10,483 +12,306 @@ const AcrylicToppers = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [hoveredProduct, setHoveredProduct] = useState(null);
+  const [addingToCart, setAddingToCart] = useState({});
   const { addToCart } = useCart();
 
-  // Category name to search for (must match exactly what you created in admin)
-  const CATEGORY_NAME = 'Acrylic Toppers';
+  const [priceRange, setPriceRange] = useState({ min: '', max: '' });
+  const [selectedArrangements, setSelectedArrangements] = useState([]);
+  const [sortBy, setSortBy] = useState('default');
+  const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState({ price: true, arrangement: true });
 
   useEffect(() => {
     const savedLang = localStorage.getItem('preferredLanguage') || 'en';
     setCurrentLang(savedLang);
-
-    const handleLangChange = (e) => {
-      setCurrentLang(e.detail);
-    };
-
+    const handleLangChange = (e) => setCurrentLang(e.detail);
     window.addEventListener('languageChange', handleLangChange);
     return () => window.removeEventListener('languageChange', handleLangChange);
   }, []);
 
-  // Fetch products from database
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        // Step 1: Get all categories
-        const categoriesResponse = await categoryService.getAllCategories();
-        console.log('Categories response:', categoriesResponse);
-
-        let categories = [];
-        if (categoriesResponse.success && categoriesResponse.data) {
-          categories = categoriesResponse.data.content || categoriesResponse.data || [];
-        }
-
-        // Step 2: Find "Acrylic Toppers" category - flexible search
-        const toppersCategory = categories.find(cat => {
-          const name = (cat.categoryName || cat.nameEn || cat.name || '').toLowerCase();
-          return name.includes('acrylic') || 
-                 name.includes('topper') || 
-                 name.includes('toppers');
-        });
-
-        if (!toppersCategory) {
-          console.warn('Category "Acrylic Toppers" not found. Available categories:', categories.map(c => c.categoryName || c.nameEn || c.name));
-          setError('Category not found. Please create an "Acrylic Toppers" category in admin.');
-          setProducts([]);
-          setLoading(false);
-          return;
-        }
-
-        console.log('Found category:', toppersCategory);
-
-        // Step 3: Fetch products from this category
-        const productsResponse = await productService.getProductsByCategory(toppersCategory.categoryId, {
-          page: 0,
-          size: 100,
-          sort: 'createdAt,desc'
-        });
-
-        console.log('Products response:', productsResponse);
-
-        let productsList = [];
-        if (productsResponse.success && productsResponse.data) {
-          productsList = productsResponse.data.content || productsResponse.data || [];
-        }
-
-        // Filter only active products
-        const activeProducts = productsList.filter(p => p.isActive !== false);
-        
-        setProducts(activeProducts);
-        console.log('Loaded products:', activeProducts.length);
-
-      } catch (err) {
-        console.error('Error fetching products:', err);
-        setError('Failed to load products. Please try again later.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
+  useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const translations = {
     en: {
-      pageTitle: "Acrylic Celebration Toppers",
-      pageSubtitle: "Add a touch of elegance to your floral arrangements",
-      breadcrumbHome: "Home",
-      breadcrumbAddOns: "Add-Ons",
-      breadcrumbCurrent: "Acrylic Toppers",
-      filterAll: "All",
-      filterCelebrations: "Celebrations",
-      filterBaby: "Baby",
-      filterLove: "Love & Romance",
-      filterOccasions: "Special Occasions",
-      filterExtras: "Extras",
-      addToCart: "Add to Cart",
-      viewDetails: "View Details",
-      currency: "KD",
-      featuredBadge: "Popular",
-      newBadge: "New",
-      loading: "Loading products...",
-      noProducts: "No products available yet. Check back soon!",
-      error: "Something went wrong",
+      title: "Acrylic Toppers", subtitle: "Elegant acrylic toppers for cakes and celebrations", badge: "ACRYLIC TOPPERS",
+      filters: "Filters", clearAll: "Clear All", priceRange: "Price Range", arrangement: "Arrangement",
+      minPrice: "Min", maxPrice: "Max", sortBy: "Sort by:", default: "Default",
+      priceLow: "Price: Low to High", priceHigh: "Price: High to Low", newest: "Newest First", nameAZ: "Name: A-Z",
+      items: "items", bouquet: "Bouquet", box: "Box", basket: "Basket", vase: "Vase", tray: "Tray", stand: "Stand",
+      kd: "KD", addToCart: "Add to Cart",
+      loading: "Loading products...", error: "Failed to load products", noProducts: "No products found", highestPrice: "Highest price"
     },
     ar: {
-      pageTitle: "توبر احتفالات أكريليك",
-      pageSubtitle: "أضف لمسة من الأناقة إلى تنسيقات الزهور الخاصة بك",
-      breadcrumbHome: "الرئيسية",
-      breadcrumbAddOns: "الإضافات",
-      breadcrumbCurrent: "توبر أكريليك",
-      filterAll: "الكل",
-      filterCelebrations: "الاحتفالات",
-      filterBaby: "المواليد",
-      filterLove: "الحب والرومانسية",
-      filterOccasions: "المناسبات الخاصة",
-      filterExtras: "إضافات",
-      addToCart: "أضف للسلة",
-      viewDetails: "عرض التفاصيل",
-      currency: "د.ك",
-      featuredBadge: "مميز",
-      newBadge: "جديد",
-      loading: "جاري تحميل المنتجات...",
-      noProducts: "لا توجد منتجات متاحة حالياً. تحقق مرة أخرى قريباً!",
-      error: "حدث خطأ ما",
+      title: "توبرات أكريليك", subtitle: "توبرات أكريليك أنيقة للكيك والاحتفالات", badge: "توبرات أكريليك",
+      filters: "التصفية", clearAll: "مسح الكل", priceRange: "نطاق السعر", arrangement: "التنسيق",
+      minPrice: "الحد الأدنى", maxPrice: "الحد الأقصى", sortBy: "ترتيب حسب:", default: "افتراضي",
+      priceLow: "السعر: من الأقل للأعلى", priceHigh: "السعر: من الأعلى للأقل", newest: "الأحدث أولاً", nameAZ: "الاسم: أ-ي",
+      items: "منتج", bouquet: "باقة", box: "صندوق", basket: "سلة", vase: "مزهرية", tray: "صينية", stand: "حامل",
+      kd: "د.ك", addToCart: "أضف للسلة",
+      loading: "جاري تحميل المنتجات...", error: "فشل في تحميل المنتجات", noProducts: "لا توجد منتجات", highestPrice: "أعلى سعر"
     }
   };
+  const t = translations[currentLang] || translations.en;
 
-  const t = translations[currentLang];
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true); setError(null);
+        const categoriesResponse = await categoryService.getAllCategories();
+        let categories = [];
+        if (categoriesResponse.success && categoriesResponse.data) categories = categoriesResponse.data.content || categoriesResponse.data || [];
+        const targetCategory = categories.find(cat => {
+          const name = (cat.categoryName || cat.nameEn || cat.name || '').toLowerCase();
+          return name === 'acrylic celebration toppers' || name.includes('acrylic');
+        });
+        if (!targetCategory) { setError('Category not found.'); setProducts([]); setLoading(false); return; }
+        const productsResponse = await productService.getProductsByCategory(targetCategory.categoryId, { page: 0, size: 100, sort: 'createdAt,desc' });
+        let productsList = [];
+        if (productsResponse.success && productsResponse.data) productsList = productsResponse.data.content || productsResponse.data || [];
+        setProducts(productsList.filter(p => p.isActive !== false));
+      } catch (err) { setError('Failed to load products.'); } finally { setLoading(false); }
+    };
+    fetchProducts();
+  }, []);
 
-  // Filter categories with keywords for tag-based filtering
-  // In admin, add these tags to products: celebrations, baby, love, occasions, extras
-  const filterCategories = [
-    { id: 'all', labelEn: t.filterAll, keywords: [] },
-    { id: 'celebrations', labelEn: t.filterCelebrations, keywords: ['celebration', 'celebrations', 'birthday', 'graduation', 'new year', 'newyear', 'mabrook', 'congrats'] },
-    { id: 'baby', labelEn: t.filterBaby, keywords: ['baby', 'boy', 'girl', 'newborn'] },
-    { id: 'love', labelEn: t.filterLove, keywords: ['love', 'anniversary', 'romantic', 'romance', 'mom', 'mother', 'heart'] },
-    { id: 'occasions', labelEn: t.filterOccasions, keywords: ['occasion', 'occasions', 'eid', 'welcome', 'get well', 'thank you', 'thanks', 'mubarak'] },
-    { id: 'extras', labelEn: t.filterExtras, keywords: ['extra', 'extras', 'perfume', 'chocolate', 'chocolates', 'gift'] },
-  ];
-
-  // Helper functions to get product data
   const getProductName = (product) => {
-    if (currentLang === 'ar') {
-      return product.productNameAr || product.nameAr || product.productName || product.name || 'Unknown';
-    }
+    if (currentLang === 'ar') return product.productNameAr || product.nameAr || product.productName || product.name || 'Unknown';
     return product.productName || product.nameEn || product.name || 'Unknown';
   };
 
+  const getProductImage = (product) => product.imageUrl || product.primaryImageUrl || product.image || '/images/placeholder.webp';
+  const getOriginalPrice = (product) => product.actualPrice || product.originalPrice || product.price || 0;
+  const getFinalPrice = (product) => product.finalPrice || product.salePrice || product.price || product.actualPrice || 0;
+  const hasDiscount = (product) => { const o = getOriginalPrice(product); const f = getFinalPrice(product); return o > 0 && f > 0 && o > f; };
+  const getProductSlug = (product) => product.productId || product.sku || product.slug || product.id;
+
   const getProductDescription = (product) => {
-    if (currentLang === 'ar') {
-      return product.shortDescriptionAr || product.descriptionAr || product.description || '';
+    const dbDesc = product.shortDescriptionEn || product.shortDescription || product.descriptionEn || product.description;
+    const dbDescAr = product.shortDescriptionAr || product.descriptionAr;
+    if (currentLang === 'ar' && dbDescAr) return String(dbDescAr);
+    if (dbDesc) return String(dbDesc);
+    const name = (product.productName || product.name || '').toLowerCase();
+    if (name.includes('rose')) return currentLang === 'ar' ? 'ورود طازجة وجميلة' : 'Fresh beautiful roses';
+    if (name.includes('orchid')) return currentLang === 'ar' ? 'أوركيد أنيق وفاخر' : 'Elegant premium orchids';
+    if (name.includes('tulip')) return currentLang === 'ar' ? 'توليب طازج وملون' : 'Fresh colorful tulips';
+    if (name.includes('lily') || name.includes('lilium')) return currentLang === 'ar' ? 'ليليوم عطري وجميل' : 'Fragrant beautiful lilium';
+    if (name.includes('bouquet')) return currentLang === 'ar' ? 'باقة زهور مرتبة بعناية' : 'Carefully arranged flower bouquet';
+    if (name.includes('vase')) return currentLang === 'ar' ? 'تنسيق زهور في مزهرية أنيقة' : 'Flower arrangement in elegant vase';
+    if (name.includes('box')) return currentLang === 'ar' ? 'زهور في صندوق فاخر' : 'Flowers in luxury box';
+    if (name.includes('basket')) return currentLang === 'ar' ? 'سلة زهور طازجة' : 'Fresh flower basket';
+    return currentLang === 'ar' ? 'تنسيق زهور طازجة وأنيقة' : 'Fresh elegant flower arrangement';
+  };
+
+  const maxPrice = useMemo(() => products.length === 0 ? 100 : Math.ceil(Math.max(...products.map(p => getFinalPrice(p)))), [products]);
+
+  const filteredAndSortedProducts = useMemo(() => {
+    let result = [...products];
+    if (priceRange.min !== '') result = result.filter(p => getFinalPrice(p) >= Number(priceRange.min));
+    if (priceRange.max !== '') result = result.filter(p => getFinalPrice(p) <= Number(priceRange.max));
+    if (selectedArrangements.length > 0) result = result.filter(p => selectedArrangements.some(arr => getProductName(p).toLowerCase().includes(arr.toLowerCase())));
+    switch (sortBy) {
+      case 'priceLow': result.sort((a, b) => getFinalPrice(a) - getFinalPrice(b)); break;
+      case 'priceHigh': result.sort((a, b) => getFinalPrice(b) - getFinalPrice(a)); break;
+      case 'newest': result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); break;
+      case 'nameAZ': result.sort((a, b) => getProductName(a).localeCompare(getProductName(b))); break;
+      default: break;
     }
-    return product.shortDescriptionEn || product.descriptionEn || product.shortDescription || product.description || '';
-  };
+    return result;
+  }, [products, priceRange, selectedArrangements, sortBy, currentLang]);
 
-  const getProductImage = (product) => {
-    return product.imageUrl || product.primaryImageUrl || product.image || '/images/placeholder.webp';
-  };
-
-  const getOriginalPrice = (product) => {
-    return product.actualPrice || product.originalPrice || product.price || 0;
-  };
-
-  const getFinalPrice = (product) => {
-    return product.finalPrice || product.salePrice || product.price || product.actualPrice || 0;
-  };
-
-  const getProductSlug = (product) => {
-    return product.productId || product.sku || product.slug || product.id;
-  };
-
-  // Get product tags as lowercase string for filtering
-  const getProductTags = (product) => {
-    const tags = product.tags || product.tag || '';
-    // Handle both string and array formats
-    if (Array.isArray(tags)) {
-      return tags.join(',').toLowerCase();
-    }
-    return String(tags || '').toLowerCase().trim();
-  };
-
-  // Check if product has a badge (featured/new)
-  const getProductBadge = (product) => {
-    if (product.isFeatured || product.featured) return 'popular';
-    if (product.isNew || product.newArrival) return 'new';
-    return null;
-  };
-
-  // Filter products based on selected category using tags field
-  const filteredProducts = (() => {
-    if (selectedCategory === 'all') {
-      return products;
-    }
-    
-    // Find the selected filter category
-    const selectedFilter = filterCategories.find(f => f.id === selectedCategory);
-    if (!selectedFilter || !selectedFilter.keywords.length) {
-      return products;
-    }
-
-    // Filter products that have matching tags
-    return products.filter(product => {
-      const productTags = getProductTags(product);
-      const productName = getProductName(product).toLowerCase();
-      
-      // Check if any keyword matches the tags or product name
-      return selectedFilter.keywords.some(keyword => {
-        const keywordLower = keyword.toLowerCase();
-        return productTags.includes(keywordLower) || productName.includes(keywordLower);
-      });
-    });
-  })();
-
-  // Handle add to cart with proper price fields
   const handleAddToCart = (e, product) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    
-    const finalPrice = getFinalPrice(product);
-    const originalPrice = getOriginalPrice(product);
-    
-    const cartItem = {
+    e.preventDefault(); e.stopPropagation();
+    const pid = getProductSlug(product);
+    setAddingToCart(prev => ({ ...prev, [pid]: true }));
+    addToCart({
       id: product.productId || product.id,
       name: getProductName(product),
       nameEn: product.productName || product.nameEn || product.name,
       nameAr: product.productNameAr || product.nameAr || product.productName,
-      // All price fields for Cart to work correctly
-      price: finalPrice,
-      salePrice: finalPrice,
-      finalPrice: finalPrice,
-      originalPrice: originalPrice,
-      actualPrice: originalPrice,
+      price: getFinalPrice(product),
+      salePrice: getFinalPrice(product),
+      finalPrice: getFinalPrice(product),
+      originalPrice: getOriginalPrice(product),
+      actualPrice: getOriginalPrice(product),
       image: getProductImage(product),
       quantity: 1,
-    };
-    
-    addToCart(cartItem);
-    console.log('Added to cart:', cartItem);
+    });
+    setTimeout(() => setAddingToCart(prev => ({ ...prev, [pid]: false })), 800);
   };
 
+  const clearFilters = () => { setPriceRange({ min: '', max: '' }); setSelectedArrangements([]); setSortBy('default'); };
+  const toggleArrangement = (arr) => setSelectedArrangements(prev => prev.includes(arr) ? prev.filter(a => a !== arr) : [...prev, arr]);
+  const hasActiveFilters = priceRange.min !== '' || priceRange.max !== '' || selectedArrangements.length > 0;
+  const arrangementTypes = [{ key: 'bouquet', label: t.bouquet }, { key: 'box', label: t.box }, { key: 'basket', label: t.basket }, { key: 'vase', label: t.vase }, { key: 'tray', label: t.tray }, { key: 'stand', label: t.stand }];
+
   return (
-    <div className={`acrylic-toppers-page ${currentLang === 'ar' ? 'rtl' : ''}`}>
-      {/* Decorative Background */}
-      <div className="page-background">
-        <div className="bg-circle bg-circle-1"></div>
-        <div className="bg-circle bg-circle-2"></div>
-        <div className="bg-circle bg-circle-3"></div>
-      </div>
-
-      {/* Breadcrumb */}
-      <nav className="breadcrumb-nav">
-        <div className="container">
-          <ol className="breadcrumb">
-            <li><Link to="/">{t.breadcrumbHome}</Link></li>
-            <li className="separator">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M9 18l6-6-6-6"/>
-              </svg>
-            </li>
-            <li><Link to="/add-ons">{t.breadcrumbAddOns}</Link></li>
-            <li className="separator">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M9 18l6-6-6-6"/>
-              </svg>
-            </li>
-            <li className="current">{t.breadcrumbCurrent}</li>
-          </ol>
+    <div className={`acrylictoppers-page ${currentLang === 'ar' ? 'rtl' : ''}`}>
+      <section className="hero-banner">
+        <div className="hero-bg-decoration">
+          <span className="floating-icon float-1">🎂</span>
+          <span className="floating-icon float-2">✨</span>
+          <span className="floating-icon float-3">🌸</span>
         </div>
-      </nav>
-
-      {/* Hero Section */}
-      <header className="page-hero">
         <div className="container">
           <div className="hero-content">
-            <span className="hero-accent">✦ Add-Ons Collection ✦</span>
-            <h1 className="hero-title">{t.pageTitle}</h1>
-            <p className="hero-subtitle">{t.pageSubtitle}</p>
-            <div className="hero-decoration">
-              <span className="deco-line"></span>
-              <svg className="deco-flower" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9C21 10.1 20.1 11 19 11C17.9 11 17 10.1 17 9C17 7.9 17.9 7 19 7C20.1 7 21 7.9 21 9ZM7 9C7 10.1 6.1 11 5 11C3.9 11 3 10.1 3 9C3 7.9 3.9 7 5 7C6.1 7 7 7.9 7 9ZM19 19C19 20.1 18.1 21 17 21C15.9 21 15 20.1 15 19C15 17.9 15.9 17 17 17C18.1 17 19 17.9 19 19ZM9 19C9 20.1 8.1 21 7 21C5.9 21 5 20.1 5 19C5 17.9 5.9 17 7 17C8.1 17 9 17.9 9 19ZM12 12C14.2 12 16 13.8 16 16C16 18.2 14.2 20 12 20C9.8 20 8 18.2 8 16C8 13.8 9.8 12 12 12Z"/>
-              </svg>
-              <span className="deco-line"></span>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Filter Section */}
-      <section className="filter-section">
-        <div className="container">
-          <div className="filter-wrapper">
-            {filterCategories.map(cat => (
-              <button
-                key={cat.id}
-                className={`filter-btn ${selectedCategory === cat.id ? 'active' : ''}`}
-                onClick={() => setSelectedCategory(cat.id)}
-              >
-                {cat.labelEn}
-              </button>
-            ))}
+            <span className="hero-badge"><span>🎂</span>{t.badge}</span>
+            <h1 className="hero-title">{t.title}</h1>
+            <p className="hero-subtitle">{t.subtitle}</p>
           </div>
         </div>
       </section>
 
-      {/* Products Grid */}
-      <section className="products-section">
+
+      {/* Mobile Filter/Sort Toolbar */}
+      <MobileFilterBar
+        currentLang={currentLang}
+        onFilterClick={() => setMobileFilterOpen(true)}
+        sortBy={sortBy}
+        onSortChange={setSortBy}
+        filterCount={(selectedArrangements.length > 0 ? 1 : 0) + (priceRange.min !== '' || priceRange.max !== '' ? 1 : 0)}
+        sortOptions={[
+          { value: 'default', labelEn: t.default || 'Default', labelAr: 'افتراضي' },
+          { value: 'priceLow', labelEn: t.priceLow || 'Price: Low to High', labelAr: 'السعر: من الأقل للأعلى' },
+          { value: 'priceHigh', labelEn: t.priceHigh || 'Price: High to Low', labelAr: 'السعر: من الأعلى للأقل' },
+          { value: 'newest', labelEn: t.newest || 'Newest First', labelAr: 'الأحدث أولاً' },
+          { value: 'nameAZ', labelEn: t.nameAZ || 'Name: A-Z', labelAr: 'الاسم: أ-ي' },
+        ]}
+      />
+
+      {/* Mobile Filter Drawer */}
+      <MobileFilterDrawer
+        isOpen={mobileFilterOpen}
+        onClose={() => setMobileFilterOpen(false)}
+        currentLang={currentLang}
+        onClearAll={clearFilters}
+        itemCount={filteredAndSortedProducts.length}
+      >
+        <FilterSection 
+          title={t.priceRange || t.price || 'Price Range'} 
+          isOpen={filtersOpen.price} 
+          onToggle={() => setFiltersOpen(prev => ({ ...prev, price: !prev.price }))}
+        >
+          <PriceRangeFilter
+            minValue={priceRange.min}
+            maxValue={priceRange.max}
+            onMinChange={(val) => setPriceRange(prev => ({ ...prev, min: val }))}
+            onMaxChange={(val) => setPriceRange(prev => ({ ...prev, max: val }))}
+            currency={t.kd || t.currency || 'KD'}
+            highestPriceLabel={t.highestPrice || 'Highest price'}
+            highestPrice={maxPrice}
+          />
+        </FilterSection>
+        
+        <FilterSection 
+          title={t.arrangement || 'Arrangement'} 
+          isOpen={filtersOpen.arrangement} 
+          onToggle={() => setFiltersOpen(prev => ({ ...prev, arrangement: !prev.arrangement }))}
+        >
+          <CheckboxFilter
+            options={arrangementTypes.map ? arrangementTypes.map(arr => ({ value: arr.key || arr.value, label: arr.label })) : arrangementTypes}
+            selectedValues={selectedArrangements}
+            onChange={setSelectedArrangements}
+            currentLang={currentLang}
+          />
+        </FilterSection>
+      </MobileFilterDrawer>
+
+      <section className="main-content">
         <div className="container">
-          {/* Loading State */}
-          {loading && (
-            <div className="loading-state" style={{ textAlign: 'center', padding: '60px 20px' }}>
-              <div className="spinner" style={{
-                width: '40px',
-                height: '40px',
-                border: '3px solid #f3f3f3',
-                borderTop: '3px solid #c9a86c',
-                borderRadius: '50%',
-                animation: 'spin 1s linear infinite',
-                margin: '0 auto 16px'
-              }}></div>
-              <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '14px', color: '#7a6a60' }}>{t.loading}</p>
-              <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
-            </div>
-          )}
-
-          {/* Error State */}
-          {error && !loading && (
-            <div className="error-state" style={{ 
-              textAlign: 'center', 
-              padding: '60px 20px',
-              background: '#fff5f5',
-              borderRadius: '12px',
-              margin: '20px 0'
-            }}>
-              <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '16px', color: '#e74c3c', margin: '0 0 8px' }}>{t.error}</p>
-              <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '13px', color: '#7a6a60' }}>{error}</p>
-            </div>
-          )}
-
-          {/* Empty State */}
-          {!loading && !error && products.length === 0 && (
-            <div className="empty-state" style={{ textAlign: 'center', padding: '60px 20px' }}>
-              <div style={{ fontSize: '48px', marginBottom: '16px' }}>✦</div>
-              <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '16px', color: '#7a6a60' }}>{t.noProducts}</p>
-            </div>
-          )}
-
-          {/* Products */}
-          {!loading && !error && products.length > 0 && (
-            <>
-              <div className="products-grid">
-                {filteredProducts.map((product, index) => {
-                  const productName = getProductName(product);
-                  const productDesc = getProductDescription(product);
-                  const productImage = getProductImage(product);
-                  const finalPrice = getFinalPrice(product);
-                  const badge = getProductBadge(product);
-                  const productSlug = getProductSlug(product);
-                  
-                  return (
-                    <Link 
-                      to={`/product/${productSlug}`}
-                      key={product.productId || product.id} 
-                      className={`product-card ${hoveredProduct === (product.productId || product.id) ? 'hovered' : ''}`}
-                      onMouseEnter={() => setHoveredProduct(product.productId || product.id)}
-                      onMouseLeave={() => setHoveredProduct(null)}
-                      style={{ animationDelay: `${index * 0.1}s`, textDecoration: 'none' }}
-                    >
-                      {badge && (
-                        <span className={`product-badge badge-${badge}`}>
-                          {badge === 'popular' ? t.featuredBadge : t.newBadge}
-                        </span>
-                      )}
-                      
-                      <div className="product-image-wrapper">
-                        <div className="image-glow"></div>
-                        <img 
-                          src={productImage} 
-                          alt={productName}
-                          className="product-image"
-                          loading="lazy"
-                          onError={(e) => {
-                            e.target.src = '/images/placeholder.webp';
-                          }}
-                        />
-                        <div className="product-overlay">
-                          <button 
-                            className="quick-add-btn"
-                            onClick={(e) => handleAddToCart(e, product)}
-                            aria-label={t.addToCart}
-                          >
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                              <circle cx="9" cy="21" r="1"></circle>
-                              <circle cx="20" cy="21" r="1"></circle>
-                              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                            </svg>
-                            <span>{t.addToCart}</span>
-                          </button>
-                        </div>
-                      </div>
-                      
-                      <div className="product-details">
-                        <h3 className="product-name">{productName}</h3>
-                        <p className="product-desc">
-                          {productDesc || (currentLang === 'ar' ? 'توبر أكريليك' : 'Acrylic topper')}
-                        </p>
-                        <div className="product-footer">
-                          <span className="product-price">
-                            {t.currency} {parseFloat(finalPrice).toFixed(3)}
-                          </span>
-                          <button 
-                            className="cart-icon-btn"
-                            onClick={(e) => handleAddToCart(e, product)}
-                            aria-label={t.addToCart}
-                          >
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                              <path d="M12 5v14M5 12h14"/>
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-                    </Link>
-                  );
-                })}
+          <div className="content-layout">
+            <aside className={`filters-sidebar ${mobileFilterOpen ? "open" : ""}`}>
+              <div className="filters-header">
+                <h3 className="filters-title">{t.filters}</h3>
+                <button className="mobile-filter-close" onClick={() => setMobileFilterOpen(false)} aria-label="Close filters">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+                {hasActiveFilters && <button className="clear-filters" onClick={clearFilters}>{t.clearAll}</button>}
+              </div>
+              <div className="filter-section">
+                <button className={`filter-header ${filtersOpen.price ? 'open' : ''}`} onClick={() => setFiltersOpen(prev => ({ ...prev, price: !prev.price }))}>
+                  <span>{t.priceRange}</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                {filtersOpen.price && (
+                  <div className="filter-content">
+                    <div className="price-inputs">
+                      <div className="price-input-group"><span className="currency-label">{t.kd}</span><input type="number" placeholder={t.minPrice} value={priceRange.min} onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))} min="0"/></div>
+                      <span className="price-separator">-</span>
+                      <div className="price-input-group"><span className="currency-label">{t.kd}</span><input type="number" placeholder={t.maxPrice} value={priceRange.max} onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))} min="0"/></div>
+                    </div>
+                    <p className="price-hint">{t.highestPrice}: {maxPrice} {t.kd}</p>
+                  </div>
+                )}
+              </div>
+              <div className="filter-section">
+                <button className={`filter-header ${filtersOpen.arrangement ? 'open' : ''}`} onClick={() => setFiltersOpen(prev => ({ ...prev, arrangement: !prev.arrangement }))}>
+                  <span>{t.arrangement}</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                {filtersOpen.arrangement && (
+                  <div className="filter-content">
+                    {arrangementTypes.map(({ key, label }) => (
+                      <label key={key} className="checkbox-label">
+                        <input type="checkbox" checked={selectedArrangements.includes(key)} onChange={() => toggleArrangement(key)}/>
+                        <span className="checkmark"></span>
+                        <span className="label-text">{label}</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </aside>
+            <div className="products-main">
+              <div className="products-toolbar">
+                <span className="items-count">{filteredAndSortedProducts.length} {t.items}</span>
+                <div className="toolbar-right">
+                  <div className="sort-dropdown"><label>{t.sortBy}</label><select value={sortBy} onChange={(e) => setSortBy(e.target.value)}><option value="default">{t.default}</option><option value="priceLow">{t.priceLow}</option><option value="priceHigh">{t.priceHigh}</option><option value="newest">{t.newest}</option><option value="nameAZ">{t.nameAZ}</option></select></div>
+                  </div>
               </div>
 
-              {/* No filtered results */}
-              {filteredProducts.length === 0 && (
-                <div className="empty-filter-state" style={{ textAlign: 'center', padding: '40px 20px' }}>
-                  <div style={{ fontSize: '40px', marginBottom: '12px' }}>🔍</div>
-                  <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '15px', color: '#7a6a60' }}>
-                    {currentLang === 'ar' 
-                      ? 'لا توجد منتجات في هذه الفئة. جرب فئة أخرى أو أضف منتجات بهذا التاج في لوحة التحكم.' 
-                      : 'No products in this category. Try another filter or add products with matching tags in admin.'}
-                  </p>
-                  <button 
-                    onClick={() => setSelectedCategory('all')}
-                    style={{
-                      marginTop: '16px',
-                      padding: '10px 24px',
-                      background: 'linear-gradient(135deg, #c9a86c 0%, #b8956a 100%)',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '25px',
-                      fontFamily: 'Poppins, sans-serif',
-                      fontSize: '13px',
-                      fontWeight: '600',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    {currentLang === 'ar' ? 'عرض الكل' : 'Show All'}
-                  </button>
+              {loading ? (
+                <div className="loading-state"><div className="spinner"></div><p>{t.loading}</p></div>
+              ) : error ? (
+                <div className="error-state"><p>{t.error}</p></div>
+              ) : filteredAndSortedProducts.length === 0 ? (
+                <div className="empty-state"><span className="empty-icon">🎂</span><p>{t.noProducts}</p></div>
+              ) : (
+                <div className="products-grid">
+                  {filteredAndSortedProducts.map((product, index) => {
+                    const productName = getProductName(product);
+                    const productImage = getProductImage(product);
+                    const originalPrice = getOriginalPrice(product);
+                    const finalPrice = getFinalPrice(product);
+                    const showDiscount = hasDiscount(product);
+                    const productSlug = getProductSlug(product);
+                    return (
+                      <Link to={`/product/${productSlug}`} className="product-card" key={productSlug} style={{ animationDelay: `${index * 0.05}s` }}>
+                        {showDiscount && <span className="discount-badge">-{Math.round((1 - finalPrice / originalPrice) * 100)}%</span>}
+                        <div className="product-image-wrapper"><img src={productImage} alt={productName} className="product-image" loading="lazy" onError={(e) => { e.target.src = '/images/placeholder.webp'; }}/></div>
+                        <div className="product-info">
+                          <h3 className="product-name">{productName}</h3>
+                          <div className="product-footer">
+                            <div className="price-wrapper">
+                              {showDiscount && <span className="original-price">{parseFloat(originalPrice).toFixed(3)} KWD</span>}
+                              <span className="sale-price">{parseFloat(finalPrice).toFixed(3)} KWD</span>
+                            </div>
+                            
+                            <button className={`add-btn ${addingToCart[productSlug] ? 'adding' : ''}`} onClick={(e) => handleAddToCart(e, product)}>
+                              {addingToCart[productSlug] ? (
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+                              ) : (
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  })}
                 </div>
               )}
-            </>
-          )}
-        </div>
-      </section>
-
-      {/* Info Banner */}
-      <section className="info-banner">
-        <div className="container">
-          <div className="banner-content">
-            <div className="banner-icon">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-              </svg>
-            </div>
-            <div className="banner-text">
-              <h3>{currentLang === 'ar' ? 'أضف لمسة خاصة' : 'Add a Special Touch'}</h3>
-              <p>{currentLang === 'ar' 
-                ? 'يمكن إضافة جميع التوبرز الأكريليك إلى أي باقة زهور أو ترتيب' 
-                : 'All acrylic toppers can be added to any flower bouquet or arrangement'}</p>
             </div>
           </div>
         </div>

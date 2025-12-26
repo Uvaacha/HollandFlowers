@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useCart } from './CartContext';
 import categoryService from '../services/categoryService';
 import productService from '../services/productService';
+import MobileFilterBar from './MobileFilterBar';
+import MobileFilterDrawer, { FilterSection, PriceRangeFilter, CheckboxFilter } from './MobileFilterDrawer';
 import './Offers50.css';
 
 const Offers50 = () => {
@@ -17,19 +19,12 @@ const Offers50 = () => {
   const [priceRange, setPriceRange] = useState({ min: 0, max: 500 });
   const [selectedArrangement, setSelectedArrangement] = useState([]);
   const [sortBy, setSortBy] = useState('default');
-  const [viewMode, setViewMode] = useState('grid');
+  const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState({
     price: true,
     arrangement: true
   });
 
-  // Countdown timer
-  const [timeLeft, setTimeLeft] = useState({
-    days: 5,
-    hours: 12,
-    minutes: 30,
-    seconds: 0
-  });
 
   const CATEGORY_NAME = '50% DISCOUNT';
 
@@ -45,34 +40,6 @@ const Offers50 = () => {
     return () => window.removeEventListener('languageChange', handleLangChange);
   }, []);
 
-  // Countdown timer
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        let { days, hours, minutes, seconds } = prev;
-        
-        if (seconds > 0) {
-          seconds--;
-        } else if (minutes > 0) {
-          minutes--;
-          seconds = 59;
-        } else if (hours > 0) {
-          hours--;
-          minutes = 59;
-          seconds = 59;
-        } else if (days > 0) {
-          days--;
-          hours = 23;
-          minutes = 59;
-          seconds = 59;
-        }
-        
-        return { days, hours, minutes, seconds };
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -367,44 +334,78 @@ const Offers50 = () => {
             </div>
             <h1 className="hero-title">{t.pageTitle}</h1>
             <p className="hero-subtitle">{t.pageSubtitle}</p>
-            
-            {/* Countdown Timer */}
-            <div className="countdown-section">
-              <p className="countdown-label">{t.hurry}</p>
-              <div className="countdown-timer">
-                <div className="time-block">
-                  <span className="time-number">{String(timeLeft.days).padStart(2, '0')}</span>
-                  <span className="time-label">{t.days}</span>
-                </div>
-                <span className="time-separator">:</span>
-                <div className="time-block">
-                  <span className="time-number">{String(timeLeft.hours).padStart(2, '0')}</span>
-                  <span className="time-label">{t.hours}</span>
-                </div>
-                <span className="time-separator">:</span>
-                <div className="time-block">
-                  <span className="time-number">{String(timeLeft.minutes).padStart(2, '0')}</span>
-                  <span className="time-label">{t.minutes}</span>
-                </div>
-                <span className="time-separator">:</span>
-                <div className="time-block">
-                  <span className="time-number">{String(timeLeft.seconds).padStart(2, '0')}</span>
-                  <span className="time-label">{t.seconds}</span>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
+
+      {/* Mobile Filter/Sort Toolbar */}
+      <MobileFilterBar
+        currentLang={currentLang}
+        onFilterClick={() => setMobileFilterOpen(true)}
+        sortBy={sortBy}
+        onSortChange={setSortBy}
+        filterCount={(selectedArrangement.length > 0 ? 1 : 0) + (priceRange.min > 0 || priceRange.max < maxProductPrice ? 1 : 0)}
+        sortOptions={[
+          { value: 'default', labelEn: t.sortDefault, labelAr: 'افتراضي' },
+          { value: 'price-low', labelEn: t.sortPriceLow, labelAr: 'السعر: من الأقل للأعلى' },
+          { value: 'price-high', labelEn: t.sortPriceHigh, labelAr: 'السعر: من الأعلى للأقل' },
+          { value: 'newest', labelEn: t.sortNewest, labelAr: 'الأحدث أولاً' },
+          { value: 'name', labelEn: t.sortName, labelAr: 'الاسم: أ-ي' },
+        ]}
+      />
+
+      {/* Mobile Filter Drawer */}
+      <MobileFilterDrawer
+        isOpen={mobileFilterOpen}
+        onClose={() => setMobileFilterOpen(false)}
+        currentLang={currentLang}
+        onClearAll={clearAllFilters}
+        showClearAll={selectedArrangement.length > 0 || priceRange.min > 0}
+        itemCount={filteredProducts.length}
+      >
+        <FilterSection 
+          title={t.price} 
+          isOpen={filtersOpen.price} 
+          onToggle={() => toggleFilter('price')}
+        >
+          <PriceRangeFilter
+            minValue={priceRange.min}
+            maxValue={priceRange.max}
+            onMinChange={(val) => setPriceRange(prev => ({ ...prev, min: Number(val) || 0 }))}
+            onMaxChange={(val) => setPriceRange(prev => ({ ...prev, max: Number(val) || 500 }))}
+            currency={t.currency}
+            highestPriceLabel={t.highestPrice}
+            highestPrice={maxProductPrice.toFixed(3)}
+          />
+        </FilterSection>
+        
+        <FilterSection 
+          title={t.arrangement} 
+          isOpen={filtersOpen.arrangement} 
+          onToggle={() => toggleFilter('arrangement')}
+        >
+          <CheckboxFilter
+            options={arrangements}
+            selectedValues={selectedArrangement}
+            onChange={setSelectedArrangement}
+            currentLang={currentLang}
+          />
+        </FilterSection>
+      </MobileFilterDrawer>
 
       {/* Main Content */}
       <div className="main-content">
         <div className="container">
           <div className="content-layout">
             {/* Left Sidebar - Filters */}
-            <aside className="filters-sidebar">
+            <aside className={`filters-sidebar ${mobileFilterOpen ? "open" : ""}`}>
               <div className="filters-header">
-                <h2 className="filters-title">{t.filters}</h2>
+                <h3 className="filters-title">{t.filters}</h3>
+                <button className="mobile-filter-close" onClick={() => setMobileFilterOpen(false)} aria-label="Close filters">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
                 {(selectedArrangement.length > 0 || priceRange.min > 0 || priceRange.max < maxProductPrice) && (
                   <button className="clear-filters" onClick={clearAllFilters}>
                     {t.clearAll}
@@ -480,6 +481,7 @@ const Offers50 = () => {
                 )}
               </div>
             </aside>
+            {mobileFilterOpen && <div className="mobile-filter-overlay" onClick={() => setMobileFilterOpen(false)}></div>}
 
             {/* Right Content - Products */}
             <main className="products-main">
@@ -499,32 +501,7 @@ const Offers50 = () => {
                     </select>
                   </div>
 
-                  <div className="view-toggle">
-                    <button 
-                      className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
-                      onClick={() => setViewMode('grid')}
-                      aria-label="Grid view"
-                    >
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                        <rect x="3" y="3" width="7" height="7" rx="1"/>
-                        <rect x="14" y="3" width="7" height="7" rx="1"/>
-                        <rect x="3" y="14" width="7" height="7" rx="1"/>
-                        <rect x="14" y="14" width="7" height="7" rx="1"/>
-                      </svg>
-                    </button>
-                    <button 
-                      className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
-                      onClick={() => setViewMode('list')}
-                      aria-label="List view"
-                    >
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                        <rect x="3" y="4" width="18" height="4" rx="1"/>
-                        <rect x="3" y="10" width="18" height="4" rx="1"/>
-                        <rect x="3" y="16" width="18" height="4" rx="1"/>
-                      </svg>
-                    </button>
                   </div>
-                </div>
               </div>
 
               {/* Loading State */}
@@ -553,7 +530,7 @@ const Offers50 = () => {
 
               {/* Products Grid */}
               {!loading && !error && filteredProducts.length > 0 && (
-                <div className={`products-grid ${viewMode}`}>
+                <div className="products-grid">
                   {filteredProducts.map((product, index) => {
                     const discount = getDiscountPercent(product);
                     const originalPrice = getOriginalPrice(product);
@@ -591,8 +568,6 @@ const Offers50 = () => {
                         {/* Product Info */}
                         <div className="product-info">
                           <h3 className="product-name">{productName}</h3>
-                          <p className="product-desc">{productDesc}</p>
-                          
                           {/* Price Row */}
                           <div className="product-footer">
                             <div className="price-wrapper">

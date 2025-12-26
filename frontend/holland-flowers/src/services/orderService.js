@@ -10,12 +10,12 @@ const ORDER_ENDPOINTS = {
   LIST: '/orders',
   DETAIL: (orderId) => `/orders/${orderId}`,
   BY_NUMBER: (orderNumber) => `/orders/number/${orderNumber}`,
-  BY_STATUS: (status) => `/orders/status/${status}`,
+  BY_DELIVERY_STATUS: (status) => `/orders/delivery-status/${status}`,
   CANCEL: (orderId) => `/orders/${orderId}/cancel`,
 };
 
-// Order status constants (matching backend enum)
-export const ORDER_STATUS = {
+// Delivery status constants (matching backend enum)
+export const DELIVERY_STATUS = {
   PENDING: 'PENDING',
   CONFIRMED: 'CONFIRMED',
   PROCESSING: 'PROCESSING',
@@ -25,8 +25,8 @@ export const ORDER_STATUS = {
   REFUNDED: 'REFUNDED',
 };
 
-// Order status display names
-export const ORDER_STATUS_DISPLAY = {
+// Delivery status display names
+export const DELIVERY_STATUS_DISPLAY = {
   PENDING: { en: 'Pending', ar: 'قيد الانتظار' },
   CONFIRMED: { en: 'Confirmed', ar: 'مؤكد' },
   PROCESSING: { en: 'Processing', ar: 'قيد المعالجة' },
@@ -36,26 +36,39 @@ export const ORDER_STATUS_DISPLAY = {
   REFUNDED: { en: 'Refunded', ar: 'مسترد' },
 };
 
+// Payment status constants
+export const PAYMENT_STATUS = {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  CAPTURED: 'CAPTURED',
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED',
+  REFUNDED: 'REFUNDED',
+  PARTIALLY_REFUNDED: 'PARTIALLY_REFUNDED',
+  EXPIRED: 'EXPIRED',
+  ON_HOLD: 'ON_HOLD',
+};
+
+// Payment status display names
+export const PAYMENT_STATUS_DISPLAY = {
+  PENDING: { en: 'Pending', ar: 'قيد الانتظار' },
+  PROCESSING: { en: 'Processing', ar: 'قيد المعالجة' },
+  COMPLETED: { en: 'Completed', ar: 'مكتمل' },
+  CAPTURED: { en: 'Captured', ar: 'تم الخصم' },
+  FAILED: { en: 'Failed', ar: 'فشل' },
+  CANCELLED: { en: 'Cancelled', ar: 'ملغي' },
+  REFUNDED: { en: 'Refunded', ar: 'مسترد' },
+  PARTIALLY_REFUNDED: { en: 'Partially Refunded', ar: 'مسترد جزئياً' },
+  EXPIRED: { en: 'Expired', ar: 'منتهي' },
+  ON_HOLD: { en: 'On Hold', ar: 'معلق' },
+};
+
 const orderService = {
   /**
    * Create a new order
    * @param {Object} orderData - Order creation data
    * @returns {Promise} Created order details
-   * 
-   * orderData structure:
-   * {
-   *   items: [{ productId, quantity, specialInstructions }],
-   *   cardMessage: string,
-   *   instructionMessage: string,
-   *   recipientName: string (required),
-   *   recipientPhone: string (required),
-   *   deliveryAddress: string (required),
-   *   deliveryArea: string,
-   *   deliveryCity: string,
-   *   deliveryNotes: string,
-   *   preferredDeliveryDate: ISO datetime string,
-   *   couponCode: string
-   * }
    */
   createOrder: async (orderData) => {
     try {
@@ -112,15 +125,15 @@ const orderService = {
   },
 
   /**
-   * Get user's orders by status
-   * @param {string} status - Order status (from ORDER_STATUS)
+   * Get user's orders by delivery status
+   * @param {string} status - Delivery status (from DELIVERY_STATUS)
    * @param {Object} params - { page, size }
    * @returns {Promise} Paginated order list
    */
-  getOrdersByStatus: async (status, params = {}) => {
+  getOrdersByDeliveryStatus: async (status, params = {}) => {
     try {
       const { page = 0, size = 10 } = params;
-      const response = await api.get(ORDER_ENDPOINTS.BY_STATUS(status), {
+      const response = await api.get(ORDER_ENDPOINTS.BY_DELIVERY_STATUS(status), {
         params: { page, size },
       });
       return response;
@@ -144,22 +157,32 @@ const orderService = {
   },
 
   /**
-   * Get status display name
-   * @param {string} status - Order status
+   * Get delivery status display name
+   * @param {string} status - Delivery status
    * @param {string} lang - Language code ('en' or 'ar')
    * @returns {string} Display name
    */
-  getStatusDisplayName: (status, lang = 'en') => {
-    return ORDER_STATUS_DISPLAY[status]?.[lang] || status;
+  getDeliveryStatusDisplayName: (status, lang = 'en') => {
+    return DELIVERY_STATUS_DISPLAY[status]?.[lang] || status;
+  },
+
+  /**
+   * Get payment status display name
+   * @param {string} status - Payment status
+   * @param {string} lang - Language code ('en' or 'ar')
+   * @returns {string} Display name
+   */
+  getPaymentStatusDisplayName: (status, lang = 'en') => {
+    return PAYMENT_STATUS_DISPLAY[status]?.[lang] || status;
   },
 
   /**
    * Check if order can be cancelled
-   * @param {string} status - Current order status
+   * @param {string} status - Current delivery status
    * @returns {boolean}
    */
   canCancelOrder: (status) => {
-    return status === ORDER_STATUS.PENDING;
+    return status === DELIVERY_STATUS.PENDING;
   },
 
   /**
@@ -171,8 +194,9 @@ const orderService = {
   formatOrderForDisplay: (order, lang = 'en') => {
     return {
       ...order,
-      statusDisplay: orderService.getStatusDisplayName(order.orderStatus, lang),
-      canCancel: orderService.canCancelOrder(order.orderStatus),
+      deliveryStatusDisplay: orderService.getDeliveryStatusDisplayName(order.deliveryStatus, lang),
+      paymentStatusDisplay: orderService.getPaymentStatusDisplayName(order.paymentStatus, lang),
+      canCancel: orderService.canCancelOrder(order.deliveryStatus),
       formattedTotal: `${lang === 'ar' ? 'د.ك' : 'KWD'} ${order.totalAmount?.toFixed(3)}`,
       formattedDate: new Date(order.createdAt).toLocaleDateString(
         lang === 'ar' ? 'ar-KW' : 'en-KW',

@@ -68,6 +68,11 @@ const Cart = () => {
       item: 'item',
       backToShopping: '← Back to Shopping',
       secureCheckout: '🔒 Secure Checkout',
+      // New translations for item details
+      deliveryDate: 'Delivery Date',
+      deliveryTime: 'Delivery Time',
+      cardMessage: 'Card Message',
+      senderInfo: 'Sender',
     },
     ar: {
       title: 'سلة التسوق',
@@ -98,6 +103,11 @@ const Cart = () => {
       item: 'عنصر',
       backToShopping: 'العودة للتسوق ←',
       secureCheckout: '🔒 دفع آمن',
+      // New translations for item details
+      deliveryDate: 'تاريخ التوصيل',
+      deliveryTime: 'وقت التوصيل',
+      cardMessage: 'رسالة البطاقة',
+      senderInfo: 'المرسل',
     }
   };
 
@@ -174,14 +184,6 @@ const Cart = () => {
         <div className="cart-content">
           {/* Cart Items Section */}
           <div className="cart-items-section">
-            {/* Table Header - Desktop Only */}
-            <div className="cart-table-header">
-              <div className="col-product">{text.product}</div>
-              <div className="col-price">{text.price}</div>
-              <div className="col-quantity">{text.quantity}</div>
-              <div className="col-total">{text.total}</div>
-              <div className="col-action"></div>
-            </div>
 
             {/* Cart Items */}
             <div className="cart-items-list">
@@ -192,36 +194,87 @@ const Cart = () => {
                 const itemTotal = displayPrice * item.quantity;
 
                 return (
-                  <div key={`${item.id}-${item.selectedVariant || ''}-${index}`} className="cart-item-row">
-                    {/* Product Column */}
-                    <div className="col-product">
-                      <div className="product-image">
+                  <div key={`${item.id}-${item.selectedVariant || ''}-${index}`} className="cart-item-card">
+                    {/* Remove Button */}
+                    <button 
+                      type="button"
+                      className="remove-btn"
+                      onClick={() => removeFromCart(item.id, item.selectedVariant)}
+                      aria-label={text.remove}
+                    >
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6"/>
+                      </svg>
+                    </button>
+
+                    {/* Main Content */}
+                    <div className="cart-item-main">
+                      {/* Product Image */}
+                      <div className="cart-item-image">
                         <img 
                           src={item.image} 
                           alt={currentLang === 'ar' ? item.nameAr : item.nameEn}
                           onError={(e) => { e.target.src = '/images/placeholder.webp'; }}
                         />
                       </div>
-                      <div className="product-info">
-                        <h3 className="product-name">
+
+                      {/* Product Details */}
+                      <div className="cart-item-details">
+                        <h3 className="cart-item-name">
                           {currentLang === 'ar' ? (item.nameAr || item.nameEn || item.name) : (item.nameEn || item.name)}
                         </h3>
+                        
                         {item.selectedVariant && (
-                          <span className="product-variant">{item.selectedVariant}</span>
+                          <span className="cart-item-variant">{item.selectedVariant}</span>
+                        )}
+
+                        {/* Price Display */}
+                        <div className="cart-item-price">
+                          <span className="price-current">{displayPrice.toFixed(3)} {text.kd}</span>
+                          {itemHasDiscount && (
+                            <span className="price-original">{originalPrice.toFixed(3)} {text.kd}</span>
+                          )}
+                        </div>
+
+                        {/* Delivery & Card Info */}
+                        {(item.deliveryDate || item.deliveryTime || item.cardMessage || item.senderInfo) && (
+                          <div className="cart-item-extras">
+                            {item.deliveryDate && (
+                              <div className="extra-item">
+                                <span className="extra-icon">📅</span>
+                                <span className="extra-label">{text.deliveryDate}:</span>
+                                <span className="extra-value">{item.deliveryDate}</span>
+                              </div>
+                            )}
+                            {item.deliveryTime && (
+                              <div className="extra-item">
+                                <span className="extra-icon">🕐</span>
+                                <span className="extra-label">{text.deliveryTime}:</span>
+                                <span className="extra-value">{item.deliveryTime}</span>
+                              </div>
+                            )}
+                            {item.senderInfo && (
+                              <div className="extra-item">
+                                <span className="extra-icon">👤</span>
+                                <span className="extra-label">{text.senderInfo}:</span>
+                                <span className="extra-value">{item.senderInfo}</span>
+                              </div>
+                            )}
+                            {item.cardMessage && (
+                              <div className="extra-item card-message-item">
+                                <span className="extra-icon">💌</span>
+                                <span className="extra-label">{text.cardMessage}:</span>
+                                <span className="extra-value card-message-text">"{item.cardMessage}"</span>
+                              </div>
+                            )}
+                          </div>
                         )}
                       </div>
                     </div>
 
-                    {/* Price Column */}
-                    <div className="col-price">
-                      <span className="current-price">{displayPrice.toFixed(3)} {text.kd}</span>
-                      {itemHasDiscount && (
-                        <span className="original-price">{originalPrice.toFixed(3)} {text.kd}</span>
-                      )}
-                    </div>
-
-                    {/* Quantity Column */}
-                    <div className="col-quantity">
+                    {/* Actions Row */}
+                    <div className="cart-item-actions">
+                      {/* Quantity Selector */}
                       <div className="qty-selector">
                         <button 
                           type="button"
@@ -240,25 +293,11 @@ const Cart = () => {
                           <span>+</span>
                         </button>
                       </div>
-                    </div>
 
-                    {/* Total Column */}
-                    <div className="col-total">
-                      <span className="total-price">{itemTotal.toFixed(3)} {text.kd}</span>
-                    </div>
-
-                    {/* Action Column */}
-                    <div className="col-action">
-                      <button 
-                        type="button"
-                        className="remove-btn"
-                        onClick={() => removeFromCart(item.id, item.selectedVariant)}
-                        aria-label={text.remove}
-                      >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6"/>
-                        </svg>
-                      </button>
+                      {/* Item Total */}
+                      <div className="cart-item-total">
+                        <span className="total-price">{itemTotal.toFixed(3)} {text.kd}</span>
+                      </div>
                     </div>
                   </div>
                 );

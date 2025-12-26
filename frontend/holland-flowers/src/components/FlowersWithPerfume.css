@@ -1,452 +1,495 @@
 /* ============================================
-   Flowers With Perfume Page - Luxury Design
+   Flowers with Perfume - STYLED PAGE
+   Theme: #9c27b0
    ============================================ */
 
-/* Page Container */
-.flowers-perfume-page {
+.flowerswithperfume-page {
   min-height: 100vh;
-  background: linear-gradient(180deg, var(--bg-primary) 0%, #fff8f5 50%, #fef5ff 100%);
-  position: relative;
-  overflow-x: hidden;
-  padding-bottom: 80px;
+  background: #ffffff;
 }
 
-.flowers-perfume-page.rtl {
+.flowerswithperfume-page.rtl {
   direction: rtl;
 }
 
-/* Decorative Background */
-.perfume-bg {
-  position: fixed;
+.flowerswithperfume-page .container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* HERO BANNER */
+.flowerswithperfume-page .hero-banner {
+  background: linear-gradient(135deg, #f3e5f5 0%, #f9f2fa 50%, #f3e5f5 100%);
+  padding: 50px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.flowerswithperfume-page .hero-bg-decoration {
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
 }
 
-.sparkle {
+.flowerswithperfume-page .floating-icon {
   position: absolute;
-  font-size: 30px;
-  opacity: 0.2;
-  animation: sparkleFloat 8s ease-in-out infinite;
+  font-size: 40px;
+  opacity: 0.15;
+  animation: floatFlowersWithPerfume 15s ease-in-out infinite;
 }
 
-.sparkle-1 {
-  top: 15%;
-  left: 10%;
-  animation-delay: 0s;
+.flowerswithperfume-page .float-1 { top: 10%; left: 5%; }
+.flowerswithperfume-page .float-2 { top: 60%; right: 8%; font-size: 35px; animation-delay: -5s; }
+.flowerswithperfume-page .float-3 { bottom: 15%; left: 15%; font-size: 30px; animation-delay: -10s; }
+
+@keyframes floatFlowersWithPerfume {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(10deg); }
 }
 
-.sparkle-2 {
-  top: 45%;
-  right: 12%;
-  animation-delay: -3s;
-  font-size: 25px;
-}
-
-.sparkle-3 {
-  bottom: 25%;
-  left: 20%;
-  animation-delay: -6s;
-  font-size: 35px;
-}
-
-@keyframes sparkleFloat {
-  0%, 100% { transform: translateY(0) scale(1); opacity: 0.2; }
-  50% { transform: translateY(-20px) scale(1.2); opacity: 0.4; }
-}
-
-.bg-gradient-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(100px);
-  opacity: 0.4;
-}
-
-.orb-1 {
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, var(--secondary) 0%, transparent 70%);
-  top: -150px;
-  right: -100px;
-}
-
-.orb-2 {
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, var(--warning) 0%, transparent 70%);
-  bottom: 10%;
-  left: -100px;
-}
-
-/* Container */
-.flowers-perfume-page .container {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 24px;
+.flowerswithperfume-page .hero-content {
   position: relative;
-  z-index: 1;
-}
-
-/* Breadcrumb */
-.flowers-perfume-page .breadcrumb-nav {
-  padding: 20px 0;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(155, 89, 182, 0.15);
-}
-
-.flowers-perfume-page .breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  font-family: 'Poppins', sans-serif;
-  font-size: 14px;
-}
-
-.flowers-perfume-page.rtl .breadcrumb {
-  font-family: 'Tajawal', sans-serif;
-}
-
-.flowers-perfume-page .breadcrumb a {
-  color: #8e7a9e;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.flowers-perfume-page .breadcrumb a:hover {
-  color: var(--secondary);
-}
-
-.flowers-perfume-page .breadcrumb .separator {
-  color: #c9b8d8;
-  display: flex;
-}
-
-.flowers-perfume-page.rtl .breadcrumb .separator svg {
-  transform: scaleX(-1);
-}
-
-.flowers-perfume-page .breadcrumb .current {
-  color: #5d4a6d;
-  font-weight: 500;
-}
-
-/* Hero Section */
-.flowers-perfume-page .page-hero {
-  padding: 50px 0 40px;
+  z-index: 2;
   text-align: center;
-}
-
-.flowers-perfume-page .hero-content {
   max-width: 800px;
   margin: 0 auto;
 }
 
-.flowers-perfume-page .hero-icon {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 20px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--secondary) 0%, var(--warning) 100%);
-  display: flex;
+.flowerswithperfume-page .hero-badge {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  font-size: 36px;
-  box-shadow: 0 10px 40px rgba(155, 89, 182, 0.4);
-  animation: iconPulse 3s ease-in-out infinite;
-}
-
-@keyframes iconPulse {
-  0%, 100% { transform: scale(1); box-shadow: 0 10px 40px rgba(155, 89, 182, 0.4); }
-  50% { transform: scale(1.05); box-shadow: 0 15px 50px rgba(155, 89, 182, 0.5); }
-}
-
-.flowers-perfume-page .hero-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 52px;
-  font-weight: 600;
-  color: var(--text-dark);
-  margin: 0 0 14px;
-  line-height: 1.2;
-  background: linear-gradient(135deg, var(--text-dark) 0%, var(--secondary) 50%, var(--warning) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.flowers-perfume-page.rtl .hero-title {
-  font-family: 'Amiri', serif;
-  font-size: 46px;
-}
-
-.flowers-perfume-page .hero-subtitle {
-  font-family: 'Poppins', sans-serif;
-  font-size: 17px;
-  font-weight: 300;
-  color: #6d5d7d;
-  margin: 0 0 30px;
-  line-height: 1.7;
-}
-
-.flowers-perfume-page.rtl .hero-subtitle {
-  font-family: 'Tajawal', sans-serif;
-}
-
-/* Hero Stats */
-.flowers-perfume-page .hero-stats {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 35px;
-  padding: 22px 40px;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(155, 89, 182, 0.15);
-  max-width: 550px;
-  margin: 0 auto;
-}
-
-.flowers-perfume-page .stat {
-  text-align: center;
-}
-
-.flowers-perfume-page .stat-number {
-  display: block;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 32px;
-  font-weight: 700;
-  color: var(--secondary);
-  line-height: 1;
-}
-
-.flowers-perfume-page.rtl .stat-number {
-  font-family: 'Amiri', serif;
-}
-
-.flowers-perfume-page .stat-label {
-  font-family: 'Poppins', sans-serif;
-  font-size: 11px;
-  color: #8d7d9d;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.flowers-perfume-page.rtl .stat-label {
-  font-family: 'Tajawal', sans-serif;
-  text-transform: none;
-  letter-spacing: 0;
-}
-
-.flowers-perfume-page .stat-divider {
-  width: 1px;
-  height: 40px;
-  background: linear-gradient(180deg, transparent, #d8c8e8, transparent);
-}
-
-/* Products Section */
-.flowers-perfume-page .products-section {
-  padding: 30px 0 60px;
-}
-
-.flowers-perfume-page .products-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 28px;
-}
-
-/* Product Card */
-.flowers-perfume-page .product-card {
-  background: white;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 8px 35px rgba(61, 45, 77, 0.08);
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  animation: cardFadeIn 0.6s ease-out forwards;
-  opacity: 0;
-  text-decoration: none;
-  display: block;
-}
-
-@keyframes cardFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.flowers-perfume-page .product-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 55px rgba(155, 89, 182, 0.2);
-}
-
-/* Perfume Badge */
-.flowers-perfume-page .perfume-badge {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary) 100%);
-  border-radius: 20px;
+  gap: 10px;
+  padding: 10px 22px;
+  background: linear-gradient(135deg, #9c27b0 0%, #842195 100%);
+  border-radius: 50px;
   color: white;
   font-family: 'Poppins', sans-serif;
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 600;
-  box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4);
+  margin-bottom: 18px;
+  box-shadow: 0 8px 25px rgba(156, 39, 176, 0.35);
 }
 
-.flowers-perfume-page.rtl .perfume-badge {
-  left: auto;
-  right: 16px;
-  font-family: 'Tajawal', sans-serif;
-  flex-direction: row-reverse;
+.flowerswithperfume-page .hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 48px;
+  font-weight: 600;
+  font-style: italic;
+  color: #2d2d2d;
+  margin: 0 0 14px;
+  line-height: 1.1;
 }
 
-/* Product Badge */
-.flowers-perfume-page .product-badge {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  z-index: 10;
-  padding: 6px 14px;
-  border-radius: 20px;
+.flowerswithperfume-page.rtl .hero-title {
+  font-family: 'Amiri', serif;
+  font-size: 42px;
+}
+
+.flowerswithperfume-page .hero-subtitle {
   font-family: 'Poppins', sans-serif;
-  font-size: 10px;
+  font-size: 15px;
+  color: #666;
+  margin: 0 auto;
+  line-height: 1.7;
+  max-width: 600px;
+}
+
+/* MAIN CONTENT */
+.flowerswithperfume-page .main-content {
+  padding: 40px 0 80px;
+}
+
+.flowerswithperfume-page .content-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 50px;
+  align-items: start;
+}
+
+/* FILTERS SIDEBAR */
+.flowerswithperfume-page .filters-sidebar {
+  position: sticky;
+  top: 20px;
+}
+
+.flowerswithperfume-page .filters-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.flowerswithperfume-page .filters-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
   font-weight: 600;
-  text-transform: uppercase;
+  color: #2d2d2d;
+  margin: 0;
+}
+
+.flowerswithperfume-page .clear-filters {
+  background: none;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #9c27b0;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.flowerswithperfume-page .filter-section {
+  border-bottom: 1px solid #f0eded;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.flowerswithperfume-page .filter-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2d2d2d;
   letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
-.flowers-perfume-page.rtl .product-badge {
-  right: auto;
-  left: 16px;
-  font-family: 'Tajawal', sans-serif;
-  text-transform: none;
+.flowerswithperfume-page .filter-header svg {
+  transition: transform 0.3s ease;
+  color: #999;
 }
 
-.flowers-perfume-page .badge-bestseller {
-  background: linear-gradient(135deg, var(--warning) 0%, #c9a227 100%);
-  color: #4a3f00;
-  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+.flowerswithperfume-page .filter-header.open svg {
+  transform: rotate(180deg);
 }
 
-.flowers-perfume-page .badge-new {
-  background: linear-gradient(135deg, var(--accent-light) 0%, #88d8b0 100%);
-  color: #1a5c3a;
-  box-shadow: 0 4px 15px rgba(168, 230, 207, 0.4);
+.flowerswithperfume-page .filter-content {
+  margin-top: 18px;
 }
 
-/* Product Image */
-.flowers-perfume-page .product-image-wrapper {
-  position: relative;
-  height: 320px;
+.flowerswithperfume-page .price-inputs {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.flowerswithperfume-page .price-input-group {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
   overflow: hidden;
-  background: linear-gradient(180deg, var(--bg-primary) 0%, #f5eafa 100%);
+  flex: 1;
 }
 
-.flowers-perfume-page .product-image {
+.flowerswithperfume-page .price-input-group .currency-label {
+  padding: 10px 12px;
+  background: #fafafa;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #999;
+  border-right: 1px solid #e5e5e5;
+}
+
+.flowerswithperfume-page .price-input-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #2d2d2d;
+  outline: none;
+}
+
+.flowerswithperfume-page .price-separator {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #999;
+}
+
+.flowerswithperfume-page .price-hint {
+  margin: 14px 0 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #999;
+}
+
+.flowerswithperfume-page .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+.flowerswithperfume-page .checkbox-label:hover {
+  color: #9c27b0;
+}
+
+.flowerswithperfume-page .checkbox-label input[type="checkbox"] {
+  display: none;
+}
+
+.flowerswithperfume-page .checkbox-label .checkmark {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.flowerswithperfume-page .checkbox-label input:checked + .checkmark {
+  background: #9c27b0;
+  border-color: #9c27b0;
+}
+
+.flowerswithperfume-page .checkbox-label input:checked + .checkmark::after {
+  content: '';
+  width: 5px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-bottom: 2px;
+}
+
+.flowerswithperfume-page .checkbox-label .label-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #4a4a4a;
+}
+
+/* PRODUCTS MAIN */
+.flowerswithperfume-page .products-main {
+  min-height: 500px;
+}
+
+.flowerswithperfume-page .products-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0eded;
+}
+
+.flowerswithperfume-page .items-count {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.flowerswithperfume-page .toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.flowerswithperfume-page .sort-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.flowerswithperfume-page .sort-dropdown label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #666;
+}
+
+.flowerswithperfume-page .sort-dropdown select {
+  padding: 8px 32px 8px 14px;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #2d2d2d;
+  background: white;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  outline: none;
+}
+
+.flowerswithperfume-page .sort-dropdown select:focus {
+  border-color: #9c27b0;
+}
+
+.flowerswithperfume-page .view-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.flowerswithperfume-page .view-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  transition: all 0.2s ease;
+}
+
+.flowerswithperfume-page .view-btn.active {
+  background: white;
+  color: #9c27b0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* PRODUCTS GRID */
+.flowerswithperfume-page .products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.flowerswithperfume-page .products-grid.list {
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+/* PRODUCT CARD */
+.flowerswithperfume-page .product-card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  animation: cardFadeInFlowersWithPerfume 0.5s ease forwards;
+  opacity: 0;
+  border: 1px solid #f5f5f5;
+}
+
+@keyframes cardFadeInFlowersWithPerfume {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.flowerswithperfume-page .product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(156, 39, 176, 0.12);
+  border-color: #f3e5f5;
+}
+
+.flowerswithperfume-page .products-grid.list .product-card {
+  flex-direction: row;
+}
+
+.flowerswithperfume-page .products-grid.list .product-image-wrapper {
+  width: 300px;
+  height: 280px;
+  flex-shrink: 0;
+}
+
+.flowerswithperfume-page .products-grid.list .product-info {
+  flex: 1;
+  padding: 12px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.flowerswithperfume-page .discount-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 10;
+  padding: 8px 14px;
+  background: linear-gradient(135deg, #9c27b0 0%, #842195 100%);
+  color: #ffffff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 50px;
+  box-shadow: 0 4px 15px rgba(156, 39, 176, 0.35);
+}
+
+.flowerswithperfume-page.rtl .discount-badge {
+  left: auto;
+  right: 14px;
+}
+
+.flowerswithperfume-page .product-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #f3e5f5 0%, #fff 100%);
+}
+
+.flowerswithperfume-page .product-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  padding: 25px;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.flowers-perfume-page .product-card:hover .product-image {
+.flowerswithperfume-page .product-card:hover .product-image {
   transform: scale(1.08);
 }
 
-/* Product Overlay */
-.flowers-perfume-page .product-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 20px;
-  background: linear-gradient(180deg, transparent 0%, rgba(61, 45, 77, 0.85) 100%);
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+.flowerswithperfume-page .product-info {
+  padding: 12px 0 0 0;
+  background: #ffffff;
+  flex: 1;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
 }
 
-.flowers-perfume-page .product-card:hover .product-overlay {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.flowers-perfume-page .quick-add-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  background: white;
-  border: none;
-  border-radius: 50px;
+.flowerswithperfume-page .product-name {
   font-family: 'Poppins', sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  color: #5d4a6d;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.flowers-perfume-page.rtl .quick-add-btn {
-  font-family: 'Tajawal', sans-serif;
-  flex-direction: row-reverse;
-}
-
-.flowers-perfume-page .quick-add-btn:hover {
-  background: linear-gradient(135deg, var(--secondary) 0%, var(--warning) 100%);
-  color: white;
-  transform: scale(1.05);
-}
-
-/* Product Details */
-.flowers-perfume-page .product-details {
-  padding: 22px;
-}
-
-.flowers-perfume-page .product-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 22px;
-  font-weight: 600;
-  color: var(--text-dark);
-  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #2d2d2d;
+  margin: 0 0 6px;
   line-height: 1.3;
   display: -webkit-box;
-  -webkit-line-clamp: 1;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  transition: color 0.3s ease;
 }
 
-.flowers-perfume-page.rtl .product-name {
-  font-family: 'Amiri', serif;
+.flowerswithperfume-page .product-card:hover .product-name {
+  color: #9c27b0;
 }
 
-.flowers-perfume-page .product-desc {
+.flowerswithperfume-page .product-desc {
   font-family: 'Poppins', sans-serif;
   font-size: 13px;
-  color: #8d7d9d;
-  margin: 0 0 14px;
+  color: #888;
+  margin: 0 0 6px;
   line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -454,51 +497,41 @@
   overflow: hidden;
 }
 
-.flowers-perfume-page.rtl .product-desc {
-  font-family: 'Tajawal', sans-serif;
-}
-
-.flowers-perfume-page .product-footer {
+.flowerswithperfume-page .product-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-top: auto;
 }
 
-.flowers-perfume-page .price-wrapper {
+.flowerswithperfume-page .price-wrapper {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.flowers-perfume-page .original-price {
+.flowerswithperfume-page .original-price {
   font-family: 'Poppins', sans-serif;
   font-size: 12px;
-  color: #b8a8c8;
+  color: #bbb;
   text-decoration: line-through;
 }
 
-.flowers-perfume-page.rtl .original-price {
-  font-family: 'Tajawal', sans-serif;
-}
-
-.flowers-perfume-page .sale-price {
+.flowerswithperfume-page .sale-price {
   font-family: 'Poppins', sans-serif;
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--secondary);
+  font-size: 16px;
+  font-weight: 700;
+  color: #9c27b0;
 }
 
-.flowers-perfume-page.rtl .sale-price {
-  font-family: 'Tajawal', sans-serif;
-}
-
-.flowers-perfume-page .cart-icon-btn {
-  width: 46px;
-  height: 46px;
+.flowerswithperfume-page .add-btn {
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
-  border: 2px solid var(--secondary);
-  background: transparent;
-  color: var(--secondary);
+  border: none;
+  background: #f3e5f5;
+  color: #9c27b0;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -506,695 +539,2665 @@
   flex-shrink: 0;
 }
 
-.flowers-perfume-page .product-card:hover .cart-icon-btn {
-  background: linear-gradient(135deg, var(--secondary) 0%, var(--warning) 100%);
-  border-color: transparent;
-  color: white;
-  transform: rotate(90deg);
+.flowerswithperfume-page .add-btn:hover {
+  background: linear-gradient(135deg, #9c27b0 0%, #842195 100%);
+  color: #ffffff;
+  transform: scale(1.08);
 }
 
-/* Info Banner */
-.flowers-perfume-page .info-banner {
-  padding: 0 0 40px;
+.flowerswithperfume-page .add-btn.adding {
+  background: #9c27b0;
+  color: #ffffff;
 }
 
-.flowers-perfume-page .banner-content {
+/* STATES */
+.flowerswithperfume-page .loading-state,
+.flowerswithperfume-page .error-state,
+.flowerswithperfume-page .empty-state {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 24px;
-  padding: 30px 40px;
-  background: linear-gradient(135deg, rgba(155, 89, 182, 0.1) 0%, rgba(212, 175, 55, 0.1) 100%);
-  border: 1px solid rgba(155, 89, 182, 0.2);
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
 }
 
-.flowers-perfume-page.rtl .banner-content {
-  flex-direction: row-reverse;
-  text-align: right;
-}
-
-.flowers-perfume-page .banner-icon {
-  width: 70px;
-  height: 70px;
+.flowerswithperfume-page .spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f3e5f5;
+  border-top-color: #9c27b0;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--secondary) 0%, var(--warning) 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  flex-shrink: 0;
-  animation: iconPulse 3s ease-in-out infinite;
-  box-shadow: 0 10px 30px rgba(155, 89, 182, 0.35);
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
 }
 
-.flowers-perfume-page .banner-text h3 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--text-dark);
-  margin: 0 0 8px;
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
-.flowers-perfume-page.rtl .banner-text h3 {
-  font-family: 'Amiri', serif;
-}
-
-.flowers-perfume-page .banner-text p {
+.flowerswithperfume-page .loading-state p,
+.flowerswithperfume-page .error-state p,
+.flowerswithperfume-page .empty-state p {
   font-family: 'Poppins', sans-serif;
-  font-size: 14px;
-  color: #6d5d7d;
+  font-size: 15px;
+  color: #666;
   margin: 0;
-  line-height: 1.5;
 }
 
-.flowers-perfume-page.rtl .banner-text p {
-  font-family: 'Tajawal', sans-serif;
+.flowerswithperfume-page .empty-icon {
+  font-size: 50px;
+  margin-bottom: 16px;
 }
 
-/* ============================================
-   RESPONSIVE DESIGN - 5 BREAKPOINTS
-   ============================================ */
-
-/* Large Desktop */
+/* RESPONSIVE */
 @media (max-width: 1200px) {
-  .flowers-perfume-page .hero-title {
-    font-size: 46px;
-  }
-
-  .flowers-perfume-page .products-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-  }
-
-  .flowers-perfume-page .product-image-wrapper {
-    height: 280px;
-  }
+  .flowerswithperfume-page .content-layout { grid-template-columns: 250px 1fr; gap: 40px; }
+  .flowerswithperfume-page .products-grid { grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .flowerswithperfume-page .product-image-wrapper { height: 280px; }
+  .flowerswithperfume-page .hero-title { font-size: 42px; }
 }
 
-/* Tablet Landscape */
 @media (max-width: 992px) {
-  .flowers-perfume-page .products-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
-
-  .flowers-perfume-page .product-image-wrapper {
-    height: 240px;
-  }
-
-  .flowers-perfume-page .banner-content {
-    flex-direction: column;
-    text-align: center;
-    padding: 26px;
-  }
-
-  .flowers-perfume-page.rtl .banner-content {
-    flex-direction: column;
-    text-align: center;
-  }
+  .flowerswithperfume-page .hero-banner { padding: 40px 0; }
+  .flowerswithperfume-page .hero-title { font-size: 38px; }
+  .flowerswithperfume-page .content-layout { grid-template-columns: 220px 1fr; gap: 30px; }
+  .flowerswithperfume-page .products-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .flowerswithperfume-page .product-image-wrapper { height: 260px; }
 }
 
-/* Tablet Portrait */
 @media (max-width: 768px) {
-  .flowers-perfume-page {
-    padding-bottom: 60px;
-  }
-
-  /* Floating decorations */
-  .sparkle {
-    font-size: 22px;
-    opacity: 0.15;
-  }
-
-  .sparkle-1 { font-size: 24px; }
-  .sparkle-2 { font-size: 20px; }
-  .sparkle-3 { font-size: 26px; }
-
-  /* Container */
-  .flowers-perfume-page .container {
-    padding: 0 16px;
-  }
-
-  /* Breadcrumb */
-  .flowers-perfume-page .breadcrumb-nav {
-    padding: 12px 0;
-  }
-
-  .flowers-perfume-page .breadcrumb {
-    font-size: 12px;
-    gap: 6px;
-  }
-
-  /* Hero */
-  .flowers-perfume-page .page-hero {
-    padding: 30px 0 25px;
-  }
-
-  .flowers-perfume-page .hero-icon {
-    width: 65px;
-    height: 65px;
-    font-size: 28px;
-    margin-bottom: 16px;
-  }
-
-  .flowers-perfume-page .hero-title {
-    font-size: 34px;
-    margin-bottom: 10px;
-  }
-
-  .flowers-perfume-page.rtl .hero-title {
-    font-size: 30px;
-  }
-
-  .flowers-perfume-page .hero-subtitle {
-    font-size: 14px;
-    margin-bottom: 22px;
-  }
-
-  .flowers-perfume-page .hero-stats {
-    gap: 22px;
-    padding: 18px 28px;
-    max-width: 480px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .flowers-perfume-page .stat-number {
-    font-size: 24px;
-  }
-
-  .flowers-perfume-page .stat-label {
-    font-size: 10px;
-  }
-
-  .flowers-perfume-page .stat-divider {
-    height: 32px;
-  }
-
-  /* Products */
-  .flowers-perfume-page .products-section {
-    padding: 20px 0 40px;
-  }
-
-  .flowers-perfume-page .products-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-  }
-
-  .flowers-perfume-page .product-card {
-    border-radius: 18px;
-  }
-
-  .flowers-perfume-page .product-card:hover {
-    transform: none;
-  }
-
-  .flowers-perfume-page .perfume-badge {
-    padding: 5px 10px;
-    font-size: 8px;
-    top: 10px;
-    left: 10px;
-    border-radius: 12px;
-  }
-
-  .flowers-perfume-page.rtl .perfume-badge {
-    left: auto;
-    right: 10px;
-  }
-
-  .flowers-perfume-page .product-badge {
-    padding: 4px 10px;
-    font-size: 8px;
-    top: 10px;
-    right: 10px;
-    border-radius: 12px;
-  }
-
-  .flowers-perfume-page.rtl .product-badge {
-    right: auto;
-    left: 10px;
-  }
-
-  .flowers-perfume-page .product-image-wrapper {
-    height: 280px;
-  }
-
-  .flowers-perfume-page .product-image {
-    padding: 16px;
-  }
-
-  .flowers-perfume-page .product-overlay {
-    display: none;
-  }
-
-  .flowers-perfume-page .product-details {
-    padding: 16px;
-  }
-
-  .flowers-perfume-page .product-name {
-    font-size: 16px;
-    margin-bottom: 5px;
-  }
-
-  .flowers-perfume-page .product-desc {
-    font-size: 11px;
-    -webkit-line-clamp: 1;
-    margin-bottom: 10px;
-  }
-
-  .flowers-perfume-page .original-price {
-    font-size: 10px;
-  }
-
-  .flowers-perfume-page .sale-price {
-    font-size: 16px;
-  }
-
-  .flowers-perfume-page .cart-icon-btn {
-    width: 38px;
-    height: 38px;
-  }
-
-  .flowers-perfume-page .cart-icon-btn svg {
-    width: 16px;
-    height: 16px;
-  }
-
-  /* Banner */
-  .flowers-perfume-page .info-banner {
-    padding: 0 0 30px;
-  }
-
-  .flowers-perfume-page .banner-content {
-    flex-direction: column;
-    text-align: center;
-    padding: 22px 18px;
-    gap: 16px;
-    border-radius: 16px;
-  }
-
-  .flowers-perfume-page .banner-icon {
-    width: 58px;
-    height: 58px;
-  }
-
-  .flowers-perfume-page .banner-icon svg {
-    width: 28px;
-    height: 28px;
-  }
-
-  .flowers-perfume-page .banner-text h3 {
-    font-size: 19px;
-  }
-
-  .flowers-perfume-page .banner-text p {
-    font-size: 12px;
-  }
+  .flowerswithperfume-page .hero-banner { padding: 35px 0; }
+  .flowerswithperfume-page .hero-title { font-size: 32px; }
+  .flowerswithperfume-page .hero-subtitle { font-size: 14px; }
+  .flowerswithperfume-page .floating-icon { display: none; }
+  .flowerswithperfume-page .main-content { padding: 30px 0 60px; }
+  .flowerswithperfume-page .content-layout { grid-template-columns: 1fr; gap: 24px; }
+  .flowerswithperfume-page .filters-sidebar { position: relative; top: 0; padding: 20px; background: #f3e5f5; border-radius: 12px; }
+  .flowerswithperfume-page .products-toolbar { flex-wrap: wrap; gap: 16px; }
+  .flowerswithperfume-page .toolbar-right { width: 100%; justify-content: space-between; }
+  .flowerswithperfume-page .products-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .flowerswithperfume-page .product-image-wrapper { height: 240px; }
+  .flowerswithperfume-page .product-info { padding: 12px 0 0 0; }
+  .flowerswithperfume-page .product-name { font-size: 14px; margin-bottom: 4px; }
+  .flowerswithperfume-page .product-desc { font-size: 11px; margin-bottom: 10px; }
+  .flowerswithperfume-page .sale-price { font-size: 16px; }
+  .flowerswithperfume-page .add-btn { width: 38px; height: 38px; }
+  .flowerswithperfume-page .discount-badge { padding: 6px 12px; font-size: 10px; }
+  .flowerswithperfume-page .products-grid.list .product-card { flex-direction: column; }
+  .flowerswithperfume-page .products-grid.list .product-image-wrapper { width: 100%; height: 240px; }
 }
 
-/* Mobile */
-@media (max-width: 480px) {
-  .flowers-perfume-page {
-    padding-bottom: 50px;
-  }
-
-  /* Hide floating decorations */
-  .sparkle-3 {
-    display: none;
-  }
-
-  .orb-2 {
-    opacity: 0.25;
-  }
-
-  /* Container */
-  .flowers-perfume-page .container {
-    padding: 0 12px;
-  }
-
-  /* Breadcrumb */
-  .flowers-perfume-page .breadcrumb-nav {
-    padding: 10px 0;
-  }
-
-  .flowers-perfume-page .breadcrumb {
-    font-size: 11px;
-    gap: 4px;
-  }
-
-  .flowers-perfume-page .breadcrumb .separator svg {
-    width: 12px;
-    height: 12px;
-  }
-
-  /* Hero */
-  .flowers-perfume-page .page-hero {
-    padding: 20px 0;
-  }
-
-  .flowers-perfume-page .hero-icon {
-    width: 55px;
-    height: 55px;
-    font-size: 24px;
-    margin-bottom: 14px;
-  }
-
-  .flowers-perfume-page .hero-title {
-    font-size: 28px;
-  }
-
-  .flowers-perfume-page.rtl .hero-title {
-    font-size: 26px;
-  }
-
-  .flowers-perfume-page .hero-subtitle {
-    font-size: 13px;
-    margin-bottom: 18px;
-  }
-
-  .flowers-perfume-page .hero-stats {
-    flex-direction: row;
-    gap: 14px;
-    padding: 14px 18px;
-    max-width: 100%;
-    border-radius: 14px;
-  }
-
-  .flowers-perfume-page .stat-number {
-    font-size: 20px;
-  }
-
-  .flowers-perfume-page .stat-label {
-    font-size: 8px;
-    letter-spacing: 0.5px;
-  }
-
-  .flowers-perfume-page .stat-divider {
-    height: 28px;
-  }
-
-  /* Products */
-  .flowers-perfume-page .products-section {
-    padding: 16px 0 30px;
-  }
-
-  .flowers-perfume-page .products-grid {
-    gap: 10px;
-  }
-
-  .flowers-perfume-page .product-card {
-    border-radius: 14px;
-  }
-
-  .flowers-perfume-page .perfume-badge {
-    padding: 4px 8px;
-    font-size: 7px;
-    top: 8px;
-    left: 8px;
-    border-radius: 10px;
-    gap: 4px;
-  }
-
-  .flowers-perfume-page.rtl .perfume-badge {
-    left: auto;
-    right: 8px;
-  }
-
-  .flowers-perfume-page .perfume-badge svg {
-    width: 10px;
-    height: 10px;
-  }
-
-  .flowers-perfume-page .product-badge {
-    padding: 3px 8px;
-    font-size: 7px;
-    top: 8px;
-    right: 8px;
-    border-radius: 10px;
-  }
-
-  .flowers-perfume-page.rtl .product-badge {
-    right: auto;
-    left: 8px;
-  }
-
-  .flowers-perfume-page .product-image-wrapper {
-    height: 160px;
-  }
-
-  .flowers-perfume-page .product-image {
-    padding: 0;
-  }
-
-  .flowers-perfume-page .product-details {
-    padding: 0;
-  }
-
-  .flowers-perfume-page .product-name {
-    font-size: 13px;
-    margin-bottom: 3px;
-  }
-
-  .flowers-perfume-page .product-desc {
-    display: none;
-  }
-
-  .flowers-perfume-page .original-price {
-    font-size: 9px;
-  }
-
-  .flowers-perfume-page .sale-price {
-    font-size: 13px;
-  }
-
-  .flowers-perfume-page .cart-icon-btn {
-    width: 32px;
-    height: 32px;
-  }
-
-  .flowers-perfume-page .cart-icon-btn svg {
-    width: 14px;
-    height: 14px;
-  }
-
-  /* Banner */
-  .flowers-perfume-page .info-banner {
-    padding: 0 0 20px;
-  }
-
-  .flowers-perfume-page .banner-content {
-    padding: 18px 14px;
-    gap: 12px;
-    border-radius: 14px;
-  }
-
-  .flowers-perfume-page .banner-icon {
-    width: 50px;
-    height: 50px;
-  }
-
-  .flowers-perfume-page .banner-icon svg {
-    width: 24px;
-    height: 24px;
-  }
-
-  .flowers-perfume-page .banner-text h3 {
-    font-size: 16px;
-  }
-
-  .flowers-perfume-page .banner-text p {
-    font-size: 11px;
-  }
+@media (max-width: 576px) {
+  .flowerswithperfume-page .container { padding: 0 16px; }
+  .flowerswithperfume-page .hero-title { font-size: 26px; }
+  .flowerswithperfume-page .products-grid { gap: 14px; }
+  .flowerswithperfume-page .product-image-wrapper { height: 200px; }
+  .flowerswithperfume-page .product-info { padding: 12px 0 0 0; }
+  .flowerswithperfume-page .product-name { font-size: 14px; margin-bottom: 3px; }
+  .flowerswithperfume-page .product-desc { font-size: 10px; margin-bottom: 8px; }
+  .flowerswithperfume-page .sale-price { font-size: 16px; }
+  .flowerswithperfume-page .add-btn { width: 34px; height: 34px; }
+  .flowerswithperfume-page .discount-badge { padding: 5px 10px; font-size: 9px; top: 10px; left: 10px; }
 }
 
-/* Extra Small Mobile */
-@media (max-width: 360px) {
-  .flowers-perfume-page .container {
-    padding: 0 10px;
-  }
-
-  .flowers-perfume-page .hero-icon {
-    width: 48px;
-    height: 48px;
-    font-size: 20px;
-  }
-
-  .flowers-perfume-page .hero-title {
-    font-size: 24px;
-  }
-
-  .flowers-perfume-page.rtl .hero-title {
-    font-size: 22px;
-  }
-
-  .flowers-perfume-page .hero-subtitle {
-    font-size: 12px;
-  }
-
-  .flowers-perfume-page .hero-stats {
-    gap: 10px;
-    padding: 12px 14px;
-  }
-
-  .flowers-perfume-page .stat-number {
-    font-size: 18px;
-  }
-
-  .flowers-perfume-page .stat-label {
-    font-size: 7px;
-  }
-
-  .flowers-perfume-page .stat-divider {
-    height: 24px;
-  }
-
-  .flowers-perfume-page .products-grid {
-    gap: 8px;
-  }
-
-  .flowers-perfume-page .product-image-wrapper {
-    height: 140px;
-  }
-
-  .flowers-perfume-page .product-details {
-    padding: 0;
-  }
-
-  .flowers-perfume-page .product-name {
-    font-size: 12px;
-  }
-
-  .flowers-perfume-page .original-price {
-    font-size: 8px;
-  }
-
-  .flowers-perfume-page .sale-price {
-    font-size: 12px;
-  }
-
-  .flowers-perfume-page .perfume-badge {
-    padding: 3px 6px;
-    font-size: 6px;
-  }
-
-  .flowers-perfume-page .product-badge {
-    padding: 2px 6px;
-    font-size: 6px;
-  }
-
-  .flowers-perfume-page .cart-icon-btn {
-    width: 28px;
-    height: 28px;
-  }
-
-  .flowers-perfume-page .cart-icon-btn svg {
-    width: 12px;
-    height: 12px;
-  }
-
-  .flowers-perfume-page .banner-content {
-    padding: 14px 12px;
-  }
-
-  .flowers-perfume-page .banner-icon {
-    width: 44px;
-    height: 44px;
-  }
-
-  .flowers-perfume-page .banner-icon svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  .flowers-perfume-page .banner-text h3 {
-    font-size: 14px;
-  }
-
-  .flowers-perfume-page .banner-text p {
-    font-size: 10px;
-  }
-}
 
 /* ============================================
-   ACCESSIBILITY & PRINT
+   IMPROVED CARD LAYOUT
    ============================================ */
-@media (prefers-reduced-motion: reduce) {
-  .sparkle,
-  .hero-icon,
-  .product-card,
-  .product-image,
-  .cart-icon-btn,
-  .banner-icon {
-    animation: none !important;
-    transition: none !important;
-  }
+
+.flowerswithperfume-page .product-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  border: 1px solid #f0f0f0;
 }
 
-.flowers-perfume-page .product-card:focus-visible,
-.flowers-perfume-page .quick-add-btn:focus-visible,
-.flowers-perfume-page .cart-icon-btn:focus-visible {
-  outline: 2px solid var(--secondary);
-  outline-offset: 2px;
+.flowerswithperfume-page .product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
 
-@media print {
-  .perfume-bg {
-    display: none;
-  }
-
-  .flowers-perfume-page .product-card {
-    box-shadow: none;
-    border: 1px solid var(--border-medium);
-    break-inside: avoid;
-  }
-
-  .flowers-perfume-page .info-banner {
-    display: none;
-  }
+.flowerswithperfume-page .product-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100%; /* 1:1 Aspect Ratio */
+  overflow: hidden;
+  background: #f8f8f8;
 }
 
-/* Filter Section */
-.flowers-perfume-page .filter-section {
-  padding: 25px 0 35px;
+.flowerswithperfume-page .product-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
 }
 
-.flowers-perfume-page .filter-wrapper {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 12px;
+.flowerswithperfume-page .product-card:hover .product-image {
+  transform: scale(1.05);
 }
 
-.flowers-perfume-page .filter-btn {
+.flowerswithperfume-page .product-info {
+  padding: 14px;
+}
+
+.flowerswithperfume-page .product-name {
   font-family: 'Poppins', sans-serif;
   font-size: 14px;
   font-weight: 500;
-  padding: 12px 28px;
-  border: 2px solid rgba(155, 89, 182, 0.2);
-  border-radius: 50px;
-  background: rgba(255, 255, 255, 0.8);
-  color: #5d4a6d;
+  color: #333;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.flowerswithperfume-page .product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.flowerswithperfume-page .price-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.flowerswithperfume-page .original-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.flowerswithperfume-page .sale-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #e91e63;
+}
+
+.flowerswithperfume-page .add-btn {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #fce4ec;
+  color: #e91e63;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
-.flowers-perfume-page.rtl .filter-btn {
-  font-family: 'Tajawal', sans-serif;
+.flowerswithperfume-page .add-btn:hover {
+  background: #e91e63;
+  color: #fff;
 }
 
-.flowers-perfume-page .filter-btn:hover {
-  border-color: var(--secondary);
-  color: var(--text-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(155, 89, 182, 0.2);
+.flowerswithperfume-page .add-btn.adding {
+  background: #4caf50;
+  color: #fff;
 }
 
-.flowers-perfume-page .filter-btn.active {
-  border-color: transparent;
-  color: white;
-  background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary) 100%);
-  box-shadow: 0 8px 25px rgba(155, 89, 182, 0.35);
+.flowerswithperfume-page .discount-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 5;
+  padding: 6px 12px;
+  background: #e91e63;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 20px;
+}
+
+.flowerswithperfume-page.rtl .discount-badge {
+  left: auto;
+  right: 12px;
+}
+
+
+/* ============================================
+   PREMIUM DESIGN OVERRIDES
+   ============================================ */
+
+/* Page Background - Elegant soft gray */
+.flowerswithperfume-page {
+  background: #f5f5f5 !important;
+  min-height: 100vh;
+}
+
+.flowerswithperfume-page .main-content {
+  background: #f5f5f5;
+  padding: 40px 0 80px;
+}
+
+/* Filter Sidebar - White card with shadow */
+.flowerswithperfume-page .filters-sidebar {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  border: none;
+}
+
+.flowerswithperfume-page .filters-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #f5f5f5;
+}
+
+.flowerswithperfume-page .filters-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.flowerswithperfume-page .clear-filters {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #e91e63;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.flowerswithperfume-page .clear-filters:hover {
+  text-decoration: underline;
+}
+
+/* Filter Sections */
+.flowerswithperfume-page .filter-section {
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.flowerswithperfume-page .filter-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.flowerswithperfume-page .filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-bottom: 0;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.flowerswithperfume-page .filter-content {
+  margin-top: 20px;
+}
+
+/* Checkbox Labels - PROPER SPACING */
+.flowerswithperfume-page .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  cursor: pointer;
+  border-bottom: 1px solid #f8f8f8;
+  transition: all 0.2s ease;
+}
+
+.flowerswithperfume-page .checkbox-label:last-child {
+  border-bottom: none;
+}
+
+.flowerswithperfume-page .checkbox-label:hover {
+  padding-left: 8px;
+}
+
+.flowerswithperfume-page .checkbox-label input[type="checkbox"] {
+  display: none;
+}
+
+.flowerswithperfume-page .checkbox-label .checkmark {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  background: #fff;
+}
+
+.flowerswithperfume-page .checkbox-label:hover .checkmark {
+  border-color: #e91e63;
+}
+
+.flowerswithperfume-page .checkbox-label input:checked + .checkmark {
+  background: #e91e63;
+  border-color: #e91e63;
+}
+
+.flowerswithperfume-page .checkbox-label input:checked + .checkmark::after {
+  content: '';
+  width: 6px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(45deg);
+  margin-bottom: 2px;
+}
+
+.flowerswithperfume-page .checkbox-label .label-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  color: #444;
+  font-weight: 400;
+}
+
+.flowerswithperfume-page .checkbox-label:hover .label-text {
+  color: #e91e63;
+}
+
+/* Price Inputs */
+.flowerswithperfume-page .price-inputs {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.flowerswithperfume-page .price-input-group {
+  display: flex;
+  align-items: center;
+  background: #fafafa;
+  border: 2px solid #eee;
+  border-radius: 10px;
+  overflow: hidden;
+  flex: 1;
+  transition: border-color 0.2s ease;
+}
+
+.flowerswithperfume-page .price-input-group:focus-within {
+  border-color: #e91e63;
+}
+
+.flowerswithperfume-page .price-input-group .currency-label {
+  padding: 12px 14px;
+  background: #f5f5f5;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #888;
+  font-weight: 500;
+  border-right: 1px solid #eee;
+}
+
+.flowerswithperfume-page .price-input-group input {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #333;
+  background: transparent;
+  outline: none;
+}
+
+.flowerswithperfume-page .price-separator {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #ccc;
+  font-weight: 500;
+}
+
+.flowerswithperfume-page .price-hint {
+  margin: 14px 0 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #999;
+}
+
+/* Product Cards - White with subtle shadow */
+.flowerswithperfume-page .product-card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  border: none;
+}
+
+.flowerswithperfume-page .product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 35px rgba(0,0,0,0.1);
+}
+
+/* Product Image */
+.flowerswithperfume-page .product-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  overflow: hidden;
+  background: #f9f9f9;
+}
+
+.flowerswithperfume-page .product-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.flowerswithperfume-page .product-card:hover .product-image {
+  transform: scale(1.05);
+}
+
+/* Product Info */
+.flowerswithperfume-page .product-info {
+  padding: 16px;
+}
+
+.flowerswithperfume-page .product-name {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #222;
+  margin: 0 0 10px 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.flowerswithperfume-page .product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flowerswithperfume-page .price-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.flowerswithperfume-page .original-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #aaa;
+  text-decoration: line-through;
+}
+
+.flowerswithperfume-page .sale-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: #e91e63;
+}
+
+.flowerswithperfume-page .add-btn {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  border-radius: 50%;
+  border: none;
+  background: #fce4ec;
+  color: #e91e63;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.flowerswithperfume-page .add-btn:hover {
+  background: #e91e63;
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.flowerswithperfume-page .add-btn.adding {
+  background: #4caf50;
+  color: #fff;
+}
+
+/* Discount Badge */
+.flowerswithperfume-page .discount-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 5;
+  padding: 6px 14px;
+  background: #e91e63;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 25px;
+  box-shadow: 0 3px 10px rgba(233, 30, 99, 0.3);
+}
+
+.flowerswithperfume-page.rtl .discount-badge {
+  left: auto;
+  right: 14px;
+}
+
+/* Toolbar */
+.flowerswithperfume-page .products-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.flowerswithperfume-page .items-count {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  color: #666;
+  font-weight: 500;
+}
+
+.flowerswithperfume-page .toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.flowerswithperfume-page .sort-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.flowerswithperfume-page .sort-dropdown label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.flowerswithperfume-page .sort-dropdown select {
+  padding: 10px 36px 10px 16px;
+  border: 2px solid #eee;
+  border-radius: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #333;
+  background: #fff;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.flowerswithperfume-page .sort-dropdown select:focus {
+  border-color: #e91e63;
+}
+
+/* Hide view toggle */
+.flowerswithperfume-page .view-toggle {
+  display: none !important;
+}
+
+/* Products Grid - Always 4 columns */
+.flowerswithperfume-page .products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .flowerswithperfume-page .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 992px) {
+  .flowerswithperfume-page .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .flowerswithperfume-page .filters-sidebar {
+    padding: 20px;
+    border-radius: 12px;
+  }
+  
+  .flowerswithperfume-page .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  
+  .flowerswithperfume-page .checkbox-label {
+    padding: 12px 0;
+  }
+}
+
+@media (max-width: 576px) {
+  .flowerswithperfume-page .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .flowerswithperfume-page .product-info {
+    padding: 12px;
+  }
+  
+  .flowerswithperfume-page .product-name {
+    font-size: 13px;
+  }
+  
+  .flowerswithperfume-page .sale-price {
+    font-size: 15px;
+  }
+  
+  .flowerswithperfume-page .add-btn {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+  }
+}
+
+
+/* ============================================
+   FINAL DESIGN FIXES
+   ============================================ */
+
+/* Cool Background - Light blue-gray */
+.flowerswithperfume-page {
+  background: #f8f9fa !important;
+  min-height: 100vh;
+}
+
+.flowerswithperfume-page .main-content {
+  background: #f8f9fa;
+  padding: 40px 0 80px;
+}
+
+/* Content Layout - More space on left */
+.flowerswithperfume-page .content-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 40px;
+  align-items: start;
+  padding-left: 20px;
+}
+
+/* Filter Sidebar */
+.flowerswithperfume-page .filters-sidebar {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px 20px;
+  box-shadow: 0 2px 15px rgba(0,0,0,0.04);
+  border: 1px solid #eef0f2;
+}
+
+.flowerswithperfume-page .filters-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #eef0f2;
+}
+
+.flowerswithperfume-page .filters-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+/* Filter Sections */
+.flowerswithperfume-page .filter-section {
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eef0f2;
+}
+
+.flowerswithperfume-page .filter-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.flowerswithperfume-page .filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.flowerswithperfume-page .filter-content {
+  margin-top: 16px;
+}
+
+/* Price Inputs - Like reference */
+.flowerswithperfume-page .price-inputs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.flowerswithperfume-page .price-input-group {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+  flex: 1;
+}
+
+.flowerswithperfume-page .price-input-group:focus-within {
+  border-color: #999;
+}
+
+.flowerswithperfume-page .price-input-group .currency-label {
+  padding: 10px 12px;
+  background: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #666;
+  border-right: 1px solid #eee;
+}
+
+.flowerswithperfume-page .price-input-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #333;
+  background: transparent;
+  outline: none;
+  text-align: right;
+}
+
+.flowerswithperfume-page .price-separator {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #999;
+}
+
+.flowerswithperfume-page .price-hint {
+  margin: 12px 0 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #888;
+}
+
+/* Checkbox Labels - WITH LEFT PADDING like reference */
+.flowerswithperfume-page .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  padding-left: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.flowerswithperfume-page .checkbox-label:hover {
+  color: #e91e63;
+}
+
+.flowerswithperfume-page .checkbox-label input[type="checkbox"] {
+  display: none;
+}
+
+.flowerswithperfume-page .checkbox-label .checkmark {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  border: 1.5px solid #ccc;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  background: #fff;
+}
+
+.flowerswithperfume-page .checkbox-label:hover .checkmark {
+  border-color: #e91e63;
+}
+
+.flowerswithperfume-page .checkbox-label input:checked + .checkmark {
+  background: #e91e63;
+  border-color: #e91e63;
+}
+
+.flowerswithperfume-page .checkbox-label input:checked + .checkmark::after {
+  content: '';
+  width: 5px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-bottom: 2px;
+}
+
+.flowerswithperfume-page .checkbox-label .label-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #444;
+  font-weight: 400;
+}
+
+/* Product Cards - SQUARE Images */
+.flowerswithperfume-page .product-card {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  border: 1px solid #eef0f2;
+}
+
+.flowerswithperfume-page .product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+/* SQUARE Product Image */
+.flowerswithperfume-page .product-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100%; /* 1:1 Square Ratio */
+  overflow: hidden;
+  background: #f5f5f5;
+}
+
+.flowerswithperfume-page .product-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.flowerswithperfume-page .product-card:hover .product-image {
+  transform: scale(1.03);
+}
+
+/* Product Info */
+.flowerswithperfume-page .product-info {
+  padding: 14px 16px 16px;
+  background: #fff;
+}
+
+.flowerswithperfume-page .product-name {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #222;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.flowerswithperfume-page .product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flowerswithperfume-page .price-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.flowerswithperfume-page .original-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.flowerswithperfume-page .sale-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #e91e63;
+}
+
+.flowerswithperfume-page .add-btn {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #fce4ec;
+  color: #e91e63;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.flowerswithperfume-page .add-btn:hover {
+  background: #e91e63;
+  color: #fff;
+}
+
+.flowerswithperfume-page .add-btn.adding {
+  background: #4caf50;
+  color: #fff;
+}
+
+/* Discount Badge */
+.flowerswithperfume-page .discount-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 5;
+  padding: 5px 12px;
+  background: #e91e63;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 20px;
+}
+
+.flowerswithperfume-page.rtl .discount-badge {
+  left: auto;
+  right: 12px;
+}
+
+/* Toolbar */
+.flowerswithperfume-page .products-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.flowerswithperfume-page .items-count {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #666;
+}
+
+.flowerswithperfume-page .sort-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.flowerswithperfume-page .sort-dropdown label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #666;
+}
+
+.flowerswithperfume-page .sort-dropdown select {
+  padding: 10px 35px 10px 14px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #333;
+  background: #fff;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  outline: none;
+  min-width: 140px;
+}
+
+/* Products Grid - 4 columns */
+.flowerswithperfume-page .products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* Responsive */
+@media (max-width: 1400px) {
+  .flowerswithperfume-page .content-layout {
+    grid-template-columns: 260px 1fr;
+    gap: 30px;
+    padding-left: 10px;
+  }
+  .flowerswithperfume-page .products-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .flowerswithperfume-page .content-layout {
+    grid-template-columns: 240px 1fr;
+    gap: 24px;
+    padding-left: 0;
+  }
+  .flowerswithperfume-page .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 992px) {
+  .flowerswithperfume-page .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .flowerswithperfume-page .content-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .flowerswithperfume-page .filters-sidebar {
+    padding: 20px 16px;
+  }
+  .flowerswithperfume-page .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .flowerswithperfume-page .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .flowerswithperfume-page .product-info {
+    padding: 10px 12px 12px;
+  }
+  .flowerswithperfume-page .product-name {
+    font-size: 13px;
+  }
+  .flowerswithperfume-page .sale-price {
+    font-size: 14px;
+  }
+  .flowerswithperfume-page .add-btn {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+  }
+}
+
+
+/* ============================================
+   CLEAN CLASSIC FILTER DESIGN
+   ============================================ */
+
+/* Page Background */
+.flowerswithperfume-page {
+  background: #f8f9fa !important;
+}
+
+.flowerswithperfume-page .main-content {
+  background: #f8f9fa;
+  padding: 40px 0 80px;
+}
+
+/* Container */
+.flowerswithperfume-page .container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Content Layout */
+.flowerswithperfume-page .content-layout {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* Filter Sidebar - Clean White */
+.flowerswithperfume-page .filters-sidebar {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  border: 1px solid #eee;
+  position: sticky;
+  top: 20px;
+}
+
+.flowerswithperfume-page .filters-header {
+  margin-bottom: 20px;
+}
+
+.flowerswithperfume-page .filters-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #222;
+  margin: 0;
+}
+
+.flowerswithperfume-page .clear-filters {
+  font-size: 13px;
+  color: #e91e63;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-top: 8px;
+  padding: 0;
+}
+
+/* Filter Sections */
+.flowerswithperfume-page .filter-section {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.flowerswithperfume-page .filter-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.flowerswithperfume-page .filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.flowerswithperfume-page .filter-header svg {
+  width: 10px;
+  height: 10px;
+  color: #999;
+  transition: transform 0.2s;
+}
+
+.flowerswithperfume-page .filter-header.open svg {
+  transform: rotate(180deg);
+}
+
+.flowerswithperfume-page .filter-content {
+  margin-top: 0;
+}
+
+/* Price Inputs - Compact */
+.flowerswithperfume-page .price-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.flowerswithperfume-page .price-input-group {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  flex: 1;
+}
+
+.flowerswithperfume-page .price-input-group .currency-label {
+  padding: 8px 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #666;
+  background: #fafafa;
+  border-right: 1px solid #eee;
+}
+
+.flowerswithperfume-page .price-input-group input {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #333;
+  outline: none;
+}
+
+.flowerswithperfume-page .price-separator {
+  font-size: 12px;
+  color: #999;
+}
+
+.flowerswithperfume-page .price-hint {
+  margin: 10px 0 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  color: #999;
+}
+
+/* CLEAN CHECKBOX - No boxes, simple list */
+.flowerswithperfume-page .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  cursor: pointer;
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.flowerswithperfume-page .checkbox-label:hover .label-text {
+  color: #e91e63;
+}
+
+.flowerswithperfume-page .checkbox-label input[type="checkbox"] {
+  display: none;
+}
+
+.flowerswithperfume-page .checkbox-label .checkmark {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  border: 1.5px solid #ccc;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  transition: all 0.2s;
+}
+
+.flowerswithperfume-page .checkbox-label:hover .checkmark {
+  border-color: #e91e63;
+}
+
+.flowerswithperfume-page .checkbox-label input:checked + .checkmark {
+  background: #e91e63;
+  border-color: #e91e63;
+}
+
+.flowerswithperfume-page .checkbox-label input:checked + .checkmark::after {
+  content: '';
+  width: 4px;
+  height: 7px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-bottom: 1px;
+}
+
+.flowerswithperfume-page .checkbox-label .label-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #555;
+}
+
+/* Products Section */
+.flowerswithperfume-page .products-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.flowerswithperfume-page .items-count {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #666;
+}
+
+.flowerswithperfume-page .sort-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.flowerswithperfume-page .sort-dropdown label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #666;
+}
+
+.flowerswithperfume-page .sort-dropdown select {
+  padding: 8px 30px 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #333;
+  background: #fff;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  outline: none;
+}
+
+/* Product Grid */
+.flowerswithperfume-page .products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* Product Card */
+.flowerswithperfume-page .product-card {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid #eee;
+}
+
+.flowerswithperfume-page .product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+/* Square Image */
+.flowerswithperfume-page .product-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  background: #f5f5f5;
+  overflow: hidden;
+}
+
+.flowerswithperfume-page .product-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.flowerswithperfume-page .product-card:hover .product-image {
+  transform: scale(1.03);
+}
+
+.flowerswithperfume-page .product-info {
+  padding: 12px 14px 14px;
+}
+
+.flowerswithperfume-page .product-name {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #222;
+  margin: 0 0 8px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.flowerswithperfume-page .product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flowerswithperfume-page .price-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.flowerswithperfume-page .original-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.flowerswithperfume-page .sale-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #e91e63;
+}
+
+.flowerswithperfume-page .add-btn {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #fce4ec;
+  color: #e91e63;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.flowerswithperfume-page .add-btn:hover {
+  background: #e91e63;
+  color: #fff;
+}
+
+.flowerswithperfume-page .add-btn.adding {
+  background: #4caf50;
+  color: #fff;
+}
+
+.flowerswithperfume-page .discount-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 5;
+  padding: 4px 10px;
+  background: #e91e63;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+.flowerswithperfume-page.rtl .discount-badge {
+  left: auto;
+  right: 10px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .flowerswithperfume-page .content-layout { grid-template-columns: 220px 1fr; gap: 30px; }
+  .flowerswithperfume-page .products-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 992px) {
+  .flowerswithperfume-page .products-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+}
+
+@media (max-width: 768px) {
+  .flowerswithperfume-page .content-layout { grid-template-columns: 1fr; }
+  .flowerswithperfume-page .filters-sidebar { margin-bottom: 20px; }
+  .flowerswithperfume-page .products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+}
+
+@media (max-width: 480px) {
+  .flowerswithperfume-page .products-grid { gap: 10px; }
+  .flowerswithperfume-page .product-info { padding: 10px 12px; }
+  .flowerswithperfume-page .product-name { font-size: 13px; }
+  .flowerswithperfume-page .sale-price { font-size: 14px; }
+  .flowerswithperfume-page .add-btn { width: 32px; height: 32px; min-width: 32px; }
+}
+
+
+/* ============================================
+   MOBILE FILTER DRAWER
+   ============================================ */
+
+/* Mobile Filter Toggle Button - Hidden on desktop */
+.flowerswithperfume-page .mobile-filter-toggle {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+.flowerswithperfume-page .mobile-filter-toggle svg {
+  color: #666;
+}
+
+/* Mobile Filter Overlay */
+.flowerswithperfume-page .mobile-filter-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+}
+
+/* Mobile Close Button - Hidden on desktop */
+.flowerswithperfume-page .mobile-filter-close {
+  display: none;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: #f5f5f5;
+  border-radius: 50%;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  z-index: 10;
+}
+
+.flowerswithperfume-page .mobile-filter-close:hover {
+  background: #eee;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  /* Show mobile filter toggle */
+  .flowerswithperfume-page .mobile-filter-toggle {
+    display: flex;
+  }
+  
+  /* Show overlay when filter is open */
+  .flowerswithperfume-page .mobile-filter-overlay {
+    display: block;
+  }
+  
+  /* Filter Sidebar - Slide in drawer */
+  .flowerswithperfume-page .filters-sidebar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 85%;
+    max-width: 320px;
+    height: 100vh;
+    z-index: 999;
+    border-radius: 0;
+    padding: 70px 20px 20px;
+    overflow-y: auto;
+    transition: left 0.3s ease;
+    box-shadow: 2px 0 20px rgba(0,0,0,0.15);
+  }
+  
+  .flowerswithperfume-page .filters-sidebar.open {
+    left: 0;
+  }
+  
+  /* Show close button on mobile */
+  .flowerswithperfume-page .mobile-filter-close {
+    display: flex;
+  }
+  
+  /* Content layout - single column */
+  .flowerswithperfume-page .content-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* RTL Support for mobile drawer */
+.flowerswithperfume-page.rtl .filters-sidebar {
+  left: auto;
+  right: -100%;
+}
+
+.flowerswithperfume-page.rtl .filters-sidebar.open {
+  right: 0;
+  left: auto;
+}
+
+.flowerswithperfume-page.rtl .mobile-filter-close {
+  right: auto;
+  left: 16px;
+}
+
+
+/* ============================================
+   FORCE SQUARE IMAGES
+   ============================================ */
+
+/* Product Image Wrapper - SQUARE 1:1 */
+.flowerswithperfume-page .product-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100% !important; /* Force 1:1 square ratio */
+  height: 0 !important;
+  overflow: hidden;
+  background: #f8f8f8;
+}
+
+.flowerswithperfume-page .product-image {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center;
+}
+
+
+/* ============================================
+   EXPANDED FILTER WIDTH
+   ============================================ */
+
+.flowerswithperfume-page .content-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr !important;
+  gap: 40px;
+  align-items: start;
+}
+
+.flowerswithperfume-page .filters-sidebar {
+  width: 100%;
+  min-width: 280px;
+  padding: 24px;
+}
+
+@media (max-width: 1400px) {
+  .flowerswithperfume-page .content-layout {
+    grid-template-columns: 260px 1fr !important;
+    gap: 30px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .flowerswithperfume-page .content-layout {
+    grid-template-columns: 250px 1fr !important;
+    gap: 24px;
+  }
+}
+
+@media (max-width: 992px) {
+  .flowerswithperfume-page .content-layout {
+    grid-template-columns: 230px 1fr !important;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .flowerswithperfume-page .content-layout {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* ============================================
+   FILTER TO FAR LEFT
+   ============================================ */
+
+.flowerswithperfume-page .main-content {
+  padding: 40px 0 80px;
+}
+
+.flowerswithperfume-page .main-content .container {
+  max-width: 100%;
+  padding: 0 40px 0 20px;
+  margin: 0;
+}
+
+.flowerswithperfume-page .content-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr !important;
+  gap: 30px;
+  align-items: start;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.flowerswithperfume-page .filters-sidebar {
+  margin-left: 0;
+  position: sticky;
+  top: 20px;
+}
+
+@media (max-width: 1400px) {
+  .flowerswithperfume-page .main-content .container {
+    padding: 0 30px 0 15px;
+  }
+  .flowerswithperfume-page .content-layout {
+    grid-template-columns: 260px 1fr !important;
+    gap: 25px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .flowerswithperfume-page .main-content .container {
+    padding: 0 20px 0 10px;
+  }
+  .flowerswithperfume-page .content-layout {
+    grid-template-columns: 250px 1fr !important;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .flowerswithperfume-page .main-content .container {
+    padding: 0 16px;
+  }
+  .flowerswithperfume-page .content-layout {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* ============================================
+   MOBILE FILTER - COMPLETE FIX
+   ============================================ */
+
+/* Mobile Filter Toggle Button */
+.flowerswithperfume-page .mobile-filter-toggle {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.flowerswithperfume-page .mobile-filter-toggle:active {
+  background: #f5f5f5;
+}
+
+/* Mobile Filter Overlay */
+.flowerswithperfume-page .mobile-filter-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+}
+
+/* Mobile Close Button */
+.flowerswithperfume-page .mobile-filter-close {
+  display: none;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: #f0f0f0;
+  border-radius: 50%;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  z-index: 10;
+  padding: 0;
+}
+
+.flowerswithperfume-page .mobile-filter-close:active {
+  background: #e0e0e0;
+}
+
+.flowerswithperfume-page .mobile-filter-close svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Mobile Responsive - 768px and below */
+@media (max-width: 768px) {
+  /* Show mobile toggle button */
+  .flowerswithperfume-page .mobile-filter-toggle {
+    display: flex !important;
+  }
+  
+  /* Show overlay when open */
+  .flowerswithperfume-page .mobile-filter-overlay {
+    display: block !important;
+  }
+  
+  /* Filter Sidebar - Fixed drawer */
+  .flowerswithperfume-page .filters-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 85% !important;
+    max-width: 320px !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    z-index: 9999 !important;
+    border-radius: 0 !important;
+    padding: 70px 20px 30px !important;
+    overflow-y: auto !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.3s ease !important;
+    box-shadow: 2px 0 20px rgba(0,0,0,0.15) !important;
+    background: #fff !important;
+  }
+  
+  /* Open state */
+  .flowerswithperfume-page .filters-sidebar.open {
+    transform: translateX(0) !important;
+  }
+  
+  /* Show close button */
+  .flowerswithperfume-page .mobile-filter-close {
+    display: flex !important;
+  }
+  
+  /* Hide overlay when filter closed */
+  .flowerswithperfume-page .filters-sidebar:not(.open) + .mobile-filter-overlay,
+  .flowerswithperfume-page .mobile-filter-overlay:not(:has(~ .filters-sidebar.open)) {
+    display: none;
+  }
+  
+  /* Content layout single column */
+  .flowerswithperfume-page .content-layout {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Products grid 2 columns on mobile */
+  .flowerswithperfume-page .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+}
+
+/* RTL Support */
+.flowerswithperfume-page.rtl .filters-sidebar {
+  left: auto !important;
+  right: 0 !important;
+  transform: translateX(100%) !important;
+}
+
+.flowerswithperfume-page.rtl .filters-sidebar.open {
+  transform: translateX(0) !important;
+}
+
+.flowerswithperfume-page.rtl .mobile-filter-close {
+  right: auto !important;
+  left: 15px !important;
+}
+
+
+/* ============================================
+   MOBILE FILTER BUTTON - FINAL FIX
+   ============================================ */
+
+/* Hide on desktop */
+.flowerswithperfume-page .mobile-filter-toggle {
+  display: none;
+}
+
+/* Show on mobile */
+@media (max-width: 768px) {
+  .flowerswithperfume-page .mobile-filter-toggle {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    width: fit-content;
+  }
+  
+  .flowerswithperfume-page .mobile-filter-toggle svg {
+    color: #666;
+  }
+  
+  .flowerswithperfume-page .mobile-filter-toggle:active {
+    background: #f5f5f5;
+  }
+}
+
+
+/* ============================================
+   MOBILE FILTER - TOP POSITION FIX
+   ============================================ */
+
+@media (max-width: 768px) {
+  /* Filter drawer - start below header */
+  .flowerswithperfume-page .filters-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 85% !important;
+    max-width: 320px !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    z-index: 9999 !important;
+    border-radius: 0 !important;
+    padding: 20px !important;
+    padding-top: 100px !important; /* Space for header + close button */
+    overflow-y: auto !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.3s ease !important;
+    box-shadow: 4px 0 25px rgba(0,0,0,0.15) !important;
+    background: #fff !important;
+  }
+  
+  .flowerswithperfume-page .filters-sidebar.open {
+    transform: translateX(0) !important;
+  }
+  
+  /* Close button - fixed at top */
+  .flowerswithperfume-page .mobile-filter-close {
+    display: flex !important;
+    position: fixed !important;
+    top: 50px !important; /* Below header */
+    left: 260px !important; /* Near right edge of drawer */
+    width: 36px !important;
+    height: 36px !important;
+    border: none !important;
+    background: #f0f0f0 !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #333 !important;
+    z-index: 10000 !important;
+    padding: 0 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease !important;
+  }
+  
+  /* Show close button when filter is open */
+  .flowerswithperfume-page .filters-sidebar.open ~ .mobile-filter-close,
+  .flowerswithperfume-page .filters-sidebar.open + * + .mobile-filter-close {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .flowerswithperfume-page .mobile-filter-close svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  /* Filters title */
+  .flowerswithperfume-page .filters-sidebar .filters-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+}
+
+/* RTL support */
+@media (max-width: 768px) {
+  .flowerswithperfume-page.rtl .filters-sidebar {
+    left: auto !important;
+    right: 0 !important;
+    transform: translateX(100%) !important;
+  }
+  
+  .flowerswithperfume-page.rtl .filters-sidebar.open {
+    transform: translateX(0) !important;
+  }
+  
+  .flowerswithperfume-page.rtl .mobile-filter-close {
+    left: auto !important;
+    right: 260px !important;
+  }
+}
+
+
+/* ============================================
+   MOBILE FILTER - COMPLETE FINAL FIX
+   ============================================ */
+
+/* Desktop - hide close button */
+.flowerswithperfume-page .mobile-filter-close {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* Filter sidebar drawer */
+  .flowerswithperfume-page .filters-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 85% !important;
+    max-width: 320px !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    z-index: 9999 !important;
+    border-radius: 0 !important;
+    padding: 20px !important;
+    overflow-y: auto !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.3s ease !important;
+    box-shadow: 4px 0 25px rgba(0,0,0,0.15) !important;
+    background: #fff !important;
+  }
+  
+  .flowerswithperfume-page .filters-sidebar.open {
+    transform: translateX(0) !important;
+  }
+  
+  /* Filters header with close button */
+  .flowerswithperfume-page .filters-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-bottom: 24px !important;
+    padding-bottom: 16px !important;
+    border-bottom: 1px solid #eee !important;
+    margin-top: 40px !important; /* Space from top */
+  }
+  
+  /* Close button */
+  .flowerswithperfume-page .mobile-filter-close {
+    display: flex !important;
+    width: 36px !important;
+    height: 36px !important;
+    border: none !important;
+    background: #f5f5f5 !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #333 !important;
+    padding: 0 !important;
+    order: 2 !important; /* Put after title */
+    flex-shrink: 0 !important;
+  }
+  
+  .flowerswithperfume-page .mobile-filter-close:active {
+    background: #e5e5e5 !important;
+  }
+  
+  .flowerswithperfume-page .mobile-filter-close svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  /* Filters title */
+  .flowerswithperfume-page .filters-title {
+    font-size: 18px !important;
+    order: 1 !important;
+  }
+  
+  /* Clear filters button */
+  .flowerswithperfume-page .clear-filters {
+    display: none !important; /* Hide on mobile header, can add elsewhere */
+  }
+}
+
+/* RTL support */
+@media (max-width: 768px) {
+  .flowerswithperfume-page.rtl .filters-sidebar {
+    left: auto !important;
+    right: 0 !important;
+    transform: translateX(100%) !important;
+  }
+  
+  .flowerswithperfume-page.rtl .filters-sidebar.open {
+    transform: translateX(0) !important;
+  }
+}
+
+
+/* ============================================
+   MOBILE FILTER - REFERENCE DESIGN
+   ============================================ */
+
+/* Hide mobile toolbar on desktop */
+.flowerswithperfume-page .mobile-toolbar {
+  display: none;
+}
+
+/* Hide old mobile filter toggle */
+.flowerswithperfume-page .mobile-filter-toggle {
+  display: none;
+}
+
+/* Desktop - hide mobile close button */
+.flowerswithperfume-page .mobile-filter-close {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* Mobile Toolbar - Filter + Sort side by side */
+  .flowerswithperfume-page .mobile-toolbar {
+    display: flex !important;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  /* Filter Button */
+  .flowerswithperfume-page .mobile-toolbar .mobile-filter-toggle {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  
+  .flowerswithperfume-page .mobile-toolbar .mobile-filter-toggle svg {
+    color: #555;
+  }
+  
+  /* Sort Dropdown */
+  .flowerswithperfume-page .mobile-sort {
+    flex: 1;
+  }
+  
+  .flowerswithperfume-page .mobile-sort select {
+    width: 100%;
+    padding: 12px 35px 12px 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    color: #333;
+    background: #fff;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  
+  /* Hide desktop toolbar on mobile */
+  .flowerswithperfume-page .products-toolbar {
+    display: none !important;
+  }
+  
+  /* Filter Drawer - Full screen like reference */
+  .flowerswithperfume-page .filters-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    z-index: 9999 !important;
+    border-radius: 0 !important;
+    padding: 24px !important;
+    padding-top: 80px !important;
+    overflow-y: auto !important;
+    transform: translateY(100%) !important;
+    transition: transform 0.3s ease !important;
+    box-shadow: none !important;
+    background: #fff !important;
+  }
+  
+  .flowerswithperfume-page .filters-sidebar.open {
+    transform: translateY(0) !important;
+  }
+  
+  /* Filter Header */
+  .flowerswithperfume-page .filters-sidebar .filters-header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 20px 24px !important;
+    background: #fff !important;
+    border-bottom: 1px solid #eee !important;
+    z-index: 10 !important;
+    margin: 0 !important;
+  }
+  
+  .flowerswithperfume-page .filters-sidebar .filters-title {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 22px !important;
+    font-weight: 600 !important;
+    color: #000 !important;
+    margin: 0 !important;
+  }
+  
+  /* Close Button - Circle with X like reference */
+  .flowerswithperfume-page .mobile-filter-close {
+    display: flex !important;
+    width: 40px !important;
+    height: 40px !important;
+    border: none !important;
+    background: #222 !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #fff !important;
+    padding: 0 !important;
+  }
+  
+  .flowerswithperfume-page .mobile-filter-close svg {
+    width: 18px !important;
+    height: 18px !important;
+    stroke: #fff !important;
+  }
+  
+  /* Hide clear all on mobile header */
+  .flowerswithperfume-page .filters-sidebar .clear-filters {
+    display: none !important;
+  }
+  
+  /* Filter Sections */
+  .flowerswithperfume-page .filter-section {
+    padding: 20px 0 !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+  }
+  
+  .flowerswithperfume-page .filter-header {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+    text-transform: capitalize !important;
+    letter-spacing: 0 !important;
+  }
+  
+  /* Checkboxes */
+  .flowerswithperfume-page .checkbox-label {
+    padding: 12px 0 !important;
+  }
+  
+  .flowerswithperfume-page .checkbox-label .checkmark {
+    width: 20px !important;
+    height: 20px !important;
+    border: 2px solid #ddd !important;
+    border-radius: 4px !important;
+  }
+  
+  .flowerswithperfume-page .checkbox-label input:checked + .checkmark {
+    background: #e91e63 !important;
+    border-color: #e91e63 !important;
+    border-radius: 4px !important;
+  }
+  
+  /* Overlay */
+  .flowerswithperfume-page .mobile-filter-overlay {
+    display: block !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0,0,0,0.5) !important;
+    z-index: 9998 !important;
+  }
+}
+
+
+/* ============================================
+   MOBILE FILTER - COMPLETE FINAL FIX
+   ============================================ */
+
+/* Desktop: Hide mobile elements */
+.flowerswithperfume-page .mobile-filter-btn {
+  display: none;
+}
+
+.flowerswithperfume-page .mobile-filter-close {
+  display: none;
+}
+
+.flowerswithperfume-page .mobile-filter-overlay {
+  display: none;
+}
+
+.flowerswithperfume-page .mobile-toolbar {
+  display: none;
+}
+
+/* ===== MOBILE STYLES (<= 768px) ===== */
+@media (max-width: 768px) {
+
+  /* Hide filters sidebar by default on mobile */
+  .flowerswithperfume-page .filters-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    z-index: 99999 !important; /* Above everything including header */
+    background: #fff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow-y: auto !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.3s ease-in-out !important;
+    visibility: hidden;
+  }
+  
+  .flowerswithperfume-page .filters-sidebar.open {
+    transform: translateX(0) !important;
+    visibility: visible;
+  }
+  
+  /* Filter Header - Fixed at top */
+  .flowerswithperfume-page .filters-sidebar .filters-header {
+    position: sticky !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 20px 20px !important;
+    background: #fff !important;
+    border-bottom: 1px solid #eee !important;
+    margin: 0 !important;
+    z-index: 10 !important;
+  }
+  
+  .flowerswithperfume-page .filters-sidebar .filters-title {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 20px !important;
+    font-weight: 600 !important;
+    color: #000 !important;
+    margin: 0 !important;
+  }
+  
+  /* Close Button - Black circle with X */
+  .flowerswithperfume-page .mobile-filter-close {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    background: #222 !important;
+    border: none !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+  }
+  
+  .flowerswithperfume-page .mobile-filter-close svg {
+    stroke: #fff !important;
+    width: 14px !important;
+    height: 14px !important;
+  }
+  
+  /* Filter Content */
+  .flowerswithperfume-page .filters-sidebar .filter-section {
+    padding: 20px !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+    margin: 0 !important;
+  }
+  
+  .flowerswithperfume-page .filters-sidebar .filter-header {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+    text-transform: capitalize !important;
+    letter-spacing: 0 !important;
+    margin-bottom: 15px !important;
+    padding: 0 !important;
+  }
+  
+  /* Price inputs */
+  .flowerswithperfume-page .filters-sidebar .price-inputs {
+    gap: 10px !important;
+  }
+  
+  .flowerswithperfume-page .filters-sidebar .price-input-group {
+    flex: 1 !important;
+    border: 1px solid #ddd !important;
+    border-radius: 6px !important;
+    overflow: hidden !important;
+  }
+  
+  .flowerswithperfume-page .filters-sidebar .price-input-group input {
+    padding: 12px 10px !important;
+    font-size: 14px !important;
+  }
+  
+  /* Checkboxes - rounded squares like reference */
+  .flowerswithperfume-page .filters-sidebar .checkbox-label {
+    padding: 14px 0 !important;
+    background: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+  }
+  
+  .flowerswithperfume-page .filters-sidebar .checkbox-label .checkmark {
+    width: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
+    border: 2px solid #ddd !important;
+    border-radius: 6px !important;
+    background: #fff !important;
+  }
+  
+  .flowerswithperfume-page .filters-sidebar .checkbox-label input:checked + .checkmark {
+    background: #e91e63 !important;
+    border-color: #e91e63 !important;
+  }
+  
+  .flowerswithperfume-page .filters-sidebar .checkbox-label .label-text {
+    font-size: 15px !important;
+    color: #333 !important;
+  }
+  
+  /* Hide clear all in header on mobile */
+  .flowerswithperfume-page .filters-sidebar .clear-filters {
+    display: none !important;
+  }
+  
+  /* Overlay */
+  .flowerswithperfume-page .mobile-filter-overlay {
+    display: none;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0,0,0,0.5) !important;
+    z-index: 99998 !important;
+  }
+  
+  .flowerswithperfume-page .filters-sidebar.open ~ .mobile-filter-overlay {
+    display: block !important;
+  }
+  
+  /* Mobile Filter Button in toolbar */
+  .flowerswithperfume-page .mobile-filter-btn {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 10px 16px !important;
+    background: #fff !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 6px !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    color: #333 !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+  }
+  
+  .flowerswithperfume-page .mobile-filter-btn svg {
+    color: #555 !important;
+    flex-shrink: 0 !important;
+  }
+  
+  /* Products toolbar adjustments */
+  .flowerswithperfume-page .products-toolbar {
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+  }
+  
+  .flowerswithperfume-page .items-count {
+    order: 2 !important;
+    width: 100% !important;
+  }
+  
+  .flowerswithperfume-page .sort-dropdown {
+    order: 3 !important;
+    flex: 1 !important;
+  }
+  
+  .flowerswithperfume-page .sort-dropdown select {
+    width: 100% !important;
+  }
+  
+  /* Hide desktop sort label */
+  .flowerswithperfume-page .sort-dropdown label {
+    display: none !important;
+  }
+  
+  /* Content layout - single column */
+  .flowerswithperfume-page .content-layout {
+    display: block !important;
+  }
+  
+  /* Products grid */
+  .flowerswithperfume-page .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+}
+
+
+/* ============================================
+   HIDE OLD MOBILE FILTER ELEMENTS - FINAL FIX
+   Use new MobileFilterBar and MobileFilterDrawer instead
+   ============================================ */
+
+/* Hide old mobile filter buttons on ALL screens */
+.flowers-with-perfume-page .mobile-filter-btn,
+.flowers-with-perfume-page .mobile-filter-toggle,
+.flowers-with-perfume-page .mobile-filter-close,
+.flowers-with-perfume-page .mobile-toolbar {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  /* Hide desktop sidebar on mobile */
+  .flowers-with-perfume-page .filters-sidebar {
+    display: none !important;
+  }
+  
+  /* Hide desktop sort dropdown */
+  .flowers-with-perfume-page .products-toolbar .sort-dropdown,
+  .flowers-with-perfume-page .products-toolbar .toolbar-right {
+    display: none !important;
+  }
+  
+  /* Simplify toolbar - only show items count */
+  .flowers-with-perfume-page .products-toolbar {
+    justify-content: center !important;
+    padding: 12px 16px !important;
+  }
+  
+  .flowers-with-perfume-page .products-toolbar .items-count {
+    width: auto !important;
+    order: 0 !important;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  /* Ensure content layout is single column */
+  .flowers-with-perfume-page .content-layout {
+    display: block !important;
+  }
 }

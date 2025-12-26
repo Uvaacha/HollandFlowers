@@ -1,6 +1,6 @@
 /**
  * Order Detail Component - Holland Flowers
- * Displays detailed information about a specific order
+ * Displays detailed information about a specific order with delivery and payment status
  */
 
 import React, { useState, useEffect } from 'react';
@@ -49,7 +49,7 @@ const OrderDetail = () => {
     }
   };
 
-  const getStatusColor = (status) => {
+  const getDeliveryStatusColor = (status) => {
     const colors = {
       PENDING: '#f59e0b',
       CONFIRMED: '#3b82f6',
@@ -62,13 +62,39 @@ const OrderDetail = () => {
     return colors[status] || '#666';
   };
 
-  const getStatusLabel = (status) => {
+  const getPaymentStatusColor = (status) => {
+    const colors = {
+      PENDING: '#f59e0b',
+      PROCESSING: '#3b82f6',
+      COMPLETED: '#10b981',
+      CAPTURED: '#10b981',
+      FAILED: '#ef4444',
+      CANCELLED: '#6b7280',
+      REFUNDED: '#8b5cf6',
+    };
+    return colors[status] || '#666';
+  };
+
+  const getDeliveryStatusLabel = (status) => {
     const labels = {
       PENDING: { en: 'Pending', ar: 'قيد الانتظار' },
       CONFIRMED: { en: 'Confirmed', ar: 'مؤكد' },
       PROCESSING: { en: 'Processing', ar: 'قيد التحضير' },
       OUT_FOR_DELIVERY: { en: 'Out for Delivery', ar: 'قيد التوصيل' },
       DELIVERED: { en: 'Delivered', ar: 'تم التوصيل' },
+      CANCELLED: { en: 'Cancelled', ar: 'ملغي' },
+      REFUNDED: { en: 'Refunded', ar: 'مسترد' },
+    };
+    return labels[status]?.[currentLang] || status;
+  };
+
+  const getPaymentStatusLabel = (status) => {
+    const labels = {
+      PENDING: { en: 'Payment Pending', ar: 'في انتظار الدفع' },
+      PROCESSING: { en: 'Processing', ar: 'قيد المعالجة' },
+      COMPLETED: { en: 'Paid', ar: 'مدفوع' },
+      CAPTURED: { en: 'Paid', ar: 'مدفوع' },
+      FAILED: { en: 'Payment Failed', ar: 'فشل الدفع' },
       CANCELLED: { en: 'Cancelled', ar: 'ملغي' },
       REFUNDED: { en: 'Refunded', ar: 'مسترد' },
     };
@@ -133,7 +159,7 @@ const OrderDetail = () => {
     return null;
   }
 
-  const progress = getOrderProgress(order.orderStatus);
+  const progress = getOrderProgress(order.deliveryStatus);
   const progressSteps = [
     { key: 'PENDING', en: 'Placed', ar: 'تم الطلب' },
     { key: 'CONFIRMED', en: 'Confirmed', ar: 'مؤكد' },
@@ -163,22 +189,36 @@ const OrderDetail = () => {
               {currentLang === 'ar' ? 'تم الطلب في' : 'Placed on'} {formatDate(order.createdAt)}
             </p>
           </div>
-          <span 
-            className="order-status-badge"
-            style={{ 
-              backgroundColor: `${getStatusColor(order.orderStatus)}20`,
-              color: getStatusColor(order.orderStatus),
-              borderColor: getStatusColor(order.orderStatus)
-            }}
-          >
-            {getStatusLabel(order.orderStatus)}
-          </span>
+          <div className="order-header-statuses">
+            {/* Delivery Status */}
+            <span 
+              className="order-status-badge delivery"
+              style={{ 
+                backgroundColor: `${getDeliveryStatusColor(order.deliveryStatus)}20`,
+                color: getDeliveryStatusColor(order.deliveryStatus),
+                borderColor: getDeliveryStatusColor(order.deliveryStatus)
+              }}
+            >
+              🚚 {getDeliveryStatusLabel(order.deliveryStatus)}
+            </span>
+            {/* Payment Status */}
+            <span 
+              className="order-status-badge payment"
+              style={{ 
+                backgroundColor: `${getPaymentStatusColor(order.paymentStatus)}20`,
+                color: getPaymentStatusColor(order.paymentStatus),
+                borderColor: getPaymentStatusColor(order.paymentStatus)
+              }}
+            >
+              💳 {getPaymentStatusLabel(order.paymentStatus)}
+            </span>
+          </div>
         </div>
 
         {/* Order Progress */}
         {progress >= 0 && (
           <div className="order-progress-section">
-            <h2>{currentLang === 'ar' ? 'حالة الطلب' : 'Order Status'}</h2>
+            <h2>{currentLang === 'ar' ? 'حالة التوصيل' : 'Delivery Status'}</h2>
             <div className="progress-track">
               {progressSteps.map((step, index) => (
                 <div 
@@ -202,14 +242,14 @@ const OrderDetail = () => {
         )}
 
         {/* Cancelled/Refunded Notice */}
-        {(order.orderStatus === 'CANCELLED' || order.orderStatus === 'REFUNDED') && (
-          <div className={`order-notice ${order.orderStatus.toLowerCase()}`}>
+        {(order.deliveryStatus === 'CANCELLED' || order.deliveryStatus === 'REFUNDED') && (
+          <div className={`order-notice ${order.deliveryStatus.toLowerCase()}`}>
             <span className="notice-icon">
-              {order.orderStatus === 'CANCELLED' ? '❌' : '💰'}
+              {order.deliveryStatus === 'CANCELLED' ? '❌' : '💰'}
             </span>
             <div className="notice-content">
               <strong>
-                {order.orderStatus === 'CANCELLED' 
+                {order.deliveryStatus === 'CANCELLED' 
                   ? (currentLang === 'ar' ? 'تم إلغاء الطلب' : 'Order Cancelled')
                   : (currentLang === 'ar' ? 'تم استرداد المبلغ' : 'Order Refunded')}
               </strong>
@@ -276,6 +316,19 @@ const OrderDetail = () => {
                 <span>{currentLang === 'ar' ? 'د.ك' : 'KWD'} {order.totalAmount?.toFixed(3)}</span>
               </div>
             </div>
+            {/* Payment Status in Summary */}
+            <div className="payment-status-summary">
+              <span className="label">{currentLang === 'ar' ? 'حالة الدفع:' : 'Payment Status:'}</span>
+              <span 
+                className="payment-badge"
+                style={{ 
+                  backgroundColor: `${getPaymentStatusColor(order.paymentStatus)}20`,
+                  color: getPaymentStatusColor(order.paymentStatus)
+                }}
+              >
+                {getPaymentStatusLabel(order.paymentStatus)}
+              </span>
+            </div>
           </div>
 
           {/* Delivery Information */}
@@ -335,7 +388,7 @@ const OrderDetail = () => {
 
         {/* Action Buttons */}
         <div className="order-actions">
-          {order.orderStatus === 'PENDING' && (
+          {order.deliveryStatus === 'PENDING' && (
             <button 
               className="cancel-order-btn"
               onClick={async () => {

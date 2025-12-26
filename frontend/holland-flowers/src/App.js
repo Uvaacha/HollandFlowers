@@ -999,7 +999,6 @@ const HomePage = ({ currentLang }) => {
                 </div>
                 <p className="testimonial-text">"{testimonial.text}"</p>
                 <div className="testimonial-author">
-                  <img src={testimonial.image} alt={testimonial.name} className="testimonial-avatar" />
                   <span className="testimonial-name">{testimonial.name}</span>
                 </div>
               </div>

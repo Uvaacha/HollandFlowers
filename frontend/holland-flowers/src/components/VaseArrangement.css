@@ -1,695 +1,559 @@
 /* ============================================
-   Vase Arrangement - Sophisticated Teal Theme
-   Matching Valentine's attractive design
+   Vase Arrangements - STYLED PAGE
+   Theme: #607d8b
    ============================================ */
 
-/* Page Container */
-.vase-page {
+.vasearrangement-page {
   min-height: 100vh;
-  background: linear-gradient(180deg, #f0fdfa 0%, #ccfbf1 50%, #ecfeff 100%);
-  position: relative;
-  overflow-x: hidden;
+  background: #ffffff;
 }
 
-.vase-page.rtl {
+.vasearrangement-page.rtl {
   direction: rtl;
 }
 
-/* Decorative Background */
-.vase-bg {
-  position: fixed;
+.vasearrangement-page .container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* HERO BANNER */
+.vasearrangement-page .hero-banner {
+  background: linear-gradient(135deg, #eceff1 0%, #f5f7f8 50%, #eceff1 100%);
+  padding: 50px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.vasearrangement-page .hero-bg-decoration {
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
 }
 
-.vase-glow {
+.vasearrangement-page .floating-icon {
   position: absolute;
-  border-radius: 50%;
-  filter: blur(120px);
-  opacity: 0.4;
+  font-size: 40px;
+  opacity: 0.15;
+  animation: floatVaseArrangement 15s ease-in-out infinite;
 }
 
-.vase-page .glow-1 {
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, #99f6e4 0%, transparent 70%);
-  top: -150px;
-  right: -100px;
-}
+.vasearrangement-page .float-1 { top: 10%; left: 5%; }
+.vasearrangement-page .float-2 { top: 60%; right: 8%; font-size: 35px; animation-delay: -5s; }
+.vasearrangement-page .float-3 { bottom: 15%; left: 15%; font-size: 30px; animation-delay: -10s; }
 
-.vase-page .glow-2 {
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, #5eead4 0%, transparent 70%);
-  bottom: 20%;
-  left: -120px;
-  opacity: 0.3;
-}
-
-.floating-vase {
-  position: absolute;
-  font-size: 28px;
-  opacity: 0.18;
-  animation: vaseFloat 18s ease-in-out infinite;
-}
-
-.fv-1 {
-  top: 8%;
-  left: 4%;
-  animation-delay: 0s;
-  font-size: 32px;
-}
-
-.fv-2 {
-  top: 35%;
-  right: 5%;
-  animation-delay: -5s;
-  font-size: 26px;
-}
-
-.fv-3 {
-  bottom: 40%;
-  left: 8%;
-  animation-delay: -10s;
-  font-size: 30px;
-}
-
-.fv-4 {
-  bottom: 15%;
-  right: 10%;
-  animation-delay: -15s;
-  font-size: 28px;
-}
-
-@keyframes vaseFloat {
+@keyframes floatVaseArrangement {
   0%, 100% { transform: translateY(0) rotate(0deg); }
-  25% { transform: translateY(-18px) rotate(8deg); }
-  50% { transform: translateY(-8px) rotate(-5deg); }
-  75% { transform: translateY(-22px) rotate(5deg); }
+  50% { transform: translateY(-20px) rotate(10deg); }
 }
 
-/* Container */
-.vase-page .container {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 24px;
+.vasearrangement-page .hero-content {
   position: relative;
-  z-index: 1;
-}
-
-/* ============================================
-   HERO SECTION - Matching Valentine's Style
-   ============================================ */
-.vase-hero {
-  padding: 50px 0 40px;
+  z-index: 2;
   text-align: center;
-  background: linear-gradient(180deg, rgba(255,245,247,0.9) 0%, rgba(255,240,243,0.95) 100%);
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-.vase-page .hero-badge {
+.vasearrangement-page .hero-badge {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 28px;
-  background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+  gap: 10px;
+  padding: 10px 22px;
+  background: linear-gradient(135deg, #607d8b 0%, #516a76 100%);
   border-radius: 50px;
   color: white;
   font-family: 'Poppins', sans-serif;
   font-size: 13px;
   font-weight: 600;
-  letter-spacing: 1.5px;
-  margin-bottom: 24px;
-  box-shadow: 0 8px 30px rgba(225, 29, 72, 0.35);
+  margin-bottom: 18px;
+  box-shadow: 0 8px 25px rgba(96, 125, 139, 0.35);
 }
 
-.vase-page.rtl .hero-badge {
-  font-family: 'Tajawal', sans-serif;
-  letter-spacing: 0;
-}
-
-.vase-page .hero-title {
+.vasearrangement-page .hero-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 56px;
-  font-weight: 500;
-  font-style: italic;
-  color: #1f2937;
-  margin: 0 0 16px;
-  line-height: 1.2;
-}
-
-.vase-page.rtl .hero-title {
-  font-family: 'Amiri', serif;
   font-size: 48px;
+  font-weight: 600;
+  font-style: italic;
+  color: #2d2d2d;
+  margin: 0 0 14px;
+  line-height: 1.1;
 }
 
-.vase-page .hero-subtitle {
+.vasearrangement-page.rtl .hero-title {
+  font-family: 'Amiri', serif;
+  font-size: 42px;
+}
+
+.vasearrangement-page .hero-subtitle {
   font-family: 'Poppins', sans-serif;
-  font-size: 16px;
-  font-weight: 300;
-  color: #6b7280;
-  margin: 0;
-  line-height: 1.6;
+  font-size: 15px;
+  color: #666;
+  margin: 0 auto;
+  line-height: 1.7;
+  max-width: 600px;
 }
 
-.vase-page.rtl .hero-subtitle {
-  font-family: 'Tajawal', sans-serif;
+/* MAIN CONTENT */
+.vasearrangement-page .main-content {
+  padding: 40px 0 80px;
 }
 
-/* ============================================
-   MAIN CONTENT WITH SIDEBAR
-   ============================================ */
-.vase-content {
-  padding: 40px 0 60px;
+.vasearrangement-page .content-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 50px;
+  align-items: start;
 }
 
-.content-wrapper {
-  display: flex;
-  gap: 40px;
-  align-items: flex-start;
-}
-
-/* ============================================
-   LEFT SIDEBAR - FILTERS
-   ============================================ */
-.filters-sidebar {
-  width: 280px;
-  flex-shrink: 0;
+/* FILTERS SIDEBAR */
+.vasearrangement-page .filters-sidebar {
   position: sticky;
-  top: 100px;
-  background: white;
-  border-radius: 16px;
-  padding: 28px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  top: 20px;
 }
 
-.filters-title {
-  font-family: 'Poppins', sans-serif;
-  font-size: 20px;
-  font-weight: 600;
-  color: #1f2937;
-  margin: 0 0 28px;
-}
-
-.vase-page.rtl .filters-title {
-  font-family: 'Tajawal', sans-serif;
-}
-
-.filter-section {
-  margin-bottom: 28px;
-  padding-bottom: 28px;
-  border-bottom: 1px solid #f3f4f6;
-}
-
-.filter-section:last-child {
-  margin-bottom: 0;
-  padding-bottom: 0;
-  border-bottom: none;
-}
-
-.filter-heading {
-  font-family: 'Poppins', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  color: #6b7280;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin: 0 0 16px;
+.vasearrangement-page .filters-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  cursor: pointer;
+  margin-bottom: 30px;
 }
 
-.vase-page.rtl .filter-heading {
-  font-family: 'Tajawal', sans-serif;
-  text-transform: none;
-  letter-spacing: 0;
+.vasearrangement-page .filters-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2d2d2d;
+  margin: 0;
 }
 
-/* Price Range Inputs */
-.price-inputs {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.price-input-group {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.currency-label {
-  padding: 10px 12px;
-  background: #f3f4f6;
+.vasearrangement-page .clear-filters {
+  background: none;
+  border: none;
   font-family: 'Poppins', sans-serif;
   font-size: 13px;
-  font-weight: 500;
-  color: #6b7280;
-  border-right: 1px solid #e5e7eb;
+  color: #607d8b;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
-.vase-page.rtl .currency-label {
-  border-right: none;
-  border-left: 1px solid #e5e7eb;
+.vasearrangement-page .filter-section {
+  border-bottom: 1px solid #f0eded;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
 }
 
-.price-input {
-  flex: 1;
-  padding: 10px 12px;
-  border: none;
-  background: transparent;
-  font-family: 'Poppins', sans-serif;
-  font-size: 14px;
-  color: #374151;
+.vasearrangement-page .filter-header {
   width: 100%;
-  outline: none;
-}
-
-.price-input::placeholder {
-  color: #9ca3af;
-}
-
-.price-separator {
-  color: #9ca3af;
-  font-weight: 500;
-}
-
-.highest-price {
-  font-family: 'Poppins', sans-serif;
-  font-size: 12px;
-  color: #9ca3af;
-  margin: 12px 0 0;
-}
-
-.vase-page.rtl .highest-price {
-  font-family: 'Tajawal', sans-serif;
-}
-
-/* Checkbox Group */
-.checkbox-group {
   display: flex;
-  flex-direction: column;
-  gap: 14px;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2d2d2d;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
-.checkbox-item {
+.vasearrangement-page .filter-header svg {
+  transition: transform 0.3s ease;
+  color: #999;
+}
+
+.vasearrangement-page .filter-header.open svg {
+  transform: rotate(180deg);
+}
+
+.vasearrangement-page .filter-content {
+  margin-top: 18px;
+}
+
+.vasearrangement-page .price-inputs {
   display: flex;
   align-items: center;
   gap: 12px;
-  cursor: pointer;
-  padding: 8px 12px;
+}
+
+.vasearrangement-page .price-input-group {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e5e5e5;
   border-radius: 8px;
-  transition: background 0.2s ease;
+  overflow: hidden;
+  flex: 1;
 }
 
-.checkbox-item:hover {
-  background: #f0fdfa;
+.vasearrangement-page .price-input-group .currency-label {
+  padding: 10px 12px;
+  background: #fafafa;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #999;
+  border-right: 1px solid #e5e5e5;
 }
 
-.checkbox-item input {
+.vasearrangement-page .price-input-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #2d2d2d;
+  outline: none;
+}
+
+.vasearrangement-page .price-separator {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #999;
+}
+
+.vasearrangement-page .price-hint {
+  margin: 14px 0 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #999;
+}
+
+.vasearrangement-page .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+.vasearrangement-page .checkbox-label:hover {
+  color: #607d8b;
+}
+
+.vasearrangement-page .checkbox-label input[type="checkbox"] {
   display: none;
 }
 
-.checkmark {
-  width: 20px;
-  height: 20px;
-  border: 2px solid #d1d5db;
+.vasearrangement-page .checkbox-label .checkmark {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ddd;
   border-radius: 4px;
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: all 0.2s ease;
   flex-shrink: 0;
 }
 
-.checkbox-item input:checked + .checkmark {
-  background: #0d9488;
-  border-color: #0d9488;
+.vasearrangement-page .checkbox-label input:checked + .checkmark {
+  background: #607d8b;
+  border-color: #607d8b;
 }
 
-.checkbox-item input:checked + .checkmark::after {
+.vasearrangement-page .checkbox-label input:checked + .checkmark::after {
   content: '';
-  position: absolute;
-  left: 6px;
-  top: 2px;
   width: 5px;
-  height: 10px;
+  height: 9px;
   border: solid white;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
+  margin-bottom: 2px;
 }
 
-.checkbox-label {
+.vasearrangement-page .checkbox-label .label-text {
   font-family: 'Poppins', sans-serif;
   font-size: 14px;
-  color: #374151;
+  color: #4a4a4a;
 }
 
-.vase-page.rtl .checkbox-label {
-  font-family: 'Tajawal', sans-serif;
+/* PRODUCTS MAIN */
+.vasearrangement-page .products-main {
+  min-height: 500px;
 }
 
-/* ============================================
-   RIGHT CONTENT - PRODUCTS AREA
-   ============================================ */
-.products-area {
-  flex: 1;
-  min-width: 0;
-}
-
-/* Toolbar */
-.products-toolbar {
+.vasearrangement-page .products-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 28px;
+  margin-bottom: 30px;
   padding-bottom: 20px;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid #f0eded;
 }
 
-.items-count {
+.vasearrangement-page .items-count {
   font-family: 'Poppins', sans-serif;
-  font-size: 15px;
+  font-size: 14px;
+  color: #666;
   font-weight: 500;
-  color: #6b7280;
 }
 
-.vase-page.rtl .items-count {
-  font-family: 'Tajawal', sans-serif;
-}
-
-.toolbar-right {
+.vasearrangement-page .toolbar-right {
   display: flex;
   align-items: center;
   gap: 20px;
 }
 
-.sort-wrapper {
+.vasearrangement-page .sort-dropdown {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.sort-wrapper label {
+.vasearrangement-page .sort-dropdown label {
   font-family: 'Poppins', sans-serif;
   font-size: 14px;
-  color: #6b7280;
+  color: #666;
 }
 
-.vase-page.rtl .sort-wrapper label {
-  font-family: 'Tajawal', sans-serif;
-}
-
-.sort-select {
-  padding: 10px 36px 10px 14px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center;
+.vasearrangement-page .sort-dropdown select {
+  padding: 8px 32px 8px 14px;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
   font-family: 'Poppins', sans-serif;
   font-size: 14px;
-  color: #374151;
+  color: #2d2d2d;
+  background: white;
   cursor: pointer;
   appearance: none;
-  min-width: 160px;
-}
-
-.vase-page.rtl .sort-select {
-  font-family: 'Tajawal', sans-serif;
-  padding: 10px 14px 10px 36px;
-  background-position: left 12px center;
-}
-
-.sort-select:focus {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
   outline: none;
-  border-color: #0d9488;
 }
 
-/* View Toggle */
-.view-toggle {
+.vasearrangement-page .sort-dropdown select:focus {
+  border-color: #607d8b;
+}
+
+.vasearrangement-page .view-toggle {
   display: flex;
+  align-items: center;
   gap: 4px;
   padding: 4px;
-  background: #f3f4f6;
+  background: #f5f5f5;
   border-radius: 8px;
 }
 
-.view-btn {
+.vasearrangement-page .view-btn {
   width: 36px;
   height: 36px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: none;
-  background: transparent;
-  color: #9ca3af;
-  border-radius: 6px;
-  cursor: pointer;
+  color: #999;
   transition: all 0.2s ease;
 }
 
-.view-btn:hover {
-  color: #6b7280;
-}
-
-.view-btn.active {
+.vasearrangement-page .view-btn.active {
   background: white;
-  color: #0d9488;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  color: #607d8b;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-/* ============================================
-   PRODUCTS GRID
-   ============================================ */
-.products-grid {
+/* PRODUCTS GRID */
+.vasearrangement-page .products-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+  gap: 20px;
 }
 
-.products-grid.list {
+.vasearrangement-page .products-grid.list {
   grid-template-columns: 1fr;
   gap: 16px;
 }
 
-/* Product Card */
-.vase-page .product-card {
-  background: white;
+/* PRODUCT CARD */
+.vasearrangement-page .product-card {
+  background: #ffffff;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
   text-decoration: none;
-  display: block;
-  animation: cardFadeIn 0.5s ease-out forwards;
+  color: inherit;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  animation: cardFadeInVaseArrangement 0.5s ease forwards;
   opacity: 0;
+  border: 1px solid #f5f5f5;
 }
 
-@keyframes cardFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes cardFadeInVaseArrangement {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.vase-page .product-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 40px rgba(225, 29, 72, 0.12);
+.vasearrangement-page .product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(96, 125, 139, 0.12);
+  border-color: #eceff1;
 }
 
-/* Discount Badge */
-.discount-badge {
+.vasearrangement-page .products-grid.list .product-card {
+  flex-direction: row;
+}
+
+.vasearrangement-page .products-grid.list .product-image-wrapper {
+  width: 300px;
+  height: 280px;
+  flex-shrink: 0;
+}
+
+.vasearrangement-page .products-grid.list .product-info {
+  flex: 1;
+  padding: 12px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.vasearrangement-page .discount-badge {
   position: absolute;
-  top: 12px;
-  left: 12px;
-  z-index: 15;
-  padding: 6px 12px;
-  background: #ef4444;
-  color: white;
-  border-radius: 20px;
+  top: 14px;
+  left: 14px;
+  z-index: 10;
+  padding: 8px 14px;
+  background: linear-gradient(135deg, #607d8b 0%, #516a76 100%);
+  color: #ffffff;
   font-family: 'Poppins', sans-serif;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
+  border-radius: 50px;
+  box-shadow: 0 4px 15px rgba(96, 125, 139, 0.35);
 }
 
-.vase-page.rtl .discount-badge {
+.vasearrangement-page.rtl .discount-badge {
   left: auto;
-  right: 12px;
+  right: 14px;
 }
 
-/* Product Badge */
-.vase-page .product-badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  z-index: 10;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-family: 'Poppins', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
-
-.vase-page.rtl .product-badge {
-  left: auto;
-  right: 12px;
-  font-family: 'Tajawal', sans-serif;
-  text-transform: none;
-}
-
-.vase-page .product-card:has(.discount-badge) .product-badge {
-  top: 48px;
-}
-
-.vase-page .badge-pink {
-  background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
-  color: white;
-}
-
-.vase-page .badge-purple {
-  background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
-  color: white;
-}
-
-.vase-page .badge-white {
-  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-  color: #475569;
-}
-
-.vase-page .badge-yellow {
-  background: linear-gradient(135deg, #fbbf24 0%, #fcd34d 100%);
-  color: #78350f;
-}
-
-.vase-page .badge-mix {
-  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #fbbf24 100%);
-  color: white;
-}
-
-.vase-page .badge-premium {
-  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
-  color: white;
-}
-
-/* Product Image */
-.vase-page .product-image-wrapper {
+.vasearrangement-page .product-image-wrapper {
   position: relative;
-  height: 240px;
+  width: 100%;
+  height: 280px;
   overflow: hidden;
-  background: linear-gradient(180deg, #fefefe 0%, #faf8f7 100%);
+  background: linear-gradient(180deg, #eceff1 0%, #fff 100%);
 }
 
-.vase-page .product-image {
+.vasearrangement-page .product-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.vase-page .product-card:hover .product-image {
-  transform: scale(1.05);
+.vasearrangement-page .product-card:hover .product-image {
+  transform: scale(1.08);
 }
 
-/* Quick Add Button */
-.quick-add-btn {
-  position: absolute;
-  bottom: 12px;
-  right: 12px;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: none;
-  background: white;
-  color: #0d9488;
+.vasearrangement-page .product-info {
+  padding: 12px 0 0 0;
+  background: #ffffff;
+  flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  flex-direction: column;
 }
 
-.vase-page.rtl .quick-add-btn {
-  right: auto;
-  left: 12px;
-}
-
-.vase-page .product-card:hover .quick-add-btn {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.quick-add-btn:hover {
-  background: #0d9488;
-  color: white;
-  transform: scale(1.1);
-}
-
-/* Product Details */
-.vase-page .product-details {
-  padding: 18px;
-}
-
-.vase-page .product-name {
+.vasearrangement-page .product-name {
   font-family: 'Poppins', sans-serif;
   font-size: 14px;
   font-weight: 500;
-  color: #374151;
-  margin: 0 0 8px;
-  line-height: 1.4;
+  color: #2d2d2d;
+  margin: 0 0 6px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color 0.3s ease;
+}
+
+.vasearrangement-page .product-card:hover .product-name {
+  color: #607d8b;
+}
+
+.vasearrangement-page .product-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #888;
+  margin: 0 0 6px;
+  line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.vase-page.rtl .product-name {
-  font-family: 'Tajawal', sans-serif;
-}
-
-.vase-page .price-wrapper {
+.vasearrangement-page .product-footer {
   display: flex;
   align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: auto;
 }
 
-.vase-page .original-price {
+.vasearrangement-page .price-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.vasearrangement-page .original-price {
   font-family: 'Poppins', sans-serif;
-  font-size: 13px;
-  color: #9ca3af;
+  font-size: 12px;
+  color: #bbb;
   text-decoration: line-through;
 }
 
-.vase-page .final-price {
+.vasearrangement-page .sale-price {
   font-family: 'Poppins', sans-serif;
   font-size: 16px;
-  font-weight: 600;
-  color: #1f2937;
+  font-weight: 700;
+  color: #607d8b;
 }
 
-/* ============================================
-   LOADING / ERROR / EMPTY STATES
-   ============================================ */
-.loading-state {
+.vasearrangement-page .add-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: #eceff1;
+  color: #607d8b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.vasearrangement-page .add-btn:hover {
+  background: linear-gradient(135deg, #607d8b 0%, #516a76 100%);
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+.vasearrangement-page .add-btn.adding {
+  background: #607d8b;
+  color: #ffffff;
+}
+
+/* STATES */
+.vasearrangement-page .loading-state,
+.vasearrangement-page .error-state,
+.vasearrangement-page .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -698,11 +562,11 @@
   text-align: center;
 }
 
-.spinner {
-  width: 44px;
-  height: 44px;
-  border: 3px solid #99f6e4;
-  border-top-color: #0d9488;
+.vasearrangement-page .spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #eceff1;
+  border-top-color: #607d8b;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 16px;
@@ -712,541 +576,2628 @@
   to { transform: rotate(360deg); }
 }
 
-.loading-state p {
+.vasearrangement-page .loading-state p,
+.vasearrangement-page .error-state p,
+.vasearrangement-page .empty-state p {
   font-family: 'Poppins', sans-serif;
   font-size: 15px;
-  color: #9ca3af;
-}
-
-.error-state {
-  text-align: center;
-  padding: 60px 20px;
-  background: #fef2f2;
-  border-radius: 12px;
-}
-
-.error-title {
-  font-family: 'Poppins', sans-serif;
-  font-size: 16px;
-  color: #dc2626;
-  margin: 0 0 8px;
-}
-
-.error-message {
-  font-family: 'Poppins', sans-serif;
-  font-size: 14px;
-  color: #9ca3af;
+  color: #666;
   margin: 0;
 }
 
-.empty-state {
-  text-align: center;
-  padding: 80px 20px;
-}
-
-.empty-icon {
-  font-size: 56px;
+.vasearrangement-page .empty-icon {
+  font-size: 50px;
   margin-bottom: 16px;
 }
 
-.empty-state p {
-  font-family: 'Poppins', sans-serif;
-  font-size: 16px;
-  color: #9ca3af;
+/* RESPONSIVE */
+@media (max-width: 1200px) {
+  .vasearrangement-page .content-layout { grid-template-columns: 250px 1fr; gap: 40px; }
+  .vasearrangement-page .products-grid { grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .vasearrangement-page .product-image-wrapper { height: 280px; }
+  .vasearrangement-page .hero-title { font-size: 42px; }
 }
+
+@media (max-width: 992px) {
+  .vasearrangement-page .hero-banner { padding: 40px 0; }
+  .vasearrangement-page .hero-title { font-size: 38px; }
+  .vasearrangement-page .content-layout { grid-template-columns: 220px 1fr; gap: 30px; }
+  .vasearrangement-page .products-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .vasearrangement-page .product-image-wrapper { height: 260px; }
+}
+
+@media (max-width: 768px) {
+  .vasearrangement-page .hero-banner { padding: 35px 0; }
+  .vasearrangement-page .hero-title { font-size: 32px; }
+  .vasearrangement-page .hero-subtitle { font-size: 14px; }
+  .vasearrangement-page .floating-icon { display: none; }
+  .vasearrangement-page .main-content { padding: 30px 0 60px; }
+  .vasearrangement-page .content-layout { grid-template-columns: 1fr; gap: 24px; }
+  .vasearrangement-page .filters-sidebar { position: relative; top: 0; padding: 20px; background: #eceff1; border-radius: 12px; }
+  .vasearrangement-page .products-toolbar { flex-wrap: wrap; gap: 16px; }
+  .vasearrangement-page .toolbar-right { width: 100%; justify-content: space-between; }
+  .vasearrangement-page .products-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .vasearrangement-page .product-image-wrapper { height: 240px; }
+  .vasearrangement-page .product-info { padding: 12px 0 0 0; }
+  .vasearrangement-page .product-name { font-size: 14px; margin-bottom: 4px; }
+  .vasearrangement-page .product-desc { font-size: 11px; margin-bottom: 10px; }
+  .vasearrangement-page .sale-price { font-size: 16px; }
+  .vasearrangement-page .add-btn { width: 38px; height: 38px; }
+  .vasearrangement-page .discount-badge { padding: 6px 12px; font-size: 10px; }
+  .vasearrangement-page .products-grid.list .product-card { flex-direction: column; }
+  .vasearrangement-page .products-grid.list .product-image-wrapper { width: 100%; height: 240px; }
+}
+
+@media (max-width: 576px) {
+  .vasearrangement-page .container { padding: 0 16px; }
+  .vasearrangement-page .hero-title { font-size: 26px; }
+  .vasearrangement-page .products-grid { gap: 14px; }
+  .vasearrangement-page .product-image-wrapper { height: 200px; }
+  .vasearrangement-page .product-info { padding: 12px 0 0 0; }
+  .vasearrangement-page .product-name { font-size: 14px; margin-bottom: 3px; }
+  .vasearrangement-page .product-desc { font-size: 10px; margin-bottom: 8px; }
+  .vasearrangement-page .sale-price { font-size: 16px; }
+  .vasearrangement-page .add-btn { width: 34px; height: 34px; }
+  .vasearrangement-page .discount-badge { padding: 5px 10px; font-size: 9px; top: 10px; left: 10px; }
+}
+
 
 /* ============================================
-   INFO BANNER
+   IMPROVED CARD LAYOUT
    ============================================ */
-.info-banner {
-  padding: 0 0 60px;
+
+.vasearrangement-page .product-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  border: 1px solid #f0f0f0;
 }
 
-.banner-content {
+.vasearrangement-page .product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.vasearrangement-page .product-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100%; /* 1:1 Aspect Ratio */
+  overflow: hidden;
+  background: #f8f8f8;
+}
+
+.vasearrangement-page .product-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.vasearrangement-page .product-card:hover .product-image {
+  transform: scale(1.05);
+}
+
+.vasearrangement-page .product-info {
+  padding: 14px;
+}
+
+.vasearrangement-page .product-name {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.vasearrangement-page .product-footer {
   display: flex;
   align-items: center;
-  gap: 24px;
-  padding: 28px 35px;
-  background: linear-gradient(135deg, rgba(254, 205, 211, 0.25) 0%, rgba(251, 207, 232, 0.2) 100%);
-  border: 1px solid rgba(225, 29, 72, 0.1);
-  border-radius: 20px;
+  justify-content: space-between;
+  gap: 10px;
 }
 
-.vase-page.rtl .banner-content {
-  flex-direction: row-reverse;
+.vasearrangement-page .price-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
-.banner-icon {
-  width: 68px;
-  height: 68px;
+.vasearrangement-page .original-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.vasearrangement-page .sale-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #e91e63;
+}
+
+.vasearrangement-page .add-btn {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+  border: none;
+  background: #fce4ec;
+  color: #e91e63;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 30px;
+  transition: all 0.3s ease;
   flex-shrink: 0;
-  box-shadow: 0 8px 25px rgba(225, 29, 72, 0.3);
 }
 
-.banner-text h3 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 22px;
-  font-weight: 600;
-  color: #0f766e;
-  margin: 0 0 6px;
+.vasearrangement-page .add-btn:hover {
+  background: #e91e63;
+  color: #fff;
 }
 
-.vase-page.rtl .banner-text h3 {
-  font-family: 'Amiri', serif;
-  text-align: right;
+.vasearrangement-page .add-btn.adding {
+  background: #4caf50;
+  color: #fff;
 }
 
-.banner-text p {
+.vasearrangement-page .discount-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 5;
+  padding: 6px 12px;
+  background: #e91e63;
+  color: #fff;
   font-family: 'Poppins', sans-serif;
-  font-size: 14px;
-  color: #6b7280;
-  margin: 0;
-  line-height: 1.6;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 20px;
 }
 
-.vase-page.rtl .banner-text p {
-  font-family: 'Tajawal', sans-serif;
-  text-align: right;
+.vasearrangement-page.rtl .discount-badge {
+  left: auto;
+  right: 12px;
 }
+
 
 /* ============================================
-   RESPONSIVE - TABLET (1200px)
+   PREMIUM DESIGN OVERRIDES
    ============================================ */
+
+/* Page Background - Elegant soft gray */
+.vasearrangement-page {
+  background: #f5f5f5 !important;
+  min-height: 100vh;
+}
+
+.vasearrangement-page .main-content {
+  background: #f5f5f5;
+  padding: 40px 0 80px;
+}
+
+/* Filter Sidebar - White card with shadow */
+.vasearrangement-page .filters-sidebar {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  border: none;
+}
+
+.vasearrangement-page .filters-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #f5f5f5;
+}
+
+.vasearrangement-page .filters-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.vasearrangement-page .clear-filters {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #e91e63;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.vasearrangement-page .clear-filters:hover {
+  text-decoration: underline;
+}
+
+/* Filter Sections */
+.vasearrangement-page .filter-section {
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.vasearrangement-page .filter-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.vasearrangement-page .filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-bottom: 0;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.vasearrangement-page .filter-content {
+  margin-top: 20px;
+}
+
+/* Checkbox Labels - PROPER SPACING */
+.vasearrangement-page .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  cursor: pointer;
+  border-bottom: 1px solid #f8f8f8;
+  transition: all 0.2s ease;
+}
+
+.vasearrangement-page .checkbox-label:last-child {
+  border-bottom: none;
+}
+
+.vasearrangement-page .checkbox-label:hover {
+  padding-left: 8px;
+}
+
+.vasearrangement-page .checkbox-label input[type="checkbox"] {
+  display: none;
+}
+
+.vasearrangement-page .checkbox-label .checkmark {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  background: #fff;
+}
+
+.vasearrangement-page .checkbox-label:hover .checkmark {
+  border-color: #e91e63;
+}
+
+.vasearrangement-page .checkbox-label input:checked + .checkmark {
+  background: #e91e63;
+  border-color: #e91e63;
+}
+
+.vasearrangement-page .checkbox-label input:checked + .checkmark::after {
+  content: '';
+  width: 6px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(45deg);
+  margin-bottom: 2px;
+}
+
+.vasearrangement-page .checkbox-label .label-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  color: #444;
+  font-weight: 400;
+}
+
+.vasearrangement-page .checkbox-label:hover .label-text {
+  color: #e91e63;
+}
+
+/* Price Inputs */
+.vasearrangement-page .price-inputs {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.vasearrangement-page .price-input-group {
+  display: flex;
+  align-items: center;
+  background: #fafafa;
+  border: 2px solid #eee;
+  border-radius: 10px;
+  overflow: hidden;
+  flex: 1;
+  transition: border-color 0.2s ease;
+}
+
+.vasearrangement-page .price-input-group:focus-within {
+  border-color: #e91e63;
+}
+
+.vasearrangement-page .price-input-group .currency-label {
+  padding: 12px 14px;
+  background: #f5f5f5;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #888;
+  font-weight: 500;
+  border-right: 1px solid #eee;
+}
+
+.vasearrangement-page .price-input-group input {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #333;
+  background: transparent;
+  outline: none;
+}
+
+.vasearrangement-page .price-separator {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #ccc;
+  font-weight: 500;
+}
+
+.vasearrangement-page .price-hint {
+  margin: 14px 0 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #999;
+}
+
+/* Product Cards - White with subtle shadow */
+.vasearrangement-page .product-card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  border: none;
+}
+
+.vasearrangement-page .product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 35px rgba(0,0,0,0.1);
+}
+
+/* Product Image */
+.vasearrangement-page .product-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  overflow: hidden;
+  background: #f9f9f9;
+}
+
+.vasearrangement-page .product-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.vasearrangement-page .product-card:hover .product-image {
+  transform: scale(1.05);
+}
+
+/* Product Info */
+.vasearrangement-page .product-info {
+  padding: 16px;
+}
+
+.vasearrangement-page .product-name {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #222;
+  margin: 0 0 10px 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.vasearrangement-page .product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vasearrangement-page .price-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.vasearrangement-page .original-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #aaa;
+  text-decoration: line-through;
+}
+
+.vasearrangement-page .sale-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: #e91e63;
+}
+
+.vasearrangement-page .add-btn {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  border-radius: 50%;
+  border: none;
+  background: #fce4ec;
+  color: #e91e63;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.vasearrangement-page .add-btn:hover {
+  background: #e91e63;
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.vasearrangement-page .add-btn.adding {
+  background: #4caf50;
+  color: #fff;
+}
+
+/* Discount Badge */
+.vasearrangement-page .discount-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 5;
+  padding: 6px 14px;
+  background: #e91e63;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 25px;
+  box-shadow: 0 3px 10px rgba(233, 30, 99, 0.3);
+}
+
+.vasearrangement-page.rtl .discount-badge {
+  left: auto;
+  right: 14px;
+}
+
+/* Toolbar */
+.vasearrangement-page .products-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.vasearrangement-page .items-count {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  color: #666;
+  font-weight: 500;
+}
+
+.vasearrangement-page .toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.vasearrangement-page .sort-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.vasearrangement-page .sort-dropdown label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.vasearrangement-page .sort-dropdown select {
+  padding: 10px 36px 10px 16px;
+  border: 2px solid #eee;
+  border-radius: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #333;
+  background: #fff;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.vasearrangement-page .sort-dropdown select:focus {
+  border-color: #e91e63;
+}
+
+/* Hide view toggle */
+.vasearrangement-page .view-toggle {
+  display: none !important;
+}
+
+/* Products Grid - Always 4 columns */
+.vasearrangement-page .products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+/* Responsive */
 @media (max-width: 1200px) {
-  .products-grid {
+  .vasearrangement-page .products-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
   }
+}
 
-  .filters-sidebar {
-    width: 250px;
+@media (max-width: 992px) {
+  .vasearrangement-page .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
   }
+}
 
-  .content-wrapper {
+@media (max-width: 768px) {
+  .vasearrangement-page .filters-sidebar {
+    padding: 20px;
+    border-radius: 12px;
+  }
+  
+  .vasearrangement-page .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  
+  .vasearrangement-page .checkbox-label {
+    padding: 12px 0;
+  }
+}
+
+@media (max-width: 576px) {
+  .vasearrangement-page .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .vasearrangement-page .product-info {
+    padding: 12px;
+  }
+  
+  .vasearrangement-page .product-name {
+    font-size: 13px;
+  }
+  
+  .vasearrangement-page .sale-price {
+    font-size: 15px;
+  }
+  
+  .vasearrangement-page .add-btn {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+  }
+}
+
+
+/* ============================================
+   FINAL DESIGN FIXES
+   ============================================ */
+
+/* Cool Background - Light blue-gray */
+.vasearrangement-page {
+  background: #f8f9fa !important;
+  min-height: 100vh;
+}
+
+.vasearrangement-page .main-content {
+  background: #f8f9fa;
+  padding: 40px 0 80px;
+}
+
+/* Content Layout - More space on left */
+.vasearrangement-page .content-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 40px;
+  align-items: start;
+  padding-left: 20px;
+}
+
+/* Filter Sidebar */
+.vasearrangement-page .filters-sidebar {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px 20px;
+  box-shadow: 0 2px 15px rgba(0,0,0,0.04);
+  border: 1px solid #eef0f2;
+}
+
+.vasearrangement-page .filters-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #eef0f2;
+}
+
+.vasearrangement-page .filters-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+/* Filter Sections */
+.vasearrangement-page .filter-section {
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eef0f2;
+}
+
+.vasearrangement-page .filter-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.vasearrangement-page .filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.vasearrangement-page .filter-content {
+  margin-top: 16px;
+}
+
+/* Price Inputs - Like reference */
+.vasearrangement-page .price-inputs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.vasearrangement-page .price-input-group {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+  flex: 1;
+}
+
+.vasearrangement-page .price-input-group:focus-within {
+  border-color: #999;
+}
+
+.vasearrangement-page .price-input-group .currency-label {
+  padding: 10px 12px;
+  background: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #666;
+  border-right: 1px solid #eee;
+}
+
+.vasearrangement-page .price-input-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #333;
+  background: transparent;
+  outline: none;
+  text-align: right;
+}
+
+.vasearrangement-page .price-separator {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #999;
+}
+
+.vasearrangement-page .price-hint {
+  margin: 12px 0 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #888;
+}
+
+/* Checkbox Labels - WITH LEFT PADDING like reference */
+.vasearrangement-page .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  padding-left: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.vasearrangement-page .checkbox-label:hover {
+  color: #e91e63;
+}
+
+.vasearrangement-page .checkbox-label input[type="checkbox"] {
+  display: none;
+}
+
+.vasearrangement-page .checkbox-label .checkmark {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  border: 1.5px solid #ccc;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  background: #fff;
+}
+
+.vasearrangement-page .checkbox-label:hover .checkmark {
+  border-color: #e91e63;
+}
+
+.vasearrangement-page .checkbox-label input:checked + .checkmark {
+  background: #e91e63;
+  border-color: #e91e63;
+}
+
+.vasearrangement-page .checkbox-label input:checked + .checkmark::after {
+  content: '';
+  width: 5px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-bottom: 2px;
+}
+
+.vasearrangement-page .checkbox-label .label-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #444;
+  font-weight: 400;
+}
+
+/* Product Cards - SQUARE Images */
+.vasearrangement-page .product-card {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  border: 1px solid #eef0f2;
+}
+
+.vasearrangement-page .product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+/* SQUARE Product Image */
+.vasearrangement-page .product-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100%; /* 1:1 Square Ratio */
+  overflow: hidden;
+  background: #f5f5f5;
+}
+
+.vasearrangement-page .product-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.vasearrangement-page .product-card:hover .product-image {
+  transform: scale(1.03);
+}
+
+/* Product Info */
+.vasearrangement-page .product-info {
+  padding: 14px 16px 16px;
+  background: #fff;
+}
+
+.vasearrangement-page .product-name {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #222;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.vasearrangement-page .product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vasearrangement-page .price-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.vasearrangement-page .original-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.vasearrangement-page .sale-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #e91e63;
+}
+
+.vasearrangement-page .add-btn {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #fce4ec;
+  color: #e91e63;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.vasearrangement-page .add-btn:hover {
+  background: #e91e63;
+  color: #fff;
+}
+
+.vasearrangement-page .add-btn.adding {
+  background: #4caf50;
+  color: #fff;
+}
+
+/* Discount Badge */
+.vasearrangement-page .discount-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 5;
+  padding: 5px 12px;
+  background: #e91e63;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 20px;
+}
+
+.vasearrangement-page.rtl .discount-badge {
+  left: auto;
+  right: 12px;
+}
+
+/* Toolbar */
+.vasearrangement-page .products-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.vasearrangement-page .items-count {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #666;
+}
+
+.vasearrangement-page .sort-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.vasearrangement-page .sort-dropdown label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #666;
+}
+
+.vasearrangement-page .sort-dropdown select {
+  padding: 10px 35px 10px 14px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #333;
+  background: #fff;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  outline: none;
+  min-width: 140px;
+}
+
+/* Products Grid - 4 columns */
+.vasearrangement-page .products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* Responsive */
+@media (max-width: 1400px) {
+  .vasearrangement-page .content-layout {
+    grid-template-columns: 260px 1fr;
+    gap: 30px;
+    padding-left: 10px;
+  }
+  .vasearrangement-page .products-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .vasearrangement-page .content-layout {
+    grid-template-columns: 240px 1fr;
+    gap: 24px;
+    padding-left: 0;
+  }
+  .vasearrangement-page .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 992px) {
+  .vasearrangement-page .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .vasearrangement-page .content-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .vasearrangement-page .filters-sidebar {
+    padding: 20px 16px;
+  }
+  .vasearrangement-page .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .vasearrangement-page .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .vasearrangement-page .product-info {
+    padding: 10px 12px 12px;
+  }
+  .vasearrangement-page .product-name {
+    font-size: 13px;
+  }
+  .vasearrangement-page .sale-price {
+    font-size: 14px;
+  }
+  .vasearrangement-page .add-btn {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+  }
+}
+
+
+/* ============================================
+   CLEAN CLASSIC FILTER DESIGN
+   ============================================ */
+
+/* Page Background */
+.vasearrangement-page {
+  background: #f8f9fa !important;
+}
+
+.vasearrangement-page .main-content {
+  background: #f8f9fa;
+  padding: 40px 0 80px;
+}
+
+/* Container */
+.vasearrangement-page .container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Content Layout */
+.vasearrangement-page .content-layout {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* Filter Sidebar - Clean White */
+.vasearrangement-page .filters-sidebar {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  border: 1px solid #eee;
+  position: sticky;
+  top: 20px;
+}
+
+.vasearrangement-page .filters-header {
+  margin-bottom: 20px;
+}
+
+.vasearrangement-page .filters-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #222;
+  margin: 0;
+}
+
+.vasearrangement-page .clear-filters {
+  font-size: 13px;
+  color: #e91e63;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-top: 8px;
+  padding: 0;
+}
+
+/* Filter Sections */
+.vasearrangement-page .filter-section {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.vasearrangement-page .filter-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.vasearrangement-page .filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.vasearrangement-page .filter-header svg {
+  width: 10px;
+  height: 10px;
+  color: #999;
+  transition: transform 0.2s;
+}
+
+.vasearrangement-page .filter-header.open svg {
+  transform: rotate(180deg);
+}
+
+.vasearrangement-page .filter-content {
+  margin-top: 0;
+}
+
+/* Price Inputs - Compact */
+.vasearrangement-page .price-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vasearrangement-page .price-input-group {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  flex: 1;
+}
+
+.vasearrangement-page .price-input-group .currency-label {
+  padding: 8px 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #666;
+  background: #fafafa;
+  border-right: 1px solid #eee;
+}
+
+.vasearrangement-page .price-input-group input {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #333;
+  outline: none;
+}
+
+.vasearrangement-page .price-separator {
+  font-size: 12px;
+  color: #999;
+}
+
+.vasearrangement-page .price-hint {
+  margin: 10px 0 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  color: #999;
+}
+
+/* CLEAN CHECKBOX - No boxes, simple list */
+.vasearrangement-page .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  cursor: pointer;
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.vasearrangement-page .checkbox-label:hover .label-text {
+  color: #e91e63;
+}
+
+.vasearrangement-page .checkbox-label input[type="checkbox"] {
+  display: none;
+}
+
+.vasearrangement-page .checkbox-label .checkmark {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  border: 1.5px solid #ccc;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  transition: all 0.2s;
+}
+
+.vasearrangement-page .checkbox-label:hover .checkmark {
+  border-color: #e91e63;
+}
+
+.vasearrangement-page .checkbox-label input:checked + .checkmark {
+  background: #e91e63;
+  border-color: #e91e63;
+}
+
+.vasearrangement-page .checkbox-label input:checked + .checkmark::after {
+  content: '';
+  width: 4px;
+  height: 7px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-bottom: 1px;
+}
+
+.vasearrangement-page .checkbox-label .label-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #555;
+}
+
+/* Products Section */
+.vasearrangement-page .products-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.vasearrangement-page .items-count {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #666;
+}
+
+.vasearrangement-page .sort-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vasearrangement-page .sort-dropdown label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #666;
+}
+
+.vasearrangement-page .sort-dropdown select {
+  padding: 8px 30px 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #333;
+  background: #fff;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  outline: none;
+}
+
+/* Product Grid */
+.vasearrangement-page .products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* Product Card */
+.vasearrangement-page .product-card {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid #eee;
+}
+
+.vasearrangement-page .product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+/* Square Image */
+.vasearrangement-page .product-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  background: #f5f5f5;
+  overflow: hidden;
+}
+
+.vasearrangement-page .product-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.vasearrangement-page .product-card:hover .product-image {
+  transform: scale(1.03);
+}
+
+.vasearrangement-page .product-info {
+  padding: 12px 14px 14px;
+}
+
+.vasearrangement-page .product-name {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #222;
+  margin: 0 0 8px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.vasearrangement-page .product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vasearrangement-page .price-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.vasearrangement-page .original-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.vasearrangement-page .sale-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #e91e63;
+}
+
+.vasearrangement-page .add-btn {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #fce4ec;
+  color: #e91e63;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.vasearrangement-page .add-btn:hover {
+  background: #e91e63;
+  color: #fff;
+}
+
+.vasearrangement-page .add-btn.adding {
+  background: #4caf50;
+  color: #fff;
+}
+
+.vasearrangement-page .discount-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 5;
+  padding: 4px 10px;
+  background: #e91e63;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+.vasearrangement-page.rtl .discount-badge {
+  left: auto;
+  right: 10px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .vasearrangement-page .content-layout { grid-template-columns: 220px 1fr; gap: 30px; }
+  .vasearrangement-page .products-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 992px) {
+  .vasearrangement-page .products-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+}
+
+@media (max-width: 768px) {
+  .vasearrangement-page .content-layout { grid-template-columns: 1fr; }
+  .vasearrangement-page .filters-sidebar { margin-bottom: 20px; }
+  .vasearrangement-page .products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+}
+
+@media (max-width: 480px) {
+  .vasearrangement-page .products-grid { gap: 10px; }
+  .vasearrangement-page .product-info { padding: 10px 12px; }
+  .vasearrangement-page .product-name { font-size: 13px; }
+  .vasearrangement-page .sale-price { font-size: 14px; }
+  .vasearrangement-page .add-btn { width: 32px; height: 32px; min-width: 32px; }
+}
+
+
+/* ============================================
+   MOBILE FILTER DRAWER
+   ============================================ */
+
+/* Mobile Filter Toggle Button - Hidden on desktop */
+.vasearrangement-page .mobile-filter-toggle {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+.vasearrangement-page .mobile-filter-toggle svg {
+  color: #666;
+}
+
+/* Mobile Filter Overlay */
+.vasearrangement-page .mobile-filter-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+}
+
+/* Mobile Close Button - Hidden on desktop */
+.vasearrangement-page .mobile-filter-close {
+  display: none;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: #f5f5f5;
+  border-radius: 50%;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  z-index: 10;
+}
+
+.vasearrangement-page .mobile-filter-close:hover {
+  background: #eee;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  /* Show mobile filter toggle */
+  .vasearrangement-page .mobile-filter-toggle {
+    display: flex;
+  }
+  
+  /* Show overlay when filter is open */
+  .vasearrangement-page .mobile-filter-overlay {
+    display: block;
+  }
+  
+  /* Filter Sidebar - Slide in drawer */
+  .vasearrangement-page .filters-sidebar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 85%;
+    max-width: 320px;
+    height: 100vh;
+    z-index: 999;
+    border-radius: 0;
+    padding: 70px 20px 20px;
+    overflow-y: auto;
+    transition: left 0.3s ease;
+    box-shadow: 2px 0 20px rgba(0,0,0,0.15);
+  }
+  
+  .vasearrangement-page .filters-sidebar.open {
+    left: 0;
+  }
+  
+  /* Show close button on mobile */
+  .vasearrangement-page .mobile-filter-close {
+    display: flex;
+  }
+  
+  /* Content layout - single column */
+  .vasearrangement-page .content-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* RTL Support for mobile drawer */
+.vasearrangement-page.rtl .filters-sidebar {
+  left: auto;
+  right: -100%;
+}
+
+.vasearrangement-page.rtl .filters-sidebar.open {
+  right: 0;
+  left: auto;
+}
+
+.vasearrangement-page.rtl .mobile-filter-close {
+  right: auto;
+  left: 16px;
+}
+
+
+/* ============================================
+   FORCE SQUARE IMAGES
+   ============================================ */
+
+/* Product Image Wrapper - SQUARE 1:1 */
+.vasearrangement-page .product-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100% !important; /* Force 1:1 square ratio */
+  height: 0 !important;
+  overflow: hidden;
+  background: #f8f8f8;
+}
+
+.vasearrangement-page .product-image {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center;
+}
+
+
+/* ============================================
+   EXPANDED FILTER WIDTH
+   ============================================ */
+
+.vasearrangement-page .content-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr !important;
+  gap: 40px;
+  align-items: start;
+}
+
+.vasearrangement-page .filters-sidebar {
+  width: 100%;
+  min-width: 280px;
+  padding: 24px;
+}
+
+@media (max-width: 1400px) {
+  .vasearrangement-page .content-layout {
+    grid-template-columns: 260px 1fr !important;
     gap: 30px;
   }
 }
 
-/* ============================================
-   RESPONSIVE - TABLET (992px)
-   ============================================ */
-@media (max-width: 992px) {
-  .vase-page .hero-title {
-    font-size: 44px;
-  }
-
-  .products-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
-  }
-
-  .vase-page .product-image-wrapper {
-    height: 200px;
-  }
-}
-
-/* ============================================
-   RESPONSIVE - TABLET (768px)
-   ============================================ */
-@media (max-width: 768px) {
-  .vase-page .container {
-    padding: 0 16px;
-  }
-
-  .vase-hero {
-    padding: 35px 0 30px;
-  }
-
-  .vase-page .hero-badge {
-    padding: 10px 20px;
-    font-size: 11px;
-  }
-
-  .vase-page .hero-title {
-    font-size: 36px;
-  }
-
-  .vase-page.rtl .hero-title {
-    font-size: 32px;
-  }
-
-  .vase-page .hero-subtitle {
-    font-size: 14px;
-  }
-
-  .content-wrapper {
-    flex-direction: column;
+@media (max-width: 1200px) {
+  .vasearrangement-page .content-layout {
+    grid-template-columns: 250px 1fr !important;
     gap: 24px;
   }
+}
 
-  .filters-sidebar {
-    width: 100%;
-    position: static;
-    padding: 20px;
-    border-radius: 12px;
-  }
-
-  .filters-title {
-    font-size: 18px;
-    margin-bottom: 20px;
-  }
-
-  .filter-section {
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-  }
-
-  .vase-content {
-    padding: 30px 0 40px;
-  }
-
-  .products-toolbar {
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-
-  .toolbar-right {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .products-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-  }
-
-  .vase-page .product-card {
-    border-radius: 12px;
-  }
-
-  .vase-page .product-image-wrapper {
-    height: 180px;
-  }
-
-  .vase-page .product-details {
-    padding: 14px;
-  }
-
-  .vase-page .product-name {
-    font-size: 13px;
-    margin-bottom: 6px;
-  }
-
-  .vase-page .final-price {
-    font-size: 15px;
-  }
-
-  .quick-add-btn {
-    opacity: 1;
-    transform: translateY(0);
-    width: 38px;
-    height: 38px;
-  }
-
-  /* Banner */
-  .info-banner {
-    padding: 0 0 40px;
-  }
-
-  .banner-content {
-    flex-direction: column;
-    text-align: center;
-    padding: 24px 20px;
-    gap: 16px;
-  }
-
-  .vase-page.rtl .banner-content {
-    flex-direction: column;
-  }
-
-  .banner-icon {
-    width: 60px;
-    height: 60px;
-    font-size: 26px;
-  }
-
-  .banner-text h3 {
-    font-size: 20px;
-  }
-
-  .banner-text p {
-    font-size: 13px;
-  }
-
-  .vase-page.rtl .banner-text h3,
-  .vase-page.rtl .banner-text p {
-    text-align: center;
-  }
-
-  .fv-2, .fv-4 {
-    display: none;
+@media (max-width: 992px) {
+  .vasearrangement-page .content-layout {
+    grid-template-columns: 230px 1fr !important;
+    gap: 20px;
   }
 }
 
+@media (max-width: 768px) {
+  .vasearrangement-page .content-layout {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
 /* ============================================
-   RESPONSIVE - MOBILE (480px)
+   FILTER TO FAR LEFT
    ============================================ */
-@media (max-width: 480px) {
-  .vase-page .container {
-    padding: 0 12px;
-  }
 
-  .vase-hero {
-    padding: 28px 0 24px;
-  }
+.vasearrangement-page .main-content {
+  padding: 40px 0 80px;
+}
 
-  .vase-page .hero-badge {
-    padding: 8px 16px;
-    font-size: 10px;
+.vasearrangement-page .main-content .container {
+  max-width: 100%;
+  padding: 0 40px 0 20px;
+  margin: 0;
+}
+
+.vasearrangement-page .content-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr !important;
+  gap: 30px;
+  align-items: start;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.vasearrangement-page .filters-sidebar {
+  margin-left: 0;
+  position: sticky;
+  top: 20px;
+}
+
+@media (max-width: 1400px) {
+  .vasearrangement-page .main-content .container {
+    padding: 0 30px 0 15px;
+  }
+  .vasearrangement-page .content-layout {
+    grid-template-columns: 260px 1fr !important;
+    gap: 25px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .vasearrangement-page .main-content .container {
+    padding: 0 20px 0 10px;
+  }
+  .vasearrangement-page .content-layout {
+    grid-template-columns: 250px 1fr !important;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .vasearrangement-page .main-content .container {
+    padding: 0 16px;
+  }
+  .vasearrangement-page .content-layout {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* ============================================
+   MOBILE FILTER - COMPLETE FIX
+   ============================================ */
+
+/* Mobile Filter Toggle Button */
+.vasearrangement-page .mobile-filter-toggle {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.vasearrangement-page .mobile-filter-toggle:active {
+  background: #f5f5f5;
+}
+
+/* Mobile Filter Overlay */
+.vasearrangement-page .mobile-filter-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+}
+
+/* Mobile Close Button */
+.vasearrangement-page .mobile-filter-close {
+  display: none;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: #f0f0f0;
+  border-radius: 50%;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  z-index: 10;
+  padding: 0;
+}
+
+.vasearrangement-page .mobile-filter-close:active {
+  background: #e0e0e0;
+}
+
+.vasearrangement-page .mobile-filter-close svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Mobile Responsive - 768px and below */
+@media (max-width: 768px) {
+  /* Show mobile toggle button */
+  .vasearrangement-page .mobile-filter-toggle {
+    display: flex !important;
+  }
+  
+  /* Show overlay when open */
+  .vasearrangement-page .mobile-filter-overlay {
+    display: block !important;
+  }
+  
+  /* Filter Sidebar - Fixed drawer */
+  .vasearrangement-page .filters-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 85% !important;
+    max-width: 320px !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    z-index: 9999 !important;
+    border-radius: 0 !important;
+    padding: 70px 20px 30px !important;
+    overflow-y: auto !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.3s ease !important;
+    box-shadow: 2px 0 20px rgba(0,0,0,0.15) !important;
+    background: #fff !important;
+  }
+  
+  /* Open state */
+  .vasearrangement-page .filters-sidebar.open {
+    transform: translateX(0) !important;
+  }
+  
+  /* Show close button */
+  .vasearrangement-page .mobile-filter-close {
+    display: flex !important;
+  }
+  
+  /* Hide overlay when filter closed */
+  .vasearrangement-page .filters-sidebar:not(.open) + .mobile-filter-overlay,
+  .vasearrangement-page .mobile-filter-overlay:not(:has(~ .filters-sidebar.open)) {
+    display: none;
+  }
+  
+  /* Content layout single column */
+  .vasearrangement-page .content-layout {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Products grid 2 columns on mobile */
+  .vasearrangement-page .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+}
+
+/* RTL Support */
+.vasearrangement-page.rtl .filters-sidebar {
+  left: auto !important;
+  right: 0 !important;
+  transform: translateX(100%) !important;
+}
+
+.vasearrangement-page.rtl .filters-sidebar.open {
+  transform: translateX(0) !important;
+}
+
+.vasearrangement-page.rtl .mobile-filter-close {
+  right: auto !important;
+  left: 15px !important;
+}
+
+
+/* ============================================
+   MOBILE FILTER BUTTON - FINAL FIX
+   ============================================ */
+
+/* Hide on desktop */
+.vasearrangement-page .mobile-filter-toggle {
+  display: none;
+}
+
+/* Show on mobile */
+@media (max-width: 768px) {
+  .vasearrangement-page .mobile-filter-toggle {
+    display: flex !important;
+    align-items: center;
     gap: 8px;
-  }
-
-  .vase-page .hero-title {
-    font-size: 28px;
-  }
-
-  .vase-page.rtl .hero-title {
-    font-size: 26px;
-  }
-
-  .vase-page .hero-subtitle {
-    font-size: 13px;
-  }
-
-  .filters-sidebar {
-    padding: 16px;
-  }
-
-  .filters-title {
-    font-size: 16px;
+    padding: 12px 18px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
     margin-bottom: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    width: fit-content;
   }
-
-  .price-inputs {
-    flex-direction: column;
-    gap: 8px;
+  
+  .vasearrangement-page .mobile-filter-toggle svg {
+    color: #666;
   }
-
-  .price-input-group {
-    width: 100%;
+  
+  .vasearrangement-page .mobile-filter-toggle:active {
+    background: #f5f5f5;
   }
+}
 
-  .price-separator {
-    display: none;
+
+/* ============================================
+   MOBILE FILTER - TOP POSITION FIX
+   ============================================ */
+
+@media (max-width: 768px) {
+  /* Filter drawer - start below header */
+  .vasearrangement-page .filters-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 85% !important;
+    max-width: 320px !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    z-index: 9999 !important;
+    border-radius: 0 !important;
+    padding: 20px !important;
+    padding-top: 100px !important; /* Space for header + close button */
+    overflow-y: auto !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.3s ease !important;
+    box-shadow: 4px 0 25px rgba(0,0,0,0.15) !important;
+    background: #fff !important;
   }
-
-  .vase-content {
-    padding: 20px 0 30px;
+  
+  .vasearrangement-page .filters-sidebar.open {
+    transform: translateX(0) !important;
   }
-
-  .products-toolbar {
+  
+  /* Close button - fixed at top */
+  .vasearrangement-page .mobile-filter-close {
+    display: flex !important;
+    position: fixed !important;
+    top: 50px !important; /* Below header */
+    left: 260px !important; /* Near right edge of drawer */
+    width: 36px !important;
+    height: 36px !important;
+    border: none !important;
+    background: #f0f0f0 !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #333 !important;
+    z-index: 10000 !important;
+    padding: 0 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease !important;
+  }
+  
+  /* Show close button when filter is open */
+  .vasearrangement-page .filters-sidebar.open ~ .mobile-filter-close,
+  .vasearrangement-page .filters-sidebar.open + * + .mobile-filter-close {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .vasearrangement-page .mobile-filter-close svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  /* Filters title */
+  .vasearrangement-page .filters-sidebar .filters-title {
+    font-size: 20px;
     margin-bottom: 20px;
-    padding-bottom: 16px;
-  }
-
-  .items-count {
-    font-size: 14px;
-  }
-
-  .sort-wrapper label {
-    display: none;
-  }
-
-  .sort-select {
-    min-width: 130px;
-    font-size: 13px;
-    padding: 8px 30px 8px 12px;
-  }
-
-  .view-toggle {
-    padding: 3px;
-  }
-
-  .view-btn {
-    width: 32px;
-    height: 32px;
-  }
-
-  .products-grid {
-    gap: 10px;
-  }
-
-  .vase-page .product-card {
-    border-radius: 10px;
-  }
-
-  .discount-badge {
-    padding: 4px 8px;
-    font-size: 10px;
-    top: 8px;
-    left: 8px;
-  }
-
-  .vase-page .product-badge {
-    padding: 4px 10px;
-    font-size: 9px;
-    top: 8px;
-    left: 8px;
-  }
-
-  .vase-page .product-card:has(.discount-badge) .product-badge {
-    top: 38px;
-  }
-
-  .vase-page .product-image-wrapper {
-    height: 150px;
-  }
-
-  .vase-page .product-details {
-    padding: 12px;
-  }
-
-  .vase-page .product-name {
-    font-size: 12px;
-    -webkit-line-clamp: 1;
-    margin-bottom: 4px;
-  }
-
-  .vase-page .original-price {
-    font-size: 11px;
-  }
-
-  .vase-page .final-price {
-    font-size: 14px;
-  }
-
-  .quick-add-btn {
-    width: 34px;
-    height: 34px;
-    bottom: 8px;
-    right: 8px;
-  }
-
-  .quick-add-btn svg {
-    width: 16px;
-    height: 16px;
-  }
-
-  /* Banner */
-  .info-banner {
-    padding: 0 0 30px;
-  }
-
-  .banner-content {
-    padding: 20px 16px;
-    gap: 14px;
-    border-radius: 14px;
-  }
-
-  .banner-icon {
-    width: 52px;
-    height: 52px;
-    font-size: 22px;
-  }
-
-  .banner-text h3 {
-    font-size: 17px;
-    margin-bottom: 4px;
-  }
-
-  .banner-text p {
-    font-size: 12px;
-    line-height: 1.5;
-  }
-
-  .fv-3 {
-    display: none;
   }
 }
 
+/* RTL support */
+@media (max-width: 768px) {
+  .vasearrangement-page.rtl .filters-sidebar {
+    left: auto !important;
+    right: 0 !important;
+    transform: translateX(100%) !important;
+  }
+  
+  .vasearrangement-page.rtl .filters-sidebar.open {
+    transform: translateX(0) !important;
+  }
+  
+  .vasearrangement-page.rtl .mobile-filter-close {
+    left: auto !important;
+    right: 260px !important;
+  }
+}
+
+
 /* ============================================
-   RESPONSIVE - EXTRA SMALL (360px)
+   MOBILE FILTER - COMPLETE FINAL FIX
    ============================================ */
-@media (max-width: 360px) {
-  .vase-page .container {
-    padding: 0 10px;
-  }
 
-  .vase-page .hero-title {
-    font-size: 24px;
-  }
+/* Desktop - hide close button */
+.vasearrangement-page .mobile-filter-close {
+  display: none;
+}
 
-  .vase-page .hero-subtitle {
-    font-size: 12px;
+@media (max-width: 768px) {
+  /* Filter sidebar drawer */
+  .vasearrangement-page .filters-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 85% !important;
+    max-width: 320px !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    z-index: 9999 !important;
+    border-radius: 0 !important;
+    padding: 20px !important;
+    overflow-y: auto !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.3s ease !important;
+    box-shadow: 4px 0 25px rgba(0,0,0,0.15) !important;
+    background: #fff !important;
   }
+  
+  .vasearrangement-page .filters-sidebar.open {
+    transform: translateX(0) !important;
+  }
+  
+  /* Filters header with close button */
+  .vasearrangement-page .filters-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-bottom: 24px !important;
+    padding-bottom: 16px !important;
+    border-bottom: 1px solid #eee !important;
+    margin-top: 40px !important; /* Space from top */
+  }
+  
+  /* Close button */
+  .vasearrangement-page .mobile-filter-close {
+    display: flex !important;
+    width: 36px !important;
+    height: 36px !important;
+    border: none !important;
+    background: #f5f5f5 !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #333 !important;
+    padding: 0 !important;
+    order: 2 !important; /* Put after title */
+    flex-shrink: 0 !important;
+  }
+  
+  .vasearrangement-page .mobile-filter-close:active {
+    background: #e5e5e5 !important;
+  }
+  
+  .vasearrangement-page .mobile-filter-close svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  /* Filters title */
+  .vasearrangement-page .filters-title {
+    font-size: 18px !important;
+    order: 1 !important;
+  }
+  
+  /* Clear filters button */
+  .vasearrangement-page .clear-filters {
+    display: none !important; /* Hide on mobile header, can add elsewhere */
+  }
+}
 
-  .products-grid {
+/* RTL support */
+@media (max-width: 768px) {
+  .vasearrangement-page.rtl .filters-sidebar {
+    left: auto !important;
+    right: 0 !important;
+    transform: translateX(100%) !important;
+  }
+  
+  .vasearrangement-page.rtl .filters-sidebar.open {
+    transform: translateX(0) !important;
+  }
+}
+
+
+/* ============================================
+   MOBILE FILTER - REFERENCE DESIGN
+   ============================================ */
+
+/* Hide mobile toolbar on desktop */
+.vasearrangement-page .mobile-toolbar {
+  display: none;
+}
+
+/* Hide old mobile filter toggle */
+.vasearrangement-page .mobile-filter-toggle {
+  display: none;
+}
+
+/* Desktop - hide mobile close button */
+.vasearrangement-page .mobile-filter-close {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* Mobile Toolbar - Filter + Sort side by side */
+  .vasearrangement-page .mobile-toolbar {
+    display: flex !important;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  /* Filter Button */
+  .vasearrangement-page .mobile-toolbar .mobile-filter-toggle {
+    display: flex !important;
+    align-items: center;
     gap: 8px;
+    padding: 12px 18px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   }
-
-  .vase-page .product-image-wrapper {
-    height: 130px;
+  
+  .vasearrangement-page .mobile-toolbar .mobile-filter-toggle svg {
+    color: #555;
   }
-
-  .vase-page .product-details {
-    padding: 10px;
+  
+  /* Sort Dropdown */
+  .vasearrangement-page .mobile-sort {
+    flex: 1;
   }
-
-  .vase-page .product-name {
-    font-size: 11px;
+  
+  .vasearrangement-page .mobile-sort select {
+    width: 100%;
+    padding: 12px 35px 12px 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    color: #333;
+    background: #fff;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   }
-
-  .vase-page .final-price {
-    font-size: 13px;
-  }
-}
-
-/* ============================================
-   ACCESSIBILITY
-   ============================================ */
-@media (prefers-reduced-motion: reduce) {
-  .floating-vase,
-  .product-card,
-  .product-image,
-  .quick-add-btn,
-  .spinner {
-    animation: none !important;
-    transition: none !important;
-  }
-}
-
-.vase-page .product-card:focus-visible,
-.vase-page .quick-add-btn:focus-visible,
-.vase-page .view-btn:focus-visible,
-.vase-page .sort-select:focus-visible {
-  outline: 2px solid #0d9488;
-  outline-offset: 2px;
-}
-
-/* ============================================
-   PRINT STYLES
-   ============================================ */
-@media print {
-  .vase-bg,
-  .filters-sidebar,
-  .products-toolbar,
-  .info-banner,
-  .quick-add-btn {
+  
+  /* Hide desktop toolbar on mobile */
+  .vasearrangement-page .products-toolbar {
     display: none !important;
   }
-
-  .content-wrapper {
-    display: block;
+  
+  /* Filter Drawer - Full screen like reference */
+  .vasearrangement-page .filters-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    z-index: 9999 !important;
+    border-radius: 0 !important;
+    padding: 24px !important;
+    padding-top: 80px !important;
+    overflow-y: auto !important;
+    transform: translateY(100%) !important;
+    transition: transform 0.3s ease !important;
+    box-shadow: none !important;
+    background: #fff !important;
   }
-
-  .products-grid {
-    grid-template-columns: repeat(3, 1fr);
+  
+  .vasearrangement-page .filters-sidebar.open {
+    transform: translateY(0) !important;
   }
+  
+  /* Filter Header */
+  .vasearrangement-page .filters-sidebar .filters-header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 20px 24px !important;
+    background: #fff !important;
+    border-bottom: 1px solid #eee !important;
+    z-index: 10 !important;
+    margin: 0 !important;
+  }
+  
+  .vasearrangement-page .filters-sidebar .filters-title {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 22px !important;
+    font-weight: 600 !important;
+    color: #000 !important;
+    margin: 0 !important;
+  }
+  
+  /* Close Button - Circle with X like reference */
+  .vasearrangement-page .mobile-filter-close {
+    display: flex !important;
+    width: 40px !important;
+    height: 40px !important;
+    border: none !important;
+    background: #222 !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #fff !important;
+    padding: 0 !important;
+  }
+  
+  .vasearrangement-page .mobile-filter-close svg {
+    width: 18px !important;
+    height: 18px !important;
+    stroke: #fff !important;
+  }
+  
+  /* Hide clear all on mobile header */
+  .vasearrangement-page .filters-sidebar .clear-filters {
+    display: none !important;
+  }
+  
+  /* Filter Sections */
+  .vasearrangement-page .filter-section {
+    padding: 20px 0 !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+  }
+  
+  .vasearrangement-page .filter-header {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+    text-transform: capitalize !important;
+    letter-spacing: 0 !important;
+  }
+  
+  /* Checkboxes */
+  .vasearrangement-page .checkbox-label {
+    padding: 12px 0 !important;
+  }
+  
+  .vasearrangement-page .checkbox-label .checkmark {
+    width: 20px !important;
+    height: 20px !important;
+    border: 2px solid #ddd !important;
+    border-radius: 4px !important;
+  }
+  
+  .vasearrangement-page .checkbox-label input:checked + .checkmark {
+    background: #e91e63 !important;
+    border-color: #e91e63 !important;
+    border-radius: 4px !important;
+  }
+  
+  /* Overlay */
+  .vasearrangement-page .mobile-filter-overlay {
+    display: block !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0,0,0,0.5) !important;
+    z-index: 9998 !important;
+  }
+}
 
-  .vase-page .product-card {
-    box-shadow: none;
-    border: 1px solid #e5e7eb;
-    break-inside: avoid;
+
+/* ============================================
+   MOBILE FILTER - COMPLETE FINAL FIX
+   ============================================ */
+
+/* Desktop: Hide mobile elements */
+.vasearrangement-page .mobile-filter-btn {
+  display: none;
+}
+
+.vasearrangement-page .mobile-filter-close {
+  display: none;
+}
+
+.vasearrangement-page .mobile-filter-overlay {
+  display: none;
+}
+
+.vasearrangement-page .mobile-toolbar {
+  display: none;
+}
+
+/* ===== MOBILE STYLES (<= 768px) ===== */
+@media (max-width: 768px) {
+
+  /* Hide filters sidebar by default on mobile */
+  .vasearrangement-page .filters-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    z-index: 99999 !important; /* Above everything including header */
+    background: #fff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow-y: auto !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.3s ease-in-out !important;
+    visibility: hidden;
+  }
+  
+  .vasearrangement-page .filters-sidebar.open {
+    transform: translateX(0) !important;
+    visibility: visible;
+  }
+  
+  /* Filter Header - Fixed at top */
+  .vasearrangement-page .filters-sidebar .filters-header {
+    position: sticky !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 20px 20px !important;
+    background: #fff !important;
+    border-bottom: 1px solid #eee !important;
+    margin: 0 !important;
+    z-index: 10 !important;
+  }
+  
+  .vasearrangement-page .filters-sidebar .filters-title {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 20px !important;
+    font-weight: 600 !important;
+    color: #000 !important;
+    margin: 0 !important;
+  }
+  
+  /* Close Button - Black circle with X */
+  .vasearrangement-page .mobile-filter-close {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    background: #222 !important;
+    border: none !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+  }
+  
+  .vasearrangement-page .mobile-filter-close svg {
+    stroke: #fff !important;
+    width: 14px !important;
+    height: 14px !important;
+  }
+  
+  /* Filter Content */
+  .vasearrangement-page .filters-sidebar .filter-section {
+    padding: 20px !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+    margin: 0 !important;
+  }
+  
+  .vasearrangement-page .filters-sidebar .filter-header {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+    text-transform: capitalize !important;
+    letter-spacing: 0 !important;
+    margin-bottom: 15px !important;
+    padding: 0 !important;
+  }
+  
+  /* Price inputs */
+  .vasearrangement-page .filters-sidebar .price-inputs {
+    gap: 10px !important;
+  }
+  
+  .vasearrangement-page .filters-sidebar .price-input-group {
+    flex: 1 !important;
+    border: 1px solid #ddd !important;
+    border-radius: 6px !important;
+    overflow: hidden !important;
+  }
+  
+  .vasearrangement-page .filters-sidebar .price-input-group input {
+    padding: 12px 10px !important;
+    font-size: 14px !important;
+  }
+  
+  /* Checkboxes - rounded squares like reference */
+  .vasearrangement-page .filters-sidebar .checkbox-label {
+    padding: 14px 0 !important;
+    background: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+  }
+  
+  .vasearrangement-page .filters-sidebar .checkbox-label .checkmark {
+    width: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
+    border: 2px solid #ddd !important;
+    border-radius: 6px !important;
+    background: #fff !important;
+  }
+  
+  .vasearrangement-page .filters-sidebar .checkbox-label input:checked + .checkmark {
+    background: #e91e63 !important;
+    border-color: #e91e63 !important;
+  }
+  
+  .vasearrangement-page .filters-sidebar .checkbox-label .label-text {
+    font-size: 15px !important;
+    color: #333 !important;
+  }
+  
+  /* Hide clear all in header on mobile */
+  .vasearrangement-page .filters-sidebar .clear-filters {
+    display: none !important;
+  }
+  
+  /* Overlay */
+  .vasearrangement-page .mobile-filter-overlay {
+    display: none;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0,0,0,0.5) !important;
+    z-index: 99998 !important;
+  }
+  
+  .vasearrangement-page .filters-sidebar.open ~ .mobile-filter-overlay {
+    display: block !important;
+  }
+  
+  /* Mobile Filter Button in toolbar */
+  .vasearrangement-page .mobile-filter-btn {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 10px 16px !important;
+    background: #fff !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 6px !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    color: #333 !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+  }
+  
+  .vasearrangement-page .mobile-filter-btn svg {
+    color: #555 !important;
+    flex-shrink: 0 !important;
+  }
+  
+  /* Products toolbar adjustments */
+  .vasearrangement-page .products-toolbar {
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+  }
+  
+  .vasearrangement-page .items-count {
+    order: 2 !important;
+    width: 100% !important;
+  }
+  
+  .vasearrangement-page .sort-dropdown {
+    order: 3 !important;
+    flex: 1 !important;
+  }
+  
+  .vasearrangement-page .sort-dropdown select {
+    width: 100% !important;
+  }
+  
+  /* Hide desktop sort label */
+  .vasearrangement-page .sort-dropdown label {
+    display: none !important;
+  }
+  
+  /* Content layout - single column */
+  .vasearrangement-page .content-layout {
+    display: block !important;
+  }
+  
+  /* Products grid */
+  .vasearrangement-page .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+}
+
+
+/* ============================================
+   HIDE OLD MOBILE FILTER ELEMENTS - FINAL FIX
+   Use new MobileFilterBar and MobileFilterDrawer instead
+   ============================================ */
+
+/* Hide old mobile filter buttons on ALL screens */
+.vase-arrangement-page .mobile-filter-btn,
+.vase-arrangement-page .mobile-filter-toggle,
+.vase-arrangement-page .mobile-filter-close,
+.vase-arrangement-page .mobile-toolbar {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  /* Hide desktop sidebar on mobile */
+  .vase-arrangement-page .filters-sidebar {
+    display: none !important;
+  }
+  
+  /* Hide desktop sort dropdown */
+  .vase-arrangement-page .products-toolbar .sort-dropdown,
+  .vase-arrangement-page .products-toolbar .toolbar-right {
+    display: none !important;
+  }
+  
+  /* Simplify toolbar - only show items count */
+  .vase-arrangement-page .products-toolbar {
+    justify-content: center !important;
+    padding: 12px 16px !important;
+  }
+  
+  .vase-arrangement-page .products-toolbar .items-count {
+    width: auto !important;
+    order: 0 !important;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  /* Ensure content layout is single column */
+  .vase-arrangement-page .content-layout {
+    display: block !important;
   }
 }

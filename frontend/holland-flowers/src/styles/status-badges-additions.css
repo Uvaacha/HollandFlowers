@@ -1,0 +1,171 @@
+/* ========================================
+   ADDITIONAL CSS FOR STATUS BADGES
+   Add these styles to your existing CSS files
+   ======================================== */
+
+/* ========================================
+   OrdersManager.css - Add these styles
+   ======================================== */
+
+/* Payment Status Badges */
+.payment-pending {
+  background-color: #fef3c7 !important;
+  color: #d97706 !important;
+}
+
+.payment-processing {
+  background-color: #dbeafe !important;
+  color: #2563eb !important;
+}
+
+.payment-completed {
+  background-color: #d1fae5 !important;
+  color: #059669 !important;
+}
+
+.payment-failed {
+  background-color: #fee2e2 !important;
+  color: #dc2626 !important;
+}
+
+.payment-cancelled {
+  background-color: #f3f4f6 !important;
+  color: #6b7280 !important;
+}
+
+.payment-refunded {
+  background-color: #ede9fe !important;
+  color: #7c3aed !important;
+}
+
+/* Payment Info Box in Modal */
+.payment-info-box {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.payment-info-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.payment-info-item label {
+  font-weight: 500;
+  color: #374151;
+}
+
+.payment-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+  padding-top: 8px;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* ========================================
+   OrderHistory.css - Add these styles
+   ======================================== */
+
+/* Order Statuses Container */
+.order-statuses {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.order-status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.order-status.delivery-status {
+  /* Delivery status styles are set dynamically */
+}
+
+.order-status.payment-status {
+  /* Payment status styles are set dynamically */
+}
+
+/* ========================================
+   OrderDetail.css - Add these styles
+   ======================================== */
+
+/* Header Statuses */
+.order-header-statuses {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.order-status-badge {
+  padding: 8px 16px;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.order-status-badge.delivery {
+  /* Dynamic styles applied via inline styles */
+}
+
+.order-status-badge.payment {
+  /* Dynamic styles applied via inline styles */
+}
+
+/* Payment Status in Summary */
+.payment-status-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16px;
+  margin-top: 16px;
+  border-top: 1px dashed #e5e7eb;
+}
+
+.payment-status-summary .label {
+  font-weight: 500;
+  color: #374151;
+}
+
+.payment-status-summary .payment-badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .order-statuses {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .order-header-statuses {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 12px;
+  }
+  
+  .order-status,
+  .order-status-badge {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+}

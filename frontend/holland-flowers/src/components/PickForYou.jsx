@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useCart } from './CartContext';
 import categoryService from '../services/categoryService';
 import productService from '../services/productService';
+import MobileFilterBar from './MobileFilterBar';
+import MobileFilterDrawer, { FilterSection, PriceRangeFilter, CheckboxFilter } from './MobileFilterDrawer';
 import './PickForYou.css';
 
 const PickForYou = () => {
@@ -13,399 +15,251 @@ const PickForYou = () => {
   const [addingToCart, setAddingToCart] = useState({});
   const { addToCart } = useCart();
 
-  // Filter states
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 500 });
-  const [selectedArrangement, setSelectedArrangement] = useState([]);
+  const [priceRange, setPriceRange] = useState({ min: '', max: '' });
+  const [selectedArrangements, setSelectedArrangements] = useState([]);
   const [sortBy, setSortBy] = useState('default');
-  const [viewMode, setViewMode] = useState('grid'); // grid or list
-  const [filtersOpen, setFiltersOpen] = useState({
-    price: true,
-    arrangement: true
-  });
-
-  const CATEGORY_NAME = 'Picks for You';
+  const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState({ price: true, arrangement: true });
 
   useEffect(() => {
     const savedLang = localStorage.getItem('preferredLanguage') || 'en';
     setCurrentLang(savedLang);
-
-    const handleLangChange = (e) => {
-      setCurrentLang(e.detail);
-    };
-
+    const handleLangChange = (e) => setCurrentLang(e.detail);
     window.addEventListener('languageChange', handleLangChange);
     return () => window.removeEventListener('languageChange', handleLangChange);
   }, []);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const categoriesResponse = await categoryService.getAllCategories();
-        let categories = [];
-        if (categoriesResponse.success && categoriesResponse.data) {
-          categories = categoriesResponse.data.content || categoriesResponse.data || [];
-        }
-
-        const picksCategory = categories.find(cat => 
-          cat.categoryName?.toLowerCase() === CATEGORY_NAME.toLowerCase() ||
-          cat.nameEn?.toLowerCase() === CATEGORY_NAME.toLowerCase() ||
-          cat.name?.toLowerCase() === CATEGORY_NAME.toLowerCase() ||
-          cat.categoryName?.toLowerCase().includes('picks') ||
-          cat.nameEn?.toLowerCase().includes('picks') ||
-          cat.name?.toLowerCase().includes('picks')
-        );
-
-        if (!picksCategory) {
-          setError('Category not found. Please create a "Picks for You" category in admin.');
-          setProducts([]);
-          setLoading(false);
-          return;
-        }
-
-        const productsResponse = await productService.getProductsByCategory(picksCategory.categoryId, {
-          page: 0,
-          size: 100,
-          sort: 'createdAt,desc'
-        });
-
-        let productsList = [];
-        if (productsResponse.success && productsResponse.data) {
-          productsList = productsResponse.data.content || productsResponse.data || [];
-        }
-
-        const activeProducts = productsList.filter(p => p.isActive !== false);
-        setProducts(activeProducts);
-
-        // Set max price based on products
-        if (activeProducts.length > 0) {
-          const maxPrice = Math.max(...activeProducts.map(p => p.finalPrice || p.actualPrice || 0));
-          setPriceRange(prev => ({ ...prev, max: Math.ceil(maxPrice) }));
-        }
-
-      } catch (err) {
-        console.error('Error fetching products:', err);
-        setError('Failed to load products. Please try again later.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
+  useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const translations = {
     en: {
-      pageTitle: "Picks for You",
-      pageSubtitle: "Browse our handpicked selection of best-selling flowers and gifts, perfect for every occasion. Find the perfect bloom at Holland Flowers.",
-      breadcrumbHome: "Home",
-      breadcrumbCurrent: "Picks for You",
-      addToCart: "Add to Cart",
-      currency: "KD",
-      filters: "Filters",
-      price: "PRICE",
-      to: "to",
-      highestPrice: "The highest price is",
-      arrangement: "ARRANGEMENT",
-      items: "ITEMS",
-      sort: "SORT",
-      sortDefault: "Default",
-      sortPriceLow: "Price: Low to High",
-      sortPriceHigh: "Price: High to Low",
-      sortNewest: "Newest First",
-      sortName: "Name A-Z",
-      loading: "Loading products...",
-      noProducts: "No products available yet.",
-      error: "Something went wrong",
-      bouquet: "Bouquet",
-      box: "Box",
-      basket: "Basket",
-      vase: "Vase",
-      clearAll: "Clear All",
+      title: "Picks for You", subtitle: "Handpicked selection of best-selling flowers and gifts", badge: "PICKS FOR YOU",
+      filters: "Filters", clearAll: "Clear All", priceRange: "Price Range", arrangement: "Arrangement",
+      minPrice: "Min", maxPrice: "Max", sortBy: "Sort by:", default: "Default",
+      priceLow: "Price: Low to High", priceHigh: "Price: High to Low", newest: "Newest First", nameAZ: "Name: A-Z",
+      items: "items", bouquet: "Bouquet", box: "Box", basket: "Basket", vase: "Vase", tray: "Tray", stand: "Stand",
+      kd: "KD", addToCart: "Add to Cart",
+      loading: "Loading products...", error: "Failed to load products", noProducts: "No products found", highestPrice: "Highest price"
     },
     ar: {
-      pageTitle: "اختياراتنا لك",
-      pageSubtitle: "تصفح مجموعتنا المختارة بعناية من أفضل الزهور والهدايا المبيعة، المثالية لكل مناسبة. اعثر على الزهرة المثالية في هولند فلاورز.",
-      breadcrumbHome: "الرئيسية",
-      breadcrumbCurrent: "اختياراتنا لك",
-      addToCart: "أضف للسلة",
-      currency: "د.ك",
-      filters: "التصفية",
-      price: "السعر",
-      to: "إلى",
-      highestPrice: "أعلى سعر هو",
-      arrangement: "التنسيق",
-      items: "منتج",
-      sort: "ترتيب",
-      sortDefault: "افتراضي",
-      sortPriceLow: "السعر: من الأقل للأعلى",
-      sortPriceHigh: "السعر: من الأعلى للأقل",
-      sortNewest: "الأحدث أولاً",
-      sortName: "الاسم أ-ي",
-      loading: "جاري تحميل المنتجات...",
-      noProducts: "لا توجد منتجات متاحة حالياً.",
-      error: "حدث خطأ ما",
-      bouquet: "باقة",
-      box: "صندوق",
-      basket: "سلة",
-      vase: "مزهرية",
-      clearAll: "مسح الكل",
+      title: "اختياراتنا لك", subtitle: "مجموعة مختارة بعناية من أفضل الزهور والهدايا", badge: "اختياراتنا لك",
+      filters: "التصفية", clearAll: "مسح الكل", priceRange: "نطاق السعر", arrangement: "التنسيق",
+      minPrice: "الحد الأدنى", maxPrice: "الحد الأقصى", sortBy: "ترتيب حسب:", default: "افتراضي",
+      priceLow: "السعر: من الأقل للأعلى", priceHigh: "السعر: من الأعلى للأقل", newest: "الأحدث أولاً", nameAZ: "الاسم: أ-ي",
+      items: "منتج", bouquet: "باقة", box: "صندوق", basket: "سلة", vase: "مزهرية", tray: "صينية", stand: "حامل",
+      kd: "د.ك", addToCart: "أضف للسلة",
+      loading: "جاري تحميل المنتجات...", error: "فشل في تحميل المنتجات", noProducts: "لا توجد منتجات", highestPrice: "أعلى سعر"
     }
   };
+  const t = translations[currentLang] || translations.en;
 
-  const t = translations[currentLang];
-
-  const arrangements = [
-    { id: 'bouquet', label: t.bouquet },
-    { id: 'box', label: t.box },
-    { id: 'basket', label: t.basket },
-    { id: 'vase', label: t.vase },
-  ];
-
-  // Filter and sort products
-  const filteredProducts = useMemo(() => {
-    let result = [...products];
-
-    // Price filter
-    result = result.filter(p => {
-      const price = p.finalPrice || p.actualPrice || 0;
-      return price >= priceRange.min && price <= priceRange.max;
-    });
-
-    // Arrangement filter (if any selected)
-    if (selectedArrangement.length > 0) {
-      result = result.filter(p => {
-        const name = (p.productName || p.name || '').toLowerCase();
-        return selectedArrangement.some(arr => name.includes(arr));
-      });
-    }
-
-    // Sorting
-    switch (sortBy) {
-      case 'price-low':
-        result.sort((a, b) => (a.finalPrice || a.actualPrice || 0) - (b.finalPrice || b.actualPrice || 0));
-        break;
-      case 'price-high':
-        result.sort((a, b) => (b.finalPrice || b.actualPrice || 0) - (a.finalPrice || a.actualPrice || 0));
-        break;
-      case 'newest':
-        result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        break;
-      case 'name':
-        result.sort((a, b) => (a.productName || a.name || '').localeCompare(b.productName || b.name || ''));
-        break;
-      default:
-        break;
-    }
-
-    return result;
-  }, [products, priceRange, selectedArrangement, sortBy]);
-
-  const maxProductPrice = useMemo(() => {
-    if (products.length === 0) return 500;
-    return Math.ceil(Math.max(...products.map(p => p.finalPrice || p.actualPrice || 0)));
-  }, [products]);
-
-  const toggleFilter = (filterName) => {
-    setFiltersOpen(prev => ({ ...prev, [filterName]: !prev[filterName] }));
-  };
-
-  const handleArrangementChange = (arrangementId) => {
-    setSelectedArrangement(prev => 
-      prev.includes(arrangementId) 
-        ? prev.filter(a => a !== arrangementId)
-        : [...prev, arrangementId]
-    );
-  };
-
-  const clearAllFilters = () => {
-    setPriceRange({ min: 0, max: maxProductPrice });
-    setSelectedArrangement([]);
-    setSortBy('default');
-  };
-
-  const getDiscountPercent = (product) => {
-    if (product.offerPercentage && product.offerPercentage > 0) {
-      return product.offerPercentage;
-    }
-    if (product.actualPrice && product.finalPrice && product.actualPrice > product.finalPrice) {
-      return Math.round(((product.actualPrice - product.finalPrice) / product.actualPrice) * 100);
-    }
-    return null;
-  };
-
-  const getProductSlug = (product) => {
-    return product.productId || product.sku || product.slug || product.id;
-  };
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true); setError(null);
+        const categoriesResponse = await categoryService.getAllCategories();
+        let categories = [];
+        if (categoriesResponse.success && categoriesResponse.data) categories = categoriesResponse.data.content || categoriesResponse.data || [];
+        const targetCategory = categories.find(cat => {
+          const name = (cat.categoryName || cat.nameEn || cat.name || '').toLowerCase();
+          return name === 'picks for you' || name.includes('picks');
+        });
+        if (!targetCategory) { setError('Category not found.'); setProducts([]); setLoading(false); return; }
+        const productsResponse = await productService.getProductsByCategory(targetCategory.categoryId, { page: 0, size: 100, sort: 'createdAt,desc' });
+        let productsList = [];
+        if (productsResponse.success && productsResponse.data) productsList = productsResponse.data.content || productsResponse.data || [];
+        setProducts(productsList.filter(p => p.isActive !== false));
+      } catch (err) { setError('Failed to load products.'); } finally { setLoading(false); }
+    };
+    fetchProducts();
+  }, []);
 
   const getProductName = (product) => {
-    if (currentLang === 'ar') {
-      return product.productNameAr || product.nameAr || product.productName || product.name || 'Unknown';
-    }
+    if (currentLang === 'ar') return product.productNameAr || product.nameAr || product.productName || product.name || 'Unknown';
     return product.productName || product.nameEn || product.name || 'Unknown';
   };
 
+  const getProductImage = (product) => product.imageUrl || product.primaryImageUrl || product.image || '/images/placeholder.webp';
+  const getOriginalPrice = (product) => product.actualPrice || product.originalPrice || product.price || 0;
+  const getFinalPrice = (product) => product.finalPrice || product.salePrice || product.price || product.actualPrice || 0;
+  const hasDiscount = (product) => { const o = getOriginalPrice(product); const f = getFinalPrice(product); return o > 0 && f > 0 && o > f; };
+  const getProductSlug = (product) => product.productId || product.sku || product.slug || product.id;
+
   const getProductDescription = (product) => {
-    if (currentLang === 'ar') {
-      return product.shortDescriptionAr || product.descriptionAr || product.description || '';
+    const dbDesc = product.shortDescriptionEn || product.shortDescription || product.descriptionEn || product.description;
+    const dbDescAr = product.shortDescriptionAr || product.descriptionAr;
+    if (currentLang === 'ar' && dbDescAr) return String(dbDescAr);
+    if (dbDesc) return String(dbDesc);
+    const name = (product.productName || product.name || '').toLowerCase();
+    if (name.includes('rose')) return currentLang === 'ar' ? 'ورود طازجة وجميلة' : 'Fresh beautiful roses';
+    if (name.includes('orchid')) return currentLang === 'ar' ? 'أوركيد أنيق وفاخر' : 'Elegant premium orchids';
+    if (name.includes('tulip')) return currentLang === 'ar' ? 'توليب طازج وملون' : 'Fresh colorful tulips';
+    if (name.includes('lily') || name.includes('lilium')) return currentLang === 'ar' ? 'ليليوم عطري وجميل' : 'Fragrant beautiful lilium';
+    if (name.includes('bouquet')) return currentLang === 'ar' ? 'باقة زهور مرتبة بعناية' : 'Carefully arranged flower bouquet';
+    if (name.includes('vase')) return currentLang === 'ar' ? 'تنسيق زهور في مزهرية أنيقة' : 'Flower arrangement in elegant vase';
+    if (name.includes('box')) return currentLang === 'ar' ? 'زهور في صندوق فاخر' : 'Flowers in luxury box';
+    if (name.includes('basket')) return currentLang === 'ar' ? 'سلة زهور طازجة' : 'Fresh flower basket';
+    return currentLang === 'ar' ? 'تنسيق زهور طازجة وأنيقة' : 'Fresh elegant flower arrangement';
+  };
+
+  const maxPrice = useMemo(() => products.length === 0 ? 100 : Math.ceil(Math.max(...products.map(p => getFinalPrice(p)))), [products]);
+
+  const filteredAndSortedProducts = useMemo(() => {
+    let result = [...products];
+    if (priceRange.min !== '') result = result.filter(p => getFinalPrice(p) >= Number(priceRange.min));
+    if (priceRange.max !== '') result = result.filter(p => getFinalPrice(p) <= Number(priceRange.max));
+    if (selectedArrangements.length > 0) result = result.filter(p => selectedArrangements.some(arr => getProductName(p).toLowerCase().includes(arr.toLowerCase())));
+    switch (sortBy) {
+      case 'priceLow': result.sort((a, b) => getFinalPrice(a) - getFinalPrice(b)); break;
+      case 'priceHigh': result.sort((a, b) => getFinalPrice(b) - getFinalPrice(a)); break;
+      case 'newest': result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); break;
+      case 'nameAZ': result.sort((a, b) => getProductName(a).localeCompare(getProductName(b))); break;
+      default: break;
     }
-    return product.shortDescriptionEn || product.descriptionEn || product.shortDescription || product.description || '';
-  };
-
-  const getDefaultDescription = (product) => {
-    const existingDesc = getProductDescription(product);
-    if (existingDesc && existingDesc.length > 10) return existingDesc;
-    
-    const categoryName = product.categoryName || product.category?.name || '';
-    const categoryLower = categoryName.toLowerCase();
-    
-    if (currentLang === 'ar') {
-      if (categoryLower.includes('chocolate')) return 'شوكولاتة فاخرة مع زهور طازجة';
-      if (categoryLower.includes('cake')) return 'كيك طازج مع باقة زهور جميلة';
-      if (categoryLower.includes('perfume')) return 'عطر فاخر مع باقة زهور أنيقة';
-      if (categoryLower.includes('gift')) return 'هدية مميزة مع لمسة من الزهور';
-      return 'باقة زهور طازجة ومميزة';
-    }
-    
-    if (categoryLower.includes('chocolate')) return 'Premium chocolates with fresh flowers';
-    if (categoryLower.includes('cake')) return 'Fresh cake with beautiful flower bouquet';
-    if (categoryLower.includes('perfume')) return 'Luxury perfume with elegant flowers';
-    if (categoryLower.includes('gift')) return 'Special gift with a touch of flowers';
-    return 'Fresh and beautiful flower arrangement';
-  };
-
-  const getProductImage = (product) => {
-    return product.imageUrl || product.primaryImageUrl || product.image || '/images/placeholder.webp';
-  };
-
-  const getOriginalPrice = (product) => {
-    return product.actualPrice || product.originalPrice || product.price || 0;
-  };
-
-  const getFinalPrice = (product) => {
-    return product.finalPrice || product.salePrice || product.price || product.actualPrice || 0;
-  };
+    return result;
+  }, [products, priceRange, selectedArrangements, sortBy, currentLang]);
 
   const handleAddToCart = (e, product) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    const productId = product.productId || product.id;
-    setAddingToCart(prev => ({ ...prev, [productId]: true }));
-    
-    const finalPrice = getFinalPrice(product);
-    const originalPrice = getOriginalPrice(product);
-    
-    const cartItem = {
-      id: productId,
-      name: product.productName || product.nameEn || product.name,
+    e.preventDefault(); e.stopPropagation();
+    const pid = getProductSlug(product);
+    setAddingToCart(prev => ({ ...prev, [pid]: true }));
+    addToCart({
+      id: product.productId || product.id,
+      name: getProductName(product),
       nameEn: product.productName || product.nameEn || product.name,
       nameAr: product.productNameAr || product.nameAr || product.productName,
-      price: finalPrice,
-      salePrice: finalPrice,
-      finalPrice: finalPrice,
-      originalPrice: originalPrice,
-      actualPrice: originalPrice,
+      price: getFinalPrice(product),
+      salePrice: getFinalPrice(product),
+      finalPrice: getFinalPrice(product),
+      originalPrice: getOriginalPrice(product),
+      actualPrice: getOriginalPrice(product),
       image: getProductImage(product),
       quantity: 1,
-    };
-    
-    addToCart(cartItem);
-
-    setTimeout(() => {
-      setAddingToCart(prev => ({ ...prev, [productId]: false }));
-    }, 800);
+    });
+    setTimeout(() => setAddingToCart(prev => ({ ...prev, [pid]: false })), 800);
   };
 
+  const clearFilters = () => { setPriceRange({ min: '', max: '' }); setSelectedArrangements([]); setSortBy('default'); };
+  const hasActiveFilters = priceRange.min !== '' || priceRange.max !== '' || selectedArrangements.length > 0;
+  const arrangementTypes = [
+    { value: 'bouquet', label: t.bouquet },
+    { value: 'box', label: t.box },
+    { value: 'basket', label: t.basket },
+    { value: 'vase', label: t.vase },
+    { value: 'tray', label: t.tray },
+    { value: 'stand', label: t.stand }
+  ];
+
   return (
-    <div className={`pick-for-you-page ${currentLang === 'ar' ? 'rtl' : ''}`}>
-      {/* Hero Banner */}
+    <div className={`pickforyou-page ${currentLang === 'ar' ? 'rtl' : ''}`}>
       <section className="hero-banner">
+        <div className="hero-bg-decoration">
+          <span className="floating-icon float-1">✨</span>
+          <span className="floating-icon float-2">💐</span>
+          <span className="floating-icon float-3">🌸</span>
+        </div>
         <div className="container">
-          <h1 className="hero-title">{t.pageTitle}</h1>
-          <p className="hero-subtitle">{t.pageSubtitle}</p>
+          <div className="hero-content">
+            <span className="hero-badge"><span>✨</span>{t.badge}</span>
+            <h1 className="hero-title">{t.title}</h1>
+            <p className="hero-subtitle">{t.subtitle}</p>
+          </div>
         </div>
       </section>
 
-      {/* Main Content */}
-      <div className="main-content">
+      {/* Mobile Filter/Sort Toolbar */}
+      <MobileFilterBar
+        currentLang={currentLang}
+        onFilterClick={() => setMobileFilterOpen(true)}
+        sortBy={sortBy}
+        onSortChange={setSortBy}
+        filterCount={(selectedArrangements.length > 0 ? 1 : 0) + (priceRange.min !== '' || priceRange.max !== '' ? 1 : 0)}
+        sortOptions={[
+          { value: 'default', labelEn: t.default, labelAr: 'افتراضي' },
+          { value: 'priceLow', labelEn: t.priceLow, labelAr: 'السعر: من الأقل للأعلى' },
+          { value: 'priceHigh', labelEn: t.priceHigh, labelAr: 'السعر: من الأعلى للأقل' },
+          { value: 'newest', labelEn: t.newest, labelAr: 'الأحدث أولاً' },
+          { value: 'nameAZ', labelEn: t.nameAZ, labelAr: 'الاسم: أ-ي' },
+        ]}
+      />
+
+      {/* Mobile Filter Drawer */}
+      <MobileFilterDrawer
+        isOpen={mobileFilterOpen}
+        onClose={() => setMobileFilterOpen(false)}
+        currentLang={currentLang}
+        onClearAll={clearFilters}
+        itemCount={filteredAndSortedProducts.length}
+      >
+        <FilterSection 
+          title={t.priceRange} 
+          isOpen={filtersOpen.price} 
+          onToggle={() => setFiltersOpen(prev => ({ ...prev, price: !prev.price }))}
+        >
+          <PriceRangeFilter
+            minValue={priceRange.min}
+            maxValue={priceRange.max}
+            onMinChange={(val) => setPriceRange(prev => ({ ...prev, min: val }))}
+            onMaxChange={(val) => setPriceRange(prev => ({ ...prev, max: val }))}
+            currency={t.kd}
+            highestPriceLabel={t.highestPrice}
+            highestPrice={maxPrice}
+          />
+        </FilterSection>
+        
+        <FilterSection 
+          title={t.arrangement} 
+          isOpen={filtersOpen.arrangement} 
+          onToggle={() => setFiltersOpen(prev => ({ ...prev, arrangement: !prev.arrangement }))}
+        >
+          <CheckboxFilter
+            options={arrangementTypes}
+            selectedValues={selectedArrangements}
+            onChange={setSelectedArrangements}
+            currentLang={currentLang}
+          />
+        </FilterSection>
+      </MobileFilterDrawer>
+
+      <section className="main-content">
         <div className="container">
           <div className="content-layout">
-            {/* Left Sidebar - Filters */}
+            {/* Desktop Sidebar */}
             <aside className="filters-sidebar">
               <div className="filters-header">
-                <h2 className="filters-title">{t.filters}</h2>
-                {(selectedArrangement.length > 0 || priceRange.min > 0 || priceRange.max < maxProductPrice) && (
-                  <button className="clear-filters" onClick={clearAllFilters}>
-                    {t.clearAll}
-                  </button>
-                )}
+                <h3 className="filters-title">{t.filters}</h3>
+                {hasActiveFilters && <button className="clear-filters" onClick={clearFilters}>{t.clearAll}</button>}
               </div>
-
-              {/* Price Filter */}
               <div className="filter-section">
-                <button 
-                  className={`filter-header ${filtersOpen.price ? 'open' : ''}`}
-                  onClick={() => toggleFilter('price')}
-                >
-                  <span>{t.price}</span>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M6 9l6 6 6-6"/>
-                  </svg>
+                <button className={`filter-header ${filtersOpen.price ? 'open' : ''}`} onClick={() => setFiltersOpen(prev => ({ ...prev, price: !prev.price }))}>
+                  <span>{t.priceRange}</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6"/></svg>
                 </button>
                 {filtersOpen.price && (
                   <div className="filter-content">
                     <div className="price-inputs">
-                      <div className="price-input-group">
-                        <span className="currency-label">{t.currency}</span>
-                        <input 
-                          type="number" 
-                          value={priceRange.min}
-                          onChange={(e) => setPriceRange(prev => ({ ...prev, min: Number(e.target.value) }))}
-                          min="0"
-                          max={priceRange.max}
-                        />
-                      </div>
-                      <span className="price-separator">{t.to}</span>
-                      <div className="price-input-group">
-                        <span className="currency-label">{t.currency}</span>
-                        <input 
-                          type="number" 
-                          value={priceRange.max}
-                          onChange={(e) => setPriceRange(prev => ({ ...prev, max: Number(e.target.value) }))}
-                          min={priceRange.min}
-                        />
-                      </div>
+                      <div className="price-input-group"><span className="currency-label">{t.kd}</span><input type="number" placeholder={t.minPrice} value={priceRange.min} onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))} min="0"/></div>
+                      <span className="price-separator">-</span>
+                      <div className="price-input-group"><span className="currency-label">{t.kd}</span><input type="number" placeholder={t.maxPrice} value={priceRange.max} onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))} min="0"/></div>
                     </div>
-                    <p className="price-hint">{t.highestPrice} {maxProductPrice.toFixed(3)} {t.currency}</p>
+                    <p className="price-hint">{t.highestPrice}: {maxPrice} {t.kd}</p>
                   </div>
                 )}
               </div>
-
-              {/* Arrangement Filter */}
               <div className="filter-section">
-                <button 
-                  className={`filter-header ${filtersOpen.arrangement ? 'open' : ''}`}
-                  onClick={() => toggleFilter('arrangement')}
-                >
+                <button className={`filter-header ${filtersOpen.arrangement ? 'open' : ''}`} onClick={() => setFiltersOpen(prev => ({ ...prev, arrangement: !prev.arrangement }))}>
                   <span>{t.arrangement}</span>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M6 9l6 6 6-6"/>
-                  </svg>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6"/></svg>
                 </button>
                 {filtersOpen.arrangement && (
                   <div className="filter-content">
-                    {arrangements.map(arr => (
-                      <label key={arr.id} className="checkbox-label">
-                        <input 
-                          type="checkbox"
-                          checked={selectedArrangement.includes(arr.id)}
-                          onChange={() => handleArrangementChange(arr.id)}
-                        />
+                    {arrangementTypes.map(({ value, label }) => (
+                      <label key={value} className="checkbox-label">
+                        <input type="checkbox" checked={selectedArrangements.includes(value)} onChange={() => {
+                          setSelectedArrangements(prev => prev.includes(value) ? prev.filter(a => a !== value) : [...prev, value]);
+                        }}/>
                         <span className="checkmark"></span>
-                        <span className="label-text">{arr.label}</span>
+                        <span className="label-text">{label}</span>
                       </label>
                     ))}
                   </div>
@@ -413,148 +267,56 @@ const PickForYou = () => {
               </div>
             </aside>
 
-            {/* Right Content - Products */}
-            <main className="products-main">
-              {/* Toolbar */}
+            {/* Products Main */}
+            <div className="products-main">
               <div className="products-toolbar">
-                <span className="items-count">{filteredProducts.length} {t.items}</span>
-                
+                <span className="items-count">{filteredAndSortedProducts.length} {t.items}</span>
                 <div className="toolbar-right">
                   <div className="sort-dropdown">
-                    <label>{t.sort}</label>
+                    <label>{t.sortBy}</label>
                     <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-                      <option value="default">{t.sortDefault}</option>
-                      <option value="price-low">{t.sortPriceLow}</option>
-                      <option value="price-high">{t.sortPriceHigh}</option>
-                      <option value="newest">{t.sortNewest}</option>
-                      <option value="name">{t.sortName}</option>
+                      <option value="default">{t.default}</option>
+                      <option value="priceLow">{t.priceLow}</option>
+                      <option value="priceHigh">{t.priceHigh}</option>
+                      <option value="newest">{t.newest}</option>
+                      <option value="nameAZ">{t.nameAZ}</option>
                     </select>
-                  </div>
-
-                  <div className="view-toggle">
-                    <button 
-                      className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
-                      onClick={() => setViewMode('grid')}
-                      aria-label="Grid view"
-                    >
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                        <rect x="3" y="3" width="7" height="7" rx="1"/>
-                        <rect x="14" y="3" width="7" height="7" rx="1"/>
-                        <rect x="3" y="14" width="7" height="7" rx="1"/>
-                        <rect x="14" y="14" width="7" height="7" rx="1"/>
-                      </svg>
-                    </button>
-                    <button 
-                      className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
-                      onClick={() => setViewMode('list')}
-                      aria-label="List view"
-                    >
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                        <rect x="3" y="4" width="18" height="4" rx="1"/>
-                        <rect x="3" y="10" width="18" height="4" rx="1"/>
-                        <rect x="3" y="16" width="18" height="4" rx="1"/>
-                      </svg>
-                    </button>
                   </div>
                 </div>
               </div>
 
-              {/* Loading State */}
-              {loading && (
-                <div className="loading-state">
-                  <div className="spinner"></div>
-                  <p>{t.loading}</p>
-                </div>
-              )}
-
-              {/* Error State */}
-              {error && !loading && (
-                <div className="error-state">
-                  <p>{t.error}</p>
-                  <p className="error-details">{error}</p>
-                </div>
-              )}
-
-              {/* Empty State */}
-              {!loading && !error && filteredProducts.length === 0 && (
-                <div className="empty-state">
-                  <div className="empty-icon">🌸</div>
-                  <p>{t.noProducts}</p>
-                </div>
-              )}
-
-              {/* Products Grid */}
-              {!loading && !error && filteredProducts.length > 0 && (
-                <div className={`products-grid ${viewMode}`}>
-                  {filteredProducts.map((product, index) => {
-                    const discount = getDiscountPercent(product);
+              {loading ? (
+                <div className="loading-state"><div className="spinner"></div><p>{t.loading}</p></div>
+              ) : error ? (
+                <div className="error-state"><p>{t.error}</p></div>
+              ) : filteredAndSortedProducts.length === 0 ? (
+                <div className="empty-state"><span className="empty-icon">✨</span><p>{t.noProducts}</p></div>
+              ) : (
+                <div className="products-grid">
+                  {filteredAndSortedProducts.map((product, index) => {
+                    const productName = getProductName(product);
+                    const productImage = getProductImage(product);
                     const originalPrice = getOriginalPrice(product);
                     const finalPrice = getFinalPrice(product);
+                    const showDiscount = hasDiscount(product);
                     const productSlug = getProductSlug(product);
-                    const productName = getProductName(product);
-                    const productDesc = getDefaultDescription(product);
-                    const productImage = getProductImage(product);
-                    const productId = product.productId || product.id;
-                    const isAdding = addingToCart[productId];
-                    
                     return (
-                      <Link 
-                        to={`/product/${productSlug}`}
-                        key={productId} 
-                        className="product-card"
-                        style={{ animationDelay: `${index * 0.05}s` }}
-                      >
-                        {/* Discount Badge */}
-                        {discount && (
-                          <span className="discount-badge">-{discount}%</span>
-                        )}
-                        
-                        {/* Product Image */}
-                        <div className="product-image-wrapper">
-                          <img 
-                            src={productImage} 
-                            alt={productName}
-                            className="product-image"
-                            loading="lazy"
-                            onError={(e) => {
-                              e.target.src = '/images/placeholder.webp';
-                            }}
-                          />
-                        </div>
-                        
-                        {/* Product Info */}
+                      <Link to={`/product/${productSlug}`} className="product-card" key={productSlug} style={{ animationDelay: `${index * 0.05}s` }}>
+                        {showDiscount && <span className="discount-badge">-{Math.round((1 - finalPrice / originalPrice) * 100)}%</span>}
+                        <div className="product-image-wrapper"><img src={productImage} alt={productName} className="product-image" loading="lazy" onError={(e) => { e.target.src = '/images/placeholder.webp'; }}/></div>
                         <div className="product-info">
                           <h3 className="product-name">{productName}</h3>
-                          <p className="product-desc">{productDesc}</p>
-                          
-                          {/* Price Row */}
                           <div className="product-footer">
                             <div className="price-wrapper">
-                              {discount && discount > 0 && originalPrice > finalPrice && (
-                                <span className="original-price">
-                                  {t.currency} {parseFloat(originalPrice).toFixed(3)}
-                                </span>
-                              )}
-                              <span className="sale-price">
-                                {t.currency} {parseFloat(finalPrice).toFixed(3)}
-                              </span>
+                              {showDiscount && <span className="original-price">{parseFloat(originalPrice).toFixed(3)} KWD</span>}
+                              <span className="sale-price">{parseFloat(finalPrice).toFixed(3)} KWD</span>
                             </div>
                             
-                            {/* Add Button */}
-                            <button 
-                              className={`add-btn ${isAdding ? 'adding' : ''}`}
-                              onClick={(e) => handleAddToCart(e, product)}
-                              aria-label={t.addToCart}
-                            >
-                              {isAdding ? (
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                  <polyline points="20 6 9 17 4 12"/>
-                                </svg>
+                            <button className={`add-btn ${addingToCart[productSlug] ? 'adding' : ''}`} onClick={(e) => handleAddToCart(e, product)}>
+                              {addingToCart[productSlug] ? (
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
                               ) : (
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                  <line x1="12" y1="5" x2="12" y2="19"></line>
-                                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                                </svg>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                               )}
                             </button>
                           </div>
@@ -564,10 +326,10 @@ const PickForYou = () => {
                   })}
                 </div>
               )}
-            </main>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 };
