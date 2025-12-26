@@ -1,6 +1,6 @@
 package com.flowerapp.order.dto;
 
-import com.flowerapp.common.enums.OrderStatus;
+import com.flowerapp.common.enums.DeliveryStatus;
 import com.flowerapp.hebasePayment.domain.PaymentStatus;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -79,10 +79,10 @@ public class OrderDto {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class UpdateOrderStatusRequest {
+    public static class UpdateDeliveryStatusRequest {
 
-        @NotNull(message = "Order status is required")
-        private OrderStatus orderStatus;
+        @NotNull(message = "Delivery status is required")
+        private DeliveryStatus deliveryStatus;
 
         @Size(max = 500, message = "Note cannot exceed 500 characters")
         private String note;
@@ -104,7 +104,7 @@ public class OrderDto {
     @Builder
     public static class OrderSearchRequest {
         private UUID userId;
-        private OrderStatus orderStatus;
+        private DeliveryStatus deliveryStatus;
         private PaymentStatus paymentStatus;
         private LocalDateTime startDate;
         private LocalDateTime endDate;
@@ -120,9 +120,9 @@ public class OrderDto {
     @AllArgsConstructor
     @Builder
     public static class OrderResponse {
-        private Long orderId;           // FIXED: Changed from UUID to Long to match Order entity
+        private Long orderId;
         private String orderNumber;
-        private OrderStatus orderStatus;
+        private DeliveryStatus deliveryStatus;
         private PaymentStatus paymentStatus;
         private String cardMessage;
         private String instructionMessage;
@@ -164,7 +164,7 @@ public class OrderDto {
     public static class OrderListResponse {
         private Long orderId;
         private String orderNumber;
-        private OrderStatus orderStatus;
+        private DeliveryStatus deliveryStatus;
         private PaymentStatus paymentStatus;
         private BigDecimal totalAmount;
         private int itemCount;
@@ -222,8 +222,8 @@ public class OrderDto {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class OrderStatusHistory {
-        private OrderStatus status;
+    public static class DeliveryStatusHistory {
+        private DeliveryStatus status;
         private LocalDateTime changedAt;
         private String changedBy;
         private String note;

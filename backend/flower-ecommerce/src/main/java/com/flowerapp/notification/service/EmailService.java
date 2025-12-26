@@ -17,6 +17,7 @@ public class EmailService {
 
     private final JavaMailSender mailSender;
 
+
     @Value("${spring.mail.username}")
     private String fromEmail;
 
@@ -68,7 +69,7 @@ public class EmailService {
 
     @Async
     public void sendWelcomeEmail(String to, String userName) {
-        String subject = "Welcome to Flower App! 🌸";
+        String subject = "Welcome to Holland Flowers! 🌸";
         String content = buildWelcomeEmail(userName);
         sendEmail(to, subject, content);
     }
@@ -99,7 +100,7 @@ public class EmailService {
                         <p>We'll notify you when your order is on its way.</p>
                     </div>
                     <div class="footer">
-                        <p>© 2024 Flower App. All rights reserved.</p>
+                        <p>©  2024 Holland Flowers. All rights reserved.</p>
                     </div>
                 </div>
             </body>
@@ -170,7 +171,7 @@ public class EmailService {
             <body>
                 <div class="container">
                     <div class="header">
-                        <h1>🌸 Welcome to Flower App!</h1>
+                        <h1>🌸 Welcome to Holland Flowers!</h1>
                         <p>Hello %s!</p>
                     </div>
                     <div style="padding: 20px;">

@@ -2,6 +2,7 @@ package com.flowerapp.admin.service;
 
 import com.flowerapp.admin.dto.AdminDto.*;
 import com.flowerapp.category.repository.CategoryRepository;
+import com.flowerapp.common.enums.DeliveryStatus;
 import com.flowerapp.common.enums.RoleType;
 import com.flowerapp.common.exception.CustomException;
 import com.flowerapp.order.repository.OrderRepository;
@@ -275,7 +276,7 @@ public class AdminService {
                 .totalProducts(productRepository.countByIsActiveTrue())
                 .totalCategories(categoryRepository.countByIsActiveTrue())
                 .totalOrders(orderRepository.count())
-                .pendingOrders(orderRepository.countByOrderStatus(com.flowerapp.common.enums.OrderStatus.PENDING))
+                .pendingOrders(orderRepository.countByDeliveryStatus(DeliveryStatus.PENDING))
                 .todayOrders(orderRepository.countByCreatedAtAfter(todayStart))
                 .newUsersToday(userRepository.countNewUsersSince(todayStart))
                 .lowStockProducts(productRepository.findLowStockProducts(10).size())
@@ -313,7 +314,7 @@ public class AdminService {
                 .map(order -> CustomerOrderSummary.builder()
                         .orderId(order.getOrderId())
                         .orderNumber(order.getOrderNumber())
-                        .orderStatus(order.getOrderStatus())
+                        .orderStatus(order.getDeliveryStatus())
                         .totalAmount(order.getTotalAmount())
                         .orderDate(order.getCreatedAt())
                         .build())

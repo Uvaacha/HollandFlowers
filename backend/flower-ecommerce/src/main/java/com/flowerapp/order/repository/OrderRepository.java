@@ -1,6 +1,6 @@
 package com.flowerapp.order.repository;
 
-import com.flowerapp.common.enums.OrderStatus;
+import com.flowerapp.common.enums.DeliveryStatus;
 import com.flowerapp.hebasePayment.domain.PaymentStatus;
 import com.flowerapp.order.entity.Order;
 import org.springframework.data.domain.Page;
@@ -30,7 +30,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
 
     Page<Order> findByUserUserIdOrderByCreatedAtDesc(UUID userId, Pageable pageable);
 
-    Page<Order> findByUserUserIdAndOrderStatus(UUID userId, OrderStatus orderStatus, Pageable pageable);
+    Page<Order> findByUserUserIdAndDeliveryStatus(UUID userId, DeliveryStatus deliveryStatus, Pageable pageable);
 
     List<Order> findByUserUserIdOrderByCreatedAtDesc(UUID userId);
 
@@ -39,13 +39,13 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
     long countByUserUserId(UUID userId);
 
     // Status-based queries
-    Page<Order> findByOrderStatus(OrderStatus orderStatus, Pageable pageable);
+    Page<Order> findByDeliveryStatus(DeliveryStatus deliveryStatus, Pageable pageable);
 
     Page<Order> findByPaymentStatus(PaymentStatus paymentStatus, Pageable pageable);
 
-    List<Order> findByOrderStatusIn(List<OrderStatus> statuses);
+    List<Order> findByDeliveryStatusIn(List<DeliveryStatus> statuses);
 
-    long countByOrderStatus(OrderStatus orderStatus);
+    long countByDeliveryStatus(DeliveryStatus deliveryStatus);
 
     // All orders
     Page<Order> findAllByOrderByCreatedAtDesc(Pageable pageable);
@@ -70,22 +70,22 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
     long countByCreatedAtAfter(LocalDateTime dateTime);
 
     // Statistics queries
-    @Query("SELECT COUNT(o) FROM Order o WHERE o.orderStatus = :status")
-    long countByStatus(@Param("status") OrderStatus status);
+    @Query("SELECT COUNT(o) FROM Order o WHERE o.deliveryStatus = :status")
+    long countByStatus(@Param("status") DeliveryStatus status);
 
-    @Query("SELECT COALESCE(SUM(o.totalAmount), 0) FROM Order o WHERE o.orderStatus = 'DELIVERED'")
+    @Query("SELECT COALESCE(SUM(o.totalAmount), 0) FROM Order o WHERE o.deliveryStatus = 'DELIVERED'")
     BigDecimal getTotalRevenue();
 
-    @Query("SELECT COALESCE(SUM(o.totalAmount), 0) FROM Order o WHERE o.orderStatus = 'DELIVERED' AND o.createdAt >= :startDate")
+    @Query("SELECT COALESCE(SUM(o.totalAmount), 0) FROM Order o WHERE o.deliveryStatus = 'DELIVERED' AND o.createdAt >= :startDate")
     BigDecimal getRevenueFromDate(@Param("startDate") LocalDateTime startDate);
 
-    @Query("SELECT COALESCE(AVG(o.totalAmount), 0) FROM Order o WHERE o.orderStatus = 'DELIVERED'")
+    @Query("SELECT COALESCE(AVG(o.totalAmount), 0) FROM Order o WHERE o.deliveryStatus = 'DELIVERED'")
     BigDecimal getAverageOrderValue();
 
     @Query("SELECT COUNT(o) FROM Order o WHERE o.createdAt >= :startDate")
     long countOrdersFromDate(@Param("startDate") LocalDateTime startDate);
 
-    @Query("SELECT COUNT(o) FROM Order o WHERE o.user.userId = :userId AND o.orderStatus = 'DELIVERED'")
+    @Query("SELECT COUNT(o) FROM Order o WHERE o.user.userId = :userId AND o.deliveryStatus = 'DELIVERED'")
     long countDeliveredOrdersByUser(@Param("userId") UUID userId);
 
     // Search queries
@@ -97,29 +97,25 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
 
     // Update queries
     @Modifying
-    @Query("UPDATE Order o SET o.orderStatus = :status WHERE o.orderId = :orderId")
-    void updateOrderStatus(@Param("orderId") UUID orderId, @Param("status") OrderStatus status);
+    @Query("UPDATE Order o SET o.deliveryStatus = :status WHERE o.orderId = :orderId")
+    void updateDeliveryStatus(@Param("orderId") Long orderId, @Param("status") DeliveryStatus status);
 
     @Modifying
     @Query("UPDATE Order o SET o.paymentStatus = :status WHERE o.orderId = :orderId")
-    void updatePaymentStatus(@Param("orderId") UUID orderId, @Param("status") PaymentStatus status);
+    void updatePaymentStatus(@Param("orderId") Long orderId, @Param("status") PaymentStatus status);
 
     @Modifying
-    @Query("UPDATE Order o SET o.orderStatus = :orderStatus, o.paymentStatus = :paymentStatus WHERE o.orderId = :orderId")
-    void updateOrderAndPaymentStatus(@Param("orderId") UUID orderId,
-                                     @Param("orderStatus") OrderStatus orderStatus,
-                                     @Param("paymentStatus") PaymentStatus paymentStatus);
+    @Query("UPDATE Order o SET o.deliveryStatus = :deliveryStatus, o.paymentStatus = :paymentStatus WHERE o.orderId = :orderId")
+    void updateDeliveryAndPaymentStatus(@Param("orderId") Long orderId,
+                                        @Param("deliveryStatus") DeliveryStatus deliveryStatus,
+                                        @Param("paymentStatus") PaymentStatus paymentStatus);
 
     // Pending orders that need attention
-    @Query("SELECT o FROM Order o WHERE o.orderStatus = 'PENDING' AND o.createdAt < :threshold ORDER BY o.createdAt ASC")
+    @Query("SELECT o FROM Order o WHERE o.deliveryStatus = 'PENDING' AND o.createdAt < :threshold ORDER BY o.createdAt ASC")
     List<Order> findStalePendingOrders(@Param("threshold") LocalDateTime threshold);
 
     // Orders for delivery today
-//    @Query("SELECT o FROM Order o WHERE o.orderStatus IN ('CONFIRMED', 'PROCESSING') " +
-//           "AND DATE(o.preferredDeliveryDate) = CURRENT_DATE ORDER BY o.preferredDeliveryDate ASC")
-//    List<Order> findOrdersForDeliveryToday();
-
-    @Query("SELECT o FROM Order o WHERE o.orderStatus IN ('CONFIRMED', 'PROCESSING') " +
+    @Query("SELECT o FROM Order o WHERE o.deliveryStatus IN ('CONFIRMED', 'PROCESSING') " +
             "AND o.preferredDeliveryDate >= :startOfDay AND o.preferredDeliveryDate < :endOfDay " +
             "ORDER BY o.preferredDeliveryDate ASC")
     List<Order> findOrdersForDeliveryToday(@Param("startOfDay") LocalDateTime startOfDay,
@@ -136,7 +132,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
     Optional<Order> findById(Long orderId);
 
     // Customer statistics queries
-    @Query("SELECT COALESCE(SUM(o.totalAmount), 0) FROM Order o WHERE o.user.userId = :userId AND o.orderStatus = 'DELIVERED'")
+    @Query("SELECT COALESCE(SUM(o.totalAmount), 0) FROM Order o WHERE o.user.userId = :userId AND o.deliveryStatus = 'DELIVERED'")
     java.math.BigDecimal calculateTotalSpentByUser(@Param("userId") UUID userId);
 
     @Query("SELECT MAX(o.createdAt) FROM Order o WHERE o.user.userId = :userId")

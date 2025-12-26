@@ -1,6 +1,6 @@
 package com.flowerapp.order.controller;
 
-import com.flowerapp.common.enums.OrderStatus;
+import com.flowerapp.common.enums.DeliveryStatus;
 import com.flowerapp.common.response.ApiResponse;
 import com.flowerapp.order.dto.OrderDto.*;
 import com.flowerapp.order.service.OrderService;
@@ -69,14 +69,14 @@ public class OrderController {
         return ResponseEntity.ok(ApiResponse.success("Order retrieved successfully", order));
     }
 
-    @GetMapping("/status/{status}")
-    @Operation(summary = "Get user's orders by status")
-    public ResponseEntity<ApiResponse<Page<OrderListResponse>>> getUserOrdersByStatus(
+    @GetMapping("/delivery-status/{status}")
+    @Operation(summary = "Get user's orders by delivery status")
+    public ResponseEntity<ApiResponse<Page<OrderListResponse>>> getUserOrdersByDeliveryStatus(
             @AuthenticationPrincipal CustomUserDetails userDetails,
-            @PathVariable OrderStatus status,
+            @PathVariable DeliveryStatus status,
             @PageableDefault(size = 10) Pageable pageable) {
         
-        Page<OrderListResponse> orders = orderService.getUserOrdersByStatus(
+        Page<OrderListResponse> orders = orderService.getUserOrdersByDeliveryStatus(
                 userDetails.getUserId(), status, pageable);
         return ResponseEntity.ok(ApiResponse.success("Orders retrieved successfully", orders));
     }

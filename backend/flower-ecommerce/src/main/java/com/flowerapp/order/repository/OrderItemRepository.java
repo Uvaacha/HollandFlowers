@@ -23,16 +23,15 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, UUID> {
     long countByProductId(@Param("productId") UUID productId);
 
     @Query("SELECT SUM(oi.quantity) FROM OrderItem oi WHERE oi.product.productId = :productId " +
-           "AND oi.order.orderStatus = 'DELIVERED'")
+            "AND oi.order.deliveryStatus = 'DELIVERED'")
     Long getTotalSoldQuantity(@Param("productId") UUID productId);
 
     @Query("SELECT oi.product.productId, SUM(oi.quantity) as totalQty FROM OrderItem oi " +
-           "WHERE oi.order.orderStatus = 'DELIVERED' " +
-           "GROUP BY oi.product.productId ORDER BY totalQty DESC")
+            "WHERE oi.order.deliveryStatus = 'DELIVERED' " +
+            "GROUP BY oi.product.productId ORDER BY totalQty DESC")
     List<Object[]> findBestSellingProducts();
 
-    void deleteByOrderOrderId(
-            Long orderId);
-    int countByOrderOrderId(Long orderId);  // ← Add this line
+    void deleteByOrderOrderId(Long orderId);
 
+    int countByOrderOrderId(Long orderId);
 }

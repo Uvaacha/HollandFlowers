@@ -1,6 +1,6 @@
 package com.flowerapp.order.entity;
 
-import com.flowerapp.common.enums.OrderStatus;
+import com.flowerapp.common.enums.DeliveryStatus;
 import com.flowerapp.hebasePayment.domain.PaymentStatus;
 import com.flowerapp.user.entity.User;
 import jakarta.persistence.*;
@@ -16,8 +16,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "orders", indexes = {
+        @Index(name = "idx_delivery_status", columnList = "delivery_status"),
         @Index(name = "idx_order_user", columnList = "user_id"),
-        @Index(name = "idx_order_status", columnList = "order_status"),
         @Index(name = "idx_order_payment_status", columnList = "payment_status"),
         @Index(name = "idx_order_created_at", columnList = "created_at")
 })
@@ -41,9 +41,9 @@ public class Order {
     private String orderNumber;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "order_status", nullable = false, length = 30)
+    @Column(name = "delivery_status", nullable = false, length = 30)
     @Builder.Default
-    private OrderStatus orderStatus = OrderStatus.PENDING;
+    private DeliveryStatus deliveryStatus = DeliveryStatus.PENDING;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_status", nullable = false, length = 30)
@@ -142,12 +142,12 @@ public class Order {
     }
 
     public boolean canBeCancelled() {
-        return this.orderStatus == OrderStatus.PENDING ||
-                this.orderStatus == OrderStatus.CONFIRMED;
+        return this.deliveryStatus == DeliveryStatus.PENDING ||
+                this.deliveryStatus == DeliveryStatus.CONFIRMED;
     }
 
     public boolean isDelivered() {
-        return this.orderStatus == OrderStatus.DELIVERED;
+        return this.deliveryStatus == DeliveryStatus.DELIVERED;
     }
 
     @PrePersist

@@ -1,6 +1,6 @@
 package com.flowerapp.admin.dto;
 
-import com.flowerapp.common.enums.OrderStatus;
+import com.flowerapp.common.enums.DeliveryStatus;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -136,7 +136,7 @@ public class AdminDto {
     public static class UpdateOrderStatusRequest {
 
         @NotNull(message = "Order status is required")
-        private OrderStatus orderStatus;
+        private DeliveryStatus orderStatus;
 
         @Size(max = 500, message = "Note cannot exceed 500 characters")
         private String note;
@@ -148,7 +148,7 @@ public class AdminDto {
     @Builder
     public static class OrderSearchRequest {
         private UUID userId;
-        private OrderStatus orderStatus;
+        private DeliveryStatus orderStatus;
         private String orderNumber;
         private LocalDateTime startDate;
         private LocalDateTime endDate;
@@ -221,7 +221,7 @@ public class AdminDto {
     public static class CustomerOrderSummary {
         private Long orderId;
         private String orderNumber;
-        private OrderStatus orderStatus;
+        private DeliveryStatus orderStatus;
         private java.math.BigDecimal totalAmount;
         private LocalDateTime orderDate;
     }

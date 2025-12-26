@@ -1,7 +1,7 @@
 package com.flowerapp.hebasePayment.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.flowerapp.common.enums.OrderStatus;
+import com.flowerapp.common.enums.DeliveryStatus;
 import com.flowerapp.hebasePayment.config.HesabeConfig;
 import com.flowerapp.hebasePayment.domain.PaymentMethod;
 import com.flowerapp.hebasePayment.domain.PaymentStatus;
@@ -20,15 +20,12 @@ import com.flowerapp.order.repository.OrderRepository;
 import com.flowerapp.user.entity.User;
 import com.flowerapp.hebasePayment.request.InitiatePaymentRequest;
 import com.flowerapp.hebasePayment.response.PaymentResponse;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.crypto.Cipher;
@@ -51,92 +48,14 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
     private final OrderRepository orderRepository;
     private final ObjectMapper objectMapper;
     private final RestTemplate restTemplate;
-    private final EmailService emailService;
+    private final EmailService emailService;  // ADDED: Email service injection
 
     private static final String AES_ALGORITHM = "AES/CBC/PKCS5Padding";
-
-    /**
-     * Validate Hesabe configuration on startup
-     */
-    @PostConstruct
-    public void validateConfiguration() {
-        log.info("========== HESABE CONFIGURATION VALIDATION ==========");
-
-        boolean isValid = true;
-
-        // Check Merchant Code
-        if (hesabeConfig.getMerchantCode() == null || hesabeConfig.getMerchantCode().trim().isEmpty()) {
-            log.error("HESABE_MERCHANT_CODE is NOT SET or EMPTY");
-            isValid = false;
-        } else {
-            log.info("HESABE_MERCHANT_CODE: SET (length: {})", hesabeConfig.getMerchantCode().length());
-        }
-
-        // Check API Key (Access Code)
-        if (hesabeConfig.getApiKey() == null || hesabeConfig.getApiKey().trim().isEmpty()) {
-            log.error("HESABE_API_KEY is NOT SET or EMPTY - This will cause 401 Unauthorized errors!");
-            isValid = false;
-        } else {
-            log.info("HESABE_API_KEY: SET (length: {})", hesabeConfig.getApiKey().length());
-        }
-
-        // Check Secret Key (must be 32 characters for AES-256)
-        if (hesabeConfig.getSecretKey() == null || hesabeConfig.getSecretKey().trim().isEmpty()) {
-            log.error("HESABE_SECRET_KEY is NOT SET or EMPTY");
-            isValid = false;
-        } else if (hesabeConfig.getSecretKey().length() != 32) {
-            log.warn("HESABE_SECRET_KEY length is {} (expected 32 for AES-256)", hesabeConfig.getSecretKey().length());
-        } else {
-            log.info("HESABE_SECRET_KEY: SET (length: {})", hesabeConfig.getSecretKey().length());
-        }
-
-        // Check IV Key (must be 16 characters for AES)
-        if (hesabeConfig.getIvKey() == null || hesabeConfig.getIvKey().trim().isEmpty()) {
-            log.error("HESABE_IV_KEY is NOT SET or EMPTY");
-            isValid = false;
-        } else if (hesabeConfig.getIvKey().length() != 16) {
-            log.warn("HESABE_IV_KEY length is {} (expected 16 for AES)", hesabeConfig.getIvKey().length());
-        } else {
-            log.info("HESABE_IV_KEY: SET (length: {})", hesabeConfig.getIvKey().length());
-        }
-
-        // Check Base URL
-        log.info("HESABE_BASE_URL: {}", hesabeConfig.getBaseUrl());
-
-        // Check Response URLs
-        if (hesabeConfig.getResponseUrl() == null || hesabeConfig.getResponseUrl().trim().isEmpty()) {
-            log.warn("HESABE_RESPONSE_URL is NOT SET");
-        } else {
-            log.info("HESABE_RESPONSE_URL: {}", hesabeConfig.getResponseUrl());
-        }
-
-        if (hesabeConfig.getSuccessUrl() == null || hesabeConfig.getSuccessUrl().trim().isEmpty()) {
-            log.warn("HESABE_SUCCESS_URL is NOT SET");
-        } else {
-            log.info("HESABE_SUCCESS_URL: {}", hesabeConfig.getSuccessUrl());
-        }
-
-        if (hesabeConfig.getFailureUrl() == null || hesabeConfig.getFailureUrl().trim().isEmpty()) {
-            log.warn("HESABE_FAILURE_URL is NOT SET");
-        } else {
-            log.info("HESABE_FAILURE_URL: {}", hesabeConfig.getFailureUrl());
-        }
-
-        log.info("Sandbox Mode: {}", hesabeConfig.isSandboxMode());
-        log.info("========== END CONFIGURATION VALIDATION ==========");
-
-        if (!isValid) {
-            log.error("CRITICAL: Hesabe configuration is incomplete! Payment processing will fail.");
-        }
-    }
 
     @Transactional
     @Override
     public PaymentResponse initiatePayment(InitiatePaymentRequest request, User user) throws Exception {
         log.info("Initiating payment for user: {}, method: {}", user.getEmail(), request.getPaymentMethod());
-
-        // Validate configuration before proceeding
-        validateHesabeConfigOrThrow();
 
         // Get order
         Order order = orderRepository.findById(request.getOrderId())
@@ -248,38 +167,12 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
                 .build();
     }
 
-    /**
-     * Validate Hesabe configuration before making API calls
-     */
-    private void validateHesabeConfigOrThrow() {
-        List<String> missingConfigs = new ArrayList<>();
-
-        if (hesabeConfig.getMerchantCode() == null || hesabeConfig.getMerchantCode().trim().isEmpty()) {
-            missingConfigs.add("HESABE_MERCHANT_CODE");
-        }
-        if (hesabeConfig.getApiKey() == null || hesabeConfig.getApiKey().trim().isEmpty()) {
-            missingConfigs.add("HESABE_API_KEY");
-        }
-        if (hesabeConfig.getSecretKey() == null || hesabeConfig.getSecretKey().trim().isEmpty()) {
-            missingConfigs.add("HESABE_SECRET_KEY");
-        }
-        if (hesabeConfig.getIvKey() == null || hesabeConfig.getIvKey().trim().isEmpty()) {
-            missingConfigs.add("HESABE_IV_KEY");
-        }
-
-        if (!missingConfigs.isEmpty()) {
-            String errorMsg = "Missing Hesabe configuration: " + String.join(", ", missingConfigs);
-            log.error(errorMsg);
-            throw new PaymentException(errorMsg + ". Please check your environment variables.");
-        }
-    }
-
     @Override
     @Transactional
     public PaymentOrder createPaymentOrder(User user, Set<Order> orders, PaymentMethod paymentMethod) throws Exception {
         // Calculate total amount
         double totalAmount = orders.stream()
-                .mapToDouble(o -> o.getTotalAmount() != null ? o.getTotalAmount().doubleValue() : 0)
+                .mapToDouble(o -> o.getTotalAmount() != null ? o.getTotalAmount().abs().compareTo(new BigDecimal("")) : 0)
                 .sum();
 
         PaymentOrder paymentOrder = new PaymentOrder();
@@ -346,12 +239,12 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
             // Update order status
             Order order = payment.getOrder();
             order.setPaymentStatus(PaymentStatus.COMPLETED);
-            order.setOrderStatus(OrderStatus.CONFIRMED);
+            order.setDeliveryStatus(DeliveryStatus.CONFIRMED);
             orderRepository.save(order);
 
             log.info("Payment successful for reference: {}", payment.getPaymentReference());
 
-            // Send order confirmation email ONLY after successful payment
+            // ADDED: Send order confirmation email ONLY after successful payment
             try {
                 emailService.sendOrderConfirmationEmail(
                         order.getUser().getEmail(),
@@ -361,9 +254,10 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
                 log.info("Order confirmation email sent for order: {}", order.getOrderNumber());
             } catch (Exception e) {
                 log.error("Failed to send order confirmation email for order: {}", order.getOrderNumber(), e);
+                // Don't throw - email failure shouldn't affect payment success
             }
 
-            // Send payment confirmation email
+            // ADDED: Send payment confirmation email
             try {
                 emailService.sendPaymentConfirmationEmail(
                         order.getUser().getEmail(),
@@ -373,6 +267,7 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
                 log.info("Payment confirmation email sent for order: {}", order.getOrderNumber());
             } catch (Exception e) {
                 log.error("Failed to send payment confirmation email for order: {}", order.getOrderNumber(), e);
+                // Don't throw - email failure shouldn't affect payment success
             }
 
         } else {
@@ -415,10 +310,10 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
 
             Order order = payment.getOrder();
             order.setPaymentStatus(PaymentStatus.COMPLETED);
-            order.setOrderStatus(OrderStatus.CONFIRMED);
+            order.setDeliveryStatus(DeliveryStatus.CONFIRMED);
             orderRepository.save(order);
 
-            // Send emails on webhook success (backup in case callback didn't send)
+            // ADDED: Send emails on webhook success (backup in case callback didn't send)
             try {
                 emailService.sendOrderConfirmationEmail(
                         order.getUser().getEmail(),
@@ -485,6 +380,10 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
             throw new PaymentException("Payment has already been refunded");
         }
 
+        // TODO: Call Hesabe refund API
+        // For now, we'll mark it as refunded locally
+
+//        payment.set(true);
         payment.setRefundAmount(amount != null ? amount : payment.getAmount());
         payment.setRefundReason(reason);
         payment.setRefundedAt(LocalDateTime.now());
@@ -539,7 +438,7 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
 
         methods.add(new PaymentMethodInfo(
                 PaymentMethod.CASH_ON_DELIVERY, "Cash on Delivery", "الدفع عند الاستلام", "cod-icon",
-                true, 0.0, 100.0));
+                true, 0.0, 100.0)); // COD limited to 100 KWD
 
         return methods;
     }
@@ -594,10 +493,10 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
         paymentRepository.save(payment);
 
         order.setPaymentStatus(PaymentStatus.PENDING);
-        order.setOrderStatus(OrderStatus.CONFIRMED);
+        order.setDeliveryStatus(DeliveryStatus.CONFIRMED);
         orderRepository.save(order);
 
-        // Send order confirmation for COD orders
+        // ADDED: Send order confirmation for COD orders (they are confirmed immediately)
         try {
             emailService.sendOrderConfirmationEmail(
                     order.getUser().getEmail(),
@@ -618,82 +517,37 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
                 .amount(payment.getAmount())
                 .currency("KWD")
                 .orderId(order.getOrderId())
+//                .orderReference(order.getOrderId())
                 .build();
     }
 
     private HesabeCheckoutResponse callHesabeCheckoutApi(String encryptedData) throws Exception {
         String url = hesabeConfig.getBaseUrl() + hesabeConfig.getCheckoutEndpoint();
 
-        // Log configuration for debugging (without exposing sensitive data)
-        log.info("========== HESABE API CALL DEBUG ==========");
-        log.info("Hesabe API URL: {}", url);
-        log.info("Merchant Code: {}", hesabeConfig.getMerchantCode() != null ? hesabeConfig.getMerchantCode() : "NULL");
-        log.info("API Key (accessCode): {}", hesabeConfig.getApiKey() != null ? "SET (length: " + hesabeConfig.getApiKey().length() + ")" : "NULL - THIS WILL CAUSE 401!");
-        log.info("Secret Key: {}", hesabeConfig.getSecretKey() != null ? "SET (length: " + hesabeConfig.getSecretKey().length() + ")" : "NULL");
-        log.info("IV Key: {}", hesabeConfig.getIvKey() != null ? "SET (length: " + hesabeConfig.getIvKey().length() + ")" : "NULL");
-        log.info("Response URL: {}", hesabeConfig.getResponseUrl());
-        log.info("Failure URL: {}", hesabeConfig.getFailureUrl());
-        log.info("============================================");
-
-        // Validate API key before making the call
-        if (hesabeConfig.getApiKey() == null || hesabeConfig.getApiKey().trim().isEmpty()) {
-            log.error("HESABE_API_KEY is null or empty! Cannot make API call.");
-            throw new PaymentException("Payment gateway configuration error: API key is missing. Please contact support.");
-        }
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("accessCode", hesabeConfig.getApiKey());
-        headers.set("Accept", "application/json");
+        headers.set("Accept", "application/json");  // ADDED: Required by Hesabe API
 
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("data", encryptedData);
 
         HttpEntity<Map<String, String>> entity = new HttpEntity<>(requestBody, headers);
 
-        log.info("Calling Hesabe API: URL={}", url);
+        log.info("Calling Hesabe API: URL={}, MerchantCode={}", url, hesabeConfig.getMerchantCode());
 
         try {
             ResponseEntity<HesabeCheckoutResponse> response = restTemplate.exchange(
                     url, HttpMethod.POST, entity, HesabeCheckoutResponse.class);
 
-            log.info("Hesabe API response status: {}", response.getStatusCode());
-
-            if (response.getBody() != null) {
-                log.info("Hesabe API response - Status: {}, Code: {}, Message: {}",
-                        response.getBody().isStatus(),
-                        response.getBody().getCode(),
-                        response.getBody().getMessage());
-            }
-
             return response.getBody();
-
-        } catch (HttpClientErrorException e) {
-            log.error("Hesabe API Client Error: Status={}, Body={}", e.getStatusCode(), e.getResponseBodyAsString());
-
-            if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
-                log.error("401 Unauthorized - Check your HESABE_API_KEY environment variable!");
-                log.error("Current API Key status: {}", hesabeConfig.getApiKey() != null ? "SET but possibly invalid" : "NULL");
-                throw new PaymentException("Failed to connect to payment gateway: 401 Unauthorized. Please verify your API credentials.");
-            }
-
-            throw new PaymentException("Failed to connect to payment gateway: " + e.getMessage());
-
-        } catch (HttpServerErrorException e) {
-            log.error("Hesabe API Server Error: Status={}, Body={}", e.getStatusCode(), e.getResponseBodyAsString());
-            throw new PaymentException("Payment gateway server error: " + e.getMessage());
-
         } catch (Exception e) {
-            log.error("Error calling Hesabe API: {}", e.getMessage(), e);
+            log.error("Error calling Hesabe API: {}", e.getMessage());
             throw new PaymentException("Failed to connect to payment gateway: " + e.getMessage());
         }
     }
 
     private String encryptData(String data) throws Exception {
-        if (hesabeConfig.getSecretKey() == null || hesabeConfig.getIvKey() == null) {
-            throw new PaymentException("Encryption keys are not configured");
-        }
-
         SecretKeySpec secretKey = new SecretKeySpec(
                 hesabeConfig.getSecretKey().getBytes(StandardCharsets.UTF_8), "AES");
         IvParameterSpec ivSpec = new IvParameterSpec(
@@ -707,10 +561,6 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
     }
 
     private String decryptData(String encryptedData) throws Exception {
-        if (hesabeConfig.getSecretKey() == null || hesabeConfig.getIvKey() == null) {
-            throw new PaymentException("Decryption keys are not configured");
-        }
-
         SecretKeySpec secretKey = new SecretKeySpec(
                 hesabeConfig.getSecretKey().getBytes(StandardCharsets.UTF_8), "AES");
         IvParameterSpec ivSpec = new IvParameterSpec(

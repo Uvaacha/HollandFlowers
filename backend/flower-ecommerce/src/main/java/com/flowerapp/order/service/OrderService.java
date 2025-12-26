@@ -1,6 +1,6 @@
 package com.flowerapp.order.service;
 
-import com.flowerapp.common.enums.OrderStatus;
+import com.flowerapp.common.enums.DeliveryStatus;
 import com.flowerapp.common.exception.CustomException;
 import com.flowerapp.hebasePayment.domain.PaymentStatus;
 import com.flowerapp.notification.service.EmailService;
@@ -82,7 +82,7 @@ public class OrderService {
         // Create order
         Order order = Order.builder()
                 .user(user)
-                .orderStatus(OrderStatus.PENDING)
+                .deliveryStatus(DeliveryStatus.PENDING)
                 .paymentStatus(PaymentStatus.PENDING)
                 .cardMessage(request.getCardMessage())
                 .instructionMessage(request.getInstructionMessage())
@@ -174,11 +174,11 @@ public class OrderService {
     }
 
     /**
-     * Get user's orders by status
+     * Get user's orders by delivery status
      */
     @Transactional(readOnly = true)
-    public Page<OrderListResponse> getUserOrdersByStatus(UUID userId, OrderStatus status, Pageable pageable) {
-        return orderRepository.findByUserUserIdAndOrderStatus(userId, status, pageable)
+    public Page<OrderListResponse> getUserOrdersByDeliveryStatus(UUID userId, DeliveryStatus status, Pageable pageable) {
+        return orderRepository.findByUserUserIdAndDeliveryStatus(userId, status, pageable)
                 .map(this::mapToOrderListResponse);
     }
 
@@ -195,7 +195,7 @@ public class OrderService {
         }
 
         // Can only cancel PENDING orders
-        if (order.getOrderStatus() != OrderStatus.PENDING) {
+        if (order.getDeliveryStatus() != DeliveryStatus.PENDING) {
             throw CustomException.badRequest("Only pending orders can be cancelled");
         }
 
@@ -205,7 +205,8 @@ public class OrderService {
             productRepository.increaseStock(item.getProduct().getProductId(), item.getQuantity());
         }
 
-        order.setOrderStatus(OrderStatus.CANCELLED);
+        order.setDeliveryStatus(DeliveryStatus.CANCELLED);
+        order.setCancelledAt(LocalDateTime.now());
         Order savedOrder = orderRepository.save(order);
 
         log.info("Order cancelled: {}", order.getOrderNumber());
@@ -213,34 +214,34 @@ public class OrderService {
     }
 
     /**
-     * Update order status (admin only)
+     * Update delivery status (admin only)
      */
-    public OrderResponse updateOrderStatus(Long orderId, OrderStatus newStatus) {
+    public OrderResponse updateDeliveryStatus(Long orderId, DeliveryStatus newStatus) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> CustomException.notFound("Order not found"));
 
-        OrderStatus oldStatus = order.getOrderStatus();
+        DeliveryStatus oldStatus = order.getDeliveryStatus();
 
         // Validate status transition
         validateStatusTransition(oldStatus, newStatus);
 
         // If cancelling, restore stock
-        if (newStatus == OrderStatus.CANCELLED && oldStatus != OrderStatus.CANCELLED) {
+        if (newStatus == DeliveryStatus.CANCELLED && oldStatus != DeliveryStatus.CANCELLED) {
             List<OrderItem> items = orderItemRepository.findByOrderOrderId(orderId);
             for (OrderItem item : items) {
                 productRepository.increaseStock(item.getProduct().getProductId(), item.getQuantity());
             }
         }
 
-        order.setOrderStatus(newStatus);
+        order.setDeliveryStatus(newStatus);
 
         // Update delivered time if applicable
-        if (newStatus == OrderStatus.DELIVERED) {
+        if (newStatus == DeliveryStatus.DELIVERED) {
             order.setActualDeliveryDate(LocalDateTime.now());
         }
 
         // Update cancelled time if applicable
-        if (newStatus == OrderStatus.CANCELLED) {
+        if (newStatus == DeliveryStatus.CANCELLED) {
             order.setCancelledAt(LocalDateTime.now());
         }
 
@@ -257,7 +258,7 @@ public class OrderService {
             log.error("Failed to send order status update email", e);
         }
 
-        log.info("Order {} status updated from {} to {}", order.getOrderNumber(), oldStatus, newStatus);
+        log.info("Order {} delivery status updated from {} to {}", order.getOrderNumber(), oldStatus, newStatus);
 
         List<OrderItem> items = orderItemRepository.findByOrderOrderId(orderId);
         return mapToOrderResponse(savedOrder, items);
@@ -273,8 +274,8 @@ public class OrderService {
         order.setPaymentStatus(paymentStatus);
 
         // If payment completed, confirm the order
-        if (paymentStatus == PaymentStatus.COMPLETED && order.getOrderStatus() == OrderStatus.PENDING) {
-            order.setOrderStatus(OrderStatus.CONFIRMED);
+        if (paymentStatus == PaymentStatus.COMPLETED && order.getDeliveryStatus() == DeliveryStatus.PENDING) {
+            order.setDeliveryStatus(DeliveryStatus.CONFIRMED);
         }
 
         orderRepository.save(order);
@@ -291,11 +292,11 @@ public class OrderService {
     }
 
     /**
-     * Get orders by status (admin)
+     * Get orders by delivery status (admin)
      */
     @Transactional(readOnly = true)
-    public Page<OrderListResponse> getOrdersByStatus(OrderStatus status, Pageable pageable) {
-        return orderRepository.findByOrderStatus(status, pageable)
+    public Page<OrderListResponse> getOrdersByDeliveryStatus(DeliveryStatus status, Pageable pageable) {
+        return orderRepository.findByDeliveryStatus(status, pageable)
                 .map(this::mapToOrderListResponse);
     }
 
@@ -314,11 +315,12 @@ public class OrderService {
     @Transactional(readOnly = true)
     public OrderStatistics getOrderStatistics() {
         long totalOrders = orderRepository.count();
-        long pendingOrders = orderRepository.countByOrderStatus(OrderStatus.PENDING);
-        long confirmedOrders = orderRepository.countByOrderStatus(OrderStatus.CONFIRMED);
-        long processingOrders = orderRepository.countByOrderStatus(OrderStatus.PROCESSING);
-        long deliveredOrders = orderRepository.countByOrderStatus(OrderStatus.DELIVERED);
-        long cancelledOrders = orderRepository.countByOrderStatus(OrderStatus.CANCELLED);
+        long pendingOrders = orderRepository.countByDeliveryStatus(DeliveryStatus.PENDING);
+        long confirmedOrders = orderRepository.countByDeliveryStatus(DeliveryStatus.CONFIRMED);
+        long processingOrders = orderRepository.countByDeliveryStatus(DeliveryStatus.PROCESSING);
+        long outForDeliveryOrders = orderRepository.countByDeliveryStatus(DeliveryStatus.OUT_FOR_DELIVERY);
+        long deliveredOrders = orderRepository.countByDeliveryStatus(DeliveryStatus.DELIVERED);
+        long cancelledOrders = orderRepository.countByDeliveryStatus(DeliveryStatus.CANCELLED);
 
         BigDecimal totalRevenue = orderRepository.getTotalRevenue();
         if (totalRevenue == null) {
@@ -333,6 +335,7 @@ public class OrderService {
                 .pendingOrders(pendingOrders)
                 .confirmedOrders(confirmedOrders)
                 .processingOrders(processingOrders)
+                .outForDeliveryOrders(outForDeliveryOrders)
                 .deliveredOrders(deliveredOrders)
                 .cancelledOrders(cancelledOrders)
                 .totalRevenue(totalRevenue)
@@ -341,24 +344,37 @@ public class OrderService {
     }
 
     /**
-     * Validate order status transition
+     * Validate delivery status transition
      */
-    private void validateStatusTransition(OrderStatus currentStatus, OrderStatus newStatus) {
-        // Define valid transitions
-        boolean isValid = switch (currentStatus) {
-            case PENDING -> newStatus == OrderStatus.CONFIRMED || newStatus == OrderStatus.CANCELLED;
-            case CONFIRMED -> newStatus == OrderStatus.PROCESSING || newStatus == OrderStatus.CANCELLED;
-            case PROCESSING -> newStatus == OrderStatus.OUT_FOR_DELIVERY || newStatus == OrderStatus.CANCELLED;
-            case OUT_FOR_DELIVERY -> newStatus == OrderStatus.DELIVERED || newStatus == OrderStatus.CANCELLED;
-            case DELIVERED -> newStatus == OrderStatus.REFUNDED;
-            case CANCELLED, REFUNDED -> false;
-        };
-
-        if (!isValid) {
-            throw CustomException.badRequest(
-                    String.format("Invalid status transition from %s to %s", currentStatus, newStatus)
-            );
+    private void validateStatusTransition(DeliveryStatus currentStatus, DeliveryStatus newStatus) {
+        // Cannot change from final states
+        if (currentStatus == DeliveryStatus.CANCELLED || currentStatus == DeliveryStatus.REFUNDED) {
+            throw CustomException.badRequest("Cannot change status from a final state");
         }
+
+        // Cannot go backwards (except to CANCELLED)
+        if (newStatus == DeliveryStatus.CANCELLED) {
+            return; // Always allow cancellation
+        }
+
+        // Define order priority
+        int currentPriority = getStatusPriority(currentStatus);
+        int newPriority = getStatusPriority(newStatus);
+
+        if (newPriority < currentPriority) {
+            throw CustomException.badRequest("Cannot move order backwards in the delivery flow");
+        }
+    }
+
+    private int getStatusPriority(DeliveryStatus status) {
+        return switch (status) {
+            case PENDING -> 1;
+            case CONFIRMED -> 2;
+            case PROCESSING -> 3;
+            case OUT_FOR_DELIVERY -> 4;
+            case DELIVERED -> 5;
+            case CANCELLED, REFUNDED -> 99;
+        };
     }
 
     /**
@@ -379,7 +395,7 @@ public class OrderService {
         return OrderResponse.builder()
                 .orderId(order.getOrderId())
                 .orderNumber(order.getOrderNumber())
-                .orderStatus(order.getOrderStatus())
+                .deliveryStatus(order.getDeliveryStatus())
                 .paymentStatus(order.getPaymentStatus())
                 .cardMessage(order.getCardMessage())
                 .instructionMessage(order.getInstructionMessage())
@@ -421,7 +437,7 @@ public class OrderService {
         return OrderListResponse.builder()
                 .orderId(order.getOrderId())
                 .orderNumber(order.getOrderNumber())
-                .orderStatus(order.getOrderStatus())
+                .deliveryStatus(order.getDeliveryStatus())
                 .paymentStatus(order.getPaymentStatus())
                 .totalAmount(order.getTotalAmount())
                 .itemCount(itemCount)
