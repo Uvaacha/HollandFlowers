@@ -1,30 +1,386 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/Holland Logo.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#8B5A2B" />
-    <meta
-      name="description"
-      content="Holland Flowers - Premium flower arrangements, bouquets, and gifts in Kuwait. Order fresh flowers online for delivery."
-    />
-    <meta name="keywords" content="flowers, Kuwait, bouquet, flower delivery, Holland Flowers, roses, gifts, flower shop" />
-    <meta name="author" content="Holland Flowers" />
-    
-    <!-- Open Graph for Social Media Sharing -->
-    <meta property="og:title" content="Holland Flowers - Fresh Flower Delivery in Kuwait" />
-    <meta property="og:description" content="Premium flower arrangements, bouquets, and gifts. Order fresh flowers online for delivery in Kuwait." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.flowerskw.com" />
-    <meta property="og:image" content="%PUBLIC_URL%/Holland Logo.png" />
-    
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/Holland Logo.png" />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <title>Holland Flowers | Fresh Flower Delivery in Kuwait</title>
-  </head>
-  <body>
-    <noscript>Please enable JavaScript to view Holland Flowers website.</noscript>
-    <div id="root"></div>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- ============================================ -->
+  <!-- PRIMARY SEO META TAGS -->
+  <!-- ============================================ -->
+  <title>Holland Flowers Kuwait | Fresh Flower Delivery & Bouquets | flowerskw.com</title>
+  <meta name="title" content="Holland Flowers Kuwait | Fresh Flower Delivery & Bouquets | flowerskw.com" />
+  <meta name="description" content="Holland Flowers - Kuwait's premier florist at Ghanima Complex. Fresh flower bouquets, wedding flowers, birthday arrangements & same-day delivery across Kuwait. Call +965 6003 8844. Order online at flowerskw.com" />
+  <meta name="keywords" content="Holland Flowers, Holland Flowers Kuwait, flowerskw, flowers Kuwait, florist Kuwait, flower delivery Kuwait, fresh flowers Kuwait, bouquets Kuwait, wedding flowers Kuwait, birthday flowers Kuwait, same day flower delivery Kuwait, rose bouquet Kuwait, tulips Kuwait, orchids Kuwait, flower shop Kuwait, send flowers Kuwait, online florist Kuwait, Ghanima Complex florist, هولاند فلاورز, زهور الكويت, توصيل ورد الكويت, محل ورد الكويت" />
+  <meta name="author" content="Holland Flowers Kuwait" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="googlebot" content="index, follow" />
+  <meta name="language" content="English, Arabic" />
+  <meta name="revisit-after" content="3 days" />
+  <meta name="rating" content="general" />
+  
+  <!-- ============================================ -->
+  <!-- CANONICAL URL -->
+  <!-- ============================================ -->
+  <link rel="canonical" href="https://www.flowerskw.com/" />
+  
+  <!-- ============================================ -->
+  <!-- OPEN GRAPH / FACEBOOK -->
+  <!-- ============================================ -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.flowerskw.com/" />
+  <meta property="og:site_name" content="Holland Flowers Kuwait" />
+  <meta property="og:title" content="Holland Flowers Kuwait | Fresh Flower Delivery & Bouquets" />
+  <meta property="og:description" content="Kuwait's premier florist at Ghanima Complex. Fresh flower bouquets, wedding flowers, birthday arrangements & same-day delivery. Call +965 6003 8844" />
+  <meta property="og:image" content="https://www.flowerskw.com/Holland%20Logo.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:locale:alternate" content="ar_KW" />
+  
+  <!-- ============================================ -->
+  <!-- TWITTER CARD -->
+  <!-- ============================================ -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://www.flowerskw.com/" />
+  <meta name="twitter:title" content="Holland Flowers Kuwait | Fresh Flower Delivery" />
+  <meta name="twitter:description" content="Kuwait's premier florist. Fresh flowers, same-day delivery, wedding & birthday bouquets. Call +965 6003 8844. Order online!" />
+  <meta name="twitter:image" content="https://www.flowerskw.com/Holland%20Logo.png" />
+  
+  <!-- ============================================ -->
+  <!-- GEO & LOCATION TAGS (Important for Local SEO) -->
+  <!-- ============================================ -->
+  <meta name="geo.region" content="KW" />
+  <meta name="geo.country" content="Kuwait" />
+  <meta name="geo.placename" content="Ghanima Complex, Kuwait" />
+  <meta name="ICBM" content="29.3759, 47.9774" />
+  
+  <!-- ============================================ -->
+  <!-- FAVICON & ICONS -->
+  <!-- ============================================ -->
+  <link rel="icon" type="image/png" href="/Holland%20Logo.png" />
+  <link rel="apple-touch-icon" href="/Holland%20Logo.png" />
+  
+  <!-- ============================================ -->
+  <!-- GOOGLE SITE VERIFICATION -->
+  <!-- ============================================ -->
+  <meta name="google-site-verification" content="google11784d7edd50856d" />
+  
+  <!-- ============================================ -->
+  <!-- ALTERNATE LANGUAGE -->
+  <!-- ============================================ -->
+  <link rel="alternate" hreflang="en" href="https://www.flowerskw.com/" />
+  <link rel="alternate" hreflang="ar" href="https://www.flowerskw.com/?lang=ar" />
+  <link rel="alternate" hreflang="x-default" href="https://www.flowerskw.com/" />
+  
+  <!-- ============================================ -->
+  <!-- PRECONNECT FOR PERFORMANCE -->
+  <!-- ============================================ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+  <!-- ============================================ -->
+  <!-- STRUCTURED DATA - LOCAL BUSINESS (JSON-LD) -->
+  <!-- ============================================ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Florist",
+    "@id": "https://www.flowerskw.com/#florist",
+    "name": "Holland Flowers",
+    "alternateName": ["Holland Flowers Kuwait", "هولاند فلاورز", "flowerskw", "Holland Flowers Ghanima"],
+    "description": "Kuwait's premier florist offering fresh flower bouquets, wedding flowers, birthday arrangements, and same-day delivery across Kuwait. Located at Ghanima Complex.",
+    "url": "https://www.flowerskw.com",
+    "logo": "https://www.flowerskw.com/Holland%20Logo.png",
+    "image": [
+      "https://www.flowerskw.com/Holland%20Logo.png",
+      "https://www.flowerskw.com/images/Flowers-1.webp",
+      "https://www.flowerskw.com/images/Flowers-2.webp",
+      "https://www.flowerskw.com/images/Flowers-3.webp"
+    ],
+    "telephone": "+965-6003-8844",
+    "email": "hollandaflowers@gmail.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Ghanima Complex, Shop No. 54",
+      "addressLocality": "Kuwait City",
+      "addressRegion": "Kuwait",
+      "addressCountry": "KW"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "29.3759",
+      "longitude": "47.9774"
+    },
+    "areaServed": [
+      {
+        "@type": "City",
+        "name": "Kuwait City"
+      },
+      {
+        "@type": "City",
+        "name": "Salmiya"
+      },
+      {
+        "@type": "City",
+        "name": "Hawally"
+      },
+      {
+        "@type": "City",
+        "name": "Farwaniya"
+      },
+      {
+        "@type": "City",
+        "name": "Jahra"
+      },
+      {
+        "@type": "City",
+        "name": "Ahmadi"
+      },
+      {
+        "@type": "City",
+        "name": "Fahaheel"
+      },
+      {
+        "@type": "Country",
+        "name": "Kuwait"
+      }
+    ],
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Saturday", "Sunday"],
+        "opens": "09:00",
+        "closes": "21:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": "Friday",
+        "opens": "14:00",
+        "closes": "21:00"
+      }
+    ],
+    "priceRange": "$$",
+    "currenciesAccepted": "KWD",
+    "paymentAccepted": "Cash, Credit Card, Debit Card, KNET",
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Flower Collections",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Flower Bouquets"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Wedding Flowers"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Same Day Delivery"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Birthday Arrangements"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Valentine's Day Flowers"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Mother's Day Flowers"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Eid & Ramadan Flowers"
+          }
+        }
+      ]
+    },
+    "sameAs": [
+      "https://www.instagram.com/hollandflowerskw",
+      "https://www.facebook.com/hollandflowerskw",
+      "https://wa.me/96560038844"
+    ]
+  }
+  </script>
+  
+  <!-- ============================================ -->
+  <!-- STRUCTURED DATA - WEBSITE -->
+  <!-- ============================================ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Holland Flowers Kuwait",
+    "alternateName": ["flowerskw", "Holland Flowers", "هولاند فلاورز الكويت"],
+    "url": "https://www.flowerskw.com",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://www.flowerskw.com/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+  
+  <!-- ============================================ -->
+  <!-- STRUCTURED DATA - ORGANIZATION -->
+  <!-- ============================================ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Holland Flowers",
+    "legalName": "Holland Flowers Kuwait",
+    "url": "https://www.flowerskw.com",
+    "logo": "https://www.flowerskw.com/Holland%20Logo.png",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+965-6003-8844",
+      "contactType": "customer service",
+      "email": "hollandaflowers@gmail.com",
+      "availableLanguage": ["English", "Arabic"],
+      "areaServed": "KW"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Ghanima Complex, Shop No. 54",
+      "addressLocality": "Kuwait City",
+      "addressCountry": "KW"
+    },
+    "sameAs": [
+      "https://www.instagram.com/hollandflowerskw",
+      "https://www.facebook.com/hollandflowerskw",
+      "https://wa.me/96560038844"
+    ]
+  }
+  </script>
+
+  <!-- ============================================ -->
+  <!-- STRUCTURED DATA - SITELINKS SEARCHBOX -->
+  <!-- ============================================ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "url": "https://www.flowerskw.com/",
+    "name": "Holland Flowers Kuwait",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://www.flowerskw.com/search?q={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  <!-- ============================================ -->
+  <!-- STRUCTURED DATA - SITE NAVIGATION -->
+  <!-- ============================================ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": [
+      {
+        "@type": "SiteNavigationElement",
+        "position": 1,
+        "name": "Flower Bouquets",
+        "description": "Fresh hand-tied flower bouquets for all occasions",
+        "url": "https://www.flowerskw.com/bouquets"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "position": 2,
+        "name": "Offers & Deals",
+        "description": "Special offers and discounts on flowers",
+        "url": "https://www.flowerskw.com/offers"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "position": 3,
+        "name": "Valentine Special",
+        "description": "Romantic Valentine's Day flower arrangements",
+        "url": "https://www.flowerskw.com/valentine-special"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "position": 4,
+        "name": "Birthday Bouquets",
+        "description": "Birthday flower arrangements and gifts",
+        "url": "https://www.flowerskw.com/birthday-bouquet"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "position": 5,
+        "name": "Wedding Flowers",
+        "description": "Elegant wedding flower arrangements",
+        "url": "https://www.flowerskw.com/grand-bouquet"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "position": 6,
+        "name": "Add-Ons",
+        "description": "Balloons, chocolates, and gift add-ons",
+        "url": "https://www.flowerskw.com/add-ons"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "position": 7,
+        "name": "Gift Combos",
+        "description": "Flowers with perfume and chocolates",
+        "url": "https://www.flowerskw.com/combos"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "position": 8,
+        "name": "Mother's Day",
+        "description": "Special Mother's Day flower gifts",
+        "url": "https://www.flowerskw.com/mothers-day"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "position": 9,
+        "name": "Eid Collection",
+        "description": "Eid and Ramadan flower arrangements",
+        "url": "https://www.flowerskw.com/eid-collection"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "position": 10,
+        "name": "Hand Bouquets",
+        "description": "Elegant hand-tied bouquets",
+        "url": "https://www.flowerskw.com/hand-bouquets"
+      }
+    ]
+  }
+  </script>
+
+</head>
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+</body>
 </html>
