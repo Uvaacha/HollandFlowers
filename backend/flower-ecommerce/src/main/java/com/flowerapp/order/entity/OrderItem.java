@@ -5,12 +5,13 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.UUID;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "order_items", indexes = {
-    @Index(name = "idx_order_item_order", columnList = "order_id"),
-    @Index(name = "idx_order_item_product", columnList = "product_id")
+        @Index(name = "idx_order_item_order", columnList = "order_id"),
+        @Index(name = "idx_order_item_product", columnList = "product_id")
 })
 @Getter
 @Setter
@@ -50,6 +51,17 @@ public class OrderItem {
     @Column(name = "special_instructions", length = 500)
     private String specialInstructions;
 
+    // ============ NEW FIELDS - Per Item ============
+
+    @Column(name = "card_message", length = 500)
+    private String cardMessage;
+
+    @Column(name = "delivery_date")
+    private LocalDate deliveryDate;
+
+    @Column(name = "delivery_time_slot", length = 50)
+    private String deliveryTimeSlot;  // e.g., "11:00-13:30"
+
     @PrePersist
     @PreUpdate
     public void calculateTotalPrice() {
@@ -67,6 +79,29 @@ public class OrderItem {
                 .quantity(quantity)
                 .unitPrice(product.getFinalPrice())
                 .totalPrice(product.getFinalPrice().multiply(BigDecimal.valueOf(quantity)))
+                .build();
+    }
+
+    // Static factory method with all details
+    public static OrderItem fromProductWithDetails(
+            Product product,
+            int quantity,
+            String cardMessage,
+            LocalDate deliveryDate,
+            String deliveryTimeSlot,
+            String specialInstructions
+    ) {
+        return OrderItem.builder()
+                .product(product)
+                .productName(product.getProductName())
+                .productImageUrl(product.getImageUrl())
+                .quantity(quantity)
+                .unitPrice(product.getFinalPrice())
+                .totalPrice(product.getFinalPrice().multiply(BigDecimal.valueOf(quantity)))
+                .cardMessage(cardMessage)
+                .deliveryDate(deliveryDate)
+                .deliveryTimeSlot(deliveryTimeSlot)
+                .specialInstructions(specialInstructions)
                 .build();
     }
 }

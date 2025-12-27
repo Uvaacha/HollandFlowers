@@ -133,7 +133,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
 
     // Customer statistics queries
     @Query("SELECT COALESCE(SUM(o.totalAmount), 0) FROM Order o WHERE o.user.userId = :userId AND o.deliveryStatus = 'DELIVERED'")
-    java.math.BigDecimal calculateTotalSpentByUser(@Param("userId") UUID userId);
+    BigDecimal calculateTotalSpentByUser(@Param("userId") UUID userId);
 
     @Query("SELECT MAX(o.createdAt) FROM Order o WHERE o.user.userId = :userId")
     Optional<LocalDateTime> findLastOrderDateByUser(@Param("userId") UUID userId);

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +67,17 @@ public class OrderService {
             BigDecimal itemTotal = product.getFinalPrice().multiply(BigDecimal.valueOf(itemRequest.getQuantity()));
             subtotal = subtotal.add(itemTotal);
 
+            // Parse delivery date if provided
+            LocalDate deliveryDate = null;
+            if (itemRequest.getDeliveryDate() != null && !itemRequest.getDeliveryDate().isEmpty()) {
+                try {
+                    deliveryDate = LocalDate.parse(itemRequest.getDeliveryDate());
+                } catch (Exception e) {
+                    log.warn("Failed to parse delivery date: {}", itemRequest.getDeliveryDate());
+                }
+            }
+
+            // Build order item WITH card message and delivery date/time
             OrderItem orderItem = OrderItem.builder()
                     .product(product)
                     .quantity(itemRequest.getQuantity())
@@ -74,6 +86,9 @@ public class OrderService {
                     .productName(product.getProductName())
                     .productImageUrl(product.getImageUrl())
                     .specialInstructions(itemRequest.getSpecialInstructions())
+                    .cardMessage(itemRequest.getCardMessage())           // NEW
+                    .deliveryDate(deliveryDate)                          // NEW
+                    .deliveryTimeSlot(itemRequest.getDeliveryTimeSlot()) // NEW
                     .build();
 
             orderItems.add(orderItem);
@@ -84,7 +99,9 @@ public class OrderService {
                 .user(user)
                 .deliveryStatus(DeliveryStatus.PENDING)
                 .paymentStatus(PaymentStatus.PENDING)
-                .cardMessage(request.getCardMessage())
+                .senderName(request.getSenderName())              // NEW
+                .senderPhone(request.getSenderPhone())            // NEW
+                .cardMessage(request.getCardMessage())            // Order-level (fallback)
                 .instructionMessage(request.getInstructionMessage())
                 .deliveryAddress(request.getDeliveryAddress())
                 .deliveryArea(request.getDeliveryArea())
@@ -94,7 +111,7 @@ public class OrderService {
                 .recipientPhone(request.getRecipientPhone())
                 .preferredDeliveryDate(request.getPreferredDeliveryDate())
                 .subtotal(subtotal)
-                .totalAmount(subtotal) // Can add delivery fee and discounts later
+                .totalAmount(subtotal)
                 .couponCode(request.getCouponCode())
                 .build();
 
@@ -111,10 +128,6 @@ public class OrderService {
                 throw CustomException.badRequest("Failed to update stock for product: " + item.getProductName());
             }
         }
-
-        // REMOVED: Email is now sent ONLY after successful payment in HesabePaymentServiceImpl
-        // The order confirmation email will be triggered by processPaymentCallback()
-        // when payment status becomes COMPLETED
 
         log.info("Order created successfully: {}", savedOrder.getOrderNumber());
         return mapToOrderResponse(savedOrder, orderItems);
@@ -155,7 +168,6 @@ public class OrderService {
         Order order = orderRepository.findByOrderNumber(orderNumber)
                 .orElseThrow(() -> CustomException.notFound("Order not found"));
 
-        // Check ownership
         if (!order.getUser().getUserId().equals(userId)) {
             throw CustomException.forbidden("You don't have access to this order");
         }
@@ -189,12 +201,10 @@ public class OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> CustomException.notFound("Order not found"));
 
-        // Check ownership
         if (!order.getUser().getUserId().equals(userId)) {
             throw CustomException.forbidden("You don't have access to this order");
         }
 
-        // Can only cancel PENDING orders
         if (order.getDeliveryStatus() != DeliveryStatus.PENDING) {
             throw CustomException.badRequest("Only pending orders can be cancelled");
         }
@@ -206,7 +216,6 @@ public class OrderService {
         }
 
         order.setDeliveryStatus(DeliveryStatus.CANCELLED);
-        order.setCancelledAt(LocalDateTime.now());
         Order savedOrder = orderRepository.save(order);
 
         log.info("Order cancelled: {}", order.getOrderNumber());
@@ -221,9 +230,6 @@ public class OrderService {
                 .orElseThrow(() -> CustomException.notFound("Order not found"));
 
         DeliveryStatus oldStatus = order.getDeliveryStatus();
-
-        // Validate status transition
-        validateStatusTransition(oldStatus, newStatus);
 
         // If cancelling, restore stock
         if (newStatus == DeliveryStatus.CANCELLED && oldStatus != DeliveryStatus.CANCELLED) {
@@ -318,7 +324,6 @@ public class OrderService {
         long pendingOrders = orderRepository.countByDeliveryStatus(DeliveryStatus.PENDING);
         long confirmedOrders = orderRepository.countByDeliveryStatus(DeliveryStatus.CONFIRMED);
         long processingOrders = orderRepository.countByDeliveryStatus(DeliveryStatus.PROCESSING);
-        long outForDeliveryOrders = orderRepository.countByDeliveryStatus(DeliveryStatus.OUT_FOR_DELIVERY);
         long deliveredOrders = orderRepository.countByDeliveryStatus(DeliveryStatus.DELIVERED);
         long cancelledOrders = orderRepository.countByDeliveryStatus(DeliveryStatus.CANCELLED);
 
@@ -335,46 +340,11 @@ public class OrderService {
                 .pendingOrders(pendingOrders)
                 .confirmedOrders(confirmedOrders)
                 .processingOrders(processingOrders)
-                .outForDeliveryOrders(outForDeliveryOrders)
                 .deliveredOrders(deliveredOrders)
                 .cancelledOrders(cancelledOrders)
                 .totalRevenue(totalRevenue)
                 .todayOrders(todayOrders)
                 .build();
-    }
-
-    /**
-     * Validate delivery status transition
-     */
-    private void validateStatusTransition(DeliveryStatus currentStatus, DeliveryStatus newStatus) {
-        // Cannot change from final states
-        if (currentStatus == DeliveryStatus.CANCELLED || currentStatus == DeliveryStatus.REFUNDED) {
-            throw CustomException.badRequest("Cannot change status from a final state");
-        }
-
-        // Cannot go backwards (except to CANCELLED)
-        if (newStatus == DeliveryStatus.CANCELLED) {
-            return; // Always allow cancellation
-        }
-
-        // Define order priority
-        int currentPriority = getStatusPriority(currentStatus);
-        int newPriority = getStatusPriority(newStatus);
-
-        if (newPriority < currentPriority) {
-            throw CustomException.badRequest("Cannot move order backwards in the delivery flow");
-        }
-    }
-
-    private int getStatusPriority(DeliveryStatus status) {
-        return switch (status) {
-            case PENDING -> 1;
-            case CONFIRMED -> 2;
-            case PROCESSING -> 3;
-            case OUT_FOR_DELIVERY -> 4;
-            case DELIVERED -> 5;
-            case CANCELLED, REFUNDED -> 99;
-        };
     }
 
     /**
@@ -397,6 +367,8 @@ public class OrderService {
                 .orderNumber(order.getOrderNumber())
                 .deliveryStatus(order.getDeliveryStatus())
                 .paymentStatus(order.getPaymentStatus())
+                .senderName(order.getSenderName())
+                .senderPhone(order.getSenderPhone())
                 .cardMessage(order.getCardMessage())
                 .instructionMessage(order.getInstructionMessage())
                 .recipientName(order.getRecipientName())
@@ -442,6 +414,8 @@ public class OrderService {
                 .totalAmount(order.getTotalAmount())
                 .itemCount(itemCount)
                 .recipientName(order.getRecipientName())
+                .recipientPhone(order.getRecipientPhone())
+                .deliveryArea(order.getDeliveryArea())
                 .preferredDeliveryDate(order.getPreferredDeliveryDate())
                 .createdAt(order.getCreatedAt())
                 .user(userSummary)
@@ -461,6 +435,9 @@ public class OrderService {
                 .unitPrice(item.getUnitPrice())
                 .totalPrice(item.getTotalPrice())
                 .specialInstructions(item.getSpecialInstructions())
+                .cardMessage(item.getCardMessage())
+                .deliveryDate(item.getDeliveryDate() != null ? item.getDeliveryDate().toString() : null)
+                .deliveryTimeSlot(item.getDeliveryTimeSlot())
                 .build();
     }
 }

@@ -48,7 +48,7 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
     private final OrderRepository orderRepository;
     private final ObjectMapper objectMapper;
     private final RestTemplate restTemplate;
-    private final EmailService emailService;  // ADDED: Email service injection
+    private final EmailService emailService;
 
     private static final String AES_ALGORITHM = "AES/CBC/PKCS5Padding";
 
@@ -244,7 +244,9 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
 
             log.info("Payment successful for reference: {}", payment.getPaymentReference());
 
-            // ADDED: Send order confirmation email ONLY after successful payment
+            // ============ SEND EMAILS AFTER SUCCESSFUL PAYMENT ============
+
+            // 1. Send order confirmation email to CUSTOMER
             try {
                 emailService.sendOrderConfirmationEmail(
                         order.getUser().getEmail(),
@@ -254,10 +256,9 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
                 log.info("Order confirmation email sent for order: {}", order.getOrderNumber());
             } catch (Exception e) {
                 log.error("Failed to send order confirmation email for order: {}", order.getOrderNumber(), e);
-                // Don't throw - email failure shouldn't affect payment success
             }
 
-            // ADDED: Send payment confirmation email
+            // 2. Send payment confirmation email to CUSTOMER
             try {
                 emailService.sendPaymentConfirmationEmail(
                         order.getUser().getEmail(),
@@ -267,7 +268,43 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
                 log.info("Payment confirmation email sent for order: {}", order.getOrderNumber());
             } catch (Exception e) {
                 log.error("Failed to send payment confirmation email for order: {}", order.getOrderNumber(), e);
-                // Don't throw - email failure shouldn't affect payment success
+            }
+
+            // 3. SEND NEW ORDER NOTIFICATION TO SHOP OWNER
+            try {
+                // Build order items string for email
+                StringBuilder itemsBuilder = new StringBuilder();
+                if (order.getOrderItems() != null) {
+                    for (var item : order.getOrderItems()) {
+                        itemsBuilder.append(String.format(
+                                "<div style='padding:10px;background:#f5f5f5;margin:5px 0;border-radius:5px;'>" +
+                                        "<strong>%s</strong> × %d = KWD %.3f</div>",
+                                item.getProduct().getProductName(),
+                                item.getQuantity(),
+                                item.getTotalPrice()
+                        ));
+                    }
+                }
+
+                emailService.sendNewOrderNotificationToOwner(
+                        order.getOrderNumber(),
+                        order.getUser() != null ? order.getUser().getName() : "Guest",
+                        order.getUser() != null ? order.getUser().getEmail() : "-",
+                        order.getUser() != null ? order.getUser().getPhoneNumber() : "-",
+                        order.getRecipientName(),
+                        order.getRecipientPhone(),
+                        order.getDeliveryAddress(),
+                        order.getDeliveryArea(),
+                        order.getPreferredDeliveryDate() != null ? order.getPreferredDeliveryDate().toString() : null,
+                        order.getCardMessage(),
+                        order.getDeliveryNotes(),
+                        itemsBuilder.toString(),
+                        order.getTotalAmount().toString(),
+                        payment.getPaymentMethod() != null ? payment.getPaymentMethod().name() : "Online"
+                );
+                log.info("Owner notification sent for new order: {}", order.getOrderNumber());
+            } catch (Exception e) {
+                log.error("Failed to send owner notification for order: {}", order.getOrderNumber(), e);
             }
 
         } else {
@@ -313,7 +350,7 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
             order.setDeliveryStatus(DeliveryStatus.CONFIRMED);
             orderRepository.save(order);
 
-            // ADDED: Send emails on webhook success (backup in case callback didn't send)
+            // Send emails on webhook success (backup in case callback didn't send)
             try {
                 emailService.sendOrderConfirmationEmail(
                         order.getUser().getEmail(),
@@ -322,6 +359,18 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
                 );
             } catch (Exception e) {
                 log.error("Failed to send order confirmation email via webhook", e);
+            }
+
+            // Send owner notification via webhook (backup)
+            try {
+                emailService.sendNewOrderNotificationToOwner(
+                        order.getOrderNumber(),
+                        order.getTotalAmount().toString(),
+                        order.getUser() != null ? order.getUser().getName() : "Guest"
+                );
+                log.info("Owner notification sent via webhook for order: {}", order.getOrderNumber());
+            } catch (Exception e) {
+                log.error("Failed to send owner notification via webhook", e);
             }
         }
 
@@ -383,7 +432,6 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
         // TODO: Call Hesabe refund API
         // For now, we'll mark it as refunded locally
 
-//        payment.set(true);
         payment.setRefundAmount(amount != null ? amount : payment.getAmount());
         payment.setRefundReason(reason);
         payment.setRefundedAt(LocalDateTime.now());
@@ -496,7 +544,7 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
         order.setDeliveryStatus(DeliveryStatus.CONFIRMED);
         orderRepository.save(order);
 
-        // ADDED: Send order confirmation for COD orders (they are confirmed immediately)
+        // Send order confirmation for COD orders (they are confirmed immediately)
         try {
             emailService.sendOrderConfirmationEmail(
                     order.getUser().getEmail(),
@@ -508,6 +556,42 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
             log.error("Failed to send order confirmation email for COD order: {}", order.getOrderNumber(), e);
         }
 
+        // Send owner notification for COD orders
+        try {
+            StringBuilder itemsBuilder = new StringBuilder();
+            if (order.getOrderItems() != null) {
+                for (var item : order.getOrderItems()) {
+                    itemsBuilder.append(String.format(
+                            "<div style='padding:10px;background:#f5f5f5;margin:5px 0;border-radius:5px;'>" +
+                                    "<strong>%s</strong> × %d = KWD %.3f</div>",
+                            item.getProduct().getProductName(),
+                            item.getQuantity(),
+                            item.getTotalPrice()
+                    ));
+                }
+            }
+
+            emailService.sendNewOrderNotificationToOwner(
+                    order.getOrderNumber(),
+                    order.getUser() != null ? order.getUser().getName() : "Guest",
+                    order.getUser() != null ? order.getUser().getEmail() : "-",
+                    order.getUser() != null ? order.getUser().getPhoneNumber() : "-",
+                    order.getRecipientName(),
+                    order.getRecipientPhone(),
+                    order.getDeliveryAddress(),
+                    order.getDeliveryArea(),
+                    order.getPreferredDeliveryDate() != null ? order.getPreferredDeliveryDate().toString() : null,
+                    order.getCardMessage(),
+                    order.getDeliveryNotes(),
+                    itemsBuilder.toString(),
+                    order.getTotalAmount().toString(),
+                    "Cash on Delivery"
+            );
+            log.info("Owner notification sent for COD order: {}", order.getOrderNumber());
+        } catch (Exception e) {
+            log.error("Failed to send owner notification for COD order: {}", order.getOrderNumber(), e);
+        }
+
         return PaymentResponse.builder()
                 .success(true)
                 .message("Order placed with Cash on Delivery")
@@ -517,7 +601,6 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
                 .amount(payment.getAmount())
                 .currency("KWD")
                 .orderId(order.getOrderId())
-//                .orderReference(order.getOrderId())
                 .build();
     }
 
@@ -527,7 +610,7 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("accessCode", hesabeConfig.getApiKey());
-        headers.set("Accept", "application/json");  // ADDED: Required by Hesabe API
+        headers.set("Accept", "application/json");
 
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("data", encryptedData);

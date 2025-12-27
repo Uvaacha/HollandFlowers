@@ -25,12 +25,21 @@ public class OrderDto {
         @Valid
         private List<OrderItemRequest> items;
 
-        @Size(max = 80, message = "Card message must be less than 80 characters")
+        // ============ SENDER INFORMATION ============
+        @Size(max = 100, message = "Sender name cannot exceed 100 characters")
+        private String senderName;
+
+        @Pattern(regexp = "^[+]?[0-9]{8,15}$", message = "Invalid sender phone number format")
+        private String senderPhone;
+
+        // ============ CARD MESSAGE & INSTRUCTIONS ============
+        @Size(max = 500, message = "Card message must be less than 500 characters")
         private String cardMessage;
 
-        @Size(max = 80, message = "Delivery instructions must be less than 80 characters")
+        @Size(max = 500, message = "Instruction message must be less than 500 characters")
         private String instructionMessage;
 
+        // ============ RECIPIENT/DELIVERY INFO ============
         @NotBlank(message = "Recipient name is required")
         @Size(max = 100, message = "Recipient name cannot exceed 100 characters")
         private String recipientName;
@@ -74,6 +83,14 @@ public class OrderDto {
 
         @Size(max = 500, message = "Special instructions cannot exceed 500 characters")
         private String specialInstructions;
+
+        // ============ NEW FIELDS - Per Item ============
+        @Size(max = 500, message = "Card message cannot exceed 500 characters")
+        private String cardMessage;
+
+        private String deliveryDate;  // Format: "2025-12-28"
+
+        private String deliveryTimeSlot;  // Format: "11:00-13:30"
     }
 
     @Data
@@ -124,10 +141,16 @@ public class OrderDto {
         private String orderNumber;
         private DeliveryStatus deliveryStatus;
         private PaymentStatus paymentStatus;
+
+        // ============ SENDER INFO ============
+        private String senderName;
+        private String senderPhone;
+
+        // ============ CARD MESSAGE & INSTRUCTIONS ============
         private String cardMessage;
         private String instructionMessage;
 
-        // Delivery info
+        // ============ DELIVERY INFO ============
         private String recipientName;
         private String recipientPhone;
         private String deliveryAddress;
@@ -137,20 +160,20 @@ public class OrderDto {
         private LocalDateTime preferredDeliveryDate;
         private LocalDateTime actualDeliveryDate;
 
-        // Pricing
+        // ============ PRICING ============
         private BigDecimal subtotal;
         private BigDecimal deliveryFee;
         private BigDecimal discountAmount;
         private BigDecimal totalAmount;
         private String couponCode;
 
-        // Items
+        // ============ ITEMS ============
         private List<OrderItemResponse> items;
 
-        // User info (for admin view)
+        // ============ USER INFO (for admin view) ============
         private UserSummary user;
 
-        // Timestamps
+        // ============ TIMESTAMPS ============
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
         private LocalDateTime cancelledAt;
@@ -169,6 +192,8 @@ public class OrderDto {
         private BigDecimal totalAmount;
         private int itemCount;
         private String recipientName;
+        private String recipientPhone;
+        private String deliveryArea;
         private LocalDateTime preferredDeliveryDate;
         private LocalDateTime createdAt;
         private UserSummary user;
@@ -187,6 +212,11 @@ public class OrderDto {
         private BigDecimal unitPrice;
         private BigDecimal totalPrice;
         private String specialInstructions;
+
+        // ============ NEW FIELDS - Per Item ============
+        private String cardMessage;
+        private String deliveryDate;
+        private String deliveryTimeSlot;
     }
 
     @Data
@@ -222,7 +252,7 @@ public class OrderDto {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class DeliveryStatusHistory {
+    public static class OrderStatusHistory {
         private DeliveryStatus status;
         private LocalDateTime changedAt;
         private String changedBy;

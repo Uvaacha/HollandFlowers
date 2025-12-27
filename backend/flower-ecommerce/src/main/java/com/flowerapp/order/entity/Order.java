@@ -12,12 +12,11 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "orders", indexes = {
-        @Index(name = "idx_delivery_status", columnList = "delivery_status"),
         @Index(name = "idx_order_user", columnList = "user_id"),
+        @Index(name = "idx_order_delivery_status", columnList = "delivery_status"),
         @Index(name = "idx_order_payment_status", columnList = "payment_status"),
         @Index(name = "idx_order_created_at", columnList = "created_at")
 })
@@ -50,13 +49,21 @@ public class Order {
     @Builder.Default
     private PaymentStatus paymentStatus = PaymentStatus.PENDING;
 
-    @Column(name = "card_message", length = 80)
+    // ============ SENDER INFORMATION (Person placing the order) ============
+    @Column(name = "sender_name", length = 100)
+    private String senderName;
+
+    @Column(name = "sender_phone", length = 20)
+    private String senderPhone;
+
+    // ============ CARD MESSAGE & INSTRUCTIONS ============
+    @Column(name = "card_message", length = 500)
     private String cardMessage;
 
-    @Column(name = "instruction_message", length = 80)
+    @Column(name = "instruction_message", length = 500)
     private String instructionMessage;
 
-    // Delivery Address Fields
+    // ============ DELIVERY ADDRESS (Recipient) ============
     @Column(name = "recipient_name", nullable = false, length = 100)
     private String recipientName;
 
@@ -75,7 +82,7 @@ public class Order {
     @Column(name = "delivery_notes", length = 500)
     private String deliveryNotes;
 
-    // Pricing
+    // ============ PRICING ============
     @Column(name = "subtotal", nullable = false, precision = 10, scale = 3)
     private BigDecimal subtotal;
 
@@ -93,19 +100,19 @@ public class Order {
     @Column(name = "coupon_code", length = 50)
     private String couponCode;
 
-    // Delivery Date
+    // ============ DELIVERY DATE ============
     @Column(name = "preferred_delivery_date")
     private LocalDateTime preferredDeliveryDate;
 
     @Column(name = "actual_delivery_date")
     private LocalDateTime actualDeliveryDate;
 
-    // Order Items
+    // ============ ORDER ITEMS ============
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    // Timestamps
+    // ============ TIMESTAMPS ============
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -120,7 +127,7 @@ public class Order {
     @Column(name = "cancellation_reason", length = 500)
     private String cancellationReason;
 
-    // Helper methods
+    // ============ HELPER METHODS ============
     public void addOrderItem(OrderItem item) {
         orderItems.add(item);
         item.setOrder(this);
