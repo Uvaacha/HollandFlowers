@@ -111,7 +111,7 @@ const Combos = () => {
           id: 'flowers-perfume',
           title: "Flowers With Perfume",
           description: "Exquisite flower arrangements paired with luxury Supreme Bouquet perfumes - the perfect gift combination",
-          image: "/images/combos/flowers-perfume/Holland Style 28.PNG",
+          image: "/images/Flowers With Perfume/Holland Simple 45.webp",
           link: "/combos/flowers-perfume",
           color: "#9b59b6",
           icon: "✨"
@@ -120,7 +120,7 @@ const Combos = () => {
           id: 'flowers-chocolates',
           title: "Flowers & Chocolates",
           description: "Beautiful flowers combined with premium Ferrero chocolates - sweetness meets elegance",
-          image: "/images/combos/flowers-chocolates/Love 1.webp",
+          image: "/images/Flowers And Chocolates Offer's/Flower Box Yellow 112.webp",
           link: "/combos/flowers-chocolates",
           color: "#8b4513",
           icon: "🍫"
@@ -156,7 +156,7 @@ const Combos = () => {
           id: 'flowers-perfume',
           title: "زهور مع عطر",
           description: "تنسيقات زهور رائعة مع عطور سوبريم بوكيه الفاخرة - مزيج الهدية المثالي",
-          image: "/images/combos/flowers-perfume/Holland Style 28.PNG",
+          image: "/images/Flowers With Perfume/Holland Simple 45.webp",
           link: "/combos/flowers-perfume",
           color: "#9b59b6",
           icon: "✨"
@@ -165,7 +165,7 @@ const Combos = () => {
           id: 'flowers-chocolates',
           title: "زهور وشوكولاتة",
           description: "زهور جميلة مع شوكولاتة فيريرو الفاخرة - الحلاوة تلتقي بالأناقة",
-          image: "/images/combos/flowers-chocolates/Love 1.webp",
+          image: "/images/Flowers And Chocolates Offer's/Flower Box Yellow 112.webp",
           link: "/combos/flowers-chocolates",
           color: "#8b4513",
           icon: "🍫"
@@ -296,7 +296,6 @@ const Combos = () => {
                       className="category-image"
                       loading="lazy"
                     />
-                    <div className="image-overlay"></div>
                   </div>
                   <div className="category-icon">{category.icon}</div>
                   <div className="item-count-badge">

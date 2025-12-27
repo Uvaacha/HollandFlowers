@@ -212,19 +212,39 @@
   transition: background 0.2s ease;
 }
 
-.mobile-filter-drawer__checkbox-item input {
-  display: none;
+/* Hide the native checkbox completely */
+.mobile-filter-drawer__checkbox-item input,
+.mobile-filter-drawer__checkbox-item input[type="checkbox"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .mobile-filter-drawer__checkmark {
   width: 22px;
   height: 22px;
   min-width: 22px;
+  min-height: 22px;
   border: 2px solid #ddd;
   border-radius: 6px;
   position: relative;
   transition: all 0.2s ease;
   background: white;
+  flex-shrink: 0;
+}
+
+/* Remove any pseudo-elements that might create extra indicators */
+.mobile-filter-drawer__checkmark::before {
+  display: none !important;
+  content: none !important;
 }
 
 .mobile-filter-drawer__checkmark.checked {

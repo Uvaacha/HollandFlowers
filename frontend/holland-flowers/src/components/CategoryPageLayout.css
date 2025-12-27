@@ -252,17 +252,43 @@
   background: var(--theme-light);
 }
 
-.checkbox-item input {
-  display: none;
+/* Hide the native checkbox completely */
+.checkbox-item input,
+.checkbox-item input[type="checkbox"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
-.checkmark {
-  width: 18px;
-  height: 18px;
+/* Custom checkmark - only square checkbox */
+.checkbox-item .checkmark {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
   border: 2px solid #d1d5db;
   border-radius: 4px;
   position: relative;
   transition: all 0.2s ease;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Remove any pseudo-elements that might create the circle */
+.checkbox-item .checkmark::before {
+  display: none !important;
+  content: none !important;
 }
 
 .checkbox-item input:checked + .checkmark {
@@ -273,10 +299,10 @@
 .checkbox-item input:checked + .checkmark::after {
   content: '';
   position: absolute;
-  left: 5px;
+  left: 6px;
   top: 2px;
   width: 5px;
-  height: 9px;
+  height: 10px;
   border: solid white;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);

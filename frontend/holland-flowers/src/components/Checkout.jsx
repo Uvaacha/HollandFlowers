@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from './CartContext';
 import { useAuth } from '../contexts/AuthContext';
-import PaymentService from './PaymentService';
+import api from '../services/api';
 import './Checkout.css';
 
 // Move governorates outside component - static data
@@ -96,7 +96,7 @@ const Checkout = () => {
   // Form states
   const [contact, setContact] = useState({
     emailOrPhone: '',
-    emailOffers: true,
+    emailOffers: false,
     textOffers: false
   });
   
@@ -112,10 +112,12 @@ const Checkout = () => {
     phone: ''
   });
   
+  // Save info checkbox state
+  const [saveInfo, setSaveInfo] = useState(false);
+  
   const [selectedShipping, setSelectedShipping] = useState('');
   const [billingAddress, setBillingAddress] = useState('same');
   const [deliveryInstructions, setDeliveryInstructions] = useState('');
-  const [discountCode, setDiscountCode] = useState('');
   
   // Billing address state (for different billing address)
   const [billingDetails, setBillingDetails] = useState({
@@ -139,13 +141,76 @@ const Checkout = () => {
     return () => window.removeEventListener('languageChange', handleLangChange);
   }, []);
 
-  // Load delivery instructions from cart
+  // Load saved data from localStorage on mount
   useEffect(() => {
+    // Load saved contact info
+    const savedContact = localStorage.getItem('checkoutContact');
+    if (savedContact) {
+      try {
+        const parsedContact = JSON.parse(savedContact);
+        setContact(prev => ({
+          ...prev,
+          emailOrPhone: parsedContact.emailOrPhone || '',
+          emailOffers: parsedContact.emailOffers || false
+        }));
+      } catch (e) {
+        console.log('Error loading saved contact');
+      }
+    }
+
+    // Load saved delivery info
+    const savedDelivery = localStorage.getItem('checkoutDelivery');
+    if (savedDelivery) {
+      try {
+        const parsedDelivery = JSON.parse(savedDelivery);
+        setDelivery(prev => ({
+          ...prev,
+          ...parsedDelivery
+        }));
+        setSaveInfo(true); // If there's saved data, check the box
+      } catch (e) {
+        console.log('Error loading saved delivery');
+      }
+    }
+
+    // Load delivery instructions from cart
     const savedInstructions = localStorage.getItem('deliveryInstructions');
     if (savedInstructions) {
       setDeliveryInstructions(savedInstructions);
     }
   }, []);
+
+  // Save contact info when emailOffers changes
+  useEffect(() => {
+    if (contact.emailOffers && contact.emailOrPhone) {
+      localStorage.setItem('checkoutContact', JSON.stringify({
+        emailOrPhone: contact.emailOrPhone,
+        emailOffers: contact.emailOffers
+      }));
+    } else if (!contact.emailOffers) {
+      localStorage.removeItem('checkoutContact');
+    }
+  }, [contact.emailOffers, contact.emailOrPhone]);
+
+  // Save delivery info when saveInfo is checked
+  useEffect(() => {
+    if (saveInfo) {
+      const deliveryData = {
+        firstName: delivery.firstName,
+        lastName: delivery.lastName,
+        address: delivery.address,
+        apartment: delivery.apartment,
+        postalCode: delivery.postalCode,
+        city: delivery.city,
+        governorate: delivery.governorate,
+        phone: delivery.phone
+      };
+      localStorage.setItem('checkoutDelivery', JSON.stringify(deliveryData));
+    } else {
+      // If unchecked, remove saved delivery data
+      localStorage.removeItem('checkoutDelivery');
+    }
+  }, [saveInfo, delivery]);
 
   // Get current governorate data
   const getCurrentGovernorate = useCallback(() => {
@@ -197,6 +262,11 @@ const Checkout = () => {
     }));
   };
 
+  // Handle save info checkbox change
+  const handleSaveInfoChange = (e) => {
+    setSaveInfo(e.target.checked);
+  };
+
   // Handle billing details change
   const handleBillingChange = (e) => {
     const { name, value } = e.target;
@@ -212,7 +282,7 @@ const Checkout = () => {
     return country ? country.flag : '🌍';
   };
 
-  // Handle form submission - Create order and redirect to Hesabe
+  // ============ UPDATED: Handle form submission - Create order and redirect to Hesabe ============
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -220,6 +290,21 @@ const Checkout = () => {
     // Validate required fields
     if (!delivery.governorate) {
       setError(currentLang === 'ar' ? 'يرجى اختيار المحافظة' : 'Please select a governorate');
+      return;
+    }
+
+    if (!delivery.address) {
+      setError(currentLang === 'ar' ? 'يرجى إدخال العنوان' : 'Please enter delivery address');
+      return;
+    }
+
+    if (!delivery.phone) {
+      setError(currentLang === 'ar' ? 'يرجى إدخال رقم الهاتف' : 'Please enter phone number');
+      return;
+    }
+
+    if (!delivery.lastName) {
+      setError(currentLang === 'ar' ? 'يرجى إدخال اسم المستلم' : 'Please enter recipient name');
       return;
     }
 
@@ -236,47 +321,99 @@ const Checkout = () => {
 
     setIsLoading(true);
 
-    try {
-      // Prepare checkout data
-      const checkoutData = {
-        contact,
-        delivery,
-        billingAddress,
-        billingDetails,
-        deliveryInstructions,
-        selectedShipping,
-        shippingCost,
-        cartItems: cartItems.map(item => ({
-          id: item.id,
-          quantity: item.quantity,
-          giftMessage: item.giftMessage || ''
-        })),
-        subtotal,
-        total
-      };
+    // Save contact info if emailOffers is checked
+    if (contact.emailOffers && contact.emailOrPhone) {
+      localStorage.setItem('checkoutContact', JSON.stringify({
+        emailOrPhone: contact.emailOrPhone,
+        emailOffers: contact.emailOffers
+      }));
+    }
 
+    // Save delivery info if saveInfo is checked
+    if (saveInfo) {
+      const deliveryData = {
+        firstName: delivery.firstName,
+        lastName: delivery.lastName,
+        address: delivery.address,
+        apartment: delivery.apartment,
+        postalCode: delivery.postalCode,
+        city: delivery.city,
+        governorate: delivery.governorate,
+        phone: delivery.phone
+      };
+      localStorage.setItem('checkoutDelivery', JSON.stringify(deliveryData));
+    }
+
+    try {
       // Check if user is logged in
       const authToken = localStorage.getItem('accessToken') || localStorage.getItem('adminToken');
       
-      let orderResponse;
-      
       if (authToken) {
-        // Logged in user - Create order first
-        const orderData = {
-          items: cartItems,
-          firstName: delivery.firstName,
-          lastName: delivery.lastName,
-          phone: delivery.phone,
-          address: delivery.address,
-          apartment: delivery.apartment,
-          city: delivery.city,
-          governorate: delivery.governorate,
-          deliveryInstructions
+        // ============ TRANSFORM CART ITEMS FOR BACKEND ============
+        // Extract sender info from first item (sender is same for all items in cart)
+        const firstItemWithSender = cartItems.find(item => item.senderInfo);
+        let senderName = '';
+        let senderPhone = '';
+        
+        if (firstItemWithSender && firstItemWithSender.senderInfo) {
+          // senderInfo format: "tunga and 7836733333"
+          const senderParts = firstItemWithSender.senderInfo.split(' and ');
+          if (senderParts.length === 2) {
+            senderName = senderParts[0].trim();
+            senderPhone = senderParts[1].trim();
+          } else {
+            senderName = firstItemWithSender.senderInfo;
+          }
+        }
+
+        // Transform cart items to backend format
+        const transformedItems = cartItems.map(item => {
+          // Get the product UUID - try multiple possible field names
+          const productId = item.productId || item.id || item.product_id;
+          
+          console.log('Cart item:', item);
+          console.log('Product ID found:', productId);
+          
+          return {
+            productId: productId,
+            quantity: item.quantity || 1,
+            cardMessage: item.cardMessage || '',
+            deliveryDate: item.deliveryDate || '',
+            deliveryTimeSlot: item.deliveryTime || '',
+            specialInstructions: item.specialInstructions || ''
+          };
+        });
+
+        // Get governorate display name
+        const selectedGov = governorates.find(g => g.id === delivery.governorate);
+        const governorateName = selectedGov ? (currentLang === 'ar' ? selectedGov.nameAr : selectedGov.name) : delivery.governorate;
+
+        // Build full address
+        const fullAddress = delivery.address + (delivery.apartment ? ', ' + delivery.apartment : '');
+
+        // Build order payload matching backend OrderDto.CreateOrderRequest
+        const orderPayload = {
+          items: transformedItems,
+          senderName: senderName || `${delivery.firstName || ''} ${delivery.lastName}`.trim() || 'Customer',
+          senderPhone: senderPhone || delivery.phone,
+          recipientName: `${delivery.firstName || ''} ${delivery.lastName}`.trim() || 'Recipient',
+          recipientPhone: delivery.phone,
+          deliveryAddress: fullAddress,
+          deliveryArea: delivery.city || governorateName,
+          deliveryCity: governorateName,
+          instructionMessage: deliveryInstructions || '',
+          deliveryNotes: delivery.apartment || '',
+          cardMessage: cartItems[0]?.cardMessage || ''
         };
         
-        orderResponse = await PaymentService.createOrder(orderData);
+        console.log('========== ORDER PAYLOAD BEING SENT ==========');
+        console.log(JSON.stringify(orderPayload, null, 2));
+        console.log('===============================================');
         
-        console.log('Order API Response:', JSON.stringify(orderResponse, null, 2));
+        // Create order using api service
+        const orderResponse = await api.post('/orders', orderPayload);
+        
+        console.log('Order API Response:', orderResponse);
         
         const orderId = orderResponse?.data?.orderId || 
                         orderResponse?.data?.id || 
@@ -291,17 +428,37 @@ const Checkout = () => {
         
         console.log('Extracted orderId:', orderId);
         
-        // Then initiate payment
-        const paymentResponse = await PaymentService.initiatePayment({
+        // Initiate payment
+        const paymentPayload = {
           orderId: orderId,
           paymentMethod: 'KNET',
-          email: contact.emailOrPhone,
-          phone: delivery.phone,
+          customerEmail: contact.emailOrPhone,
+          customerPhone: delivery.phone,
           customerName: `${delivery.firstName || ''} ${delivery.lastName}`.trim(),
           deviceType: 'WEB'
-        });
+        };
+        
+        const paymentResponse = await api.post('/api/payments/initiate', paymentPayload);
 
         if (paymentResponse.success && paymentResponse.checkoutUrl) {
+          localStorage.setItem('pendingOrder', JSON.stringify({
+            orderId: orderId,
+            paymentReference: paymentResponse.paymentReference,
+            total,
+            items: cartItems.length
+          }));
+          
+          window.location.href = paymentResponse.checkoutUrl;
+        } else if (paymentResponse.data && paymentResponse.data.checkoutUrl) {
+          localStorage.setItem('pendingOrder', JSON.stringify({
+            orderId: orderId,
+            paymentReference: paymentResponse.data.paymentReference,
+            total,
+            items: cartItems.length
+          }));
+          
+          window.location.href = paymentResponse.data.checkoutUrl;
+        } else if (paymentResponse.checkoutUrl) {
           localStorage.setItem('pendingOrder', JSON.stringify({
             orderId: orderId,
             paymentReference: paymentResponse.paymentReference,
@@ -314,30 +471,11 @@ const Checkout = () => {
           throw new Error(paymentResponse.message || 'Failed to initiate payment');
         }
       } else {
-        // Guest checkout
-        orderResponse = await PaymentService.guestCheckout(checkoutData);
-        
-        if (orderResponse.success && orderResponse.checkoutUrl) {
-          localStorage.setItem('pendingOrder', JSON.stringify({
-            orderId: orderResponse.orderId,
-            paymentReference: orderResponse.paymentReference,
-            total,
-            items: cartItems.length
-          }));
-          
-          window.location.href = orderResponse.checkoutUrl;
-        } else if (orderResponse.data && orderResponse.data.checkoutUrl) {
-          localStorage.setItem('pendingOrder', JSON.stringify({
-            orderId: orderResponse.data.orderId,
-            paymentReference: orderResponse.data.paymentReference,
-            total,
-            items: cartItems.length
-          }));
-          
-          window.location.href = orderResponse.data.checkoutUrl;
-        } else {
-          throw new Error(orderResponse.message || 'Failed to process checkout');
-        }
+        // Guest checkout - redirect to login
+        setError(currentLang === 'ar' 
+          ? 'يرجى تسجيل الدخول للمتابعة' 
+          : 'Please login to continue');
+        setIsLoading(false);
       }
       
     } catch (err) {
@@ -399,9 +537,8 @@ const Checkout = () => {
       deliveryTime: 'Delivery Time',
       cardMessage: 'Card Message',
       senderInfo: 'Sender',
-      discountCode: 'Discount code',
-      apply: 'Apply',
-      saveInfo: 'Save this information for next time'
+      saveInfo: 'Save this information for next time',
+      enterShipping: 'Enter shipping address'
     },
     ar: {
       checkout: 'الدفع',
@@ -451,9 +588,8 @@ const Checkout = () => {
       deliveryTime: 'وقت التوصيل',
       cardMessage: 'رسالة البطاقة',
       senderInfo: 'المرسل',
-      discountCode: 'كود الخصم',
-      apply: 'تطبيق',
-      saveInfo: 'احفظ هذه المعلومات للمرة القادمة'
+      saveInfo: 'احفظ هذه المعلومات للمرة القادمة',
+      enterShipping: 'أدخل عنوان الشحن'
     }
   };
 
@@ -663,6 +799,8 @@ const Checkout = () => {
                 <input
                   type="checkbox"
                   name="saveInfo"
+                  checked={saveInfo}
+                  onChange={handleSaveInfoChange}
                 />
                 <span>{text.saveInfo}</span>
               </label>
@@ -959,6 +1097,11 @@ const Checkout = () => {
                         {text.deliveryTime} :: {item.deliveryTime}
                       </span>
                     )}
+                    {item.senderInfo && (
+                      <span className="product-delivery-info">
+                        {text.senderInfo} :: {item.senderInfo}
+                      </span>
+                    )}
                     {item.cardMessage && (
                       <div className="product-card-message">
                         <span className="message-icon">💌</span>
@@ -977,18 +1120,25 @@ const Checkout = () => {
               ))}
             </div>
 
-            {/* Discount Code */}
-            <div className="discount-code-section">
-              <input 
-                type="text" 
-                placeholder={text.discountCode}
-                value={discountCode}
-                onChange={(e) => setDiscountCode(e.target.value)}
-                className="discount-input"
-              />
-              <button type="button" className="discount-apply-btn">
-                {text.apply}
-              </button>
+            {/* Order Totals */}
+            <div className="order-totals">
+              <div className="totals-row">
+                <span className="totals-label">{text.subtotal}</span>
+                <span className="totals-value">{text.kwd} {subtotal.toFixed(3)}</span>
+              </div>
+              <div className="totals-row">
+                <span className="totals-label">{text.shipping}</span>
+                <span className="totals-value totals-muted">
+                  {delivery.governorate 
+                    ? `${text.kwd} ${shippingCost.toFixed(3)}` 
+                    : text.enterShipping
+                  }
+                </span>
+              </div>
+              <div className="totals-row total-final">
+                <span className="totals-label">{text.total}</span>
+                <span className="totals-value">{text.kwd} {total.toFixed(3)}</span>
+              </div>
             </div>
           </div>
         </div>

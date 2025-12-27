@@ -57,19 +57,74 @@ const RosesPetals = () => {
     const fetchProducts = async () => {
       try {
         setLoading(true); setError(null);
-        const categoriesResponse = await categoryService.getAllCategories();
-        let categories = [];
-        if (categoriesResponse.success && categoriesResponse.data) categories = categoriesResponse.data.content || categoriesResponse.data || [];
-        const targetCategory = categories.find(cat => {
-          const name = (cat.categoryName || cat.nameEn || cat.name || '').toLowerCase();
-          return name === 'roses petals' || name.includes('roses');
-        });
-        if (!targetCategory) { setError('Category not found.'); setProducts([]); setLoading(false); return; }
-        const productsResponse = await productService.getProductsByCategory(targetCategory.categoryId, { page: 0, size: 100, sort: 'createdAt,desc' });
+        
+        // Try to get category by exact name first
+        let targetCategory = null;
+        
+        try {
+          const categoryByNameResponse = await categoryService.getCategoryByName('Roses Petals');
+          if (categoryByNameResponse && categoryByNameResponse.data) {
+            targetCategory = categoryByNameResponse.data;
+          }
+        } catch (e) {
+          console.log('Category not found by name, trying search...');
+        }
+        
+        // Fallback: search through all categories with exact match
+        if (!targetCategory) {
+          const categoriesResponse = await categoryService.getAllCategories();
+          let categories = [];
+          if (categoriesResponse.success && categoriesResponse.data) {
+            categories = categoriesResponse.data.content || categoriesResponse.data || [];
+          } else if (categoriesResponse.data) {
+            categories = categoriesResponse.data.content || categoriesResponse.data || [];
+          } else if (Array.isArray(categoriesResponse)) {
+            categories = categoriesResponse;
+          }
+          
+          // Find exact match for "Roses Petals" first
+          targetCategory = categories.find(cat => {
+            const name = (cat.categoryName || cat.nameEn || cat.name || '').toLowerCase().trim();
+            return name === 'roses petals' || name === 'rose petals';
+          });
+          
+          // If no exact match, try partial match but be more specific
+          if (!targetCategory) {
+            targetCategory = categories.find(cat => {
+              const name = (cat.categoryName || cat.nameEn || cat.name || '').toLowerCase().trim();
+              return name.includes('roses petals') || name.includes('rose petals') || name.includes('petals');
+            });
+          }
+        }
+        
+        if (!targetCategory) { 
+          setError('Category not found.'); 
+          setProducts([]); 
+          setLoading(false); 
+          return; 
+        }
+        
+        const categoryId = targetCategory.categoryId || targetCategory.id;
+        console.log('Found Roses Petals category:', targetCategory.categoryName || targetCategory.name, 'ID:', categoryId);
+        
+        const productsResponse = await productService.getProductsByCategory(categoryId, { page: 0, size: 100, sort: 'createdAt,desc' });
         let productsList = [];
-        if (productsResponse.success && productsResponse.data) productsList = productsResponse.data.content || productsResponse.data || [];
+        if (productsResponse.success && productsResponse.data) {
+          productsList = productsResponse.data.content || productsResponse.data || [];
+        } else if (productsResponse.data) {
+          productsList = productsResponse.data.content || productsResponse.data || [];
+        } else if (Array.isArray(productsResponse)) {
+          productsList = productsResponse;
+        }
+        
+        console.log('Loaded products for Roses Petals:', productsList.length);
         setProducts(productsList.filter(p => p.isActive !== false));
-      } catch (err) { setError('Failed to load products.'); } finally { setLoading(false); }
+      } catch (err) { 
+        console.error('Error loading Roses Petals products:', err);
+        setError('Failed to load products.'); 
+      } finally { 
+        setLoading(false); 
+      }
     };
     fetchProducts();
   }, []);

@@ -279,6 +279,50 @@ body.rtl .nav-menu a::after {
   position: relative;
 }
 
+/* Dropdown trigger (non-link) styling - matches .nav-menu a */
+.dropdown-trigger {
+  text-decoration: none;
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: var(--transition);
+  text-transform: uppercase;
+  padding: 8px 0;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  position: relative;
+}
+
+body.rtl .dropdown-trigger {
+  text-transform: none;
+}
+
+.dropdown-trigger::before {
+  content: '▾';
+  font-size: 8px;
+  margin-left: 5px;
+  opacity: 0.6;
+  transition: var(--transition);
+}
+
+body.rtl .dropdown-trigger::before {
+  margin-left: 0;
+  margin-right: 5px;
+}
+
+.dropdown:hover .dropdown-trigger {
+  color: var(--accent-dark);
+}
+
+.dropdown:hover .dropdown-trigger::before {
+  opacity: 1;
+  transform: translateY(2px);
+}
+
 .dropdown > a::before {
   content: '▾';
   font-size: 8px;

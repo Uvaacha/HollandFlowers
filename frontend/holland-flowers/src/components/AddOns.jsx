@@ -4,6 +4,7 @@ import './AddOns.css';
 
 const AddOns = () => {
   const [currentLang, setCurrentLang] = useState('en');
+  const [loadedImages, setLoadedImages] = useState({});
 
   useEffect(() => {
     const savedLang = localStorage.getItem('preferredLanguage') || 'en';
@@ -17,6 +18,10 @@ const AddOns = () => {
     return () => window.removeEventListener('languageChange', handleLangChange);
   }, []);
 
+  const handleImageLoad = (id) => {
+    setLoadedImages(prev => ({ ...prev, [id]: true }));
+  };
+
   const translations = {
     en: {
       pageTitle: "Add-Ons Collection",
@@ -25,33 +30,52 @@ const AddOns = () => {
       breadcrumbCurrent: "Add-Ons",
       exploreBtn: "Explore Collection",
       itemsAvailable: "items available",
+      premiumBadge: "Premium Selection",
+      viewAll: "View All",
       categories: [
         {
           id: 'acrylic-toppers',
           title: "Acrylic Celebration Toppers",
           description: "Beautiful acrylic signs for every occasion - birthdays, anniversaries, graduations, and more",
-          image: "/images/add-ons/acrylic-toppers/Happy Birthday.webp",
+          image: "/images/Add on's/happy New Year.webp",
           link: "/add-ons/acrylic-toppers",
           itemCount: 18,
-          color: "#e8b4b8"
+          accent: "rose"
         },
         {
           id: 'helium-balloons',
           title: "Helium Balloons",
           description: "Colorful helium balloons to add joy and festivity to your celebrations",
-          image: "/images/add-ons/helium-balloons/Happy Birthday Pink Balloon 4.webp",
+          image: "/images/Hellium Ballons/Red Shiny Helium Balloons 03.webp",
           link: "/add-ons/helium-balloons",
           itemCount: 106,
-          color: "#87ceeb"
+          accent: "sky"
         },
         {
           id: 'crown-for-head',
           title: "Crown for Head",
           description: "Elegant floral crowns and wreaths perfect for special moments",
-          image: "/images/add-ons/crown-for-head/Crown Pink For Head -1.webp",
+          image: "/images/Crown for head/Blue Crown For Head.webp",
           link: "/add-ons/crown-for-head",
           itemCount: 13,
-          color: "#dda0dd"
+          accent: "lavender"
+        }
+      ],
+      features: [
+        {
+          icon: "heart",
+          title: "Made with Love",
+          desc: "Each piece carefully curated"
+        },
+        {
+          icon: "delivery",
+          title: "Fast Delivery",
+          desc: "Same day delivery available"
+        },
+        {
+          icon: "star",
+          title: "Premium Quality",
+          desc: "Only the finest materials"
         }
       ]
     },
@@ -62,33 +86,52 @@ const AddOns = () => {
       breadcrumbCurrent: "الإضافات",
       exploreBtn: "استكشف المجموعة",
       itemsAvailable: "منتج متوفر",
+      premiumBadge: "تشكيلة فاخرة",
+      viewAll: "عرض الكل",
       categories: [
         {
           id: 'acrylic-toppers',
           title: "توبر احتفالات أكريليك",
           description: "لافتات أكريليك جميلة لكل مناسبة - أعياد الميلاد، الذكرى السنوية، التخرج، والمزيد",
-          image: "/images/add-ons/acrylic-toppers/Happy Birthday.webp",
+          image: "/images/Add on's/happy New Year.webp",
           link: "/add-ons/acrylic-toppers",
           itemCount: 18,
-          color: "#e8b4b8"
+          accent: "rose"
         },
         {
           id: 'helium-balloons',
           title: "بالونات الهيليوم",
           description: "بالونات هيليوم ملونة لإضافة البهجة والاحتفال إلى مناسباتك",
-          image: "/images/add-ons/helium-balloons/Happy Birthday Pink Balloon 4.webp",
+          image: "/images/Hellium Ballons/Red Shiny Helium Balloons 03.webp",
           link: "/add-ons/helium-balloons",
           itemCount: 106,
-          color: "#87ceeb"
+          accent: "sky"
         },
         {
           id: 'crown-for-head',
           title: "تاج للرأس",
           description: "تيجان وأكاليل زهور أنيقة مثالية للحظات الخاصة",
-          image: "/images/add-ons/crown-for-head/Crown Pink For Head -1.webp",
+          image: "/images/Crown for head/Blue Crown For Head.webp",
           link: "/add-ons/crown-for-head",
           itemCount: 13,
-          color: "#dda0dd"
+          accent: "lavender"
+        }
+      ],
+      features: [
+        {
+          icon: "heart",
+          title: "مصنوعة بحب",
+          desc: "كل قطعة مختارة بعناية"
+        },
+        {
+          icon: "delivery",
+          title: "توصيل سريع",
+          desc: "توصيل في نفس اليوم متاح"
+        },
+        {
+          icon: "star",
+          title: "جودة ممتازة",
+          desc: "أفضل المواد فقط"
         }
       ]
     }
@@ -96,13 +139,39 @@ const AddOns = () => {
 
   const t = translations[currentLang];
 
+  const renderIcon = (type) => {
+    switch(type) {
+      case 'heart':
+        return (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        );
+      case 'delivery':
+        return (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <rect x="1" y="3" width="15" height="13"/>
+            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+            <circle cx="5.5" cy="18.5" r="2.5"/>
+            <circle cx="18.5" cy="18.5" r="2.5"/>
+          </svg>
+        );
+      case 'star':
+        return (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className={`addons-page ${currentLang === 'ar' ? 'rtl' : ''}`}>
-      {/* Decorative Elements */}
-      <div className="addons-bg-decoration">
-        <div className="deco-blob deco-blob-1"></div>
-        <div className="deco-blob deco-blob-2"></div>
-        <div className="deco-blob deco-blob-3"></div>
+      {/* Elegant Background Pattern */}
+      <div className="addons-bg-pattern">
+        <div className="pattern-overlay"></div>
       </div>
 
       {/* Breadcrumb */}
@@ -123,69 +192,83 @@ const AddOns = () => {
       {/* Hero Section */}
       <header className="addons-hero">
         <div className="container">
-          <div className="hero-inner">
-            <div className="hero-badge">
-              <span className="badge-icon">✦</span>
-              <span>Premium Collection</span>
-              <span className="badge-icon">✦</span>
+          <div className="hero-content">
+            <div className="hero-ornament top">
+              <span className="ornament-line"></span>
+              <span className="ornament-diamond">◆</span>
+              <span className="ornament-line"></span>
             </div>
+            
+            <span className="hero-badge">{t.premiumBadge}</span>
+            
             <h1 className="hero-title">{t.pageTitle}</h1>
+            
             <p className="hero-subtitle">{t.pageSubtitle}</p>
-            <div className="hero-divider">
-              <span className="divider-line"></span>
-              <svg className="divider-icon" width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/>
-              </svg>
-              <span className="divider-line"></span>
+            
+            <div className="hero-ornament bottom">
+              <span className="ornament-dot"></span>
+              <span className="ornament-dot"></span>
+              <span className="ornament-dot"></span>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Categories Grid */}
+      {/* Categories Section */}
       <section className="addons-categories">
         <div className="container">
-          <div className="categories-grid">
+          <div className="categories-wrapper">
             {t.categories.map((category, index) => (
               <Link 
                 to={category.link} 
                 key={category.id} 
-                className="category-card"
-                style={{ 
-                  '--accent-color': category.color,
-                  animationDelay: `${index * 0.15}s`
-                }}
+                className={`category-card accent-${category.accent}`}
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="card-glow"></div>
-                
-                <div className="card-image-section">
-                  <div className="image-frame">
+                {/* Card Frame */}
+                <div className="card-frame">
+                  <span className="frame-corner tl"></span>
+                  <span className="frame-corner tr"></span>
+                  <span className="frame-corner bl"></span>
+                  <span className="frame-corner br"></span>
+                </div>
+
+                {/* Image Container */}
+                <div className="card-image-container">
+                  <div className={`image-wrapper ${loadedImages[category.id] ? 'loaded' : ''}`}>
                     <img 
                       src={category.image} 
                       alt={category.title}
-                      className="category-image"
+                      onLoad={() => handleImageLoad(category.id)}
                       loading="lazy"
                     />
+                    <div className="image-overlay"></div>
                   </div>
-                  <div className="item-count-badge">
-                    <span className="count">{category.itemCount}</span>
-                    <span className="label">{t.itemsAvailable}</span>
-                  </div>
-                </div>
-
-                <div className="card-content">
-                  <h2 className="category-title">{category.title}</h2>
-                  <p className="category-desc">{category.description}</p>
                   
-                  <div className="explore-link">
-                    <span>{t.exploreBtn}</span>
-                    <svg className="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
+                  {/* Item Count Badge */}
+                  <div className="count-badge">
+                    <span className="count-number">{category.itemCount}</span>
+                    <span className="count-label">{t.itemsAvailable}</span>
                   </div>
                 </div>
 
-                <div className="card-border"></div>
+                {/* Card Content */}
+                <div className="card-body">
+                  <div className="card-divider">
+                    <span></span>
+                  </div>
+                  
+                  <h2 className="card-title">{category.title}</h2>
+                  
+                  <div className="card-action">
+                    <span className="action-text">{t.exploreBtn}</span>
+                    <span className="action-arrow">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                      </svg>
+                    </span>
+                  </div>
+                </div>
               </Link>
             ))}
           </div>
@@ -195,42 +278,32 @@ const AddOns = () => {
       {/* Features Section */}
       <section className="addons-features">
         <div className="container">
-          <div className="features-grid">
-            <div className="feature-item">
-              <div className="feature-icon">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                </svg>
+          <div className="features-wrapper">
+            {t.features.map((feature, index) => (
+              <div 
+                key={index} 
+                className="feature-card"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <div className="feature-icon-wrapper">
+                  {renderIcon(feature.icon)}
+                </div>
+                <div className="feature-text">
+                  <h3>{feature.title}</h3>
+                  <p>{feature.desc}</p>
+                </div>
               </div>
-              <h3>{currentLang === 'ar' ? 'مصنوعة بحب' : 'Made with Love'}</h3>
-              <p>{currentLang === 'ar' ? 'كل قطعة مختارة بعناية' : 'Each piece carefully curated'}</p>
-            </div>
-            
-            <div className="feature-item">
-              <div className="feature-icon">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <rect x="1" y="3" width="15" height="13"></rect>
-                  <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
-                  <circle cx="5.5" cy="18.5" r="2.5"></circle>
-                  <circle cx="18.5" cy="18.5" r="2.5"></circle>
-                </svg>
-              </div>
-              <h3>{currentLang === 'ar' ? 'توصيل سريع' : 'Fast Delivery'}</h3>
-              <p>{currentLang === 'ar' ? 'توصيل في نفس اليوم متاح' : 'Same day delivery available'}</p>
-            </div>
-            
-            <div className="feature-item">
-              <div className="feature-icon">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                </svg>
-              </div>
-              <h3>{currentLang === 'ar' ? 'جودة ممتازة' : 'Premium Quality'}</h3>
-              <p>{currentLang === 'ar' ? 'أفضل المواد فقط' : 'Only the finest materials'}</p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
+
+      {/* Bottom Decoration */}
+      <div className="addons-footer-deco">
+        <div className="deco-line"></div>
+        <span className="deco-symbol">❋</span>
+        <div className="deco-line"></div>
+      </div>
     </div>
   );
 };

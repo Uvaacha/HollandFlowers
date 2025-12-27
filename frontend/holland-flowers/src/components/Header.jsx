@@ -371,7 +371,7 @@ const Header = () => {
               
               {/* Flowers */}
               <li className="dropdown mega-menu">
-                <Link to="/flowers">{t.flowers}</Link>
+                <span className="dropdown-trigger">{t.flowers}</span>
                 <div className="dropdown-content mega-dropdown">
                   <div className="mega-column">
                     <h4 className="has-submenu">{t.occasions}</h4>

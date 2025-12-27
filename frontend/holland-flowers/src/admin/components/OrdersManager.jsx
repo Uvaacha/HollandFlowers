@@ -12,8 +12,7 @@ const OrdersManager = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
-  // Both Admin and Super Admin can update delivery status
-  const canUpdateDeliveryStatus = authAPI.isAdmin(); // Returns true for both ADMIN and SUPER_ADMIN
+  const canUpdateDeliveryStatus = authAPI.isAdmin();
 
   const fetchOrders = useCallback(async () => {
     try {
@@ -104,6 +103,16 @@ const OrdersManager = () => {
       year: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
+    });
+  };
+
+  const formatDateOnly = (dateString) => {
+    if (!dateString) return 'Not specified';
+    return new Date(dateString).toLocaleDateString('en-GB', {
+      weekday: 'long',
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
     });
   };
 
@@ -250,233 +259,315 @@ const OrdersManager = () => {
         )}
       </div>
 
-      {/* Order Details Modal */}
+      {/* FULL PAGE ORDER DETAILS MODAL */}
       {showModal && selectedOrder && (
-        <div className="modal-overlay" onClick={() => setShowModal(false)}>
-          <div className="modal order-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>Order Details - {selectedOrder.orderNumber}</h2>
-              <button className="close-btn" onClick={() => setShowModal(false)}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <div className="fullpage-modal-overlay">
+          <div className="fullpage-modal">
+            {/* Modal Header */}
+            <div className="fullpage-modal-header">
+              <div className="header-left">
+                <h1>Order Details</h1>
+                <span className="order-number-badge">{selectedOrder.orderNumber}</span>
+              </div>
+              <button className="close-btn-large" onClick={() => setShowModal(false)}>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <line x1="18" y1="6" x2="6" y2="18"/>
                   <line x1="6" y1="6" x2="18" y2="18"/>
                 </svg>
               </button>
             </div>
-            <div className="modal-body">
-              {/* Order Information */}
-              <div className="detail-section">
-                <h3>📦 Order Information</h3>
-                <div className="detail-grid">
-                  <div className="detail-item">
-                    <label>Order Number</label>
-                    <span>{selectedOrder.orderNumber}</span>
-                  </div>
-                  <div className="detail-item">
-                    <label>Delivery Status</label>
-                    <span className={`status-badge ${getDeliveryStatusClass(selectedOrder.deliveryStatus)}`}>
+
+            {/* Modal Body - Two Column Layout */}
+            <div className="fullpage-modal-body">
+              {/* Left Column */}
+              <div className="modal-column left-column">
+                
+                {/* Order Status Cards */}
+                <div className="status-cards-row">
+                  <div className="status-card">
+                    <span className="status-card-label">Delivery Status</span>
+                    <span className={`status-badge large ${getDeliveryStatusClass(selectedOrder.deliveryStatus)}`}>
                       {formatStatus(selectedOrder.deliveryStatus)}
                     </span>
                   </div>
-                  <div className="detail-item">
-                    <label>Payment Status</label>
-                    <span className={`status-badge ${getPaymentStatusClass(selectedOrder.paymentStatus)}`}>
+                  <div className="status-card">
+                    <span className="status-card-label">Payment Status</span>
+                    <span className={`status-badge large ${getPaymentStatusClass(selectedOrder.paymentStatus)}`}>
                       {formatStatus(selectedOrder.paymentStatus)}
                     </span>
                   </div>
-                  <div className="detail-item">
-                    <label>Order Date</label>
-                    <span>{formatDate(selectedOrder.createdAt)}</span>
+                  <div className="status-card">
+                    <span className="status-card-label">Order Date</span>
+                    <span className="status-card-value">{formatDate(selectedOrder.createdAt)}</span>
                   </div>
                 </div>
-              </div>
 
-              {/* Customer Information */}
-              {selectedOrder.user && (
-                <div className="detail-section">
-                  <h3>👤 Customer Information</h3>
-                  <div className="detail-grid">
-                    <div className="detail-item">
+                {/* Sender Information - NEW */}
+                <div className="info-section">
+                  <h2 className="section-title">
+                    <span className="section-icon">🙋</span>
+                    Sender Information
+                  </h2>
+                  <div className="info-grid two-col">
+                    <div className="info-item">
+                      <label>Sender Name</label>
+                      <span className="highlight">{selectedOrder.senderName || '-'}</span>
+                    </div>
+                    <div className="info-item">
+                      <label>Sender Phone</label>
+                      <span className="highlight">{selectedOrder.senderPhone || '-'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Customer Information (Account Holder) */}
+                <div className="info-section">
+                  <h2 className="section-title">
+                    <span className="section-icon">👤</span>
+                    Customer Account
+                  </h2>
+                  <div className="info-grid three-col">
+                    <div className="info-item">
                       <label>Name</label>
-                      <span>{selectedOrder.user.name}</span>
+                      <span>{selectedOrder.user?.name || '-'}</span>
                     </div>
-                    <div className="detail-item">
+                    <div className="info-item">
                       <label>Email</label>
-                      <span>{selectedOrder.user.email}</span>
+                      <span>{selectedOrder.user?.email || '-'}</span>
                     </div>
-                    <div className="detail-item">
+                    <div className="info-item">
                       <label>Phone</label>
-                      <span>{selectedOrder.user.phone}</span>
+                      <span>{selectedOrder.user?.phone || selectedOrder.user?.phoneNumber || '-'}</span>
                     </div>
                   </div>
                 </div>
-              )}
 
-              {/* Recipient/Delivery Information */}
-              <div className="detail-section">
-                <h3>🚚 Delivery Information</h3>
-                <div className="detail-grid">
-                  <div className="detail-item">
-                    <label>Recipient Name</label>
-                    <span>{selectedOrder.recipientName}</span>
-                  </div>
-                  <div className="detail-item">
-                    <label>Recipient Phone</label>
-                    <span>{selectedOrder.recipientPhone}</span>
-                  </div>
-                  <div className="detail-item full-width">
-                    <label>Delivery Address</label>
-                    <span>{selectedOrder.deliveryAddress}</span>
-                  </div>
-                  <div className="detail-item">
-                    <label>Area</label>
-                    <span>{selectedOrder.deliveryArea}</span>
-                  </div>
-                  <div className="detail-item">
-                    <label>Governorate</label>
-                    <span>{selectedOrder.deliveryCity}</span>
-                  </div>
-                  {selectedOrder.preferredDeliveryDate && (
-                    <div className="detail-item">
-                      <label>Preferred Delivery Date</label>
-                      <span>{formatDate(selectedOrder.preferredDeliveryDate)}</span>
+                {/* Delivery Information */}
+                <div className="info-section">
+                  <h2 className="section-title">
+                    <span className="section-icon">🚚</span>
+                    Delivery Information (Recipient)
+                  </h2>
+                  <div className="info-grid two-col">
+                    <div className="info-item">
+                      <label>Recipient Name</label>
+                      <span className="highlight">{selectedOrder.recipientName}</span>
                     </div>
+                    <div className="info-item">
+                      <label>Recipient Phone</label>
+                      <span className="highlight">{selectedOrder.recipientPhone}</span>
+                    </div>
+                    <div className="info-item full-width">
+                      <label>Delivery Address</label>
+                      <span>{selectedOrder.deliveryAddress || '-'}</span>
+                    </div>
+                    <div className="info-item">
+                      <label>Area</label>
+                      <span>{selectedOrder.deliveryArea || '-'}</span>
+                    </div>
+                    <div className="info-item">
+                      <label>Governorate</label>
+                      <span>{selectedOrder.deliveryCity || '-'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card Message - Highlighted Box */}
+                <div className="info-section">
+                  <h2 className="section-title">
+                    <span className="section-icon">💌</span>
+                    Card Message
+                  </h2>
+                  {selectedOrder.cardMessage ? (
+                    <div className="card-message-box">
+                      <div className="quote-mark">"</div>
+                      <p className="card-message-text">{selectedOrder.cardMessage}</p>
+                      <div className="quote-mark end">"</div>
+                    </div>
+                  ) : (
+                    <div className="no-message-box">No card message provided</div>
+                  )}
+                </div>
+
+                {/* Delivery Instructions */}
+                <div className="info-section">
+                  <h2 className="section-title">
+                    <span className="section-icon">📋</span>
+                    Delivery Instructions
+                  </h2>
+                  {selectedOrder.instructionMessage ? (
+                    <div className="instruction-box">
+                      <p>{selectedOrder.instructionMessage}</p>
+                    </div>
+                  ) : (
+                    <div className="no-message-box">No delivery instructions</div>
                   )}
                 </div>
               </div>
 
-              {/* ========== ORDER ITEMS / PRODUCTS SECTION ========== */}
-              <div className="detail-section">
-                <h3>🛒 Order Items ({selectedOrder.items?.length || 0} products)</h3>
-                {selectedOrder.items && selectedOrder.items.length > 0 ? (
-                  <div className="order-items-list">
-                    {selectedOrder.items.map((item, index) => (
-                      <div key={item.orderItemId || index} className="order-item-card">
-                        <div className="item-image">
-                          {item.productImageUrl ? (
-                            <img 
-                              src={item.productImageUrl} 
-                              alt={item.productName}
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = '/images/placeholder.jpg';
-                              }}
-                            />
-                          ) : (
-                            <div className="no-image">
-                              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                                <circle cx="8.5" cy="8.5" r="1.5"/>
-                                <polyline points="21 15 16 10 5 21"/>
-                              </svg>
+              {/* Right Column */}
+              <div className="modal-column right-column">
+                
+                {/* Order Items */}
+                <div className="info-section">
+                  <h2 className="section-title">
+                    <span className="section-icon">🛒</span>
+                    Order Items ({selectedOrder.items?.length || 0} products)
+                  </h2>
+                  <div className="order-items-container">
+                    {selectedOrder.items && selectedOrder.items.length > 0 ? (
+                      selectedOrder.items.map((item, index) => (
+                        <div key={item.orderItemId || index} className="order-item-card-full">
+                          {/* Item Header with Image and Basic Info */}
+                          <div className="item-header-row">
+                            <div className="item-image-container">
+                              {item.productImageUrl ? (
+                                <img 
+                                  src={item.productImageUrl} 
+                                  alt={item.productName}
+                                  onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = '/images/placeholder.jpg';
+                                  }}
+                                />
+                              ) : (
+                                <div className="no-image-placeholder">
+                                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                                    <polyline points="21 15 16 10 5 21"/>
+                                  </svg>
+                                </div>
+                              )}
+                            </div>
+                            <div className="item-info">
+                              <h4 className="item-name">{item.productName}</h4>
+                              <div className="item-meta">
+                                <span className="qty">Qty: {item.quantity}</span>
+                                <span className="unit-price">{formatCurrency(item.unitPrice)} each</span>
+                              </div>
+                            </div>
+                            <div className="item-price">
+                              {formatCurrency(item.totalPrice || (item.quantity * item.unitPrice))}
+                            </div>
+                          </div>
+
+                          {/* Item Delivery Date & Time */}
+                          {(item.deliveryDate || item.deliveryTimeSlot) && (
+                            <div className="item-delivery-info">
+                              <div className="item-delivery-icon">📅</div>
+                              <div className="item-delivery-details">
+                                {item.deliveryDate && (
+                                  <span className="delivery-date">
+                                    <strong>Delivery Date:</strong> {formatDateOnly(item.deliveryDate)}
+                                  </span>
+                                )}
+                                {item.deliveryTimeSlot && (
+                                  <span className="delivery-time">
+                                    <strong>Time Slot:</strong> {item.deliveryTimeSlot}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Item Card Message */}
+                          {item.cardMessage && (
+                            <div className="item-card-message">
+                              <div className="card-icon">💌</div>
+                              <div className="card-content">
+                                <span className="card-label">Card Message:</span>
+                                <p className="card-text">"{item.cardMessage}"</p>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Item Special Instructions */}
+                          {item.specialInstructions && (
+                            <div className="item-special-instructions">
+                              <strong>Note:</strong> {item.specialInstructions}
                             </div>
                           )}
                         </div>
-                        <div className="item-details">
-                          <h4 className="item-name">{item.productName}</h4>
-                          {item.specialInstructions && (
-                            <p className="item-instructions">
-                              <strong>Note:</strong> {item.specialInstructions}
-                            </p>
-                          )}
-                          <div className="item-pricing">
-                            <span className="item-quantity">Qty: {item.quantity}</span>
-                            <span className="item-unit-price">{formatCurrency(item.unitPrice)} each</span>
-                          </div>
-                        </div>
-                        <div className="item-total">
-                          {formatCurrency(item.totalPrice)}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="no-items-message">No items found for this order.</p>
-                )}
-              </div>
-
-              {/* Card Message */}
-              {selectedOrder.cardMessage && (
-                <div className="detail-section">
-                  <h3>💌 Card Message</h3>
-                  <div className="message-box">
-                    "{selectedOrder.cardMessage}"
+                      ))
+                    ) : (
+                      <p className="no-items">No items found</p>
+                    )}
                   </div>
                 </div>
-              )}
 
-              {/* Delivery Notes */}
-              {selectedOrder.deliveryNotes && (
-                <div className="detail-section">
-                  <h3>📝 Delivery Notes</h3>
-                  <div className="message-box">
-                    {selectedOrder.deliveryNotes}
-                  </div>
-                </div>
-              )}
-
-              {/* Order Summary */}
-              <div className="detail-section">
-                <h3>💰 Order Summary</h3>
-                <div className="order-summary">
-                  <div className="summary-row">
-                    <span>Subtotal</span>
-                    <span>{formatCurrency(selectedOrder.subtotal)}</span>
-                  </div>
-                  <div className="summary-row">
-                    <span>Delivery Fee</span>
-                    <span>{formatCurrency(selectedOrder.deliveryFee)}</span>
-                  </div>
-                  {selectedOrder.discountAmount > 0 && (
-                    <div className="summary-row discount">
-                      <span>Discount {selectedOrder.couponCode && `(${selectedOrder.couponCode})`}</span>
-                      <span>-{formatCurrency(selectedOrder.discountAmount)}</span>
+                {/* Order Summary */}
+                <div className="info-section">
+                  <h2 className="section-title">
+                    <span className="section-icon">💰</span>
+                    Order Summary
+                  </h2>
+                  <div className="order-summary-box">
+                    <div className="summary-line">
+                      <span>Subtotal</span>
+                      <span>{formatCurrency(selectedOrder.subtotal)}</span>
                     </div>
-                  )}
-                  <div className="summary-row total">
-                    <span>Total</span>
-                    <span>{formatCurrency(selectedOrder.totalAmount)}</span>
+                    <div className="summary-line">
+                      <span>Delivery Fee</span>
+                      <span>{formatCurrency(selectedOrder.deliveryFee)}</span>
+                    </div>
+                    {selectedOrder.discountAmount > 0 && (
+                      <div className="summary-line discount">
+                        <span>Discount {selectedOrder.couponCode && `(${selectedOrder.couponCode})`}</span>
+                        <span>-{formatCurrency(selectedOrder.discountAmount)}</span>
+                      </div>
+                    )}
+                    <div className="summary-line total">
+                      <span>Total Amount</span>
+                      <span>{formatCurrency(selectedOrder.totalAmount)}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Update Delivery Status - Both Admin and Super Admin can update */}
-              {canUpdateDeliveryStatus && (
-                <div className="detail-section">
-                  <h3>🚚 Update Delivery Status</h3>
-                  <div className="status-buttons">
-                    {['PENDING', 'CONFIRMED', 'PROCESSING', 'OUT_FOR_DELIVERY', 'DELIVERED', 'CANCELLED'].map((status) => (
-                      <button
-                        key={status}
-                        className={`status-btn ${selectedOrder.deliveryStatus === status ? 'active' : ''} ${getDeliveryStatusClass(status)}`}
-                        onClick={() => handleDeliveryStatusUpdate(selectedOrder.orderId, status)}
-                        disabled={selectedOrder.deliveryStatus === status}
-                      >
-                        {formatStatus(status)}
-                      </button>
-                    ))}
+                {/* Update Delivery Status */}
+                {canUpdateDeliveryStatus && (
+                  <div className="info-section">
+                    <h2 className="section-title">
+                      <span className="section-icon">🚚</span>
+                      Update Delivery Status
+                    </h2>
+                    <div className="status-buttons-grid">
+                      {['PENDING', 'CONFIRMED', 'PROCESSING', 'OUT_FOR_DELIVERY', 'DELIVERED', 'CANCELLED'].map((status) => (
+                        <button
+                          key={status}
+                          className={`status-update-btn ${selectedOrder.deliveryStatus === status ? 'active' : ''} ${getDeliveryStatusClass(status)}`}
+                          onClick={() => handleDeliveryStatusUpdate(selectedOrder.orderId, status)}
+                          disabled={selectedOrder.deliveryStatus === status}
+                        >
+                          {formatStatus(status)}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              {/* Payment Status Info (Read-only) */}
-              <div className="detail-section">
-                <h3>💳 Payment Information</h3>
-                <div className="payment-info-box">
-                  <div className="payment-info-item">
-                    <label>Payment Status</label>
-                    <span className={`status-badge ${getPaymentStatusClass(selectedOrder.paymentStatus)}`}>
-                      {formatStatus(selectedOrder.paymentStatus)}
-                    </span>
+                {/* Payment Information */}
+                <div className="info-section">
+                  <h2 className="section-title">
+                    <span className="section-icon">💳</span>
+                    Payment Information
+                  </h2>
+                  <div className="payment-info-card">
+                    <div className="payment-status-row">
+                      <span>Payment Status</span>
+                      <span className={`status-badge ${getPaymentStatusClass(selectedOrder.paymentStatus)}`}>
+                        {formatStatus(selectedOrder.paymentStatus)}
+                      </span>
+                    </div>
+                    <p className="payment-note-text">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                      </svg>
+                      Payment status is automatically updated by the payment gateway.
+                    </p>
                   </div>
-                  <p className="payment-note">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <circle cx="12" cy="12" r="10"/>
-                      <line x1="12" y1="8" x2="12" y2="12"/>
-                      <line x1="12" y1="16" x2="12.01" y2="16"/>
-                    </svg>
-                    Payment status is automatically updated by the payment gateway.
-                  </p>
                 </div>
               </div>
             </div>

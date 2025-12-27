@@ -215,7 +215,6 @@ const ProductCard = ({
   };
 
   // Get category name and format it nicely
-  // Converts "FLOWERS & CHOCOLATES" → "Flowers & Chocolates"
   const getCategoryName = (product) => {
     let categoryName = '';
     if (currentLang === 'ar') {
@@ -224,7 +223,6 @@ const ProductCard = ({
       categoryName = product.categoryName || '';
     }
     
-    // Format: "FLOWERS & CHOCOLATES" → "Flowers & Chocolates"
     if (categoryName) {
       return categoryName
         .toLowerCase()
@@ -239,7 +237,6 @@ const ProductCard = ({
   const getDefaultDescription = (product) => {
     const category = (product.categoryName || '').toLowerCase();
     
-    // Define default descriptions for each category
     const descriptions = {
       en: {
         'flowers & chocolates': 'Flower bouquet with Ferrero Rocher chocolates',
@@ -277,7 +274,6 @@ const ProductCard = ({
 
     const lang = currentLang === 'ar' ? 'ar' : 'en';
     
-    // Find matching category description
     for (const [key, value] of Object.entries(descriptions[lang])) {
       if (category.includes(key) || key.includes(category)) {
         return value;
@@ -733,7 +729,7 @@ const HomePage = ({ currentLang }) => {
     { 
       id: 1, 
       name: currentLang === 'ar' ? 'عيد الحب' : "Valentine's Day", 
-      image: '/images/valentine-special/Love Red Bouquet 50.PNG',
+      image: '/images/Valentine Day Special/Valentine Love Gift Flower.webp',
       link: '/valentine-special', 
       color: '#D4A5A5',
       icon: Icons.Heart
@@ -741,7 +737,7 @@ const HomePage = ({ currentLang }) => {
     { 
       id: 2, 
       name: currentLang === 'ar' ? 'عيد ميلاد' : 'Birthday', 
-      image: '/images/birthday-bouquets/Happy Peach Bouquet.webp',
+      image: '/images/Birthday and get well soon bouquet/Happy Birthday Peach Baby Rose 11.webp',
       link: '/birthday-bouquet', 
       color: '#C9B8D4',
       icon: Icons.Cake
@@ -749,7 +745,7 @@ const HomePage = ({ currentLang }) => {
     { 
       id: 3, 
       name: currentLang === 'ar' ? 'عيد الأم' : "Mother's Day", 
-      image: '/images/mothers-day/100 Roses With Gift.webp',
+      image: "/images/Mother's day specials/Mom New Box -023.webp",
       link: '/mothers-day', 
       color: '#E8C9B8',
       icon: Icons.MotherHeart
@@ -757,7 +753,7 @@ const HomePage = ({ currentLang }) => {
     { 
       id: 4, 
       name: currentLang === 'ar' ? 'زفاف' : 'Wedding', 
-      image: '/images/bouquets/Red Rose Flowers.webp',
+      image: '/images/Grand Bouquet/Grand Bouquet -19.webp',
       link: '/grand-bouquet', 
       color: '#D4C4A8',
       icon: Icons.Ring
@@ -765,7 +761,7 @@ const HomePage = ({ currentLang }) => {
     { 
       id: 5, 
       name: currentLang === 'ar' ? 'العيد' : 'Eid', 
-      image: '/images/ramadan/Ramadan 03.webp',
+      image: '/images/Eid collection/Eid Mubarak Arrangement.webp',
       link: '/eid-collection', 
       color: '#B8D4BE',
       icon: Icons.Crescent
@@ -814,34 +810,34 @@ const HomePage = ({ currentLang }) => {
   const categories = [
     { 
       id: 1, 
-      Icon: Icons.Bouquet, 
       nameEn: 'Flower Bouquets', 
       nameAr: 'باقات الزهور', 
       link: '/flower-bouquets',
+      image: '/images/Flower Bouquet/25 Pink Roses Bouquet 888.webp',
       color: '#D4A5A5'
     },
     { 
       id: 2, 
-      Icon: Icons.Rose, 
       nameEn: 'Hand Bouquets', 
       nameAr: 'باقات يدوية', 
       link: '/hand-bouquets',
+      image: '/images/Hand Bouquet/Coloured Baby Rose Bouquet - 13.webp',
       color: '#E8C9B8'
     },
     { 
       id: 3, 
-      Icon: Icons.GiftBox, 
       nameEn: 'Gift Combos', 
       nameAr: 'كومبو هدايا', 
       link: '/combos',
+      image: '/images/Flowers With Perfume/Fragrant Red Roses Handle.webp',
       color: '#C9B8D4'
     },
     { 
       id: 4, 
-      Icon: Icons.Balloon, 
       nameEn: 'Add-Ons', 
       nameAr: 'إضافات', 
       link: '/add-ons',
+      image: '/images/Crown for head/Crown Pink For Head -1.webp',
       color: '#B8D4BE'
     },
   ];
@@ -884,7 +880,10 @@ const HomePage = ({ currentLang }) => {
                       src={occasion.image} 
                       alt={occasion.name}
                       className="occasion-image"
-                      onError={(e) => { e.target.style.display = 'none'; }}
+                      onError={(e) => { 
+                        console.log('Image failed to load:', occasion.image);
+                        e.target.src = '/images/placeholder.webp';
+                      }}
                     />
                     <div className="occasion-overlay"></div>
                   </div>
@@ -957,23 +956,29 @@ const HomePage = ({ currentLang }) => {
           
           <div className="categories-grid">
             {categories.map((category) => {
-              const IconComponent = category.Icon;
               return (
                 <Link 
                   to={category.link} 
                   key={category.id} 
                   className="category-card"
-                  style={{ '--category-color': category.color }}
                 >
-                  <div className="category-icon-wrapper">
-                    <IconComponent />
+                  <div className="category-image-wrapper">
+                    <img 
+                      src={category.image} 
+                      alt={currentLang === 'ar' ? category.nameAr : category.nameEn}
+                      className="category-image"
+                      loading="lazy"
+                    />
+                    <div className="category-overlay"></div>
                   </div>
-                  <h3>{currentLang === 'ar' ? category.nameAr : category.nameEn}</h3>
-                  <span className="category-arrow">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                  </span>
+                  <div className="category-content">
+                    <h3>{currentLang === 'ar' ? category.nameAr : category.nameEn}</h3>
+                    <span className="category-arrow">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                      </svg>
+                    </span>
+                  </div>
                 </Link>
               );
             })}

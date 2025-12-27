@@ -243,13 +243,14 @@
 /* Category Card */
 .combos-categories .category-card {
   background: white;
-  border-radius: 30px;
+  border-radius: 24px;
   overflow: hidden;
   box-shadow: 0 15px 50px rgba(61, 48, 40, 0.1);
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   text-decoration: none;
-  display: block;
+  display: flex;
+  flex-direction: column;
   animation: cardReveal 0.7s ease-out forwards;
   opacity: 0;
 }
@@ -291,37 +292,39 @@
   left: 100%;
 }
 
+/* FIXED: Image Section - Full screen fitting */
 .combos-categories .card-image-section {
   position: relative;
   height: 320px;
   overflow: hidden;
+  margin: 0;
+  padding: 0;
 }
 
 .combos-categories .image-frame {
   width: 100%;
   height: 100%;
-  position: relative;
+  margin: 0;
+  padding: 0;
 }
 
 .combos-categories .category-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center center;
+  display: block;
+  margin: 0;
+  padding: 0;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .combos-categories .category-card:hover .category-image {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .combos-categories .image-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 50%;
-  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
-  pointer-events: none;
+  display: none;
 }
 
 .combos-categories .category-icon {
@@ -463,7 +466,7 @@
 .combos-categories .card-border {
   position: absolute;
   inset: 0;
-  border-radius: 30px;
+  border-radius: 24px;
   border: 3px solid transparent;
   transition: border-color 0.4s ease;
   pointer-events: none;
@@ -667,6 +670,10 @@
     max-width: 600px;
   }
   
+  .combos-categories .card-image-section {
+    height: 300px;
+  }
+  
   .combos-features .features-grid {
     gap: 20px;
   }
@@ -702,7 +709,7 @@
   }
   
   .combos-categories .card-image-section {
-    height: 340px;
+    height: 280px;
   }
   
   .combos-categories .card-content {
@@ -742,7 +749,7 @@
   }
   
   .combos-categories .card-image-section {
-    height: 220px;
+    height: 240px;
   }
   
   .combos-categories .category-icon {

@@ -341,7 +341,17 @@
 }
 
 .offers-50-page .checkbox-label input[type="checkbox"] {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .offers-50-page .checkbox-label .checkmark {
@@ -1175,7 +1185,17 @@
 }
 
 .offers-50-page .checkbox-label input[type="checkbox"] {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .offers-50-page .checkbox-label .checkmark {
@@ -1691,7 +1711,17 @@
 }
 
 .offers-50-page .checkbox-label input[type="checkbox"] {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .offers-50-page .checkbox-label .checkmark {
@@ -2155,7 +2185,17 @@
 }
 
 .offers-50-page .checkbox-label input[type="checkbox"] {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .offers-50-page .checkbox-label .checkmark {
@@ -2403,7 +2443,17 @@
 
 /* Mobile Filter Toggle Button - Hidden on desktop */
 .offers-50-page .mobile-filter-toggle {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
   align-items: center;
   gap: 8px;
   padding: 10px 16px;
@@ -2424,7 +2474,17 @@
 
 /* Mobile Filter Overlay */
 .offers-50-page .mobile-filter-overlay {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
   position: fixed;
   top: 0;
   left: 0;
@@ -2436,7 +2496,17 @@
 
 /* Mobile Close Button - Hidden on desktop */
 .offers-50-page .mobile-filter-close {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
   position: absolute;
   top: 16px;
   right: 16px;
@@ -2651,7 +2721,17 @@
 
 /* Mobile Filter Toggle Button */
 .offers-50-page .mobile-filter-toggle {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
   align-items: center;
   gap: 8px;
   padding: 12px 20px;
@@ -2673,7 +2753,17 @@
 
 /* Mobile Filter Overlay */
 .offers-50-page .mobile-filter-overlay {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
   position: fixed;
   top: 0;
   left: 0;
@@ -2685,7 +2775,17 @@
 
 /* Mobile Close Button */
 .offers-50-page .mobile-filter-close {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
   position: absolute;
   top: 15px;
   right: 15px;
@@ -2755,7 +2855,17 @@
   /* Hide overlay when filter closed */
   .offers-50-page .filters-sidebar:not(.open) + .mobile-filter-overlay,
   .offers-50-page .mobile-filter-overlay:not(:has(~ .filters-sidebar.open)) {
-    display: none;
+    -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
   }
   
   /* Content layout single column */
@@ -2793,7 +2903,17 @@
 
 /* Hide on desktop */
 .offers-50-page .mobile-filter-toggle {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 /* Show on mobile */
@@ -2922,7 +3042,17 @@
 
 /* Desktop - hide close button */
 .offers-50-page .mobile-filter-close {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 @media (max-width: 768px) {
@@ -3018,17 +3148,47 @@
 
 /* Hide mobile toolbar on desktop */
 .offers-50-page .mobile-toolbar {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 /* Hide old mobile filter toggle */
 .offers-50-page .mobile-filter-toggle {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 /* Desktop - hide mobile close button */
 .offers-50-page .mobile-filter-close {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 @media (max-width: 768px) {
@@ -3216,19 +3376,59 @@
 
 /* Desktop: Hide mobile elements */
 .offers-50-page .mobile-filter-btn {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .offers-50-page .mobile-filter-close {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .offers-50-page .mobile-filter-overlay {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .offers-50-page .mobile-toolbar {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 /* ===== MOBILE STYLES (<= 768px) ===== */
@@ -3374,7 +3574,17 @@
   
   /* Overlay */
   .offers-50-page .mobile-filter-overlay {
-    display: none;
+    -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;

@@ -238,7 +238,17 @@
 }
 
 .mothers-page .checkbox-label input[type="checkbox"] {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .mothers-page .checkbox-label .checkmark {
@@ -612,7 +622,17 @@
   .mothers-page .hero-banner { padding: 35px 0; }
   .mothers-page .hero-title { font-size: 32px; }
   .mothers-page .hero-subtitle { font-size: 14px; }
-  .mothers-page .floating-icon { display: none; }
+  .mothers-page .floating-icon { -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden; }
   .mothers-page .main-content { padding: 30px 0 60px; }
   .mothers-page .content-layout { grid-template-columns: 1fr; gap: 24px; }
   .mothers-page .filters-sidebar { position: relative; top: 0; padding: 20px; background: #fef7fb; border-radius: 12px; }
@@ -914,7 +934,17 @@
 }
 
 .mothers-page .checkbox-label input[type="checkbox"] {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .mothers-page .checkbox-label .checkmark {
@@ -1430,7 +1460,17 @@
 }
 
 .mothers-page .checkbox-label input[type="checkbox"] {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .mothers-page .checkbox-label .checkmark {
@@ -1894,7 +1934,17 @@
 }
 
 .mothers-page .checkbox-label input[type="checkbox"] {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .mothers-page .checkbox-label .checkmark {
@@ -2142,7 +2192,17 @@
 
 /* Mobile Filter Toggle Button - Hidden on desktop */
 .mothers-page .mobile-filter-toggle {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
   align-items: center;
   gap: 8px;
   padding: 10px 16px;
@@ -2163,7 +2223,17 @@
 
 /* Mobile Filter Overlay */
 .mothers-page .mobile-filter-overlay {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
   position: fixed;
   top: 0;
   left: 0;
@@ -2175,7 +2245,17 @@
 
 /* Mobile Close Button - Hidden on desktop */
 .mothers-page .mobile-filter-close {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
   position: absolute;
   top: 16px;
   right: 16px;
@@ -2390,7 +2470,17 @@
 
 /* Mobile Filter Toggle Button */
 .mothers-page .mobile-filter-toggle {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
   align-items: center;
   gap: 8px;
   padding: 12px 20px;
@@ -2412,7 +2502,17 @@
 
 /* Mobile Filter Overlay */
 .mothers-page .mobile-filter-overlay {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
   position: fixed;
   top: 0;
   left: 0;
@@ -2424,7 +2524,17 @@
 
 /* Mobile Close Button */
 .mothers-page .mobile-filter-close {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
   position: absolute;
   top: 15px;
   right: 15px;
@@ -2494,7 +2604,17 @@
   /* Hide overlay when filter closed */
   .mothers-page .filters-sidebar:not(.open) + .mobile-filter-overlay,
   .mothers-page .mobile-filter-overlay:not(:has(~ .filters-sidebar.open)) {
-    display: none;
+    -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
   }
   
   /* Content layout single column */
@@ -2532,7 +2652,17 @@
 
 /* Hide on desktop */
 .mothers-page .mobile-filter-toggle {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 /* Show on mobile */
@@ -2661,7 +2791,17 @@
 
 /* Desktop - hide close button */
 .mothers-page .mobile-filter-close {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 @media (max-width: 768px) {
@@ -2757,17 +2897,47 @@
 
 /* Hide mobile toolbar on desktop */
 .mothers-page .mobile-toolbar {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 /* Hide old mobile filter toggle */
 .mothers-page .mobile-filter-toggle {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 /* Desktop - hide mobile close button */
 .mothers-page .mobile-filter-close {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 @media (max-width: 768px) {
@@ -2955,19 +3125,59 @@
 
 /* Desktop: Hide mobile elements */
 .mothers-page .mobile-filter-btn {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .mothers-page .mobile-filter-close {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .mothers-page .mobile-filter-overlay {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .mothers-page .mobile-toolbar {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 /* ===== MOBILE STYLES (<= 768px) ===== */
@@ -3113,7 +3323,17 @@
   
   /* Overlay */
   .mothers-page .mobile-filter-overlay {
-    display: none;
+    -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
@@ -3369,7 +3589,17 @@
 }
 
 .mothers-page .checkbox-label input[type="checkbox"] {
-  display: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .mothers-page .checkbox-label .checkmark {
