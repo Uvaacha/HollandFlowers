@@ -23,25 +23,25 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI() {
         final String securitySchemeName = "bearerAuth";
-        
+
         return new OpenAPI()
                 .info(new Info()
                         .title("Flower E-Commerce API")
                         .description("Production-ready REST API for Flower E-Commerce Platform with role-based access control")
                         .version("1.0.0")
                         .contact(new Contact()
-                                .name("Flower App Support")
-                                .email("support@flowerapp.com")
-                                .url("https://flowerapp.com"))
+                                .name("Holland Flowers Support")
+                                .email("support@flowerskw.com")
+                                .url("https://www.flowerskw.com"))
                         .license(new License()
                                 .name("Private License")
-                                .url("https://flowerapp.com/license")))
+                                .url("https://www.flowerskw.com/license")))
                 .servers(List.of(
                         new Server()
                                 .url("http://localhost:" + serverPort + "/api/v1")
                                 .description("Local Development Server"),
                         new Server()
-                                .url("https://api.flowerapp.com/api/v1")
+                                .url("https://www.flowerskw.com/api/v1")
                                 .description("Production Server")))
                 .addSecurityItem(new SecurityRequirement()
                         .addList(securitySchemeName))

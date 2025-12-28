@@ -34,12 +34,12 @@ public class HesabeConfig {
      * Sandbox: https://sandbox.hesabe.com
      * Production: https://api.hesabe.com
      */
-    private String baseUrl = "https://sandbox.hesabe.com";
+    private String baseUrl = "https://api.hesabe.com";
 
     /**
-     * Payment endpoint (empty by default since base-url is the full checkout endpoint)
+     * Payment endpoint
      */
-    private String checkoutEndpoint = "";
+    private String checkoutEndpoint = "/checkout";
 
     /**
      * Payment status endpoint
@@ -69,7 +69,7 @@ public class HesabeConfig {
     /**
      * Is sandbox mode enabled
      */
-    private boolean sandboxMode = true;
+    private boolean sandboxMode = false;
 
     /**
      * Connection timeout in milliseconds
