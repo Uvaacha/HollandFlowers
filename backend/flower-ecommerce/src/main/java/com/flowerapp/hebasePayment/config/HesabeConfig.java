@@ -37,9 +37,9 @@ public class HesabeConfig {
     private String baseUrl = "https://sandbox.hesabe.com";
 
     /**
-     * Payment endpoint
+     * Payment endpoint (empty by default since base-url is the full checkout endpoint)
      */
-    private String checkoutEndpoint = "/checkout";
+    private String checkoutEndpoint = "";
 
     /**
      * Payment status endpoint
