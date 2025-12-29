@@ -74,30 +74,91 @@ public class PaymentController {
 
     /**
      * Handle Hesabe callback (redirect from payment page)
+     * This endpoint receives the browser redirect from Hesabe after payment
+     * It processes the payment and redirects to the appropriate frontend page
      */
     @GetMapping("/callback")
-    @Operation(summary = "Payment callback", description = "Handles callback from Hesabe after payment completion")
-    public ResponseEntity<Map<String, Object>> handleCallback(
+    @Operation(summary = "Payment callback", description = "Handles callback from Hesabe after payment completion - redirects to frontend")
+    public ResponseEntity<Void> handleCallback(
             @RequestParam("data") String encryptedData) {
 
-        Map<String, Object> response = new HashMap<>();
+        String redirectUrl;
 
         try {
             Payment payment = paymentService.processPaymentCallback(encryptedData);
 
-            response.put("success", payment.getStatus().isSuccessful());
-            response.put("paymentReference", payment.getPaymentReference());
-            response.put("status", payment.getStatus());
-            response.put("orderId", payment.getOrder().getOrderId());
-            response.put("orderReference", payment.getOrder().getOrderId());
-            response.put("transactionId", payment.getTransactionId());
-            response.put("message", payment.getStatus().isSuccessful()
-                    ? "Payment successful"
-                    : "Payment failed: " + payment.getResponseMessage());
-
-            return ResponseEntity.ok(response);
+            if (payment.getStatus().isSuccessful()) {
+                // Redirect to frontend success page with payment data
+                redirectUrl = String.format("/payment/success?orderId=%d&ref=%s&status=success",
+                        payment.getOrder().getOrderId(),
+                        payment.getPaymentReference());
+                log.info("Payment successful, redirecting to success page. Order: {}", payment.getOrder().getOrderId());
+            } else {
+                // Redirect to frontend failure page with error info
+                redirectUrl = String.format("/payment/failure?orderId=%d&ref=%s&status=failed&message=%s",
+                        payment.getOrder().getOrderId(),
+                        payment.getPaymentReference(),
+                        java.net.URLEncoder.encode(payment.getResponseMessage() != null ? payment.getResponseMessage() : "Payment failed", "UTF-8"));
+                log.warn("Payment failed, redirecting to failure page. Order: {}", payment.getOrder().getOrderId());
+            }
         } catch (Exception e) {
             log.error("Payment callback processing failed: {}", e.getMessage());
+            try {
+                redirectUrl = "/payment/failure?status=error&message=" +
+                        java.net.URLEncoder.encode(e.getMessage() != null ? e.getMessage() : "Payment verification failed", "UTF-8");
+            } catch (Exception ex) {
+                redirectUrl = "/payment/failure?status=error&message=Payment%20verification%20failed";
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .header("Location", redirectUrl)
+                .build();
+    }
+
+    /**
+     * API endpoint for frontend to verify payment (called by PaymentSuccess/PaymentFailure components)
+     * This is separate from the browser redirect callback
+     */
+    @GetMapping("/verify")
+    @Operation(summary = "Verify payment", description = "API endpoint for frontend to verify payment status")
+    public ResponseEntity<Map<String, Object>> verifyPayment(
+            @RequestParam(required = false) String orderId,
+            @RequestParam(required = false) String ref) {
+
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            Payment payment = null;
+
+            if (ref != null && !ref.isEmpty()) {
+                payment = paymentService.getPaymentByReference(ref);
+            } else if (orderId != null && !orderId.isEmpty()) {
+                List<Payment> payments = paymentService.getPaymentsByOrderId(Long.parseLong(orderId));
+                if (!payments.isEmpty()) {
+                    payment = payments.get(0); // Get most recent payment
+                }
+            }
+
+            if (payment != null) {
+                response.put("success", payment.getStatus().isSuccessful());
+                response.put("paymentReference", payment.getPaymentReference());
+                response.put("status", payment.getStatus().name());
+                response.put("orderId", payment.getOrder().getOrderId());
+                response.put("orderNumber", payment.getOrder().getOrderNumber());
+                response.put("transactionId", payment.getTransactionId());
+                response.put("amount", payment.getAmount());
+                response.put("message", payment.getStatus().isSuccessful()
+                        ? "Payment successful"
+                        : "Payment failed: " + payment.getResponseMessage());
+                return ResponseEntity.ok(response);
+            } else {
+                response.put("success", false);
+                response.put("message", "Payment not found");
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            log.error("Payment verification failed: {}", e.getMessage());
             response.put("success", false);
             response.put("message", "Payment verification failed");
             response.put("error", e.getMessage());
