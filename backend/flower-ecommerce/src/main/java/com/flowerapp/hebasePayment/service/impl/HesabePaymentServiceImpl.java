@@ -53,7 +53,8 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
     private final RestTemplate restTemplate;
     private final EmailService emailService;
 
-    private static final String AES_ALGORITHM = "AES/CBC/PKCS5Padding";
+    private static final String AES_ENCRYPT_ALGORITHM = "AES/CBC/PKCS5Padding";
+    private static final String AES_DECRYPT_ALGORITHM = "AES/CBC/NoPadding";
     private static final java.util.HexFormat HEX = java.util.HexFormat.of();
 
     @Transactional
@@ -813,7 +814,7 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
     /**
      * Encrypt data using AES-256-CBC with PKCS5Padding and return as HEX string
      * Per Hesabe documentation:
-     * - Algorithm: AES-256-CBC
+     * - Algorithm: AES/CBC/PKCS5Padding for encryption
      * - Key: 32 bytes (256 bits)
      * - IV: 16 bytes
      * - Output: HEX encoded
@@ -826,25 +827,26 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
         IvParameterSpec ivSpec = new IvParameterSpec(
                 hesabeConfig.getIvKey().getBytes(StandardCharsets.UTF_8));
 
-        Cipher cipher = Cipher.getInstance(AES_ALGORITHM);
+        Cipher cipher = Cipher.getInstance(AES_ENCRYPT_ALGORITHM);
         cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
 
         byte[] encrypted = cipher.doFinal(data.getBytes(StandardCharsets.UTF_8));
 
-        // Return as HEX string (uppercase) per Hesabe requirements
-        String hexResult = HEX.formatHex(encrypted).toUpperCase();
+        // Return as HEX string per Hesabe requirements
+        String hexResult = HEX.formatHex(encrypted);
         log.debug("Encrypted data HEX length: {}", hexResult.length());
 
         return hexResult;
     }
 
     /**
-     * Decrypt HEX-encoded data using AES-256-CBC with PKCS5Padding
+     * Decrypt HEX-encoded data using AES-256-CBC with NoPadding
      * Per Hesabe documentation:
-     * - Algorithm: AES-256-CBC
+     * - Algorithm: AES/CBC/NoPadding for decryption
      * - Key: 32 bytes (256 bits)
      * - IV: 16 bytes
      * - Input: HEX encoded
+     * - Must manually trim null bytes after decryption
      */
     private String decryptData(String hexCipherText) throws Exception {
         log.debug("Decrypting HEX data, length: {}", hexCipherText.length());
@@ -854,14 +856,18 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
         IvParameterSpec ivSpec = new IvParameterSpec(
                 hesabeConfig.getIvKey().getBytes(StandardCharsets.UTF_8));
 
-        Cipher cipher = Cipher.getInstance(AES_ALGORITHM);
+        Cipher cipher = Cipher.getInstance(AES_DECRYPT_ALGORITHM);
         cipher.init(Cipher.DECRYPT_MODE, secretKey, ivSpec);
 
         // Parse HEX string to bytes (case insensitive)
         byte[] cipherBytes = HEX.parseHex(hexCipherText.toLowerCase());
         byte[] decrypted = cipher.doFinal(cipherBytes);
 
-        String result = new String(decrypted, StandardCharsets.UTF_8).trim();
+        // Trim null bytes (zero-padding) from the end - required for NoPadding mode
+        int end = decrypted.length;
+        while (end > 0 && decrypted[end - 1] == 0) end--;
+
+        String result = new String(Arrays.copyOf(decrypted, end), StandardCharsets.UTF_8);
         log.debug("Decrypted data length: {}", result.length());
 
         return result;
