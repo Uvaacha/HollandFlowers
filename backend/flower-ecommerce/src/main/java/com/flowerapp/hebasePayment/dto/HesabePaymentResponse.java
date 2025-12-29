@@ -150,10 +150,17 @@ public class HesabePaymentResponse {
 
     /**
      * Check if payment was successful
+     * Hesabe returns "CAPTURED" for successful payments
+     * Also check for common success codes: "000", "00", "SUCCESS", "ACCEPT"
      */
     public boolean isSuccessful() {
-        return "CAPTURED".equalsIgnoreCase(resultCode) || 
-               "000".equals(resultCode) ||
-               "00".equals(resultCode);
+        if (resultCode == null) return false;
+        
+        String code = resultCode.toUpperCase().trim();
+        return "CAPTURED".equals(code) || 
+               "SUCCESS".equals(code) ||
+               "ACCEPT".equals(code) ||
+               "000".equals(code) ||
+               "00".equals(code);
     }
 }

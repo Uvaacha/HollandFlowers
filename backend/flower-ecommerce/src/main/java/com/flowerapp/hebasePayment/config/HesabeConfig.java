@@ -62,6 +62,11 @@ public class HesabeConfig {
     private String responseUrl;
 
     /**
+     * Webhook URL for server-to-server notifications
+     */
+    private String webhookUrl;
+
+    /**
      * Default payment method (if not specified)
      */
     private String defaultPaymentMethod = "KNET";

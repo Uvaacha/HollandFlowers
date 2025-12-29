@@ -1,5 +1,9 @@
-package com.flowerapp.hebasePayment.domain;
+package com.flowerapp.common.enums;
 
+/**
+ * Payment Status enum for common use across the application
+ * Note: The main PaymentStatus for Hesabe is in com.flowerapp.hebasePayment.domain
+ */
 public enum PaymentStatus {
     
     PENDING("Pending", "Payment initiated but not completed"),

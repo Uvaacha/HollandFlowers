@@ -71,9 +71,17 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
             throw new PaymentException("Order is already paid");
         }
 
-        // Calculate amount (convert KWD to fils - 1 KWD = 1000 fils)
+        // Calculate amount (Hesabe expects amount in KWD, e.g., 10.500)
+        // Minimum amount is 0.200 KWD, maximum is 100000 KWD
         Double amountKwd = order.getTotalAmount().doubleValue();
-        Long amountFils = Math.round(amountKwd * 1000);
+        
+        // Validate amount
+        if (amountKwd < 0.200) {
+            throw new PaymentException("Minimum payment amount is 0.200 KWD");
+        }
+        if (amountKwd > 100000) {
+            throw new PaymentException("Maximum payment amount is 100,000 KWD");
+        }
 
         // Generate unique payment reference
         String paymentReference = generatePaymentReference();
@@ -86,7 +94,7 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
                 .paymentMethod(request.getPaymentMethod())
                 .status(PaymentStatus.PENDING)
                 .amount(amountKwd)
-                .amountInFils(amountFils)
+                .amountInFils(Math.round(amountKwd * 1000)) // Store fils for reference
                 .currency("KWD")
                 .customerEmail(request.getCustomerEmail() != null ? request.getCustomerEmail() : user.getEmail())
                 .customerPhone(request.getCustomerPhone() != null ? request.getCustomerPhone() : user.getPhoneNumber())
@@ -99,22 +107,24 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
         }
 
         // Build Hesabe checkout request
+        // Note: amount should be in KWD (e.g., 10.500), not fils
         HesabeCheckoutRequest checkoutRequest = HesabeCheckoutRequest.builder()
                 .merchantCode(hesabeConfig.getMerchantCode())
-                .amount(amountFils)
+                .amount(amountKwd) // Amount in KWD (e.g., 10.500)
                 .paymentType(request.getPaymentMethod().getHesabeCode())
                 .orderReferenceNumber(paymentReference)
                 .responseUrl(hesabeConfig.getResponseUrl())
                 .failureUrl(hesabeConfig.getFailureUrl())
+                .webhookUrl(hesabeConfig.getWebhookUrl()) // Add webhook URL
                 .version("2.0")
                 .currency("KWD")
                 .customerName(user.getName())
                 .customerEmail(payment.getCustomerEmail())
                 .customerMobile(payment.getCustomerPhone())
                 .variable1(String.valueOf(order.getOrderId()))
-                .variable2(String.valueOf(order.getOrderId()))
+                .variable2(order.getOrderNumber())
                 .variable3(user.getUserId().toString())
-                .orderDescription("Order #" + order.getOrderId())
+                .orderDescription("Order #" + order.getOrderNumber())
                 .build();
 
         // Encrypt request
@@ -123,7 +133,7 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
         // Call Hesabe API
         HesabeCheckoutResponse hesabeResponse = callHesabeCheckoutApi(encryptedRequest);
 
-        if (!hesabeResponse.isStatus()) {
+        if (!hesabeResponse.isSuccessResponse()) {
             payment.setStatus(PaymentStatus.FAILED);
             payment.setErrorDetails(hesabeResponse.getMessage());
             paymentRepository.save(payment);
@@ -139,7 +149,10 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
         // Update payment with Hesabe response
         payment.setHesabePaymentId(hesabeResponse.getResponse().getPaymentId());
         payment.setHesabeCheckoutToken(hesabeResponse.getResponse().getData());
-        payment.setCheckoutUrl(hesabeResponse.getResponse().getCheckoutUrl());
+        
+        // Get checkout URL - construct if not provided
+        String checkoutUrl = hesabeResponse.getResponse().getFullCheckoutUrl(hesabeConfig.getBaseUrl());
+        payment.setCheckoutUrl(checkoutUrl);
         payment.setStatus(PaymentStatus.PROCESSING);
         paymentRepository.save(payment);
 
@@ -620,10 +633,57 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
         log.info("Calling Hesabe API: URL={}, MerchantCode={}", url, hesabeConfig.getMerchantCode());
 
         try {
-            ResponseEntity<HesabeCheckoutResponse> response = restTemplate.exchange(
-                    url, HttpMethod.POST, entity, HesabeCheckoutResponse.class);
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url, HttpMethod.POST, entity, String.class);
 
-            return response.getBody();
+            String responseBody = response.getBody();
+            log.debug("Hesabe API raw response: {}", responseBody);
+
+            if (responseBody == null || responseBody.isEmpty()) {
+                throw new PaymentException("Empty response from Hesabe API");
+            }
+
+            // The response body contains encrypted data that needs to be decrypted
+            // First, try to parse as JSON to check if it's a direct response or encrypted
+            try {
+                // Try parsing as direct JSON first (for error responses)
+                HesabeCheckoutResponse directResponse = objectMapper.readValue(responseBody, HesabeCheckoutResponse.class);
+                if (directResponse.getCode() != null) {
+                    return directResponse;
+                }
+            } catch (Exception e) {
+                // Not a direct JSON response, continue with decryption
+            }
+
+            // Try to extract encrypted data from the response
+            try {
+                // Parse the response to get the encrypted data field
+                Map<String, Object> responseMap = objectMapper.readValue(responseBody, Map.class);
+                
+                // Check if response contains encrypted data
+                if (responseMap.containsKey("response")) {
+                    Object responseData = responseMap.get("response");
+                    if (responseData instanceof Map) {
+                        Map<String, Object> responseDataMap = (Map<String, Object>) responseData;
+                        if (responseDataMap.containsKey("data")) {
+                            String encryptedResponse = (String) responseDataMap.get("data");
+                            // Decrypt the response data
+                            String decryptedData = decryptData(encryptedResponse);
+                            log.debug("Decrypted Hesabe response: {}", decryptedData);
+                            return objectMapper.readValue(decryptedData, HesabeCheckoutResponse.class);
+                        }
+                    }
+                }
+                
+                // If the response structure is different, parse directly
+                return objectMapper.readValue(responseBody, HesabeCheckoutResponse.class);
+                
+            } catch (Exception e) {
+                log.error("Error parsing Hesabe response: {}", e.getMessage());
+                // Return the direct parsed response
+                return objectMapper.readValue(responseBody, HesabeCheckoutResponse.class);
+            }
+
         } catch (Exception e) {
             log.error("Error calling Hesabe API: {}", e.getMessage());
             throw new PaymentException("Failed to connect to payment gateway: " + e.getMessage());

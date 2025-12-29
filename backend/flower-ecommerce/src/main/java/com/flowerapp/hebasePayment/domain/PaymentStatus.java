@@ -1,8 +1,8 @@
-package com.flowerapp.common.enums;
+package com.flowerapp.hebasePayment.domain;
 
 /**
- * Common Payment Status enum (for backward compatibility with existing code)
- * The main PaymentStatus for Hesabe is in com.flowerapp.hebasePayment.domain
+ * Payment Status enum for Hesabe Payment Gateway
+ * Used throughout the payment module for tracking payment state
  */
 public enum PaymentStatus {
 

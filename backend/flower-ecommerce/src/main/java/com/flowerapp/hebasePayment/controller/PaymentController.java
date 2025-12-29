@@ -110,16 +110,28 @@ public class PaymentController {
      */
     @PostMapping("/webhook")
     @Operation(summary = "Payment webhook", description = "Receives server-to-server notifications from Hesabe")
-    public ResponseEntity<String> handleWebhook(@RequestBody String payload) {
+    public ResponseEntity<String> handleWebhook(
+            @RequestBody Map<String, String> payload,
+            @RequestHeader(value = "accessCode", required = false) String accessCode) {
         log.info("Received payment webhook");
 
         try {
-            // Process webhook asynchronously
-            // The actual implementation would parse and verify the webhook
+            // Verify the access code if provided
+            // Note: Implement proper webhook signature verification for production
+
+            // The payload contains encrypted data in the "data" field
+            String encryptedData = payload.get("data");
+            if (encryptedData != null && !encryptedData.isEmpty()) {
+                Payment payment = paymentService.processPaymentCallback(encryptedData);
+                log.info("Webhook processed successfully for payment: {}", payment.getPaymentReference());
+            }
+
             return ResponseEntity.ok("OK");
         } catch (Exception e) {
-            log.error("Webhook processing failed: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
+            log.error("Webhook processing failed: {}", e.getMessage(), e);
+            // Return 200 OK even on error to prevent Hesabe from retrying
+            // Log the error for investigation
+            return ResponseEntity.ok("OK");
         }
     }
 

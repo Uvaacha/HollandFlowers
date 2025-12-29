@@ -19,11 +19,12 @@ public class HesabeCheckoutRequest {
     private String merchantCode;
 
     /**
-     * Amount in the smallest currency unit (fils for KWD)
-     * 1 KWD = 1000 fils
+     * Amount in KWD (e.g., 10.500)
+     * Minimum: 0.200 KWD, Maximum: 100000 KWD
+     * Format: numeric with up to 3 decimal places
      */
     @JsonProperty("amount")
-    private Long amount;
+    private Double amount;
 
     /**
      * Payment method code
@@ -110,8 +111,14 @@ public class HesabeCheckoutRequest {
     /**
      * Customer mobile (optional)
      */
-    @JsonProperty("mobile")
+    @JsonProperty("mobile_number")
     private String customerMobile;
+
+    /**
+     * Webhook URL for server-to-server notifications
+     */
+    @JsonProperty("webhookUrl")
+    private String webhookUrl;
 
     /**
      * Order description (optional)
