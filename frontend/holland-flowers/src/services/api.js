@@ -12,7 +12,7 @@ import axios from 'axios';
 // ============================================
 // In production, this will use the REACT_APP_API_URL from .env.production
 // In development, it falls back to localhost
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api/v1';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://www.flowerskw.com/api/v1';
 
 // Log the API URL in development for debugging
 if (process.env.NODE_ENV === 'development') {
