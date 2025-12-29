@@ -403,7 +403,8 @@ const Checkout = () => {
           deliveryCity: governorateName,
           instructionMessage: deliveryInstructions || '',
           deliveryNotes: delivery.apartment || '',
-          cardMessage: cartItems[0]?.cardMessage || ''
+          cardMessage: cartItems[0]?.cardMessage || '',
+          deliveryFee: shippingCost  // ADDED: Include delivery fee in order
         };
         
         console.log('========== ORDER PAYLOAD BEING SENT ==========');
@@ -441,7 +442,8 @@ const Checkout = () => {
         // ============ INITIATE PAYMENT WITH HESABE ============
         const paymentPayload = {
           orderId: orderId,
-          paymentMethod: 'KNET', // Can be: KNET, VISA, MASTERCARD, AMERICAN_EXPRESS, APPLE_PAY, GOOGLE_PAY, CASH_ON_DELIVERY
+          showAllPaymentMethods: true, // Show all payment options (KNET, Visa, Mastercard, Apple Pay, etc.)
+          // paymentMethod is not set - this will default to showing all methods on Hesabe page
           customerEmail: contact.emailOrPhone.includes('@') ? contact.emailOrPhone : null,
           customerPhone: delivery.phone,
           customerName: `${delivery.firstName || ''} ${delivery.lastName}`.trim(),
