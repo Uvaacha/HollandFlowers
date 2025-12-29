@@ -47,7 +47,11 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/swagger-ui.html",
             "/api-docs/**",
-            "/v3/api-docs/**"
+            "/v3/api-docs/**",
+            "/payments/callback",      // Hesabe callback - no auth
+            "/payments/webhook",       // Hesabe webhook - no auth
+            "/payments/verify",        // Payment verification - no auth
+            "/payments/methods"        // Payment methods - public
     };
 
     // User endpoints (Role = 1, 2, 3) - Requires authentication

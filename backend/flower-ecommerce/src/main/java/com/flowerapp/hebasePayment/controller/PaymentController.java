@@ -76,6 +76,11 @@ public class PaymentController {
      * Handle Hesabe callback (redirect from payment page)
      * This endpoint receives the browser redirect from Hesabe after payment
      * It processes the payment and redirects to the appropriate frontend page
+     *
+     * Hesabe sends encrypted data in the 'data' parameter which needs to be:
+     * 1. URL-decoded (if URL-encoded)
+     * 2. Decrypted using AES-256-CBC with secret key and IV
+     * 3. Parsed as JSON to extract payment result
      */
     @GetMapping("/callback")
     @Operation(summary = "Payment callback", description = "Handles callback from Hesabe after payment completion - redirects to frontend")
@@ -86,8 +91,16 @@ public class PaymentController {
         final String FRONTEND_URL = "https://www.flowerskw.com";
         String redirectUrl;
 
+        log.info("========== HESABE CALLBACK RECEIVED ==========");
+        log.info("Encrypted data length: {}", encryptedData != null ? encryptedData.length() : 0);
+        log.info("Encrypted data (first 100 chars): {}",
+                encryptedData != null ? encryptedData.substring(0, Math.min(100, encryptedData.length())) : "null");
+
         try {
             Payment payment = paymentService.processPaymentCallback(encryptedData);
+
+            log.info("Payment processed - Status: {}, Reference: {}",
+                    payment.getStatus(), payment.getPaymentReference());
 
             if (payment.getStatus().isSuccessful()) {
                 // Redirect to frontend success page with payment data
@@ -106,7 +119,10 @@ public class PaymentController {
                 log.warn("Payment failed, redirecting to failure page. Order: {}", payment.getOrder().getOrderId());
             }
         } catch (Exception e) {
-            log.error("Payment callback processing failed: {}", e.getMessage(), e);
+            log.error("========== CALLBACK PROCESSING ERROR ==========");
+            log.error("Error type: {}", e.getClass().getSimpleName());
+            log.error("Error message: {}", e.getMessage());
+            log.error("Stack trace:", e);
             try {
                 redirectUrl = FRONTEND_URL + "/payment/failure?status=error&message=" +
                         java.net.URLEncoder.encode(e.getMessage() != null ? e.getMessage() : "Payment verification failed", "UTF-8");
@@ -116,6 +132,7 @@ public class PaymentController {
         }
 
         log.info("Redirecting to: {}", redirectUrl);
+        log.info("========== CALLBACK PROCESSING COMPLETE ==========");
         return ResponseEntity.status(HttpStatus.FOUND)
                 .header("Location", redirectUrl)
                 .build();

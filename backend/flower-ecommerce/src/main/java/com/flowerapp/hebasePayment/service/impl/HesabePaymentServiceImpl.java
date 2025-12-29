@@ -53,8 +53,7 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
     private final RestTemplate restTemplate;
     private final EmailService emailService;
 
-    private static final String AES_ENCRYPT_ALGORITHM = "AES/CBC/PKCS5Padding";
-    private static final String AES_DECRYPT_ALGORITHM = "AES/CBC/NoPadding";
+    private static final String AES_ALGORITHM = "AES/CBC/PKCS5Padding";
     private static final java.util.HexFormat HEX = java.util.HexFormat.of();
 
     @Transactional
@@ -225,15 +224,31 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
     @Transactional
     public Payment processPaymentCallback(String encryptedData) throws Exception {
         log.info("Processing payment callback");
+        log.info("Raw callback data (first 100 chars): {}",
+                encryptedData != null ? encryptedData.substring(0, Math.min(100, encryptedData.length())) : "null");
 
-        // The callback data may be URL-encoded, extract HEX first
-        String hexData = extractHexFromResponse(encryptedData);
+        // Step 1: URL-decode if necessary (callback data may be URL-encoded)
+        String decodedData = encryptedData;
+        try {
+            // Check if data is URL-encoded (contains %XX patterns)
+            if (encryptedData.contains("%")) {
+                decodedData = java.net.URLDecoder.decode(encryptedData, StandardCharsets.UTF_8);
+                log.info("URL-decoded callback data");
+            }
+        } catch (Exception e) {
+            log.warn("URL decoding failed, using raw data: {}", e.getMessage());
+        }
 
-        // Decrypt response (HEX encoded)
+        // Step 2: Extract HEX data from response
+        String hexData = extractHexFromResponse(decodedData);
+        log.info("Extracted HEX data (first 100 chars): {}",
+                hexData.substring(0, Math.min(100, hexData.length())));
+
+        // Step 3: Decrypt response (HEX encoded AES-256-CBC)
         String decryptedData = decryptData(hexData);
         log.info("Decrypted callback data: {}", decryptedData);
 
-        // Parse the response - it can be either wrapped or direct format
+        // Step 4: Parse the response - it can be either wrapped or direct format
         HesabeCallbackResponse.PaymentData paymentData = parsePaymentCallback(decryptedData);
 
         if (paymentData == null) {
@@ -796,44 +811,60 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
     }
 
     /**
-     * Encrypt data using AES/CBC/PKCS5Padding and return as HEX string
-     * Per Hesabe documentation - must use HEX encoding
+     * Encrypt data using AES-256-CBC with PKCS5Padding and return as HEX string
+     * Per Hesabe documentation:
+     * - Algorithm: AES-256-CBC
+     * - Key: 32 bytes (256 bits)
+     * - IV: 16 bytes
+     * - Output: HEX encoded
      */
     private String encryptData(String data) throws Exception {
+        log.debug("Encrypting data, length: {}", data.length());
+
         SecretKeySpec secretKey = new SecretKeySpec(
                 hesabeConfig.getSecretKey().getBytes(StandardCharsets.UTF_8), "AES");
         IvParameterSpec ivSpec = new IvParameterSpec(
                 hesabeConfig.getIvKey().getBytes(StandardCharsets.UTF_8));
 
-        Cipher cipher = Cipher.getInstance(AES_ENCRYPT_ALGORITHM);
+        Cipher cipher = Cipher.getInstance(AES_ALGORITHM);
         cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
 
         byte[] encrypted = cipher.doFinal(data.getBytes(StandardCharsets.UTF_8));
-        // Return as HEX string (not Base64) per Hesabe requirements
-        return HEX.formatHex(encrypted);
+
+        // Return as HEX string (uppercase) per Hesabe requirements
+        String hexResult = HEX.formatHex(encrypted).toUpperCase();
+        log.debug("Encrypted data HEX length: {}", hexResult.length());
+
+        return hexResult;
     }
 
     /**
-     * Decrypt HEX-encoded data using AES/CBC/NoPadding
-     * Per Hesabe documentation - response is HEX encoded
+     * Decrypt HEX-encoded data using AES-256-CBC with PKCS5Padding
+     * Per Hesabe documentation:
+     * - Algorithm: AES-256-CBC
+     * - Key: 32 bytes (256 bits)
+     * - IV: 16 bytes
+     * - Input: HEX encoded
      */
     private String decryptData(String hexCipherText) throws Exception {
+        log.debug("Decrypting HEX data, length: {}", hexCipherText.length());
+
         SecretKeySpec secretKey = new SecretKeySpec(
                 hesabeConfig.getSecretKey().getBytes(StandardCharsets.UTF_8), "AES");
         IvParameterSpec ivSpec = new IvParameterSpec(
                 hesabeConfig.getIvKey().getBytes(StandardCharsets.UTF_8));
 
-        Cipher cipher = Cipher.getInstance(AES_DECRYPT_ALGORITHM);
+        Cipher cipher = Cipher.getInstance(AES_ALGORITHM);
         cipher.init(Cipher.DECRYPT_MODE, secretKey, ivSpec);
 
-        // Parse HEX string to bytes (not Base64)
-        byte[] decrypted = cipher.doFinal(HEX.parseHex(hexCipherText));
+        // Parse HEX string to bytes (case insensitive)
+        byte[] cipherBytes = HEX.parseHex(hexCipherText.toLowerCase());
+        byte[] decrypted = cipher.doFinal(cipherBytes);
 
-        // Trim null bytes (zero-padding) from the end
-        int end = decrypted.length;
-        while (end > 0 && decrypted[end - 1] == 0) end--;
+        String result = new String(decrypted, StandardCharsets.UTF_8).trim();
+        log.debug("Decrypted data length: {}", result.length());
 
-        return new String(Arrays.copyOf(decrypted, end), StandardCharsets.UTF_8);
+        return result;
     }
 
     private String generatePaymentReference() {
