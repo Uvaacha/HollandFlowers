@@ -82,6 +82,8 @@ public class PaymentController {
     public ResponseEntity<Void> handleCallback(
             @RequestParam("data") String encryptedData) {
 
+        // Frontend base URL - must be absolute for proper redirect
+        final String FRONTEND_URL = "https://www.flowerskw.com";
         String redirectUrl;
 
         try {
@@ -89,28 +91,31 @@ public class PaymentController {
 
             if (payment.getStatus().isSuccessful()) {
                 // Redirect to frontend success page with payment data
-                redirectUrl = String.format("/payment/success?orderId=%d&ref=%s&status=success",
+                redirectUrl = String.format("%s/payment/success?orderId=%d&ref=%s&status=success",
+                        FRONTEND_URL,
                         payment.getOrder().getOrderId(),
                         payment.getPaymentReference());
                 log.info("Payment successful, redirecting to success page. Order: {}", payment.getOrder().getOrderId());
             } else {
                 // Redirect to frontend failure page with error info
-                redirectUrl = String.format("/payment/failure?orderId=%d&ref=%s&status=failed&message=%s",
+                redirectUrl = String.format("%s/payment/failure?orderId=%d&ref=%s&status=failed&message=%s",
+                        FRONTEND_URL,
                         payment.getOrder().getOrderId(),
                         payment.getPaymentReference(),
                         java.net.URLEncoder.encode(payment.getResponseMessage() != null ? payment.getResponseMessage() : "Payment failed", "UTF-8"));
                 log.warn("Payment failed, redirecting to failure page. Order: {}", payment.getOrder().getOrderId());
             }
         } catch (Exception e) {
-            log.error("Payment callback processing failed: {}", e.getMessage());
+            log.error("Payment callback processing failed: {}", e.getMessage(), e);
             try {
-                redirectUrl = "/payment/failure?status=error&message=" +
+                redirectUrl = FRONTEND_URL + "/payment/failure?status=error&message=" +
                         java.net.URLEncoder.encode(e.getMessage() != null ? e.getMessage() : "Payment verification failed", "UTF-8");
             } catch (Exception ex) {
-                redirectUrl = "/payment/failure?status=error&message=Payment%20verification%20failed";
+                redirectUrl = FRONTEND_URL + "/payment/failure?status=error&message=Payment%20verification%20failed";
             }
         }
 
+        log.info("Redirecting to: {}", redirectUrl);
         return ResponseEntity.status(HttpStatus.FOUND)
                 .header("Location", redirectUrl)
                 .build();
