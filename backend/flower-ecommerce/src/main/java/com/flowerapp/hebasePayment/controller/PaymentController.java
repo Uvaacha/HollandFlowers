@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/payments")
+@RequestMapping("/payments")  // FIXED: Removed /api prefix - context-path already adds /api/v1
 @RequiredArgsConstructor
 @Slf4j
 @Tag(name = "Payment", description = "Hesabe Payment Gateway APIs")

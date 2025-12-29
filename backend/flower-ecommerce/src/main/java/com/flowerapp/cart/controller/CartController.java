@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/cart")
+@RequestMapping("/cart")  // FIXED: Removed /api prefix - context-path already adds /api/v1
 @RequiredArgsConstructor
 @Slf4j
 //@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5173"})
