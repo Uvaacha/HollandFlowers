@@ -114,11 +114,11 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
         // Determine payment type:
         // - paymentType=0 shows ALL payment options on Hesabe payment page (KNET, Visa, Mastercard, Apple Pay, etc.)
         // - Use specific hesabe code only if showAllPaymentMethods is false AND a specific method is selected
-        String paymentType = "0"; // Default: show all payment methods on Hesabe page
+        Integer paymentType = 0; // Default: show all payment methods on Hesabe page
 
         if (!request.isShowAllPaymentMethods() && request.getPaymentMethod() != null
                 && request.getPaymentMethod() != PaymentMethod.CASH_ON_DELIVERY) {
-            paymentType = request.getPaymentMethod().getHesabeCode();
+            paymentType = Integer.parseInt(request.getPaymentMethod().getHesabeCode());
         }
 
         log.info("Using paymentType={} (0=all methods, other=specific method)", paymentType);

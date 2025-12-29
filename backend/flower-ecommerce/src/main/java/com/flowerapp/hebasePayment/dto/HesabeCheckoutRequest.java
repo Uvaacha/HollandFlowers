@@ -28,13 +28,17 @@ public class HesabeCheckoutRequest {
 
     /**
      * Payment method code
+     * 0 = Show all payment methods
      * 1 = KNET
-     * 2 = VISA/Mastercard/AMEX
-     * 7 = Apple Pay
-     * 8 = Google Pay
+     * 2 = VISA/Mastercard (MPGS)
+     * 5 = CYBS
+     * 7 = AMEX
+     * 8 = MPGS AMEX
+     * 9 = MPGS Apple Pay
+     * 16 = Google Pay
      */
     @JsonProperty("paymentType")
-    private String paymentType;
+    private Integer paymentType;
 
     /**
      * Unique order reference number
