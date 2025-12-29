@@ -1,20 +1,20 @@
 package com.flowerapp.hebasePayment.domain;
 
 public enum PaymentMethod {
-    
+
     // Kuwait National Payment System
     KNET("KNET", "1", "Kuwait National Payment"),
-    
+
     // Card Payments
     VISA("VISA", "2", "Visa Card"),
     MASTERCARD("MASTERCARD", "2", "Mastercard"),
     AMERICAN_EXPRESS("AMEX", "2", "American Express"),
-    
+
     // Digital Wallets
     APPLE_PAY("APPLE_PAY", "7", "Apple Pay"),
     GOOGLE_PAY("GOOGLE_PAY", "8", "Google Pay"),
     SAMSUNG_PAY("SAMSUNG_PAY", "9", "Samsung Pay"),
-    
+
     // Other Methods
     CASH_ON_DELIVERY("COD", "0", "Cash on Delivery"),
     WALLET("WALLET", "10", "Hesabe Wallet");
@@ -56,7 +56,7 @@ public enum PaymentMethod {
                 return method;
             }
         }
-        return KNET; // Default to KNET
+        throw new IllegalArgumentException("Unknown Hesabe payment code: " + hesabeCode);
     }
 
     public boolean isCardPayment() {

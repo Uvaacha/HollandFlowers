@@ -15,9 +15,14 @@ public class HesabeConfig {
     private String merchantCode;
 
     /**
-     * Hesabe API Key
+     * Hesabe API Key (deprecated - use accessCode)
      */
     private String apiKey;
+
+    /**
+     * Hesabe Access Code for API authentication
+     */
+    private String accessCode;
 
     /**
      * Hesabe Secret Key for encryption
@@ -67,9 +72,9 @@ public class HesabeConfig {
     private String webhookUrl;
 
     /**
-     * Default payment method (if not specified)
+     * Default payment method (optional - if not specified, all methods shown)
      */
-    private String defaultPaymentMethod = "KNET";
+    private String defaultPaymentMethod;
 
     /**
      * Is sandbox mode enabled

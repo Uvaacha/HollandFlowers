@@ -94,6 +94,12 @@ public class OrderService {
             orderItems.add(orderItem);
         }
 
+        // Get delivery fee from request (default to 0 if not provided)
+        BigDecimal deliveryFee = request.getDeliveryFee() != null ? request.getDeliveryFee() : BigDecimal.ZERO;
+
+        // Calculate total amount = subtotal + deliveryFee
+        BigDecimal totalAmount = subtotal.add(deliveryFee);
+
         // Create order
         Order order = Order.builder()
                 .user(user)
@@ -111,7 +117,8 @@ public class OrderService {
                 .recipientPhone(request.getRecipientPhone())
                 .preferredDeliveryDate(request.getPreferredDeliveryDate())
                 .subtotal(subtotal)
-                .totalAmount(subtotal)
+                .deliveryFee(deliveryFee)
+                .totalAmount(totalAmount)
                 .couponCode(request.getCouponCode())
                 .build();
 

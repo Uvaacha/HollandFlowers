@@ -20,9 +20,20 @@ public class InitiatePaymentRequest {
     private Long paymentOrderId;
 
     /**
-     * Selected payment method
+     * Selected payment method (OPTIONAL)
+     * If null or not provided, Hesabe payment page will show ALL available payment options
+     * (KNET, Visa, Mastercard, Apple Pay, etc.)
+     *
+     * Set to a specific PaymentMethod to go directly to that payment type.
+     * Set to CASH_ON_DELIVERY for COD orders.
      */
     private PaymentMethod paymentMethod;
+
+    /**
+     * If true, show all payment methods on Hesabe page regardless of paymentMethod value
+     * Default: true (show all methods)
+     */
+    private boolean showAllPaymentMethods = true;
 
     /**
      * Customer email (optional, for receipt)

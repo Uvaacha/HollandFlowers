@@ -5,6 +5,7 @@ import com.flowerapp.common.enums.DeliveryStatus;
 import com.flowerapp.hebasePayment.config.HesabeConfig;
 import com.flowerapp.hebasePayment.domain.PaymentMethod;
 import com.flowerapp.hebasePayment.domain.PaymentStatus;
+import com.flowerapp.hebasePayment.dto.HesabeCallbackResponse;
 import com.flowerapp.hebasePayment.dto.HesabeCheckoutRequest;
 import com.flowerapp.hebasePayment.dto.HesabeCheckoutResponse;
 import com.flowerapp.hebasePayment.dto.HesabePaymentResponse;
@@ -36,6 +37,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -50,7 +53,9 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
     private final RestTemplate restTemplate;
     private final EmailService emailService;
 
-    private static final String AES_ALGORITHM = "AES/CBC/PKCS5Padding";
+    private static final String AES_ENCRYPT_ALGORITHM = "AES/CBC/PKCS5Padding";
+    private static final String AES_DECRYPT_ALGORITHM = "AES/CBC/NoPadding";
+    private static final java.util.HexFormat HEX = java.util.HexFormat.of();
 
     @Transactional
     @Override
@@ -74,7 +79,7 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
         // Calculate amount (Hesabe expects amount in KWD, e.g., 10.500)
         // Minimum amount is 0.200 KWD, maximum is 100000 KWD
         Double amountKwd = order.getTotalAmount().doubleValue();
-        
+
         // Validate amount
         if (amountKwd < 0.200) {
             throw new PaymentException("Minimum payment amount is 0.200 KWD");
@@ -106,12 +111,25 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
             return handleCashOnDelivery(payment, order);
         }
 
+        // Determine payment type:
+        // - paymentType=0 shows ALL payment options on Hesabe payment page (KNET, Visa, Mastercard, Apple Pay, etc.)
+        // - Use specific hesabe code only if showAllPaymentMethods is false AND a specific method is selected
+        String paymentType = "0"; // Default: show all payment methods on Hesabe page
+
+        if (!request.isShowAllPaymentMethods() && request.getPaymentMethod() != null
+                && request.getPaymentMethod() != PaymentMethod.CASH_ON_DELIVERY) {
+            paymentType = request.getPaymentMethod().getHesabeCode();
+        }
+
+        log.info("Using paymentType={} (0=all methods, other=specific method)", paymentType);
+
         // Build Hesabe checkout request
         // Note: amount should be in KWD (e.g., 10.500), not fils
+        // paymentType=0 shows all payment options on Hesabe payment page
         HesabeCheckoutRequest checkoutRequest = HesabeCheckoutRequest.builder()
                 .merchantCode(hesabeConfig.getMerchantCode())
                 .amount(amountKwd) // Amount in KWD (e.g., 10.500)
-                .paymentType(request.getPaymentMethod().getHesabeCode())
+                .paymentType(paymentType) // 0 = show all methods, or specific code
                 .orderReferenceNumber(paymentReference)
                 .responseUrl(hesabeConfig.getResponseUrl())
                 .failureUrl(hesabeConfig.getFailureUrl())
@@ -149,7 +167,7 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
         // Update payment with Hesabe response
         payment.setHesabePaymentId(hesabeResponse.getResponse().getPaymentId());
         payment.setHesabeCheckoutToken(hesabeResponse.getResponse().getData());
-        
+
         // Get checkout URL - construct if not provided
         String checkoutUrl = hesabeResponse.getResponse().getFullCheckoutUrl(hesabeConfig.getBaseUrl());
         payment.setCheckoutUrl(checkoutUrl);
@@ -208,44 +226,59 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
     public Payment processPaymentCallback(String encryptedData) throws Exception {
         log.info("Processing payment callback");
 
-        // Decrypt response
-        String decryptedData = decryptData(encryptedData);
-        HesabePaymentResponse response = objectMapper.readValue(decryptedData, HesabePaymentResponse.class);
+        // The callback data may be URL-encoded, extract HEX first
+        String hexData = extractHexFromResponse(encryptedData);
+
+        // Decrypt response (HEX encoded)
+        String decryptedData = decryptData(hexData);
+        log.info("Decrypted callback data: {}", decryptedData);
+
+        // Parse the response - it can be either wrapped or direct format
+        HesabeCallbackResponse.PaymentData paymentData = parsePaymentCallback(decryptedData);
+
+        if (paymentData == null) {
+            throw new PaymentException("Failed to parse payment callback data");
+        }
 
         log.info("Payment callback - Reference: {}, Result: {}",
-                response.getOrderReferenceNumber(), response.getResultCode());
+                paymentData.getOrderReferenceNumber(), paymentData.getResultCode());
 
         // Find payment by reference
-        Payment payment = paymentRepository.findByPaymentReference(response.getOrderReferenceNumber())
-                .orElseThrow(() -> new PaymentException("Payment not found for reference: " + response.getOrderReferenceNumber()));
+        Payment payment = paymentRepository.findByPaymentReference(paymentData.getOrderReferenceNumber())
+                .orElseThrow(() -> new PaymentException("Payment not found for reference: " + paymentData.getOrderReferenceNumber()));
 
         // Update payment with response data
-        payment.setTransactionId(response.getTransactionId());
-        payment.setAuthorizationCode(response.getAuthorizationCode());
-        payment.setResultCode(response.getResultCode());
-        payment.setResponseCode(response.getResultCode());
-        payment.setResponseMessage(response.getResponseMessage());
+        payment.setTransactionId(paymentData.getTransactionId());
+        payment.setAuthorizationCode(paymentData.getAuthorizationCode());
+        payment.setResultCode(paymentData.getResultCode());
+        payment.setResponseCode(paymentData.getResultCode());
+        payment.setResponseMessage(paymentData.getResponseMessage());
         payment.setWebhookReceived(true);
         payment.setWebhookReceivedAt(LocalDateTime.now());
 
+        // Set Hesabe payment ID
+        if (paymentData.getPaymentId() != null) {
+            payment.setHesabePaymentId(paymentData.getPaymentId());
+        }
+
         // KNET specific fields
-        if (response.getKnetPaymentId() != null) {
-            payment.setKnetPaymentId(response.getKnetPaymentId());
-            payment.setKnetTransactionId(response.getKnetTransactionId());
-            payment.setKnetReferenceId(response.getKnetReferenceId());
-            payment.setKnetResultCode(response.getKnetResultCode());
+        if (paymentData.getKnetPaymentId() != null) {
+            payment.setKnetPaymentId(paymentData.getKnetPaymentId());
+            payment.setKnetTransactionId(paymentData.getKnetTransactionId());
+            payment.setKnetReferenceId(paymentData.getKnetReferenceId());
+            payment.setKnetResultCode(paymentData.getKnetResultCode());
         }
 
         // Card specific fields
-        if (response.getMaskedCardNumber() != null) {
-            payment.setMaskedCardNumber(response.getMaskedCardNumber());
-            payment.setCardBrand(response.getCardBrand());
-            payment.setCardExpiryMonth(response.getCardExpiryMonth());
-            payment.setCardExpiryYear(response.getCardExpiryYear());
+        if (paymentData.getMaskedCardNumber() != null) {
+            payment.setMaskedCardNumber(paymentData.getMaskedCardNumber());
+            payment.setCardBrand(paymentData.getCardBrand());
+            payment.setCardExpiryMonth(paymentData.getCardExpiryMonth());
+            payment.setCardExpiryYear(paymentData.getCardExpiryYear());
         }
 
         // Update status based on result
-        if (response.isSuccessful()) {
+        if (paymentData.isSuccessful()) {
             payment.setStatus(PaymentStatus.COMPLETED);
             payment.setCompletedAt(LocalDateTime.now());
 
@@ -322,7 +355,7 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
 
         } else {
             payment.setStatus(PaymentStatus.FAILED);
-            payment.setErrorDetails(response.getResponseMessage());
+            payment.setErrorDetails(paymentData.getResponseMessage());
 
             // Update order status
             Order order = payment.getOrder();
@@ -330,10 +363,64 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
             orderRepository.save(order);
 
             log.warn("Payment failed for reference: {}. Reason: {}",
-                    payment.getPaymentReference(), response.getResponseMessage());
+                    payment.getPaymentReference(), paymentData.getResponseMessage());
         }
 
         return paymentRepository.save(payment);
+    }
+
+    /**
+     * Parse the payment callback data
+     * Handles both wrapped format (status/code/message/response.data) and direct format
+     */
+    private HesabeCallbackResponse.PaymentData parsePaymentCallback(String decryptedData) {
+        try {
+            // First try to parse as wrapped response (standard Hesabe format)
+            // {status: true, code: 1, message: "...", response: {data: {...}}}
+            if (decryptedData.contains("\"response\"") && decryptedData.contains("\"data\"")) {
+                HesabeCallbackResponse wrappedResponse = objectMapper.readValue(decryptedData, HesabeCallbackResponse.class);
+                if (wrappedResponse.getPaymentData() != null) {
+                    log.info("Parsed wrapped callback response. Status: {}, Code: {}",
+                            wrappedResponse.isStatus(), wrappedResponse.getCode());
+                    return wrappedResponse.getPaymentData();
+                }
+            }
+
+            // Fallback: try to parse as direct PaymentData
+            log.info("Attempting to parse as direct payment data format");
+            return objectMapper.readValue(decryptedData, HesabeCallbackResponse.PaymentData.class);
+
+        } catch (Exception e) {
+            log.error("Failed to parse payment callback: {}", e.getMessage());
+
+            // Last resort: try parsing as HesabePaymentResponse (old format)
+            try {
+                HesabePaymentResponse oldFormat = objectMapper.readValue(decryptedData, HesabePaymentResponse.class);
+                // Convert to PaymentData
+                HesabeCallbackResponse.PaymentData data = new HesabeCallbackResponse.PaymentData();
+                data.setResultCode(oldFormat.getResultCode());
+                data.setOrderReferenceNumber(oldFormat.getOrderReferenceNumber());
+                data.setPaymentId(oldFormat.getPaymentId());
+                data.setTransactionId(oldFormat.getTransactionId());
+                data.setAuthorizationCode(oldFormat.getAuthorizationCode());
+                data.setResponseMessage(oldFormat.getResponseMessage());
+                data.setVariable1(oldFormat.getVariable1());
+                data.setVariable2(oldFormat.getVariable2());
+                data.setVariable3(oldFormat.getVariable3());
+                data.setKnetPaymentId(oldFormat.getKnetPaymentId());
+                data.setKnetTransactionId(oldFormat.getKnetTransactionId());
+                data.setKnetReferenceId(oldFormat.getKnetReferenceId());
+                data.setKnetResultCode(oldFormat.getKnetResultCode());
+                data.setMaskedCardNumber(oldFormat.getMaskedCardNumber());
+                data.setCardBrand(oldFormat.getCardBrand());
+                data.setCardExpiryMonth(oldFormat.getCardExpiryMonth());
+                data.setCardExpiryYear(oldFormat.getCardExpiryYear());
+                return data;
+            } catch (Exception ex) {
+                log.error("Failed to parse as old format: {}", ex.getMessage());
+                return null;
+            }
+        }
     }
 
     @Override
@@ -621,16 +708,18 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
         String url = hesabeConfig.getBaseUrl() + hesabeConfig.getCheckoutEndpoint();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("accessCode", hesabeConfig.getApiKey());
+        // Use form-urlencoded content type per Hesabe documentation
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.set("accessCode", hesabeConfig.getAccessCode());
         headers.set("Accept", "application/json");
 
-        Map<String, String> requestBody = new HashMap<>();
-        requestBody.put("data", encryptedData);
+        // Send as form-urlencoded: data=<encrypted_hex>
+        String formBody = "data=" + java.net.URLEncoder.encode(encryptedData, StandardCharsets.UTF_8);
 
-        HttpEntity<Map<String, String>> entity = new HttpEntity<>(requestBody, headers);
+        HttpEntity<String> entity = new HttpEntity<>(formBody, headers);
 
         log.info("Calling Hesabe API: URL={}, MerchantCode={}", url, hesabeConfig.getMerchantCode());
+        log.debug("Encrypted request data: {}...", encryptedData.substring(0, Math.min(50, encryptedData.length())));
 
         try {
             ResponseEntity<String> response = restTemplate.exchange(
@@ -643,77 +732,108 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
                 throw new PaymentException("Empty response from Hesabe API");
             }
 
-            // The response body contains encrypted data that needs to be decrypted
-            // First, try to parse as JSON to check if it's a direct response or encrypted
-            try {
-                // Try parsing as direct JSON first (for error responses)
-                HesabeCheckoutResponse directResponse = objectMapper.readValue(responseBody, HesabeCheckoutResponse.class);
-                if (directResponse.getCode() != null) {
-                    return directResponse;
+            // Extract HEX-encoded encrypted data from response
+            String encryptedResponseHex = extractHexFromResponse(responseBody);
+
+            // Decrypt the response
+            String decryptedResponse = decryptData(encryptedResponseHex);
+            log.info("Decrypted Hesabe response: {}", decryptedResponse);
+
+            // Check if response indicates success
+            if (!decryptedResponse.contains("\"status\":true")) {
+                log.error("Hesabe checkout failed. Response: {}", decryptedResponse);
+                // Try to parse error response
+                try {
+                    return objectMapper.readValue(decryptedResponse, HesabeCheckoutResponse.class);
+                } catch (Exception e) {
+                    throw new PaymentException("Hesabe checkout failed: " + decryptedResponse);
                 }
-            } catch (Exception e) {
-                // Not a direct JSON response, continue with decryption
             }
 
-            // Try to extract encrypted data from the response
-            try {
-                // Parse the response to get the encrypted data field
-                Map<String, Object> responseMap = objectMapper.readValue(responseBody, Map.class);
-                
-                // Check if response contains encrypted data
-                if (responseMap.containsKey("response")) {
-                    Object responseData = responseMap.get("response");
-                    if (responseData instanceof Map) {
-                        Map<String, Object> responseDataMap = (Map<String, Object>) responseData;
-                        if (responseDataMap.containsKey("data")) {
-                            String encryptedResponse = (String) responseDataMap.get("data");
-                            // Decrypt the response data
-                            String decryptedData = decryptData(encryptedResponse);
-                            log.debug("Decrypted Hesabe response: {}", decryptedData);
-                            return objectMapper.readValue(decryptedData, HesabeCheckoutResponse.class);
-                        }
-                    }
-                }
-                
-                // If the response structure is different, parse directly
-                return objectMapper.readValue(responseBody, HesabeCheckoutResponse.class);
-                
-            } catch (Exception e) {
-                log.error("Error parsing Hesabe response: {}", e.getMessage());
-                // Return the direct parsed response
-                return objectMapper.readValue(responseBody, HesabeCheckoutResponse.class);
+            // Parse the decrypted response
+            HesabeCheckoutResponse hesabeResponse = objectMapper.readValue(decryptedResponse, HesabeCheckoutResponse.class);
+
+            // Extract response.data for payment URL (per Hesabe documentation)
+            // $responseToken = $responseDataJson->response->data;
+            // return Redirect::to($paymentUrl . '?data='. $responseToken);
+            if (hesabeResponse.getResponse() != null && hesabeResponse.getResponse().getData() != null) {
+                String paymentToken = hesabeResponse.getResponse().getData();
+                log.info("Payment token (response.data): {}...", paymentToken.substring(0, Math.min(50, paymentToken.length())));
             }
 
+            return hesabeResponse;
+
+        } catch (PaymentException e) {
+            throw e;
         } catch (Exception e) {
-            log.error("Error calling Hesabe API: {}", e.getMessage());
+            log.error("Error calling Hesabe API: {}", e.getMessage(), e);
             throw new PaymentException("Failed to connect to payment gateway: " + e.getMessage());
         }
     }
 
+    /**
+     * Extract HEX-encoded data from Hesabe response
+     * Response may be raw HEX or JSON with "data" field containing HEX
+     */
+    private String extractHexFromResponse(String body) {
+        log.debug("Extracting HEX from response: {}", body);
+        String trimmed = body.trim();
+
+        // Check if the response is raw HEX (only hex characters)
+        if (trimmed.matches("^[0-9a-fA-F]+$")) {
+            return trimmed;
+        }
+
+        // Try to extract from JSON: {"data": "<hex>"}
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile("\"data\"\\s*:\\s*\"([0-9a-fA-F]+)\"");
+        java.util.regex.Matcher m = p.matcher(body);
+        if (m.find()) {
+            return m.group(1);
+        }
+
+        // Fallback - return trimmed body
+        return trimmed;
+    }
+
+    /**
+     * Encrypt data using AES/CBC/PKCS5Padding and return as HEX string
+     * Per Hesabe documentation - must use HEX encoding
+     */
     private String encryptData(String data) throws Exception {
         SecretKeySpec secretKey = new SecretKeySpec(
                 hesabeConfig.getSecretKey().getBytes(StandardCharsets.UTF_8), "AES");
         IvParameterSpec ivSpec = new IvParameterSpec(
                 hesabeConfig.getIvKey().getBytes(StandardCharsets.UTF_8));
 
-        Cipher cipher = Cipher.getInstance(AES_ALGORITHM);
+        Cipher cipher = Cipher.getInstance(AES_ENCRYPT_ALGORITHM);
         cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
 
         byte[] encrypted = cipher.doFinal(data.getBytes(StandardCharsets.UTF_8));
-        return Base64.getEncoder().encodeToString(encrypted);
+        // Return as HEX string (not Base64) per Hesabe requirements
+        return HEX.formatHex(encrypted);
     }
 
-    private String decryptData(String encryptedData) throws Exception {
+    /**
+     * Decrypt HEX-encoded data using AES/CBC/NoPadding
+     * Per Hesabe documentation - response is HEX encoded
+     */
+    private String decryptData(String hexCipherText) throws Exception {
         SecretKeySpec secretKey = new SecretKeySpec(
                 hesabeConfig.getSecretKey().getBytes(StandardCharsets.UTF_8), "AES");
         IvParameterSpec ivSpec = new IvParameterSpec(
                 hesabeConfig.getIvKey().getBytes(StandardCharsets.UTF_8));
 
-        Cipher cipher = Cipher.getInstance(AES_ALGORITHM);
+        Cipher cipher = Cipher.getInstance(AES_DECRYPT_ALGORITHM);
         cipher.init(Cipher.DECRYPT_MODE, secretKey, ivSpec);
 
-        byte[] decrypted = cipher.doFinal(Base64.getDecoder().decode(encryptedData));
-        return new String(decrypted, StandardCharsets.UTF_8);
+        // Parse HEX string to bytes (not Base64)
+        byte[] decrypted = cipher.doFinal(HEX.parseHex(hexCipherText));
+
+        // Trim null bytes (zero-padding) from the end
+        int end = decrypted.length;
+        while (end > 0 && decrypted[end - 1] == 0) end--;
+
+        return new String(Arrays.copyOf(decrypted, end), StandardCharsets.UTF_8);
     }
 
     private String generatePaymentReference() {

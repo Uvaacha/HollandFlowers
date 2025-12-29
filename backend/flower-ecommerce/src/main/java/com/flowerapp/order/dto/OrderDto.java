@@ -65,6 +65,12 @@ public class OrderDto {
 
         @Size(max = 50, message = "Coupon code cannot exceed 50 characters")
         private String couponCode;
+
+        /**
+         * Delivery fee amount (in KWD)
+         * Should be passed from frontend based on delivery area
+         */
+        private BigDecimal deliveryFee;
     }
 
     @Data
