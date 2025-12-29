@@ -1,6 +1,8 @@
 /**
  * Payment Failure Component - Holland Flowers
  * Displayed after failed payment from Hesabe gateway
+ * 
+ * FIXED: Better error handling and response parsing
  */
 
 import React, { useState, useEffect } from 'react';
@@ -13,12 +15,14 @@ const PaymentFailure = () => {
   const navigate = useNavigate();
   const [paymentData, setPaymentData] = useState(null);
   const [loading, setLoading] = useState(true);
+  // eslint-disable-next-line no-unused-vars
   const [error, setError] = useState(null);
 
   const currentLang = localStorage.getItem('preferredLanguage') || 'en';
 
   useEffect(() => {
     processPaymentCallback();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const processPaymentCallback = async () => {
@@ -28,22 +32,38 @@ const PaymentFailure = () => {
       if (encryptedData) {
         // Process the callback from Hesabe
         const response = await paymentService.processCallback(encryptedData);
-        setPaymentData(response);
+        console.log('Payment callback response:', response);
+        
+        // Handle different response structures
+        const paymentResult = response?.data || response;
+        setPaymentData(paymentResult);
       } else {
-        // No data param - just show failure message
-        setPaymentData({ success: false });
+        // No data param - check pending order from localStorage
+        const pendingOrder = paymentService.getPendingOrder();
+        if (pendingOrder) {
+          setPaymentData({ 
+            success: false, 
+            orderId: pendingOrder.orderId,
+            message: 'Payment was cancelled or failed'
+          });
+        } else {
+          setPaymentData({ success: false });
+        }
       }
     } catch (err) {
       console.error('Payment callback error:', err);
-      setError(err.message);
-      setPaymentData({ success: false, message: err.message });
+      setError(err.message || 'Error processing payment');
+      setPaymentData({ 
+        success: false, 
+        message: err.message || 'Payment processing failed'
+      });
     } finally {
       setLoading(false);
     }
   };
 
   const handleRetryPayment = () => {
-    // Navigate back to checkout
+    // Navigate back to checkout to retry payment
     navigate('/checkout');
   };
 
@@ -89,11 +109,11 @@ const PaymentFailure = () => {
         </p>
 
         {/* Error Details */}
-        {(paymentData?.message || paymentData?.errorMessage) && (
+        {(paymentData?.message || paymentData?.errorMessage || paymentData?.responseMessage) && (
           <div className="error-details">
             <p>
               <strong>{currentLang === 'ar' ? 'السبب:' : 'Reason:'}</strong>{' '}
-              {paymentData.message || paymentData.errorMessage}
+              {paymentData.message || paymentData.errorMessage || paymentData.responseMessage}
             </p>
           </div>
         )}
@@ -132,6 +152,14 @@ const PaymentFailure = () => {
                 {currentLang === 'ar' 
                   ? 'مشكلة في الاتصال بالإنترنت'
                   : 'Network connection issue'}
+              </span>
+            </li>
+            <li>
+              <span className="reason-icon">❌</span>
+              <span>
+                {currentLang === 'ar' 
+                  ? 'تم إلغاء العملية من قبل المستخدم'
+                  : 'Transaction cancelled by user'}
               </span>
             </li>
           </ul>

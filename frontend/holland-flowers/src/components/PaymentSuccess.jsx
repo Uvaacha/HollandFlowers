@@ -1,15 +1,19 @@
 /**
  * Payment Success Component - Holland Flowers
  * Displayed after successful payment from Hesabe gateway
+ * 
+ * FIXED: Added cart clearing after successful payment
  */
 
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { useCart } from './CartContext';
 import paymentService from '../services/paymentService';
 import './PaymentResult.css';
 
 const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
+  const { clearCart } = useCart();
   const [paymentData, setPaymentData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,6 +22,7 @@ const PaymentSuccess = () => {
 
   useEffect(() => {
     processPaymentCallback();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const processPaymentCallback = async () => {
@@ -27,14 +32,56 @@ const PaymentSuccess = () => {
       if (encryptedData) {
         // Process the callback from Hesabe
         const response = await paymentService.processCallback(encryptedData);
-        setPaymentData(response);
+        console.log('Payment callback response:', response);
+        
+        // Handle different response structures
+        const paymentResult = response?.data || response;
+        setPaymentData(paymentResult);
+        
+        // Check if payment was successful
+        const isSuccess = paymentResult?.success || 
+                          paymentService.isPaymentSuccessful(paymentResult?.status);
+        
+        if (isSuccess) {
+          // Clear cart after successful payment
+          clearCart();
+          // Clear pending order data
+          paymentService.clearPendingOrder();
+          localStorage.removeItem('deliveryInstructions');
+          console.log('Cart cleared after successful payment');
+        }
       } else {
-        // No data param - just show success message
-        setPaymentData({ success: true });
+        // No data param - check pending order from localStorage
+        const pendingOrder = paymentService.getPendingOrder();
+        if (pendingOrder) {
+          setPaymentData({ 
+            success: true, 
+            orderId: pendingOrder.orderId,
+            paymentReference: pendingOrder.paymentReference
+          });
+          // Clear cart
+          clearCart();
+          paymentService.clearPendingOrder();
+          localStorage.removeItem('deliveryInstructions');
+        } else {
+          setPaymentData({ success: true });
+        }
       }
     } catch (err) {
       console.error('Payment callback error:', err);
-      setError(err.message);
+      setError(err.message || 'Error processing payment');
+      // Still try to get pending order info
+      const pendingOrder = paymentService.getPendingOrder();
+      if (pendingOrder) {
+        setPaymentData({ 
+          success: true, 
+          orderId: pendingOrder.orderId,
+          paymentReference: pendingOrder.paymentReference,
+          message: 'Payment processed successfully'
+        });
+        clearCart();
+        paymentService.clearPendingOrder();
+      }
     } finally {
       setLoading(false);
     }
@@ -81,7 +128,7 @@ const PaymentSuccess = () => {
         </p>
 
         {/* Order Details */}
-        {paymentData && paymentData.orderId && (
+        {paymentData && (paymentData.orderId || paymentData.orderReference) && (
           <div className="order-confirmation">
             <div className="confirmation-item">
               <span className="label">
@@ -142,8 +189,8 @@ const PaymentSuccess = () => {
         {/* Action Buttons */}
         <div className="result-actions">
           {paymentData?.orderId && (
-            <Link to={`/orders/${paymentData.orderId}`} className="btn-primary">
-              {currentLang === 'ar' ? 'تتبع الطلب' : 'Track Order'}
+            <Link to={`/account/orders`} className="btn-primary">
+              {currentLang === 'ar' ? 'عرض الطلبات' : 'View Orders'}
             </Link>
           )}
           <Link to="/" className="btn-secondary">

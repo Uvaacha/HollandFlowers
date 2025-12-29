@@ -415,11 +415,21 @@ const Checkout = () => {
         
         console.log('Order API Response:', orderResponse);
         
-        const orderId = orderResponse?.data?.orderId || 
-                        orderResponse?.data?.id || 
-                        orderResponse?.orderId || 
-                        orderResponse?.id ||
-                        orderResponse?.data?.orderNumber;
+        // Extract order ID from response - handle different response structures
+        let orderId = null;
+        if (orderResponse?.data?.data?.orderId) {
+          orderId = orderResponse.data.data.orderId;
+        } else if (orderResponse?.data?.orderId) {
+          orderId = orderResponse.data.orderId;
+        } else if (orderResponse?.data?.id) {
+          orderId = orderResponse.data.id;
+        } else if (orderResponse?.orderId) {
+          orderId = orderResponse.orderId;
+        } else if (orderResponse?.id) {
+          orderId = orderResponse.id;
+        } else if (orderResponse?.data?.orderNumber) {
+          orderId = orderResponse.data.orderNumber;
+        }
         
         if (!orderId) {
           console.error('Order response structure:', orderResponse);
@@ -428,59 +438,103 @@ const Checkout = () => {
         
         console.log('Extracted orderId:', orderId);
         
-        // Initiate payment
+        // ============ INITIATE PAYMENT WITH HESABE ============
         const paymentPayload = {
           orderId: orderId,
-          paymentMethod: 'KNET',
-          customerEmail: contact.emailOrPhone,
+          paymentMethod: 'KNET', // Can be: KNET, VISA, MASTERCARD, AMERICAN_EXPRESS, APPLE_PAY, GOOGLE_PAY, CASH_ON_DELIVERY
+          customerEmail: contact.emailOrPhone.includes('@') ? contact.emailOrPhone : null,
           customerPhone: delivery.phone,
           customerName: `${delivery.firstName || ''} ${delivery.lastName}`.trim(),
           deviceType: 'WEB'
         };
         
-        const paymentResponse = await api.post('/api/payments/initiate', paymentPayload);
+        console.log('========== PAYMENT PAYLOAD BEING SENT ==========');
+        console.log(JSON.stringify(paymentPayload, null, 2));
+        console.log('=================================================');
+        
+        // FIXED: Correct API endpoint path (without /api prefix since api service adds base URL)
+        const paymentResponse = await api.post('/payments/initiate', paymentPayload);
+        
+        console.log('Payment API Response:', paymentResponse);
 
-        if (paymentResponse.success && paymentResponse.checkoutUrl) {
+        // Extract checkout URL from response - handle different response structures
+        let checkoutUrl = null;
+        let paymentReference = null;
+        
+        // Try different response structures
+        if (paymentResponse?.data?.checkoutUrl) {
+          checkoutUrl = paymentResponse.data.checkoutUrl;
+          paymentReference = paymentResponse.data.paymentReference;
+        } else if (paymentResponse?.checkoutUrl) {
+          checkoutUrl = paymentResponse.checkoutUrl;
+          paymentReference = paymentResponse.paymentReference;
+        } else if (paymentResponse?.data?.data?.checkoutUrl) {
+          checkoutUrl = paymentResponse.data.data.checkoutUrl;
+          paymentReference = paymentResponse.data.data.paymentReference;
+        }
+        
+        // Check if payment was successful
+        const isSuccess = paymentResponse?.success || 
+                          paymentResponse?.data?.success || 
+                          checkoutUrl !== null;
+
+        if (isSuccess && checkoutUrl) {
+          // Store pending order info for verification after payment
           localStorage.setItem('pendingOrder', JSON.stringify({
             orderId: orderId,
-            paymentReference: paymentResponse.paymentReference,
-            total,
-            items: cartItems.length
+            paymentReference: paymentReference,
+            total: total,
+            items: cartItems.length,
+            timestamp: new Date().toISOString()
           }));
           
-          window.location.href = paymentResponse.checkoutUrl;
-        } else if (paymentResponse.data && paymentResponse.data.checkoutUrl) {
-          localStorage.setItem('pendingOrder', JSON.stringify({
-            orderId: orderId,
-            paymentReference: paymentResponse.data.paymentReference,
-            total,
-            items: cartItems.length
-          }));
+          console.log('Redirecting to Hesabe checkout:', checkoutUrl);
           
-          window.location.href = paymentResponse.data.checkoutUrl;
-        } else if (paymentResponse.checkoutUrl) {
-          localStorage.setItem('pendingOrder', JSON.stringify({
-            orderId: orderId,
-            paymentReference: paymentResponse.paymentReference,
-            total,
-            items: cartItems.length
-          }));
-          
-          window.location.href = paymentResponse.checkoutUrl;
+          // Redirect to Hesabe payment page
+          window.location.href = checkoutUrl;
         } else {
-          throw new Error(paymentResponse.message || 'Failed to initiate payment');
+          // Payment initiation failed
+          const errorMessage = paymentResponse?.message || 
+                               paymentResponse?.data?.message || 
+                               paymentResponse?.errorMessage ||
+                               paymentResponse?.data?.errorMessage ||
+                               'Failed to initiate payment';
+          throw new Error(errorMessage);
         }
       } else {
         // Guest checkout - redirect to login
+        // Store checkout data for after login
+        localStorage.setItem('pendingCheckout', JSON.stringify({
+          cartItems,
+          delivery,
+          contact,
+          billingDetails,
+          billingAddress,
+          deliveryInstructions,
+          total
+        }));
+        
         setError(currentLang === 'ar' 
           ? 'يرجى تسجيل الدخول للمتابعة' 
           : 'Please login to continue');
+        
+        // Optionally redirect to login page
+        // navigate('/account?redirect=checkout');
         setIsLoading(false);
       }
       
     } catch (err) {
       console.error('Checkout error:', err);
-      setError(err.message || (currentLang === 'ar' 
+      
+      // Parse error message
+      let errorMessage = err.message;
+      if (err.response?.data?.message) {
+        errorMessage = err.response.data.message;
+      } else if (err.response?.data?.error) {
+        errorMessage = err.response.data.error;
+      }
+      
+      setError(errorMessage || (currentLang === 'ar' 
         ? 'حدث خطأ أثناء معالجة الطلب' 
         : 'An error occurred while processing your order'));
       setIsLoading(false);
