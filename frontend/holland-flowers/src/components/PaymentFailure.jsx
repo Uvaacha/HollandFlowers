@@ -2,12 +2,11 @@
  * Payment Failure Component - Holland Flowers
  * Displayed after failed payment from Hesabe gateway
  * 
- * FIXED: Better error handling and response parsing
+ * UPDATED: Reads payment info from URL params (set by backend redirect)
  */
 
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
-import paymentService from '../services/paymentService';
 import './PaymentResult.css';
 
 const PaymentFailure = () => {
@@ -15,47 +14,37 @@ const PaymentFailure = () => {
   const navigate = useNavigate();
   const [paymentData, setPaymentData] = useState(null);
   const [loading, setLoading] = useState(true);
-  // eslint-disable-next-line no-unused-vars
-  const [error, setError] = useState(null);
 
   const currentLang = localStorage.getItem('preferredLanguage') || 'en';
 
   useEffect(() => {
-    processPaymentCallback();
+    processPayment();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const processPaymentCallback = async () => {
+  const processPayment = async () => {
     try {
-      const encryptedData = searchParams.get('data');
+      // Get payment info from URL params (set by backend redirect)
+      const orderId = searchParams.get('orderId');
+      const ref = searchParams.get('ref');
+      const status = searchParams.get('status');
+      const message = searchParams.get('message');
       
-      if (encryptedData) {
-        // Process the callback from Hesabe
-        const response = await paymentService.processCallback(encryptedData);
-        console.log('Payment callback response:', response);
-        
-        // Handle different response structures
-        const paymentResult = response?.data || response;
-        setPaymentData(paymentResult);
-      } else {
-        // No data param - check pending order from localStorage
-        const pendingOrder = paymentService.getPendingOrder();
-        if (pendingOrder) {
-          setPaymentData({ 
-            success: false, 
-            orderId: pendingOrder.orderId,
-            message: 'Payment was cancelled or failed'
-          });
-        } else {
-          setPaymentData({ success: false });
-        }
-      }
+      console.log('Payment failure page loaded:', { orderId, ref, status, message });
+      
+      setPaymentData({
+        success: false,
+        orderId: orderId,
+        paymentReference: ref,
+        status: status || 'FAILED',
+        message: message ? decodeURIComponent(message) : 'Payment was not completed'
+      });
+      
     } catch (err) {
-      console.error('Payment callback error:', err);
-      setError(err.message || 'Error processing payment');
+      console.error('Payment failure processing error:', err);
       setPaymentData({ 
         success: false, 
-        message: err.message || 'Payment processing failed'
+        message: 'Payment processing failed'
       });
     } finally {
       setLoading(false);
@@ -109,11 +98,11 @@ const PaymentFailure = () => {
         </p>
 
         {/* Error Details */}
-        {(paymentData?.message || paymentData?.errorMessage || paymentData?.responseMessage) && (
+        {paymentData?.message && (
           <div className="error-details">
             <p>
               <strong>{currentLang === 'ar' ? 'السبب:' : 'Reason:'}</strong>{' '}
-              {paymentData.message || paymentData.errorMessage || paymentData.responseMessage}
+              {paymentData.message}
             </p>
           </div>
         )}

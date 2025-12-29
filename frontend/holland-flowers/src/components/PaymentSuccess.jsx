@@ -2,13 +2,13 @@
  * Payment Success Component - Holland Flowers
  * Displayed after successful payment from Hesabe gateway
  * 
- * FIXED: Added cart clearing after successful payment
+ * UPDATED: Reads payment info from URL params (set by backend redirect)
  */
 
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useCart } from './CartContext';
-import paymentService from '../services/paymentService';
+import api from '../services/api';
 import './PaymentResult.css';
 
 const PaymentSuccess = () => {
@@ -16,72 +16,70 @@ const PaymentSuccess = () => {
   const { clearCart } = useCart();
   const [paymentData, setPaymentData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   const currentLang = localStorage.getItem('preferredLanguage') || 'en';
 
   useEffect(() => {
-    processPaymentCallback();
+    processPayment();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const processPaymentCallback = async () => {
+  const processPayment = async () => {
     try {
-      const encryptedData = searchParams.get('data');
+      // Get payment info from URL params (set by backend redirect)
+      const orderId = searchParams.get('orderId');
+      const ref = searchParams.get('ref');
+      const status = searchParams.get('status');
       
-      if (encryptedData) {
-        // Process the callback from Hesabe
-        const response = await paymentService.processCallback(encryptedData);
-        console.log('Payment callback response:', response);
-        
-        // Handle different response structures
-        const paymentResult = response?.data || response;
-        setPaymentData(paymentResult);
-        
-        // Check if payment was successful
-        const isSuccess = paymentResult?.success || 
-                          paymentService.isPaymentSuccessful(paymentResult?.status);
-        
-        if (isSuccess) {
-          // Clear cart after successful payment
-          clearCart();
-          // Clear pending order data
-          paymentService.clearPendingOrder();
-          localStorage.removeItem('deliveryInstructions');
-          console.log('Cart cleared after successful payment');
+      console.log('Payment success page loaded:', { orderId, ref, status });
+      
+      if (orderId || ref) {
+        // Try to get more details from the verify endpoint
+        try {
+          const response = await api.get('/payments/verify', {
+            params: { orderId, ref }
+          });
+          console.log('Payment verification response:', response);
+          setPaymentData(response.data || response);
+        } catch (verifyError) {
+          console.log('Verification API not available, using URL params');
+          // Fallback to URL params
+          setPaymentData({
+            success: true,
+            orderId: orderId,
+            paymentReference: ref,
+            status: 'COMPLETED'
+          });
         }
+        
+        // Clear cart after successful payment
+        clearCart();
+        localStorage.removeItem('pendingOrder');
+        localStorage.removeItem('deliveryInstructions');
+        console.log('Cart cleared after successful payment');
       } else {
-        // No data param - check pending order from localStorage
-        const pendingOrder = paymentService.getPendingOrder();
-        if (pendingOrder) {
+        // Check pending order from localStorage as fallback
+        const pendingOrderStr = localStorage.getItem('pendingOrder');
+        if (pendingOrderStr) {
+          const pendingOrder = JSON.parse(pendingOrderStr);
           setPaymentData({ 
             success: true, 
             orderId: pendingOrder.orderId,
             paymentReference: pendingOrder.paymentReference
           });
-          // Clear cart
           clearCart();
-          paymentService.clearPendingOrder();
+          localStorage.removeItem('pendingOrder');
           localStorage.removeItem('deliveryInstructions');
         } else {
           setPaymentData({ success: true });
+          clearCart();
         }
       }
     } catch (err) {
-      console.error('Payment callback error:', err);
-      setError(err.message || 'Error processing payment');
-      // Still try to get pending order info
-      const pendingOrder = paymentService.getPendingOrder();
-      if (pendingOrder) {
-        setPaymentData({ 
-          success: true, 
-          orderId: pendingOrder.orderId,
-          paymentReference: pendingOrder.paymentReference,
-          message: 'Payment processed successfully'
-        });
-        clearCart();
-        paymentService.clearPendingOrder();
-      }
+      console.error('Payment success processing error:', err);
+      // Still show success since we're on the success page
+      setPaymentData({ success: true });
+      clearCart();
     } finally {
       setLoading(false);
     }
@@ -128,14 +126,16 @@ const PaymentSuccess = () => {
         </p>
 
         {/* Order Details */}
-        {paymentData && (paymentData.orderId || paymentData.orderReference) && (
+        {paymentData && (paymentData.orderId || paymentData.orderNumber || paymentData.paymentReference) && (
           <div className="order-confirmation">
-            <div className="confirmation-item">
-              <span className="label">
-                {currentLang === 'ar' ? 'رقم الطلب:' : 'Order Number:'}
-              </span>
-              <span className="value">{paymentData.orderReference || paymentData.orderId}</span>
-            </div>
+            {(paymentData.orderId || paymentData.orderNumber) && (
+              <div className="confirmation-item">
+                <span className="label">
+                  {currentLang === 'ar' ? 'رقم الطلب:' : 'Order Number:'}
+                </span>
+                <span className="value">{paymentData.orderNumber || paymentData.orderId}</span>
+              </div>
+            )}
             {paymentData.transactionId && (
               <div className="confirmation-item">
                 <span className="label">
@@ -150,6 +150,14 @@ const PaymentSuccess = () => {
                   {currentLang === 'ar' ? 'مرجع الدفع:' : 'Payment Reference:'}
                 </span>
                 <span className="value">{paymentData.paymentReference}</span>
+              </div>
+            )}
+            {paymentData.amount && (
+              <div className="confirmation-item">
+                <span className="label">
+                  {currentLang === 'ar' ? 'المبلغ:' : 'Amount:'}
+                </span>
+                <span className="value">KWD {Number(paymentData.amount).toFixed(3)}</span>
               </div>
             )}
           </div>
@@ -188,11 +196,9 @@ const PaymentSuccess = () => {
 
         {/* Action Buttons */}
         <div className="result-actions">
-          {paymentData?.orderId && (
-            <Link to={`/account/orders`} className="btn-primary">
-              {currentLang === 'ar' ? 'عرض الطلبات' : 'View Orders'}
-            </Link>
-          )}
+          <Link to="/orders" className="btn-primary">
+            {currentLang === 'ar' ? 'عرض الطلبات' : 'View Orders'}
+          </Link>
           <Link to="/" className="btn-secondary">
             {currentLang === 'ar' ? 'متابعة التسوق' : 'Continue Shopping'}
           </Link>
