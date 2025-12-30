@@ -1,37 +1,18 @@
 package com.flowerapp.hebasePayment.dto;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Wrapper class for Hesabe callback response
- *
- * Sample response structure:
- * {
- *   "status": true,
- *   "code": 1,
- *   "message": "Transaction Success",
- *   "response": {
- *     "data": {
- *       "resultCode": "CAPTURED",
- *       "amount": 10,
- *       "paymentToken": "...",
- *       "paymentId": "...",
- *       "paidOn": "2019-09-30 11:05:16",
- *       "orderReferenceNumber": "...",
- *       "variable1": "...",
- *       ...
- *     }
- *   }
- * }
- */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class HesabeCallbackResponse {
 
     @JsonProperty("status")
@@ -49,6 +30,7 @@ public class HesabeCallbackResponse {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class ResponseWrapper {
         @JsonProperty("data")
         private PaymentData data;
@@ -57,108 +39,118 @@ public class HesabeCallbackResponse {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class PaymentData {
         @JsonProperty("resultCode")
+        @JsonAlias({"result_code", "ResultCode", "status_code"})
         private String resultCode;
 
         @JsonProperty("amount")
         private Double amount;
 
         @JsonProperty("paymentToken")
+        @JsonAlias({"payment_token", "token"})
         private String paymentToken;
 
         @JsonProperty("paymentId")
+        @JsonAlias({"payment_id", "PaymentId", "transactionReference"})
         private String paymentId;
 
         @JsonProperty("paidOn")
+        @JsonAlias({"paid_on", "paymentDate", "payment_date"})
         private String paidOn;
 
         @JsonProperty("orderReferenceNumber")
+        @JsonAlias({"order_reference_number", "merchantOrderId", "merchant_order_id",
+                "reference", "referenceNumber", "reference_number", "invoiceId",
+                "invoice_id", "orderId", "order_id"})
         private String orderReferenceNumber;
 
         @JsonProperty("variable1")
+        @JsonAlias({"Variable1", "var1", "custom1", "merchantData1"})
         private String variable1;
 
         @JsonProperty("variable2")
+        @JsonAlias({"Variable2", "var2", "custom2", "merchantData2"})
         private String variable2;
 
         @JsonProperty("variable3")
+        @JsonAlias({"Variable3", "var3", "custom3", "merchantData3"})
         private String variable3;
 
         @JsonProperty("variable4")
+        @JsonAlias({"Variable4", "var4", "custom4", "merchantData4"})
         private String variable4;
 
         @JsonProperty("variable5")
+        @JsonAlias({"Variable5", "var5", "custom5", "merchantData5"})
         private String variable5;
 
         @JsonProperty("method")
+        @JsonAlias({"paymentMethod", "payment_method"})
         private Integer method;
 
         @JsonProperty("transactionId")
+        @JsonAlias({"transaction_id", "TransactionId", "txnId"})
         private String transactionId;
 
         @JsonProperty("authorizationCode")
+        @JsonAlias({"authorization_code", "authCode", "auth_code"})
         private String authorizationCode;
 
         @JsonProperty("responseMessage")
+        @JsonAlias({"response_message", "statusMessage", "status_message"})
         private String responseMessage;
 
         @JsonProperty("administrativeFees")
+        @JsonAlias({"administrative_fees", "fees"})
         private String administrativeFees;
 
-        // KNET specific fields
         @JsonProperty("knetPaymentId")
+        @JsonAlias({"knet_payment_id", "KnetPaymentId"})
         private String knetPaymentId;
 
         @JsonProperty("knetTransactionId")
+        @JsonAlias({"knet_transaction_id", "KnetTransactionId"})
         private String knetTransactionId;
 
         @JsonProperty("knetReferenceId")
+        @JsonAlias({"knet_reference_id", "KnetReferenceId"})
         private String knetReferenceId;
 
         @JsonProperty("knetResultCode")
+        @JsonAlias({"knet_result_code", "KnetResultCode"})
         private String knetResultCode;
 
-        // Card specific fields
         @JsonProperty("cardNumber")
+        @JsonAlias({"card_number", "maskedCardNumber", "masked_card_number", "maskedPan"})
         private String maskedCardNumber;
 
         @JsonProperty("cardBrand")
+        @JsonAlias({"card_brand", "cardType", "card_type"})
         private String cardBrand;
 
         @JsonProperty("cardExpiryMonth")
+        @JsonAlias({"card_expiry_month", "expiryMonth", "expiry_month"})
         private String cardExpiryMonth;
 
         @JsonProperty("cardExpiryYear")
+        @JsonAlias({"card_expiry_year", "expiryYear", "expiry_year"})
         private String cardExpiryYear;
 
-        /**
-         * Check if payment was successful
-         * Hesabe returns "CAPTURED" for successful payments
-         */
         public boolean isSuccessful() {
             if (resultCode == null) return false;
-
             String code = resultCode.toUpperCase().trim();
-            return "CAPTURED".equals(code) ||
-                    "SUCCESS".equals(code) ||
-                    "ACCEPT".equals(code) ||
-                    "000".equals(code) ||
-                    "00".equals(code);
+            return "CAPTURED".equals(code) || "SUCCESS".equals(code) ||
+                    "ACCEPT".equals(code) || "000".equals(code) || "00".equals(code);
         }
     }
 
-    /**
-     * Check if the overall response is successful
-     */
     public boolean isSuccessful() {
         return status && response != null && response.getData() != null
                 && response.getData().isSuccessful();
     }
 
-    /**
-     * Get the payment data from the response
-     */
     public PaymentData getPaymentData() {
         return response != null ? response.getData() : null;
     }

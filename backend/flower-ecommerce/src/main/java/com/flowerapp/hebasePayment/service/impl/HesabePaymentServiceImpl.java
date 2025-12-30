@@ -456,53 +456,186 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
      * Handles both wrapped format (status/code/message/response.data) and direct format
      */
     private HesabeCallbackResponse.PaymentData parsePaymentCallback(String decryptedData) {
+        log.info("========== PARSING CALLBACK DATA ==========");
+        log.info("Raw decrypted data: {}", decryptedData);
+
         try {
-            // First try to parse as wrapped response (standard Hesabe format)
-            // {status: true, code: 1, message: "...", response: {data: {...}}}
-            if (decryptedData.contains("\"response\"") && decryptedData.contains("\"data\"")) {
+            // Try to parse as generic JSON first to see structure
+            com.fasterxml.jackson.databind.JsonNode rootNode = objectMapper.readTree(decryptedData);
+
+            // Log all fields recursively
+            logAllFields(rootNode, "");
+
+            // Check for different response structures
+            HesabeCallbackResponse.PaymentData paymentData = null;
+
+            // Structure 1: {status, code, message, response: {data: {...}}}
+            if (rootNode.has("response") && rootNode.get("response").has("data")) {
+                log.info("Detected wrapped response structure");
                 HesabeCallbackResponse wrappedResponse = objectMapper.readValue(decryptedData, HesabeCallbackResponse.class);
-                if (wrappedResponse.getPaymentData() != null) {
-                    log.info("Parsed wrapped callback response. Status: {}, Code: {}",
-                            wrappedResponse.isStatus(), wrappedResponse.getCode());
-                    return wrappedResponse.getPaymentData();
+                paymentData = wrappedResponse.getPaymentData();
+            }
+            // Structure 2: Direct payment data at root level
+            else if (rootNode.has("resultCode") || rootNode.has("orderReferenceNumber") ||
+                    rootNode.has("result_code") || rootNode.has("order_reference_number")) {
+                log.info("Detected direct payment data structure");
+                paymentData = objectMapper.readValue(decryptedData, HesabeCallbackResponse.PaymentData.class);
+            }
+            // Structure 3: {data: {...}} without status wrapper
+            else if (rootNode.has("data") && !rootNode.has("response")) {
+                log.info("Detected simple data wrapper structure");
+                com.fasterxml.jackson.databind.JsonNode dataNode = rootNode.get("data");
+                paymentData = objectMapper.treeToValue(dataNode, HesabeCallbackResponse.PaymentData.class);
+            }
+
+            // If paymentData is null or orderRef is null, try to extract from JSON directly
+            if (paymentData == null) {
+                paymentData = new HesabeCallbackResponse.PaymentData();
+            }
+
+            // Try to find orderReferenceNumber from any field in JSON
+            if (paymentData.getOrderReferenceNumber() == null) {
+                String orderRef = findOrderReferenceInJson(rootNode);
+                if (orderRef != null) {
+                    log.info("Found order reference in JSON: {}", orderRef);
+                    paymentData.setOrderReferenceNumber(orderRef);
                 }
             }
 
-            // Fallback: try to parse as direct PaymentData
-            log.info("Attempting to parse as direct payment data format");
-            return objectMapper.readValue(decryptedData, HesabeCallbackResponse.PaymentData.class);
+            // Try to find result code
+            if (paymentData.getResultCode() == null) {
+                String resultCode = findFieldValue(rootNode, "resultCode", "result_code", "ResultCode", "result", "status_code");
+                if (resultCode != null) {
+                    paymentData.setResultCode(resultCode);
+                }
+            }
+
+            log.info("Final parsed data - orderRef: {}, var1: {}, var2: {}, var3: {}, resultCode: {}",
+                    paymentData.getOrderReferenceNumber(),
+                    paymentData.getVariable1(),
+                    paymentData.getVariable2(),
+                    paymentData.getVariable3(),
+                    paymentData.getResultCode());
+
+            return paymentData;
 
         } catch (Exception e) {
-            log.error("Failed to parse payment callback: {}", e.getMessage());
+            log.error("Failed to parse payment callback: {}", e.getMessage(), e);
 
-            // Last resort: try parsing as HesabePaymentResponse (old format)
-            try {
-                HesabePaymentResponse oldFormat = objectMapper.readValue(decryptedData, HesabePaymentResponse.class);
-                // Convert to PaymentData
+            // Last resort: try to extract ORD- from raw string
+            String orderRef = extractOrderRefFromString(decryptedData);
+            if (orderRef != null) {
+                log.info("Extracted order reference from raw string: {}", orderRef);
                 HesabeCallbackResponse.PaymentData data = new HesabeCallbackResponse.PaymentData();
-                data.setResultCode(oldFormat.getResultCode());
-                data.setOrderReferenceNumber(oldFormat.getOrderReferenceNumber());
-                data.setPaymentId(oldFormat.getPaymentId());
-                data.setTransactionId(oldFormat.getTransactionId());
-                data.setAuthorizationCode(oldFormat.getAuthorizationCode());
-                data.setResponseMessage(oldFormat.getResponseMessage());
-                data.setVariable1(oldFormat.getVariable1());
-                data.setVariable2(oldFormat.getVariable2());
-                data.setVariable3(oldFormat.getVariable3());
-                data.setKnetPaymentId(oldFormat.getKnetPaymentId());
-                data.setKnetTransactionId(oldFormat.getKnetTransactionId());
-                data.setKnetReferenceId(oldFormat.getKnetReferenceId());
-                data.setKnetResultCode(oldFormat.getKnetResultCode());
-                data.setMaskedCardNumber(oldFormat.getMaskedCardNumber());
-                data.setCardBrand(oldFormat.getCardBrand());
-                data.setCardExpiryMonth(oldFormat.getCardExpiryMonth());
-                data.setCardExpiryYear(oldFormat.getCardExpiryYear());
+                data.setOrderReferenceNumber(orderRef);
+                // Try to determine if successful
+                if (decryptedData.toUpperCase().contains("CAPTURED") ||
+                        decryptedData.toUpperCase().contains("SUCCESS")) {
+                    data.setResultCode("CAPTURED");
+                }
                 return data;
-            } catch (Exception ex) {
-                log.error("Failed to parse as old format: {}", ex.getMessage());
-                return null;
+            }
+
+            return null;
+        }
+    }
+
+    /**
+     * Log all fields in JSON recursively
+     */
+    private void logAllFields(com.fasterxml.jackson.databind.JsonNode node, String prefix) {
+        if (node.isObject()) {
+            node.fieldNames().forEachRemaining(field -> {
+                com.fasterxml.jackson.databind.JsonNode value = node.get(field);
+                String fullPath = prefix.isEmpty() ? field : prefix + "." + field;
+                log.info("JSON Field '{}': {}", fullPath, value.isObject() || value.isArray() ? "[complex]" : value.asText());
+                if (value.isObject() || value.isArray()) {
+                    logAllFields(value, fullPath);
+                }
+            });
+        } else if (node.isArray()) {
+            for (int i = 0; i < node.size(); i++) {
+                logAllFields(node.get(i), prefix + "[" + i + "]");
             }
         }
+    }
+
+    /**
+     * Find order reference number from any field in JSON
+     */
+    private String findOrderReferenceInJson(com.fasterxml.jackson.databind.JsonNode node) {
+        if (node.isTextual()) {
+            String value = node.asText();
+            if (value.startsWith("ORD-") || value.startsWith("PAY-")) {
+                return value;
+            }
+        } else if (node.isObject()) {
+            // Check common field names first
+            String[] fieldNames = {"orderReferenceNumber", "order_reference_number", "orderReference",
+                    "merchantOrderId", "referenceNumber", "reference", "trackId", "invoiceNo",
+                    "variable1", "variable2", "var1", "var2", "udf1", "udf2"};
+            for (String fieldName : fieldNames) {
+                if (node.has(fieldName)) {
+                    String value = node.get(fieldName).asText();
+                    if (value != null && !value.isEmpty() && !value.equals("null")) {
+                        return value;
+                    }
+                }
+            }
+            // Recursively search
+            java.util.Iterator<String> fields = node.fieldNames();
+            while (fields.hasNext()) {
+                String result = findOrderReferenceInJson(node.get(fields.next()));
+                if (result != null) return result;
+            }
+        } else if (node.isArray()) {
+            for (com.fasterxml.jackson.databind.JsonNode item : node) {
+                String result = findOrderReferenceInJson(item);
+                if (result != null) return result;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Find field value by trying multiple field names
+     */
+    private String findFieldValue(com.fasterxml.jackson.databind.JsonNode node, String... fieldNames) {
+        for (String fieldName : fieldNames) {
+            if (node.has(fieldName)) {
+                String value = node.get(fieldName).asText();
+                if (value != null && !value.isEmpty() && !value.equals("null")) {
+                    return value;
+                }
+            }
+        }
+        // Try nested in response.data
+        if (node.has("response") && node.get("response").has("data")) {
+            return findFieldValue(node.get("response").get("data"), fieldNames);
+        }
+        if (node.has("data")) {
+            return findFieldValue(node.get("data"), fieldNames);
+        }
+        return null;
+    }
+
+    /**
+     * Extract order reference from raw string using regex
+     */
+    private String extractOrderRefFromString(String data) {
+        // Look for ORD-xxx pattern
+        java.util.regex.Pattern ordPattern = java.util.regex.Pattern.compile("ORD-\\d+-\\d+");
+        java.util.regex.Matcher ordMatcher = ordPattern.matcher(data);
+        if (ordMatcher.find()) {
+            return ordMatcher.group();
+        }
+        // Look for PAY-xxx pattern
+        java.util.regex.Pattern payPattern = java.util.regex.Pattern.compile("PAY-\\d+-[A-Z0-9]+");
+        java.util.regex.Matcher payMatcher = payPattern.matcher(data);
+        if (payMatcher.find()) {
+            return payMatcher.group();
+        }
+        return null;
     }
 
     @Override
