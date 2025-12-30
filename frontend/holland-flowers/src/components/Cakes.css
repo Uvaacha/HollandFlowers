@@ -1,0 +1,506 @@
+/* ============================================
+   🎂 CAKES - COMING SOON PAGE
+   Elegant Coming Soon Design
+   ============================================ */
+
+.cakes-coming-soon-page {
+  min-height: 100vh;
+  background: #faf9f8;
+}
+
+.cakes-coming-soon-page.rtl {
+  direction: rtl;
+}
+
+/* ============================================
+   Hero Section
+   ============================================ */
+.cakes-hero {
+  position: relative;
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+.cakes-hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-position: center right;
+  background-repeat: no-repeat;
+  z-index: 1;
+}
+
+.cakes-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(74, 63, 63, 0.85) 0%,
+    rgba(74, 63, 63, 0.6) 40%,
+    rgba(74, 63, 63, 0.3) 70%,
+    transparent 100%
+  );
+  z-index: 2;
+}
+
+.cakes-coming-soon-page.rtl .cakes-hero-overlay {
+  background: linear-gradient(
+    -135deg,
+    rgba(74, 63, 63, 0.85) 0%,
+    rgba(74, 63, 63, 0.6) 40%,
+    rgba(74, 63, 63, 0.3) 70%,
+    transparent 100%
+  );
+}
+
+.cakes-hero-content {
+  position: relative;
+  z-index: 3;
+  max-width: 600px;
+  padding: 60px 100px;
+}
+
+.cakes-coming-soon-page.rtl .cakes-hero-content {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+/* Coming Soon Badge */
+.coming-soon-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.cakes-coming-soon-page.rtl .coming-soon-badge {
+  font-family: 'Tajawal', sans-serif;
+  letter-spacing: 0;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 15px rgba(255, 255, 255, 0);
+  }
+}
+
+.badge-icon {
+  font-size: 20px;
+  animation: bounce 1s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* Title */
+.cakes-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 64px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 20px;
+  line-height: 1.1;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.cakes-coming-soon-page.rtl .cakes-title {
+  font-family: 'Amiri', serif;
+  font-size: 56px;
+}
+
+/* Subtitle */
+.cakes-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 400;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 24px;
+  line-height: 1.4;
+}
+
+.cakes-coming-soon-page.rtl .cakes-subtitle {
+  font-family: 'Amiri', serif;
+  font-size: 24px;
+}
+
+/* Description */
+.cakes-description {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.8;
+  margin-bottom: 40px;
+  max-width: 500px;
+}
+
+.cakes-coming-soon-page.rtl .cakes-description {
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* CTA Buttons */
+.cakes-cta-buttons {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.back-home-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 32px;
+  background: white;
+  color: #4a3f3f;
+  text-decoration: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.cakes-coming-soon-page.rtl .back-home-btn {
+  font-family: 'Tajawal', sans-serif;
+  text-transform: none;
+  flex-direction: row-reverse;
+}
+
+.back-home-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+  color: white;
+}
+
+.back-home-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.back-home-btn:hover svg {
+  transform: translateX(-4px);
+}
+
+.cakes-coming-soon-page.rtl .back-home-btn svg {
+  transform: scaleX(-1);
+}
+
+.cakes-coming-soon-page.rtl .back-home-btn:hover svg {
+  transform: scaleX(-1) translateX(-4px);
+}
+
+/* ============================================
+   Features Section
+   ============================================ */
+.cakes-features-section {
+  padding: 80px 0;
+  background: linear-gradient(180deg, #fff 0%, #faf9f8 100%);
+}
+
+.cakes-features-section .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.feature-card {
+  background: white;
+  padding: 40px 30px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #fff5f5 0%, #ffeaea 100%);
+  border-radius: 50%;
+  font-size: 36px;
+  margin-bottom: 24px;
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover .feature-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.feature-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #3a3a3a;
+  margin-bottom: 12px;
+}
+
+.cakes-coming-soon-page.rtl .feature-title {
+  font-family: 'Amiri', serif;
+}
+
+.feature-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #888;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cakes-coming-soon-page.rtl .feature-desc {
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+@media (max-width: 1200px) {
+  .cakes-hero-content {
+    padding: 60px 80px;
+  }
+  
+  .cakes-title {
+    font-size: 56px;
+  }
+}
+
+@media (max-width: 992px) {
+  .cakes-hero {
+    min-height: 80vh;
+  }
+  
+  .cakes-hero-content {
+    padding: 50px 60px;
+    max-width: 550px;
+  }
+  
+  .cakes-title {
+    font-size: 48px;
+  }
+  
+  .cakes-coming-soon-page.rtl .cakes-title {
+    font-size: 44px;
+  }
+  
+  .cakes-subtitle {
+    font-size: 24px;
+  }
+  
+  .features-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  
+  .feature-card {
+    padding: 30px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .cakes-hero {
+    min-height: 75vh;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .cakes-hero-bg {
+    background-position: center;
+  }
+  
+  .cakes-hero-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(74, 63, 63, 0.4) 0%,
+      rgba(74, 63, 63, 0.7) 50%,
+      rgba(74, 63, 63, 0.9) 100%
+    );
+  }
+  
+  .cakes-coming-soon-page.rtl .cakes-hero-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(74, 63, 63, 0.4) 0%,
+      rgba(74, 63, 63, 0.7) 50%,
+      rgba(74, 63, 63, 0.9) 100%
+    );
+  }
+  
+  .cakes-hero-content {
+    padding: 40px 30px;
+    max-width: 100%;
+    text-align: center;
+  }
+  
+  .cakes-coming-soon-page.rtl .cakes-hero-content {
+    margin: 0 auto;
+  }
+  
+  .coming-soon-badge {
+    font-size: 12px;
+    padding: 10px 20px;
+  }
+  
+  .cakes-title {
+    font-size: 40px;
+  }
+  
+  .cakes-coming-soon-page.rtl .cakes-title {
+    font-size: 36px;
+  }
+  
+  .cakes-subtitle {
+    font-size: 20px;
+  }
+  
+  .cakes-description {
+    font-size: 14px;
+    margin: 0 auto 30px;
+  }
+  
+  .cakes-cta-buttons {
+    justify-content: center;
+  }
+  
+  .cakes-features-section {
+    padding: 60px 0;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .feature-card {
+    padding: 30px 25px;
+  }
+  
+  .feature-icon {
+    width: 70px;
+    height: 70px;
+    font-size: 32px;
+  }
+  
+  .feature-title {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 576px) {
+  .cakes-hero {
+    min-height: 70vh;
+  }
+  
+  .cakes-hero-content {
+    padding: 30px 20px;
+  }
+  
+  .coming-soon-badge {
+    font-size: 11px;
+    padding: 8px 16px;
+    gap: 8px;
+  }
+  
+  .badge-icon {
+    font-size: 16px;
+  }
+  
+  .cakes-title {
+    font-size: 32px;
+  }
+  
+  .cakes-coming-soon-page.rtl .cakes-title {
+    font-size: 28px;
+  }
+  
+  .cakes-subtitle {
+    font-size: 18px;
+  }
+  
+  .cakes-description {
+    font-size: 13px;
+  }
+  
+  .back-home-btn {
+    padding: 14px 28px;
+    font-size: 12px;
+  }
+  
+  .cakes-features-section {
+    padding: 50px 0;
+  }
+  
+  .feature-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 28px;
+  }
+  
+  .feature-title {
+    font-size: 20px;
+  }
+  
+  .feature-desc {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 400px) {
+  .cakes-title {
+    font-size: 28px;
+  }
+  
+  .cakes-coming-soon-page.rtl .cakes-title {
+    font-size: 24px;
+  }
+  
+  .cakes-subtitle {
+    font-size: 16px;
+  }
+}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { CartProvider, useCart } from './components/CartContext';
 import { AuthProvider } from './contexts/AuthContext';
 import Header from './components/Header';
@@ -36,6 +36,7 @@ import RosesPetals from './components/RosesPetals';
 import FlowersVase from './components/FlowersVase';
 import CylinderVases from './components/CylinderVases';
 import FlowersWithMabkhar from './components/FlowersWithMabkhar';
+import Cakes from './components/Cakes';
 import Footer from './components/Footer';
 import ProductDetail from './components/ProductDetail';
 import Cart from './components/Cart';
@@ -48,6 +49,22 @@ import PaymentFailure from './components/PaymentFailure';
 import OrderHistory from './components/OrderHistory';
 import OrderDetail from './components/OrderDetail';
 import './App.css';
+
+// ============================================
+// SCROLL TO TOP COMPONENT
+// ============================================
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    // Instantly set scroll position to top (no animation)
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, [pathname]);
+
+  return null;
+};
 
 // ============================================
 // CUSTOM SVG ICONS COMPONENT
@@ -1075,6 +1092,7 @@ function App() {
             <Route path="/*" element={
               <div className={`app ${currentLang === 'ar' ? 'rtl' : 'ltr'}`}>
                 <Header />
+                <ScrollToTop />
                 
                 <Routes>
                   <Route path="/" element={<HomePage currentLang={currentLang} />} />
@@ -1120,6 +1138,7 @@ function App() {
                   <Route path="/grand-bouquet" element={<GrandBouquets />} />
                   <Route path="/valentine-special" element={<ValentineSpecial />} />
                   <Route path="/mothers-day" element={<MothersDaySpecial />} />
+                  <Route path="/cakes" element={<Cakes />} />
                   <Route path="/anniversary" element={<PlaceholderPage title="Anniversary Collection" currentLang={currentLang} />} />
                   <Route path="/birthday" element={<BirthdayBouquets />} />
                   <Route path="*" element={<PlaceholderPage title="Page Not Found" currentLang={currentLang} />} />

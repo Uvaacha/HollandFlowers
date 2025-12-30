@@ -432,6 +432,24 @@
   color: var(--accent-dark);
 }
 
+/* Keep phone numbers and emails in LTR direction even in RTL mode */
+.contact-info a[href^="tel:"],
+.contact-info a[href^="https://wa.me"],
+.contact-info a[href^="mailto:"] {
+  direction: ltr;
+  unicode-bidi: embed;
+  display: inline-block;
+}
+
+/* Also ensure phone text displays correctly in RTL */
+.site-footer.rtl .contact-info a[href^="tel:"],
+.site-footer.rtl .contact-info a[href^="https://wa.me"],
+.site-footer.rtl .contact-info a[href^="mailto:"] {
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: left;
+}
+
 .map-link {
   font-size: 13px;
   color: var(--accent) !important;

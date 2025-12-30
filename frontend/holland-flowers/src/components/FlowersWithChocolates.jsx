@@ -33,22 +33,64 @@ const FlowersWithChocolates = () => {
 
   const translations = {
     en: {
-      title: "Flowers with Chocolates", subtitle: "Sweet combination of flowers and premium chocolates", badge: "FLOWERS & CHOCOLATES",
-      filters: "Filters", clearAll: "Clear All", priceRange: "Price Range", arrangement: "Arrangement",
-      minPrice: "Min", maxPrice: "Max", sortBy: "Sort by:", default: "Default",
-      priceLow: "Price: Low to High", priceHigh: "Price: High to Low", newest: "Newest First", nameAZ: "Name: A-Z",
-      items: "items", bouquet: "Bouquet", box: "Box", basket: "Basket", vase: "Vase", tray: "Tray", stand: "Stand",
-      kd: "KD", addToCart: "Add to Cart",
-      loading: "Loading products...", error: "Failed to load products", noProducts: "No products found", highestPrice: "Highest price"
+      title: "Flowers with Chocolates",
+      subtitle: "Sweet combination of flowers and premium chocolates",
+      badge: "FLOWERS & CHOCOLATES",
+      filters: "Filters",
+      clearAll: "Clear All",
+      priceRange: "Price Range",
+      arrangement: "Arrangement",
+      minPrice: "Min",
+      maxPrice: "Max",
+      sortBy: "Sort by:",
+      default: "Default",
+      priceLow: "Price: Low to High",
+      priceHigh: "Price: High to Low",
+      newest: "Newest First",
+      nameAZ: "Name: A-Z",
+      items: "items",
+      bouquet: "Bouquet",
+      box: "Box",
+      basket: "Basket",
+      vase: "Vase",
+      tray: "Tray",
+      stand: "Stand",
+      kd: "KD",
+      addToCart: "Add to Cart",
+      loading: "Loading products...",
+      error: "Failed to load products",
+      noProducts: "No products found",
+      highestPrice: "Highest price"
     },
     ar: {
-      title: "زهور مع شوكولاتة", subtitle: "مزيج حلو من الزهور والشوكولاتة الفاخرة", badge: "زهور وشوكولاتة",
-      filters: "التصفية", clearAll: "مسح الكل", priceRange: "نطاق السعر", arrangement: "التنسيق",
-      minPrice: "الحد الأدنى", maxPrice: "الحد الأقصى", sortBy: "ترتيب حسب:", default: "افتراضي",
-      priceLow: "السعر: من الأقل للأعلى", priceHigh: "السعر: من الأعلى للأقل", newest: "الأحدث أولاً", nameAZ: "الاسم: أ-ي",
-      items: "منتج", bouquet: "باقة", box: "صندوق", basket: "سلة", vase: "مزهرية", tray: "صينية", stand: "حامل",
-      kd: "د.ك", addToCart: "أضف للسلة",
-      loading: "جاري تحميل المنتجات...", error: "فشل في تحميل المنتجات", noProducts: "لا توجد منتجات", highestPrice: "أعلى سعر"
+      title: "زهور مع شوكولاتة",
+      subtitle: "مزيج حلو من الزهور والشوكولاتة الفاخرة",
+      badge: "زهور وشوكولاتة",
+      filters: "التصفية",
+      clearAll: "مسح الكل",
+      priceRange: "نطاق السعر",
+      arrangement: "التنسيق",
+      minPrice: "الحد الأدنى",
+      maxPrice: "الحد الأقصى",
+      sortBy: "ترتيب حسب:",
+      default: "افتراضي",
+      priceLow: "السعر: من الأقل للأعلى",
+      priceHigh: "السعر: من الأعلى للأقل",
+      newest: "الأحدث أولاً",
+      nameAZ: "الاسم: أ-ي",
+      items: "منتج",
+      bouquet: "باقة",
+      box: "صندوق",
+      basket: "سلة",
+      vase: "مزهرية",
+      tray: "صينية",
+      stand: "حامل",
+      kd: "د.ك",
+      addToCart: "أضف للسلة",
+      loading: "جاري تحميل المنتجات...",
+      error: "فشل في تحميل المنتجات",
+      noProducts: "لا توجد منتجات",
+      highestPrice: "أعلى سعر"
     }
   };
   const t = translations[currentLang] || translations.en;
@@ -56,20 +98,58 @@ const FlowersWithChocolates = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        setLoading(true); setError(null);
+        setLoading(true);
+        setError(null);
+        
         const categoriesResponse = await categoryService.getAllCategories();
         let categories = [];
-        if (categoriesResponse.success && categoriesResponse.data) categories = categoriesResponse.data.content || categoriesResponse.data || [];
+        if (categoriesResponse.success && categoriesResponse.data) {
+          categories = categoriesResponse.data.content || categoriesResponse.data || [];
+        }
+        
+        console.log('All categories:', categories); // Debug log
+        
+        // Find the exact category - FLOWERS & CHOCOLATES
         const targetCategory = categories.find(cat => {
-          const name = (cat.categoryName || cat.nameEn || cat.name || '').toLowerCase();
-          return name === 'flowers & chocolates' || name.includes('flowers');
+          const name = (cat.categoryName || cat.nameEn || cat.name || '').toLowerCase().trim();
+          return name === 'flowers & chocolates';
         });
-        if (!targetCategory) { setError('Category not found.'); setProducts([]); setLoading(false); return; }
-        const productsResponse = await productService.getProductsByCategory(targetCategory.categoryId, { page: 0, size: 100, sort: 'createdAt,desc' });
+        
+        console.log('Target category found:', targetCategory); // Debug log
+        
+        if (!targetCategory) {
+          console.log('Category not found. Available categories:', categories.map(c => c.categoryName || c.name));
+          setError('Category not found.');
+          setProducts([]);
+          setLoading(false);
+          return;
+        }
+        
+        const productsResponse = await productService.getProductsByCategory(
+          targetCategory.categoryId,
+          { page: 0, size: 100, sort: 'createdAt,desc' }
+        );
+        
+        console.log('Products response:', productsResponse); // Debug log
+        
         let productsList = [];
-        if (productsResponse.success && productsResponse.data) productsList = productsResponse.data.content || productsResponse.data || [];
-        setProducts(productsList.filter(p => p.isActive !== false));
-      } catch (err) { setError('Failed to load products.'); } finally { setLoading(false); }
+        if (productsResponse.success && productsResponse.data) {
+          productsList = productsResponse.data.content || productsResponse.data || [];
+        }
+        
+        console.log('Products list:', productsList); // Debug log
+        console.log('Total products found:', productsList.length); // Debug log
+        
+        const activeProducts = productsList.filter(p => p.isActive !== false);
+        console.log('Active products:', activeProducts.length); // Debug log
+        
+        setProducts(activeProducts);
+      } catch (err) {
+        console.error('Error fetching products:', err);
+        setError('Failed to load products.');
+      } finally {
+        setLoading(false);
+      }
     };
     fetchProducts();
   }, []);

@@ -332,6 +332,147 @@
 }
 
 /* ============================================
+   COMING SOON POPUP
+   ============================================ */
+.coming-soon-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.coming-soon-popup {
+  background: white;
+  border-radius: 24px;
+  padding: 50px 60px;
+  max-width: 450px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+  animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.coming-soon-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: #f5f5f5;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #666;
+}
+
+.coming-soon-close:hover {
+  background: var(--primary);
+  color: white;
+  transform: rotate(90deg);
+}
+
+.coming-soon-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.coming-soon-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+  animation: bounceIcon 1s ease-in-out infinite;
+}
+
+@keyframes bounceIcon {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.coming-soon-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 42px;
+  font-weight: 600;
+  color: #3a3a3a;
+  margin-bottom: 16px;
+}
+
+.slideshow-container[data-lang="ar"] .coming-soon-title {
+  font-family: 'Amiri', serif;
+}
+
+.coming-soon-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  color: #777;
+  line-height: 1.7;
+  margin-bottom: 30px;
+}
+
+.slideshow-container[data-lang="ar"] .coming-soon-desc {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.coming-soon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 40px;
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+  color: white;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(212, 165, 165, 0.4);
+}
+
+.slideshow-container[data-lang="ar"] .coming-soon-btn {
+  font-family: 'Tajawal', sans-serif;
+  text-transform: none;
+  font-size: 16px;
+}
+
+.coming-soon-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(212, 165, 165, 0.5);
+}
+
+/* ============================================
    RESPONSIVE DESIGN
    ============================================ */
 @media (max-width: 1400px) {
@@ -502,6 +643,29 @@
   .scroll-indicator {
     display: none;
   }
+  
+  /* Coming Soon Popup - Mobile */
+  .coming-soon-popup {
+    padding: 40px 30px;
+    max-width: 350px;
+  }
+  
+  .coming-soon-icon {
+    font-size: 50px;
+  }
+  
+  .coming-soon-title {
+    font-size: 32px;
+  }
+  
+  .coming-soon-desc {
+    font-size: 14px;
+  }
+  
+  .coming-soon-btn {
+    padding: 14px 32px;
+    font-size: 13px;
+  }
 }
 
 @media (max-width: 576px) {
@@ -570,6 +734,40 @@
   .dot.active {
     width: 24px;
   }
+  
+  /* Coming Soon Popup - Small Mobile */
+  .coming-soon-popup {
+    padding: 35px 25px;
+    max-width: 300px;
+    border-radius: 20px;
+  }
+  
+  .coming-soon-close {
+    top: 15px;
+    right: 15px;
+    width: 36px;
+    height: 36px;
+  }
+  
+  .coming-soon-icon {
+    font-size: 44px;
+    margin-bottom: 16px;
+  }
+  
+  .coming-soon-title {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+  
+  .coming-soon-desc {
+    font-size: 13px;
+    margin-bottom: 24px;
+  }
+  
+  .coming-soon-btn {
+    padding: 12px 28px;
+    font-size: 12px;
+  }
 }
 
 @media (max-width: 400px) {
@@ -590,6 +788,14 @@
     padding: 12px 24px;
     font-size: 10px;
   }
+  
+  .coming-soon-title {
+    font-size: 24px;
+  }
+  
+  .coming-soon-desc {
+    font-size: 12px;
+  }
 }
 
 /* ============================================
@@ -601,7 +807,10 @@
   .slide-button,
   .slide-arrow,
   .dot,
-  .scroll-indicator {
+  .scroll-indicator,
+  .coming-soon-overlay,
+  .coming-soon-popup,
+  .coming-soon-icon {
     animation: none !important;
     transition: none !important;
   }
@@ -614,7 +823,9 @@
 /* Focus States */
 .slide-button:focus-visible,
 .slide-arrow:focus-visible,
-.dot:focus-visible {
+.dot:focus-visible,
+.coming-soon-close:focus-visible,
+.coming-soon-btn:focus-visible {
   outline: 3px solid white;
   outline-offset: 3px;
 }

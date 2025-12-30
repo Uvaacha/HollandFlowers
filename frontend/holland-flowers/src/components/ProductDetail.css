@@ -1372,24 +1372,25 @@
 
 /* Product Description */
 .product-description {
-  margin-bottom: 28px;
-  padding: 24px;
-  background: linear-gradient(135deg, #faf8f8 0%, #f5f3f3 100%);
-  border-radius: 16px;
-  border: 1px solid rgba(0, 0, 0, 0.03);
+  margin-top: 12px;
+  margin-bottom: 20px;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  border: none;
 }
 
 .product-description p {
   font-family: 'Poppins', sans-serif;
   font-size: 14px;
-  line-height: 1.8;
+  line-height: 1.7;
   color: #666;
   margin: 0;
 }
 
 .product-detail-page.rtl .product-description p {
   font-family: 'Tajawal', sans-serif;
-  line-height: 2;
+  line-height: 1.9;
 }
 
 /* Delivery Accordion - Elegant Style */

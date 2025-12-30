@@ -4,6 +4,7 @@ import './ImageSlideshow.css';
 const ImageSlideshow = ({ currentLang: propLang }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [lang, setLang] = useState(propLang || 'en');
+  const [showComingSoon, setShowComingSoon] = useState(false);
 
   // Listen for language changes
   useEffect(() => {
@@ -34,7 +35,10 @@ const ImageSlideshow = ({ currentLang: propLang }) => {
       slide4Button: "Shop Flowers",
       prevAriaLabel: "Previous Slide",
       nextAriaLabel: "Next Slide",
-      goToSlide: "Go to slide"
+      goToSlide: "Go to slide",
+      comingSoon: "Coming Soon",
+      comingSoonDesc: "We're baking something special! Our premium cake collection will be available soon.",
+      stayTuned: "Stay Tuned"
     },
     ar: {
       slide1Text: "لكل قصة حب، هناك هدية ذكرى سنوية خالدة في انتظارك. استكشف مجموعتنا",
@@ -47,7 +51,10 @@ const ImageSlideshow = ({ currentLang: propLang }) => {
       slide4Button: "تسوق الزهور",
       prevAriaLabel: "الشريحة السابقة",
       nextAriaLabel: "الشريحة التالية",
-      goToSlide: "انتقل إلى الشريحة"
+      goToSlide: "انتقل إلى الشريحة",
+      comingSoon: "قريباً",
+      comingSoonDesc: "نحن نحضر شيئاً مميزاً! ستتوفر مجموعتنا المميزة من الكيك قريباً.",
+      stayTuned: "ترقبوا"
     }
   };
 
@@ -59,28 +66,32 @@ const ImageSlideshow = ({ currentLang: propLang }) => {
       image: `${process.env.PUBLIC_URL}/Flowers-1.webp`,
       text: t.slide1Text,
       buttonText: t.slide1Button,
-      buttonLink: "/valentine-special"
+      buttonLink: "/valentine-special",
+      isComingSoon: false
     },
     {
       id: 2,
       image: `${process.env.PUBLIC_URL}/Flowers-2.webp`,
       text: t.slide2Text,
       buttonText: t.slide2Button,
-      buttonLink: "/birthday"
+      buttonLink: "/birthday",
+      isComingSoon: false
     },
     {
       id: 3,
       image: `${process.env.PUBLIC_URL}/Flowers-3.webp`,
       text: t.slide3Text,
       buttonText: t.slide3Button,
-      buttonLink: "/cakes"
+      buttonLink: "/cakes",
+      isComingSoon: true  // This slide shows Coming Soon popup
     },
     {
       id: 4,
       image: `${process.env.PUBLIC_URL}/Flowers-4.webp`,
       text: t.slide4Text,
       buttonText: t.slide4Button,
-      buttonLink: "/bouquets"
+      buttonLink: "/bouquets",
+      isComingSoon: false
     }
   ];
 
@@ -93,6 +104,11 @@ const ImageSlideshow = ({ currentLang: propLang }) => {
     return () => clearInterval(timer);
   }, [slides.length]);
 
+  // Close Coming Soon popup when slide changes
+  useEffect(() => {
+    setShowComingSoon(false);
+  }, [currentSlide]);
+
   const goToSlide = (index) => {
     setCurrentSlide(index);
   };
@@ -103,6 +119,17 @@ const ImageSlideshow = ({ currentLang: propLang }) => {
 
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  const handleButtonClick = (e, slide) => {
+    if (slide.isComingSoon) {
+      e.preventDefault();
+      setShowComingSoon(true);
+    }
+  };
+
+  const closeComingSoon = () => {
+    setShowComingSoon(false);
   };
 
   return (
@@ -118,7 +145,11 @@ const ImageSlideshow = ({ currentLang: propLang }) => {
             <div className="slide-content">
               <div className="slide-text-wrapper">
                 <p className="slide-text">{slide.text}</p>
-                <a href={slide.buttonLink} className="slide-button">
+                <a 
+                  href={slide.buttonLink} 
+                  className="slide-button"
+                  onClick={(e) => handleButtonClick(e, slide)}
+                >
                   <span>{slide.buttonText}</span>
                   <svg 
                     className="button-arrow" 
@@ -137,6 +168,28 @@ const ImageSlideshow = ({ currentLang: propLang }) => {
           </div>
         </div>
       ))}
+
+      {/* Coming Soon Popup */}
+      {showComingSoon && (
+        <div className="coming-soon-overlay" onClick={closeComingSoon}>
+          <div className="coming-soon-popup" onClick={(e) => e.stopPropagation()}>
+            <button className="coming-soon-close" onClick={closeComingSoon}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+            <div className="coming-soon-content">
+              <span className="coming-soon-icon">🎂</span>
+              <h2 className="coming-soon-title">{t.comingSoon}</h2>
+              <p className="coming-soon-desc">{t.comingSoonDesc}</p>
+              <button className="coming-soon-btn" onClick={closeComingSoon}>
+                {t.stayTuned}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Navigation Arrows */}
       <button 

@@ -8428,7 +8428,7 @@ const ProductDetail = () => {
       addToCart: 'Add to cart',
       adding: 'Adding...',
       sale: 'Sale',
-      delivery: 'Delivery',
+      delivery: 'Delivery & Returns',
       share: 'Share',
       home: 'Home',
       products: 'Products',
@@ -8587,6 +8587,11 @@ const ProductDetail = () => {
               {currentLang === 'ar' ? product.nameAr : product.nameEn}
             </h1>
 
+            {/* Description - Right after title */}
+            <div className="product-description">
+              <p>{currentLang === 'ar' ? product.descriptionAr : product.descriptionEn}</p>
+            </div>
+
             {/* Price Row */}
             <div className="product-price-row">
               {product.priceOnSelection ? (
@@ -8724,11 +8729,6 @@ const ProductDetail = () => {
               {!product.inStock ? text.outOfStock : isAddingToCart ? text.adding : text.addToCart}
             </button>
 
-            {/* Description */}
-            <div className="product-description">
-              <p>{currentLang === 'ar' ? product.descriptionAr : product.descriptionEn}</p>
-            </div>
-
             {/* Delivery Accordion */}
             <div className="delivery-accordion">
               <button 
@@ -8763,7 +8763,7 @@ const ProductDetail = () => {
                       <span className="delivery-icon">🚚</span>
                       <div>
                         <strong>{currentLang === 'ar' ? 'التوصيل في نفس اليوم' : 'Same Day Delivery'}</strong>
-                        <p>{currentLang === 'ar' ? 'للطلبات قبل الساعة ٢ مساءً' : 'For orders placed before 9:00 PM'}</p>
+                        <p>{currentLang === 'ar' ? 'للطلبات قبل الساعة ٢ مساءً' : 'For orders placed before 2:00 PM'}</p>
                       </div>
                     </div>
                     <div className="delivery-info-item">
