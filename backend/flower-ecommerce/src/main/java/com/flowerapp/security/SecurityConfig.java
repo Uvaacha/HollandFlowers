@@ -163,7 +163,8 @@ public class SecurityConfig {
                 "https://hollandflowers.com",
                 "https://flowerskw.com",
                 "https://www.flowerskw.com",
-                "https://hollandflowers.onrender.com",            // Backend domain
+//                "https://hollandflowers.onrender.com",
+                "https://hollandflowers.onrender.com/api/v1",
                 "https://holland-flowers.vercel.app",
                 "https://holland-flowers-quv2xb80t-uvaachas-projects.vercel.app"
         ));
