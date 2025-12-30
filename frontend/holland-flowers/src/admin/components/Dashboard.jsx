@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { dashboardAPI } from '../services/api';
+import { dashboardAPI, ordersAPI } from '../services/api';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -10,7 +10,7 @@ const Dashboard = () => {
     totalCustomers: 0,
     totalRevenue: 0
   });
-  const [recentOrders, setRecentOrders] = useState([]);
+  const [pendingOrders, setPendingOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -20,9 +20,10 @@ const Dashboard = () => {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
-      const [statsResponse, ordersResponse] = await Promise.all([
+      const [statsResponse, pendingOrdersResponse] = await Promise.all([
         dashboardAPI.getStats(),
-        dashboardAPI.getRecentOrders(5)
+        // Fetch only PENDING orders for dashboard
+        ordersAPI.getByDeliveryStatus('PENDING', { page: 0, size: 10 })
       ]);
       
       // Handle API response format: { success: true, data: {...} }
@@ -30,9 +31,9 @@ const Dashboard = () => {
         setStats(statsResponse.data);
       }
       
-      if (ordersResponse.success && ordersResponse.data) {
+      if (pendingOrdersResponse.success && pendingOrdersResponse.data) {
         // Orders come as paginated response with 'content' array
-        setRecentOrders(ordersResponse.data.content || []);
+        setPendingOrders(pendingOrdersResponse.data.content || []);
       }
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);
@@ -133,8 +134,8 @@ const Dashboard = () => {
 
       <div className="dashboard-section">
         <div className="section-header">
-          <h2 className="section-title">Recent Orders</h2>
-          <Link to="/admin/orders" className="view-all-link">View All</Link>
+          <h2 className="section-title">Pending Orders</h2>
+          <Link to="/admin/orders" className="view-all-link">View All Orders</Link>
         </div>
         
         <div className="table-container">
@@ -150,16 +151,16 @@ const Dashboard = () => {
               </tr>
             </thead>
             <tbody>
-              {recentOrders.length > 0 ? (
-                recentOrders.map((order) => (
+              {pendingOrders.length > 0 ? (
+                pendingOrders.map((order) => (
                   <tr key={order.orderId}>
                     <td className="order-id">{order.orderNumber}</td>
                     <td>{order.recipientName}</td>
                     <td>{order.itemCount || '-'} items</td>
                     <td className="amount">KD {order.totalAmount?.toFixed(3)}</td>
                     <td>
-                      <span className={`status-badge ${getStatusClass(order.orderStatus)}`}>
-                        {formatStatus(order.orderStatus)}
+                      <span className={`status-badge ${getStatusClass(order.deliveryStatus || order.orderStatus)}`}>
+                        {formatStatus(order.deliveryStatus || order.orderStatus)}
                       </span>
                     </td>
                     <td className="date">{new Date(order.createdAt).toLocaleDateString()}</td>
@@ -167,7 +168,7 @@ const Dashboard = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="6" className="empty-message">No orders found</td>
+                  <td colSpan="6" className="empty-message">No pending orders</td>
                 </tr>
               )}
             </tbody>
