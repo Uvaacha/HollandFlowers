@@ -123,14 +123,22 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
 
         log.info("Using paymentType={} (0=all methods, other=specific method)", paymentType);
 
+        // Log the URLs being used (for debugging)
+        log.info("========== HESABE CONFIG URLs ==========");
+        log.info("Response URL: {}", hesabeConfig.getResponseUrl());
+        log.info("Failure URL: {}", hesabeConfig.getFailureUrl());
+        log.info("Webhook URL: {}", hesabeConfig.getWebhookUrl());
+        log.info("=========================================");
+
         // Build Hesabe checkout request
         // Note: amount should be in KWD (e.g., 10.500), not fils
         // paymentType=0 shows all payment options on Hesabe payment page
+        // IMPORTANT: Use orderNumber as orderReferenceNumber since Hesabe returns this in callback
         HesabeCheckoutRequest checkoutRequest = HesabeCheckoutRequest.builder()
                 .merchantCode(hesabeConfig.getMerchantCode())
                 .amount(amountKwd) // Amount in KWD (e.g., 10.500)
                 .paymentType(paymentType) // 0 = show all methods, or specific code
-                .orderReferenceNumber(paymentReference)
+                .orderReferenceNumber(order.getOrderNumber())  // Use orderNumber (ORD-xxx) - Hesabe returns this
                 .responseUrl(hesabeConfig.getResponseUrl())
                 .failureUrl(hesabeConfig.getFailureUrl())
                 .webhookUrl(hesabeConfig.getWebhookUrl()) // Add webhook URL
@@ -139,11 +147,15 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
                 .customerName(user.getName())
                 .customerEmail(payment.getCustomerEmail())
                 .customerMobile(payment.getCustomerPhone())
-                .variable1(String.valueOf(order.getOrderId()))
-                .variable2(order.getOrderNumber())
-                .variable3(user.getUserId().toString())
+                .variable1(paymentReference)                    // Payment reference (PAY-xxx)
+                .variable2(order.getOrderNumber())              // Order number (ORD-xxx)
+                .variable3(String.valueOf(order.getOrderId()))  // Numeric order ID
+                .variable4(user.getUserId().toString())         // User ID
                 .orderDescription("Order #" + order.getOrderNumber())
                 .build();
+
+        // Log the full request for debugging
+        log.info("Checkout Request JSON: {}", objectMapper.writeValueAsString(checkoutRequest));
 
         // Encrypt request
         String encryptedRequest = encryptData(objectMapper.writeValueAsString(checkoutRequest));
@@ -256,12 +268,66 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
             throw new PaymentException("Failed to parse payment callback data");
         }
 
-        log.info("Payment callback - Reference: {}, Result: {}",
-                paymentData.getOrderReferenceNumber(), paymentData.getResultCode());
+        log.info("Payment callback - Reference: {}, Result: {}, Variable1: {}, Variable2: {}, Variable3: {}",
+                paymentData.getOrderReferenceNumber(), paymentData.getResultCode(),
+                paymentData.getVariable1(), paymentData.getVariable2(), paymentData.getVariable3());
 
-        // Find payment by reference
-        Payment payment = paymentRepository.findByPaymentReference(paymentData.getOrderReferenceNumber())
-                .orElseThrow(() -> new PaymentException("Payment not found for reference: " + paymentData.getOrderReferenceNumber()));
+        // Try to find payment using multiple strategies
+        String orderRef = paymentData.getOrderReferenceNumber();
+        Payment payment = null;
+
+        // Strategy 1: orderReferenceNumber is now the orderNumber (ORD-xxx format)
+        if (orderRef != null && !orderRef.isEmpty()) {
+            if (orderRef.startsWith("ORD-")) {
+                // It's an orderNumber - find payment by order
+                payment = paymentRepository.findByOrderOrderNumber(orderRef).orElse(null);
+                log.info("Lookup by orderNumber (orderRef) '{}': {}", orderRef, payment != null ? "FOUND" : "NOT FOUND");
+            } else if (orderRef.startsWith("PAY-")) {
+                // It's a payment reference
+                payment = paymentRepository.findByPaymentReference(orderRef).orElse(null);
+                log.info("Lookup by paymentReference '{}': {}", orderRef, payment != null ? "FOUND" : "NOT FOUND");
+            }
+        }
+
+        // Strategy 2: variable1 contains payment reference (PAY-xxx)
+        if (payment == null && paymentData.getVariable1() != null && !paymentData.getVariable1().isEmpty()) {
+            String var1 = paymentData.getVariable1();
+            if (var1.startsWith("PAY-")) {
+                payment = paymentRepository.findByPaymentReference(var1).orElse(null);
+                log.info("Lookup by paymentReference (variable1) '{}': {}", var1, payment != null ? "FOUND" : "NOT FOUND");
+            } else if (var1.startsWith("ORD-")) {
+                payment = paymentRepository.findByOrderOrderNumber(var1).orElse(null);
+                log.info("Lookup by orderNumber (variable1) '{}': {}", var1, payment != null ? "FOUND" : "NOT FOUND");
+            }
+        }
+
+        // Strategy 3: variable2 contains orderNumber (ORD-xxx)
+        if (payment == null && paymentData.getVariable2() != null && !paymentData.getVariable2().isEmpty()) {
+            String var2 = paymentData.getVariable2();
+            payment = paymentRepository.findByOrderOrderNumber(var2).orElse(null);
+            log.info("Lookup by orderNumber (variable2) '{}': {}", var2, payment != null ? "FOUND" : "NOT FOUND");
+        }
+
+        // Strategy 4: variable3 contains numeric orderId
+        if (payment == null && paymentData.getVariable3() != null && !paymentData.getVariable3().isEmpty()) {
+            try {
+                Long orderId = Long.parseLong(paymentData.getVariable3());
+                payment = paymentRepository.findLatestByOrderOrderId(orderId).orElse(null);
+                log.info("Lookup by orderId (variable3) '{}': {}", orderId, payment != null ? "FOUND" : "NOT FOUND");
+            } catch (NumberFormatException e) {
+                log.warn("Variable3 '{}' is not a valid orderId", paymentData.getVariable3());
+            }
+        }
+
+        if (payment == null) {
+            log.error("Payment not found! OrderRef: {}, Var1: {}, Var2: {}, Var3: {}",
+                    orderRef, paymentData.getVariable1(), paymentData.getVariable2(), paymentData.getVariable3());
+            throw new PaymentException("Payment not found for orderRef: " + orderRef +
+                    ", var1: " + paymentData.getVariable1() + ", var2: " + paymentData.getVariable2());
+        }
+
+        log.info("Payment found: ID={}, Reference={}, OrderNumber={}",
+                payment.getId(), payment.getPaymentReference(), payment.getOrder().getOrderNumber());
 
         // Update payment with response data
         payment.setTransactionId(paymentData.getTransactionId());

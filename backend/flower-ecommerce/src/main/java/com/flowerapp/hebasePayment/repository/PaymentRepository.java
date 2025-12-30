@@ -20,6 +20,14 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
     List<Payment> findByOrderOrderId(Long orderId);
 
+    // Find single payment by orderId (most recent)
+    @Query("SELECT p FROM Payment p WHERE p.order.orderId = :orderId ORDER BY p.createdAt DESC LIMIT 1")
+    Optional<Payment> findLatestByOrderOrderId(@Param("orderId") Long orderId);
+
+    // Find payment by order number
+    @Query("SELECT p FROM Payment p WHERE p.order.orderNumber = :orderNumber ORDER BY p.createdAt DESC LIMIT 1")
+    Optional<Payment> findByOrderOrderNumber(@Param("orderNumber") String orderNumber);
+
     @Query("SELECT p FROM Payment p WHERE p.status = :status AND p.createdAt < :expiryTime")
     List<Payment> findExpiredPendingPayments(
             @Param("status") PaymentStatus status,

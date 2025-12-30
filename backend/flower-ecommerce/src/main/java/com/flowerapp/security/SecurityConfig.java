@@ -161,10 +161,11 @@ public class SecurityConfig {
                 "http://localhost:8080",
                 "https://flowerapp.com",
                 "https://hollandflowers.com",
-                "https://flowerskw.com",                              // ADD THIS
-                "https://www.flowerskw.com",                          // ADD THIS
-                "https://holland-flowers.vercel.app",                 // ADD THIS
-                "https://holland-flowers-quv2xb80t-uvaachas-projects.vercel.app"  // ADD THIS
+                "https://flowerskw.com",
+                "https://www.flowerskw.com",
+                "https://hollandflowers.onrender.com",            // Backend domain
+                "https://holland-flowers.vercel.app",
+                "https://holland-flowers-quv2xb80t-uvaachas-projects.vercel.app"
         ));
         configuration.setAllowedMethods(Arrays.asList(
                 "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
