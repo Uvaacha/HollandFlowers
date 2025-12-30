@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './AdminLogin.css';
 
 // API URL - Make sure this matches your backend
-const API_URL = 'http://localhost:8080/api/v1';
+const API_URL = process.env.REACT_APP_API_URL || 'https://hollandflowers.onrender.com/api/v1';
 
 const AdminLogin = ({ onLogin }) => {
   const [credentials, setCredentials] = useState({
