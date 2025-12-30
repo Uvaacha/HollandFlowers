@@ -83,18 +83,36 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Public endpoints
-                        .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+                        // ============ PUBLIC ENDPOINTS (NO AUTH) ============
+                        // IMPORTANT: Specific payment endpoints MUST come BEFORE general /payments/**
+                        .requestMatchers("/payments/callback").permitAll()   // Hesabe callback - NO AUTH
+                        .requestMatchers("/payments/webhook").permitAll()    // Hesabe webhook - NO AUTH
+                        .requestMatchers("/payments/verify").permitAll()     // Payment verify - NO AUTH
+                        .requestMatchers("/payments/methods").permitAll()    // Payment methods - NO AUTH
+                        .requestMatchers(HttpMethod.GET, "/payments/methods/**").permitAll()
+
+                        // Other public endpoints
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/categories/**").permitAll()
+                        .requestMatchers("/products/**").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/swagger-ui.html").permitAll()
+                        .requestMatchers("/api-docs/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/categories/**", "/products/**").permitAll()
 
+                        // ============ AUTHENTICATED ENDPOINTS ============
                         // Cart endpoints - authenticated users only
                         .requestMatchers("/api/cart/**").authenticated()
                         .requestMatchers("/cart/**").authenticated()
 
                         // User endpoints - authenticated users
-                        .requestMatchers(USER_ENDPOINTS).authenticated()
+                        .requestMatchers("/users/profile/**").authenticated()
+                        .requestMatchers("/orders/**").authenticated()
+                        .requestMatchers("/payments/**").authenticated()  // Other payment endpoints need auth
 
-                        // Admin management endpoints - ADMIN and SUPER_ADMIN
+                        // ============ ADMIN ENDPOINTS ============
                         .requestMatchers("/admin/products/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
                         .requestMatchers("/admin/categories/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
                         .requestMatchers("/admin/orders/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
@@ -102,7 +120,9 @@ public class SecurityConfig {
                         .requestMatchers("/admin/dashboard/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
 
                         // Super Admin only endpoints
-                        .requestMatchers(SUPER_ADMIN_ENDPOINTS).hasRole("SUPER_ADMIN")
+                        .requestMatchers("/admin/users/**").hasRole("SUPER_ADMIN")
+                        .requestMatchers("/admin/roles/**").hasRole("SUPER_ADMIN")
+                        .requestMatchers("/admin/system/**").hasRole("SUPER_ADMIN")
                         .requestMatchers(HttpMethod.POST, "/admin/admins/**").hasRole("SUPER_ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/admin/admins/**").hasRole("SUPER_ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/admin/admins/**").hasRole("SUPER_ADMIN")
