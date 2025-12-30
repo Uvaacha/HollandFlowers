@@ -169,7 +169,7 @@ const PaymentFailure = () => {
           <p>
             {currentLang === 'ar' 
               ? 'يمكنك أيضاً الدفع عند الاستلام أو التواصل معنا:'
-              : 'You can also pay on delivery or contact us:'}
+              : 'You can also contact us:'}
           </p>
           <a href="https://wa.me/96560038844" className="whatsapp-link" target="_blank" rel="noopener noreferrer">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
