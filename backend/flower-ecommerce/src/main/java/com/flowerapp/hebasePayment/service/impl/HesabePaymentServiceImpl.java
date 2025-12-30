@@ -453,7 +453,8 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
 
     /**
      * Parse the payment callback data
-     * Handles both wrapped format (status/code/message/response.data) and direct format
+     * Hesabe returns: {status, code, message, response: {resultCode, orderReferenceNumber, ...}}
+     * NOTE: Data is DIRECTLY in "response", NOT in "response.data"!
      */
     private HesabeCallbackResponse.PaymentData parsePaymentCallback(String decryptedData) {
         log.info("========== PARSING CALLBACK DATA ==========");
@@ -469,41 +470,53 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
             // Check for different response structures
             HesabeCallbackResponse.PaymentData paymentData = null;
 
-            // Structure 1: {status, code, message, response: {data: {...}}}
-            if (rootNode.has("response") && rootNode.get("response").has("data")) {
-                log.info("Detected wrapped response structure");
+            // Structure 1: {status, code, message, response: {...}} - Hesabe's actual format
+            // Data is DIRECTLY in "response", NOT in "response.data"
+            if (rootNode.has("response") && !rootNode.get("response").has("data")) {
+                log.info("Detected Hesabe direct response structure (response contains data directly)");
                 HesabeCallbackResponse wrappedResponse = objectMapper.readValue(decryptedData, HesabeCallbackResponse.class);
                 paymentData = wrappedResponse.getPaymentData();
+
+                if (paymentData != null) {
+                    log.info("Successfully parsed Hesabe response - resultCode: {}, orderRef: {}, var1: {}, var2: {}, var3: {}",
+                            paymentData.getResultCode(),
+                            paymentData.getOrderReferenceNumber(),
+                            paymentData.getVariable1(),
+                            paymentData.getVariable2(),
+                            paymentData.getVariable3());
+                }
             }
-            // Structure 2: Direct payment data at root level
-            else if (rootNode.has("resultCode") || rootNode.has("orderReferenceNumber") ||
-                    rootNode.has("result_code") || rootNode.has("order_reference_number")) {
-                log.info("Detected direct payment data structure");
+            // Structure 2: {status, code, message, response: {data: {...}}} - Old expected format
+            else if (rootNode.has("response") && rootNode.get("response").has("data")) {
+                log.info("Detected wrapped response.data structure");
+                com.fasterxml.jackson.databind.JsonNode dataNode = rootNode.get("response").get("data");
+                paymentData = objectMapper.treeToValue(dataNode, HesabeCallbackResponse.PaymentData.class);
+            }
+            // Structure 3: Direct payment data at root level
+            else if (rootNode.has("resultCode") || rootNode.has("orderReferenceNumber")) {
+                log.info("Detected direct payment data structure at root");
                 paymentData = objectMapper.readValue(decryptedData, HesabeCallbackResponse.PaymentData.class);
             }
-            // Structure 3: {data: {...}} without status wrapper
+            // Structure 4: {data: {...}} without status wrapper
             else if (rootNode.has("data") && !rootNode.has("response")) {
                 log.info("Detected simple data wrapper structure");
                 com.fasterxml.jackson.databind.JsonNode dataNode = rootNode.get("data");
                 paymentData = objectMapper.treeToValue(dataNode, HesabeCallbackResponse.PaymentData.class);
             }
 
-            // If paymentData is null or orderRef is null, try to extract from JSON directly
+            // If paymentData is still null, try to extract manually
             if (paymentData == null) {
+                log.warn("Could not parse with known structures, trying manual extraction");
                 paymentData = new HesabeCallbackResponse.PaymentData();
-            }
 
-            // Try to find orderReferenceNumber from any field in JSON
-            if (paymentData.getOrderReferenceNumber() == null) {
+                // Try to find orderReferenceNumber from any field in JSON
                 String orderRef = findOrderReferenceInJson(rootNode);
                 if (orderRef != null) {
                     log.info("Found order reference in JSON: {}", orderRef);
                     paymentData.setOrderReferenceNumber(orderRef);
                 }
-            }
 
-            // Try to find result code
-            if (paymentData.getResultCode() == null) {
+                // Try to find result code
                 String resultCode = findFieldValue(rootNode, "resultCode", "result_code", "ResultCode", "result", "status_code");
                 if (resultCode != null) {
                     paymentData.setResultCode(resultCode);
@@ -511,11 +524,11 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
             }
 
             log.info("Final parsed data - orderRef: {}, var1: {}, var2: {}, var3: {}, resultCode: {}",
-                    paymentData.getOrderReferenceNumber(),
-                    paymentData.getVariable1(),
-                    paymentData.getVariable2(),
-                    paymentData.getVariable3(),
-                    paymentData.getResultCode());
+                    paymentData != null ? paymentData.getOrderReferenceNumber() : "null",
+                    paymentData != null ? paymentData.getVariable1() : "null",
+                    paymentData != null ? paymentData.getVariable2() : "null",
+                    paymentData != null ? paymentData.getVariable3() : "null",
+                    paymentData != null ? paymentData.getResultCode() : "null");
 
             return paymentData;
 
