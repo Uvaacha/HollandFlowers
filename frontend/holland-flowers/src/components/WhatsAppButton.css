@@ -266,3 +266,8 @@
     display: none;
   }
 }
+/* PREVENT OVERSCROLL / BOUNCE EFFECT */
+html {
+  overscroll-behavior: none;
+}
+

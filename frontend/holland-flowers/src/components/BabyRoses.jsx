@@ -4,7 +4,7 @@ import { useCart } from './CartContext';
 import categoryService from '../services/categoryService';
 import productService from '../services/productService';
 import MobileFilterBar from './MobileFilterBar';
-import MobileFilterDrawer, { FilterSection, PriceRangeFilter, CheckboxFilter } from './MobileFilterDrawer';
+import MobileFilterDrawer, { FilterSection, PriceRangeFilter, CheckboxFilter, ColorFilter } from './MobileFilterDrawer';
 import './BabyRoses.css';
 
 const BabyRoses = () => {
@@ -17,9 +17,10 @@ const BabyRoses = () => {
 
   const [priceRange, setPriceRange] = useState({ min: '', max: '' });
   const [selectedArrangements, setSelectedArrangements] = useState([]);
+  const [selectedColors, setSelectedColors] = useState([]);
   const [sortBy, setSortBy] = useState('default');
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
-  const [filtersOpen, setFiltersOpen] = useState({ price: true, arrangement: true });
+  const [filtersOpen, setFiltersOpen] = useState({ price: true, arrangement: true, color: true });
 
   useEffect(() => {
     const savedLang = localStorage.getItem('preferredLanguage') || 'en';
@@ -39,7 +40,8 @@ const BabyRoses = () => {
       priceLow: "Price: Low to High", priceHigh: "Price: High to Low", newest: "Newest First", nameAZ: "Name: A-Z",
       items: "items", bouquet: "Bouquet", box: "Box", basket: "Basket", vase: "Vase", tray: "Tray", stand: "Stand",
       kd: "KD", addToCart: "Add to Cart",
-      loading: "Loading products...", error: "Failed to load products", noProducts: "No products found", highestPrice: "Highest price"
+      loading: "Loading products...", error: "Failed to load products", noProducts: "No products found", highestPrice: "Highest price",
+      color: 'COLOR'
     },
     ar: {
       title: "ورود صغيرة", subtitle: "ورود صغيرة رقيقة للحظات الحنان", badge: "ورود صغيرة",
@@ -48,7 +50,8 @@ const BabyRoses = () => {
       priceLow: "السعر: من الأقل للأعلى", priceHigh: "السعر: من الأعلى للأقل", newest: "الأحدث أولاً", nameAZ: "الاسم: أ-ي",
       items: "منتج", bouquet: "باقة", box: "صندوق", basket: "سلة", vase: "مزهرية", tray: "صينية", stand: "حامل",
       kd: "د.ك", addToCart: "أضف للسلة",
-      loading: "جاري تحميل المنتجات...", error: "فشل في تحميل المنتجات", noProducts: "لا توجد منتجات", highestPrice: "أعلى سعر"
+      loading: "جاري تحميل المنتجات...", error: "فشل في تحميل المنتجات", noProducts: "لا توجد منتجات", highestPrice: "أعلى سعر",
+      color: 'اللون'
     }
   };
   const t = translations[currentLang] || translations.en;
@@ -109,6 +112,7 @@ const BabyRoses = () => {
     if (priceRange.min !== '') result = result.filter(p => getFinalPrice(p) >= Number(priceRange.min));
     if (priceRange.max !== '') result = result.filter(p => getFinalPrice(p) <= Number(priceRange.max));
     if (selectedArrangements.length > 0) result = result.filter(p => selectedArrangements.some(arr => getProductName(p).toLowerCase().includes(arr.toLowerCase())));
+    if (selectedColors.length > 0) result = result.filter(p => selectedColors.some(color => getProductName(p).toLowerCase().includes(color.toLowerCase()) || (p.tags || '').toLowerCase().includes(color.toLowerCase()) || (p.color || '').toLowerCase().includes(color.toLowerCase())));
     switch (sortBy) {
       case 'priceLow': result.sort((a, b) => getFinalPrice(a) - getFinalPrice(b)); break;
       case 'priceHigh': result.sort((a, b) => getFinalPrice(b) - getFinalPrice(a)); break;
@@ -117,7 +121,7 @@ const BabyRoses = () => {
       default: break;
     }
     return result;
-  }, [products, priceRange, selectedArrangements, sortBy, currentLang]);
+  }, [products, priceRange, selectedArrangements, selectedColors, sortBy, currentLang]);
 
   const handleAddToCart = (e, product) => {
     e.preventDefault(); e.stopPropagation();
@@ -139,10 +143,29 @@ const BabyRoses = () => {
     setTimeout(() => setAddingToCart(prev => ({ ...prev, [pid]: false })), 800);
   };
 
-  const clearFilters = () => { setPriceRange({ min: '', max: '' }); setSelectedArrangements([]); setSortBy('default'); };
+  const clearFilters = () => { setPriceRange({ min: '', max: '' }); setSelectedArrangements([]);
+    setSelectedColors([]); setSortBy('default'); };
   const toggleArrangement = (arr) => setSelectedArrangements(prev => prev.includes(arr) ? prev.filter(a => a !== arr) : [...prev, arr]);
-  const hasActiveFilters = priceRange.min !== '' || priceRange.max !== '' || selectedArrangements.length > 0;
+  const toggleColor = (color) => setSelectedColors(prev => prev.includes(color) ? prev.filter(c => c !== color) : [...prev, color]);
+  const hasActiveFilters = priceRange.min !== '' || priceRange.max !== '' || selectedArrangements.length > 0 || selectedColors.length > 0;
   const arrangementTypes = [{ key: 'bouquet', label: t.bouquet }, { key: 'box', label: t.box }, { key: 'basket', label: t.basket }, { key: 'vase', label: t.vase }, { key: 'tray', label: t.tray }, { key: 'stand', label: t.stand }];
+  const colorOptions = [
+    { key: 'beige', label: 'Beige', color: '#F5DEB3' },
+    { key: 'black', label: 'Black', color: '#000000' },
+    { key: 'blue', label: 'Blue', color: '#0066FF' },
+    { key: 'brown', label: 'Brown', color: '#8B4513' },
+    { key: 'clear', label: 'Clear', color: '#FFFFFF', border: true },
+    { key: 'gold', label: 'Gold', color: '#FFD700' },
+    { key: 'green', label: 'Green', color: '#00AA00' },
+    { key: 'multicolor', label: 'Multicolor', color: 'linear-gradient(135deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff)', gradient: true },
+    { key: 'orange', label: 'Orange', color: '#FF8C00' },
+    { key: 'pink', label: 'Pink', color: '#FFB6C1' },
+    { key: 'purple', label: 'Purple', color: '#9932CC' },
+    { key: 'red', label: 'Red', color: '#FF0000' },
+    { key: 'white', label: 'White', color: '#FFFFFF', border: true },
+    { key: 'yellow', label: 'Yellow', color: '#FFFF00' }
+  ];
+
 
   return (
     <div className={`babyroses-page ${currentLang === 'ar' ? 'rtl' : ''}`}>
@@ -214,6 +237,19 @@ const BabyRoses = () => {
             currentLang={currentLang}
           />
         </FilterSection>
+        
+        <FilterSection 
+          title={t.color || 'Color'} 
+          isOpen={filtersOpen.color} 
+          onToggle={() => setFiltersOpen(prev => ({ ...prev, color: !prev.color }))}
+        >
+          <ColorFilter
+            options={colorOptions}
+            selectedValues={selectedColors}
+            onChange={setSelectedColors}
+            currentLang={currentLang}
+          />
+        </FilterSection>
       </MobileFilterDrawer>
 
       <section className="main-content">
@@ -259,6 +295,26 @@ const BabyRoses = () => {
                         <span className="label-text">{label}</span>
                       </label>
                     ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="filter-section">
+                <button className={`filter-header ${filtersOpen.color ? 'open' : ''}`} onClick={() => setFiltersOpen(prev => ({ ...prev, color: !prev.color }))}>
+                  <span>{t.color}</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                {filtersOpen.color && (
+                  <div className="filter-content">
+                    <div className="color-grid">
+                      {colorOptions.map(({ key, label, color, border }) => (
+                        <label key={key} className={`color-option ${selectedColors.includes(key) ? 'selected' : ''}`}>
+                          <input type="checkbox" checked={selectedColors.includes(key)} onChange={() => toggleColor(key)}/>
+                          <span className={`color-circle ${border ? 'with-border' : ''}`} style={{ background: color }}></span>
+                          <span className="color-name">{label}</span>
+                        </label>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>

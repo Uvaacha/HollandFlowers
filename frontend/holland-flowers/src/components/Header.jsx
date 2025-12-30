@@ -374,15 +374,6 @@ const Header = () => {
                 <span className="dropdown-trigger">{t.flowers}</span>
                 <div className="dropdown-content mega-dropdown">
                   <div className="mega-column">
-                    <h4 className="has-submenu">{t.occasions}</h4>
-                    <div className="submenu-items">
-                      <Link to="/valentine-special">{t.valentineDay}</Link>
-                      <Link to="/mothers-day">{t.mothersDay}</Link>
-                      <Link to="/ramadan">{t.ramadan}</Link>
-                      <Link to="/eid-collection">{t.eidCollection}</Link>
-                    </div>
-                  </div>
-                  <div className="mega-column">
                     <Link to="/tulips">{t.tulips}</Link>
                     <Link to="/lilium-arrangement">{t.liliumArrangements}</Link>
                     <Link to="/holland-small">{t.hollandSmall}</Link>
@@ -398,6 +389,17 @@ const Header = () => {
                     <Link to="/flowers-mabkhar">{t.flowersWithMabkhar}</Link>
                     <Link to="/combos/flowers-perfume">{t.flowersWithPerfume}</Link>
                   </div>
+                </div>
+              </li>
+
+              {/* Occasions - Separate Menu */}
+              <li className="dropdown">
+                <span className="dropdown-trigger">{t.occasions}</span>
+                <div className="dropdown-content">
+                  <Link to="/valentine-special">{t.valentineDay}</Link>
+                  <Link to="/mothers-day">{t.mothersDay}</Link>
+                  <Link to="/ramadan">{t.ramadan}</Link>
+                  <Link to="/eid-collection">{t.eidCollection}</Link>
                 </div>
               </li>
 
@@ -647,12 +649,6 @@ const Header = () => {
                 </svg>
               </div>
               <ul className="mobile-submenu">
-                <li className="submenu-title">{t.occasions}</li>
-                <li><Link to="/valentine-special" onClick={handleLinkClick}>{t.valentineDay}</Link></li>
-                <li><Link to="/mothers-day" onClick={handleLinkClick}>{t.mothersDay}</Link></li>
-                <li><Link to="/ramadan" onClick={handleLinkClick}>{t.ramadan}</Link></li>
-                <li><Link to="/eid-collection" onClick={handleLinkClick}>{t.eidCollection}</Link></li>
-                <li className="submenu-divider"></li>
                 <li><Link to="/tulips" onClick={handleLinkClick}>{t.tulips}</Link></li>
                 <li><Link to="/lilium-arrangement" onClick={handleLinkClick}>{t.liliumArrangements}</Link></li>
                 <li><Link to="/holland-small" onClick={handleLinkClick}>{t.hollandSmall}</Link></li>
@@ -665,6 +661,22 @@ const Header = () => {
                 <li><Link to="/cylinder-vases" onClick={handleLinkClick}>{t.cylinderVases}</Link></li>
                 <li><Link to="/flowers-mabkhar" onClick={handleLinkClick}>{t.flowersWithMabkhar}</Link></li>
                 <li><Link to="/combos/flowers-perfume" onClick={handleLinkClick}>{t.flowersWithPerfume}</Link></li>
+              </ul>
+            </li>
+
+            {/* Occasions - Separate Menu */}
+            <li className={`mobile-dropdown ${expandedMenu === 'occasions' ? 'expanded' : ''}`}>
+              <div className="mobile-menu-item" onClick={(e) => toggleMobileSubmenu('occasions', e)}>
+                <span>{t.occasions}</span>
+                <svg className="menu-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M9 18l6-6-6-6"/>
+                </svg>
+              </div>
+              <ul className="mobile-submenu">
+                <li><Link to="/valentine-special" onClick={handleLinkClick}>{t.valentineDay}</Link></li>
+                <li><Link to="/mothers-day" onClick={handleLinkClick}>{t.mothersDay}</Link></li>
+                <li><Link to="/ramadan" onClick={handleLinkClick}>{t.ramadan}</Link></li>
+                <li><Link to="/eid-collection" onClick={handleLinkClick}>{t.eidCollection}</Link></li>
               </ul>
             </li>
 

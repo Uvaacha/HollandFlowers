@@ -1164,3 +1164,9 @@
 .cart-page.rtl .char-counter-wrapper {
   flex-direction: row-reverse;
 }
+
+/* PREVENT OVERSCROLL / BOUNCE EFFECT */
+html {
+  overscroll-behavior: none;
+}
+

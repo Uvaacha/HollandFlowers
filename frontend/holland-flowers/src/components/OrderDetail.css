@@ -487,3 +487,8 @@
     text-align: center;
   }
 }
+/* PREVENT OVERSCROLL / BOUNCE EFFECT */
+html {
+  overscroll-behavior: none;
+}
+

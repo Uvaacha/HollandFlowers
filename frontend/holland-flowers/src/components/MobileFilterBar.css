@@ -211,3 +211,9 @@
 .mobile-filter-bar__sort-option.active svg {
   color: #e91e63;
 }
+
+/* PREVENT OVERSCROLL / BOUNCE EFFECT */
+html {
+  overscroll-behavior: none;
+}
+

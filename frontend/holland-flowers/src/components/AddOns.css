@@ -704,3 +704,8 @@
     border: 1px solid #ddd;
   }
 }
+/* PREVENT OVERSCROLL / BOUNCE EFFECT */
+html {
+  overscroll-behavior: none;
+}
+

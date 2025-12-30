@@ -51,6 +51,7 @@ const Footer = () => {
       copyright: '© 2024 Holland Flowers Kuwait. All rights reserved.',
       privacy: 'Privacy Policy',
       terms: 'Terms of Service',
+      refund: 'Refund Policy',
       viewMap: 'View on Map',
     },
     ar: {
@@ -77,6 +78,7 @@ const Footer = () => {
       copyright: '© 2024 هولاند فلاورز الكويت. جميع الحقوق محفوظة.',
       privacy: 'سياسة الخصوصية',
       terms: 'شروط الخدمة',
+      refund: 'سياسة الاسترداد',
       viewMap: 'عرض على الخريطة',
     }
   };
@@ -369,6 +371,8 @@ const Footer = () => {
             <p className="copyright">{text.copyright}</p>
             <div className="footer-legal">
               <span onClick={() => handleLinkClick('/privacy')}>{text.privacy}</span>
+              <span className="divider">|</span>
+              <span onClick={() => handleLinkClick('/refund-policy')}>{text.refund}</span>
               <span className="divider">|</span>
               <span onClick={() => handleLinkClick('/terms')}>{text.terms}</span>
             </div>

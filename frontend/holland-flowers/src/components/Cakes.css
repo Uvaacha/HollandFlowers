@@ -504,3 +504,8 @@
     font-size: 16px;
   }
 }
+/* PREVENT OVERSCROLL / BOUNCE EFFECT */
+html {
+  overscroll-behavior: none;
+}
+

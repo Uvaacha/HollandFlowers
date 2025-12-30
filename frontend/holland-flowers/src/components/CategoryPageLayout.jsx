@@ -30,16 +30,36 @@ const CategoryPageLayout = ({
   const [priceRange, setPriceRange] = useState({ min: '', max: '' });
   const [maxPrice, setMaxPrice] = useState(100);
   const [selectedArrangements, setSelectedArrangements] = useState([]);
+  const [selectedColors, setSelectedColors] = useState([]);
   const [expandedFilters, setExpandedFilters] = useState({
     price: true,
-    arrangement: true
+    arrangement: true,
+    color: true
   });
   
   // Mobile filter drawer state
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [mobileSortOpen, setMobileSortOpen] = useState(false);
 
-  const arrangementTypes = ['Bouquet', 'Box', 'Basket', 'Vase', 'Tray', 'Stand'];
+  const arrangementTypes = ['Basket', 'Bouquet', 'Box', 'Other', 'Vase'];
+  
+  
+  const colorOptions = [
+    { name: 'Beige', color: '#F5DEB3' },
+    { name: 'Black', color: '#000000' },
+    { name: 'Blue', color: '#0066FF' },
+    { name: 'Brown', color: '#8B4513' },
+    { name: 'Clear', color: '#FFFFFF', border: true },
+    { name: 'Gold', color: '#FFD700' },
+    { name: 'Green', color: '#00AA00' },
+    { name: 'Multicolor', color: 'linear-gradient(135deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff)', gradient: true },
+    { name: 'Orange', color: '#FF8C00' },
+    { name: 'Pink', color: '#FFB6C1' },
+    { name: 'Purple', color: '#9932CC' },
+    { name: 'Red', color: '#FF0000' },
+    { name: 'White', color: '#FFFFFF', border: true },
+    { name: 'Yellow', color: '#FFFF00' }
+  ];
 
   // Theme colors
   const themes = {
@@ -188,8 +208,27 @@ const CategoryPageLayout = ({
       result = result.filter(product => {
         const name = (product.productName || product.name || '').toLowerCase();
         const tags = (product.tags || '').toLowerCase();
+        const description = (product.description || product.shortDescription || '').toLowerCase();
         return selectedArrangements.some(arr => 
-          name.includes(arr.toLowerCase()) || tags.includes(arr.toLowerCase())
+          name.includes(arr.toLowerCase()) || 
+          tags.includes(arr.toLowerCase()) ||
+          description.includes(arr.toLowerCase())
+        );
+      });
+    }
+
+    // Color filter
+    if (selectedColors.length > 0) {
+      result = result.filter(product => {
+        const name = (product.productName || product.name || '').toLowerCase();
+        const tags = (product.tags || '').toLowerCase();
+        const color = (product.color || '').toLowerCase();
+        const description = (product.description || product.shortDescription || '').toLowerCase();
+        return selectedColors.some(c => 
+          name.includes(c.toLowerCase()) || 
+          tags.includes(c.toLowerCase()) ||
+          color.includes(c.toLowerCase()) ||
+          description.includes(c.toLowerCase())
         );
       });
     }
@@ -216,15 +255,17 @@ const CategoryPageLayout = ({
     }
 
     setFilteredProducts(result);
-  }, [products, priceRange, selectedArrangements, sortBy]);
+  }, [products, priceRange, selectedArrangements, selectedColors, sortBy]);
 
   const translations = {
     en: {
       filters: "Filters",
       filter: "Filter",
       priceRange: "PRICE RANGE",
-      highestPrice: "Highest price:",
+      price: "PRICE",
+      highestPrice: "The highest price is",
       arrangement: "ARRANGEMENT",
+      color: "COLOR",
       items: "items",
       sortBy: "Sort by:",
       sort: "Sort",
@@ -239,6 +280,8 @@ const CategoryPageLayout = ({
       noProducts: "No products found",
       error: "Failed to load products",
       currency: "KD",
+      currencySymbol: "د.ك",
+      to: "to",
       clearAll: "Clear All",
       apply: "Apply Filters",
       close: "Close"
@@ -247,8 +290,10 @@ const CategoryPageLayout = ({
       filters: "تصفية",
       filter: "تصفية",
       priceRange: "نطاق السعر",
-      highestPrice: "أعلى سعر:",
+      price: "السعر",
+      highestPrice: "أعلى سعر هو",
       arrangement: "نوع الترتيب",
+      color: "اللون",
       items: "منتج",
       sortBy: "ترتيب حسب:",
       sort: "ترتيب",
@@ -263,6 +308,8 @@ const CategoryPageLayout = ({
       noProducts: "لا توجد منتجات",
       error: "فشل في تحميل المنتجات",
       currency: "د.ك",
+      currencySymbol: "د.ك",
+      to: "إلى",
       clearAll: "مسح الكل",
       apply: "تطبيق",
       close: "إغلاق"
@@ -345,6 +392,14 @@ const CategoryPageLayout = ({
     );
   };
 
+  const toggleColor = (color) => {
+    setSelectedColors(prev => 
+      prev.includes(color)
+        ? prev.filter(c => c !== color)
+        : [...prev, color]
+    );
+  };
+
   const toggleFilter = (filter) => {
     setExpandedFilters(prev => ({
       ...prev,
@@ -355,6 +410,7 @@ const CategoryPageLayout = ({
   const clearAllFilters = () => {
     setPriceRange({ min: '', max: '' });
     setSelectedArrangements([]);
+    setSelectedColors([]);
     setSortBy('default');
   };
 
@@ -536,6 +592,52 @@ const CategoryPageLayout = ({
                   </div>
                 )}
               </div>
+
+              {/* Color Filter - Mobile */}
+              <div className="mobile-filter-section">
+                <button 
+                  className="mobile-filter-header"
+                  onClick={() => toggleFilter('color')}
+                >
+                  <span>{t.color}</span>
+                  <svg 
+                    className={`chevron ${expandedFilters.color ? 'expanded' : ''}`}
+                    width="16" 
+                    height="16" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    strokeWidth="2"
+                  >
+                    <path d="M6 9l6 6 6-6"/>
+                  </svg>
+                </button>
+                {expandedFilters.color && (
+                  <div className="mobile-filter-content">
+                    <div className="color-grid">
+                      {colorOptions.map(colorOption => (
+                        <label 
+                          key={colorOption.name} 
+                          className={`color-item ${selectedColors.includes(colorOption.name) ? 'selected' : ''}`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedColors.includes(colorOption.name)}
+                            onChange={() => toggleColor(colorOption.name)}
+                          />
+                          <span 
+                            className={`color-circle ${colorOption.border ? 'with-border' : ''}`}
+                            style={{ 
+                              background: colorOption.gradient ? colorOption.color : colorOption.color 
+                            }}
+                          ></span>
+                          <span className="color-label">{colorOption.name}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
             
             <div className="mobile-drawer-footer">
@@ -684,6 +786,52 @@ const CategoryPageLayout = ({
                           />
                           <span className="checkmark"></span>
                           <span className="checkbox-label">{type}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Color Filter */}
+              <div className="filter-section">
+                <button 
+                  className="filter-header"
+                  onClick={() => toggleFilter('color')}
+                >
+                  <span>{t.color}</span>
+                  <svg 
+                    className={`chevron ${expandedFilters.color ? 'expanded' : ''}`}
+                    width="16" 
+                    height="16" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    strokeWidth="2"
+                  >
+                    <path d="M6 9l6 6 6-6"/>
+                  </svg>
+                </button>
+                {expandedFilters.color && (
+                  <div className="filter-content">
+                    <div className="color-grid">
+                      {colorOptions.map(colorOption => (
+                        <label 
+                          key={colorOption.name} 
+                          className={`color-item ${selectedColors.includes(colorOption.name) ? 'selected' : ''}`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedColors.includes(colorOption.name)}
+                            onChange={() => toggleColor(colorOption.name)}
+                          />
+                          <span 
+                            className={`color-circle ${colorOption.border ? 'with-border' : ''}`}
+                            style={{ 
+                              background: colorOption.gradient ? colorOption.color : colorOption.color 
+                            }}
+                          ></span>
+                          <span className="color-label">{colorOption.name}</span>
                         </label>
                       ))}
                     </div>

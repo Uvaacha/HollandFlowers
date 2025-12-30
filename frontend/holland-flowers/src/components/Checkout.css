@@ -1471,3 +1471,8 @@
     font-size: 11px;
   }
 }
+/* PREVENT OVERSCROLL / BOUNCE EFFECT */
+html {
+  overscroll-behavior: none;
+}
+

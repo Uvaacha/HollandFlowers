@@ -829,3 +829,8 @@
   outline: 3px solid white;
   outline-offset: 3px;
 }
+/* PREVENT OVERSCROLL / BOUNCE EFFECT */
+html {
+  overscroll-behavior: none;
+}
+

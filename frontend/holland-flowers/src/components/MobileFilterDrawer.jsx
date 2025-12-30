@@ -211,4 +211,46 @@ export const CheckboxFilter = ({
   );
 };
 
+/**
+ * ColorFilter - Color selection filter with visual swatches
+ */
+export const ColorFilter = ({
+  options,
+  selectedValues = [],
+  onChange,
+  currentLang = 'en'
+}) => {
+  const handleChange = (value) => {
+    if (selectedValues.includes(value)) {
+      onChange(selectedValues.filter(v => v !== value));
+    } else {
+      onChange([...selectedValues, value]);
+    }
+  };
+
+  return (
+    <div className="mobile-filter-drawer__color-grid">
+      {options.map(option => {
+        const { key, label, color, border, gradient } = option;
+        const isSelected = selectedValues.includes(key);
+        
+        return (
+          <label key={key} className={`mobile-filter-drawer__color-option ${isSelected ? 'selected' : ''}`}>
+            <input
+              type="checkbox"
+              checked={isSelected}
+              onChange={() => handleChange(key)}
+            />
+            <span 
+              className={`mobile-filter-drawer__color-circle ${border ? 'with-border' : ''}`}
+              style={{ background: color }}
+            ></span>
+            <span className="mobile-filter-drawer__color-name">{label}</span>
+          </label>
+        );
+      })}
+    </div>
+  );
+};
+
 export default MobileFilterDrawer;
