@@ -112,7 +112,7 @@ const NewYearPopup = () => {
 
           {/* Footer */}
           <div className="newyear-popup-footer">
-            <span>✨ Happy New Year from Holland Flowers ✨</span>
+            <span>✨ Happy New Year from Holland Flowers. ✨</span>
           </div>
         </div>
       </div>
