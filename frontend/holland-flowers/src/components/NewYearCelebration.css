@@ -1,0 +1,636 @@
+/* ============================================
+   NEW YEAR CELEBRATION - FIREWORKS + POPUP
+   Holland Flowers Kuwait
+   ============================================ */
+
+/* ============================================
+   FIREWORKS SCREEN
+   ============================================ */
+.fireworks-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10001;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fireworksFadeIn 0.5s ease;
+}
+
+@keyframes fireworksFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fireworks-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.fireworks-text {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  animation: textGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes textGlow {
+  from {
+    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));
+  }
+  to {
+    filter: drop-shadow(0 0 40px rgba(255, 215, 0, 0.8));
+  }
+}
+
+.fireworks-sparkle {
+  font-size: 40px;
+  animation: sparkleRotate 2s linear infinite;
+  display: inline-block;
+}
+
+@keyframes sparkleRotate {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.2); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+.fireworks-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 72px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 10px 0;
+  text-shadow: 
+    0 0 10px rgba(255, 215, 0, 0.8),
+    0 0 20px rgba(255, 215, 0, 0.6),
+    0 0 30px rgba(255, 215, 0, 0.4),
+    0 0 40px rgba(192, 139, 139, 0.4);
+  letter-spacing: 4px;
+  animation: titlePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes titlePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+.fireworks-year {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 120px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 25%, #c08b8b 50%, #FFD700 75%, #FFA500 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientMove 3s linear infinite;
+  margin: 0;
+  line-height: 1;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+.fireworks-brand {
+  margin-top: 30px;
+  animation: brandFloat 3s ease-in-out infinite;
+}
+
+@keyframes brandFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.fireworks-logo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  box-shadow: 
+    0 0 20px rgba(192, 139, 139, 0.6),
+    0 0 40px rgba(192, 139, 139, 0.4);
+}
+
+/* ============================================
+   POPUP OVERLAY
+   ============================================ */
+.newyear-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+.newyear-popup-overlay.closing {
+  animation: fadeOut 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* ============================================
+   POPUP CONTAINER
+   ============================================ */
+.newyear-popup-container {
+  background: #ffffff;
+  border-radius: 20px;
+  max-width: 420px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.newyear-popup-container.closing {
+  animation: slideDown 0.3s ease forwards;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+}
+
+/* ============================================
+   CLOSE BUTTON
+   ============================================ */
+.newyear-popup-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  color: #666;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.newyear-popup-close:hover {
+  background: #ffffff;
+  color: #333;
+  transform: scale(1.08);
+}
+
+/* ============================================
+   HERO IMAGE
+   ============================================ */
+.newyear-popup-hero {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #fdf6f6 0%, #f8e8e8 100%);
+}
+
+.newyear-hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.newyear-hero-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to top, #ffffff 0%, transparent 100%);
+}
+
+/* ============================================
+   CONTENT SECTION
+   ============================================ */
+.newyear-popup-content {
+  padding: 20px 28px 28px;
+  text-align: center;
+}
+
+.newyear-popup-badge {
+  display: inline-block;
+  padding: 8px 20px;
+  background: linear-gradient(135deg, #fff8f8 0%, #ffefef 100%);
+  color: #b88a8a;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  border-radius: 25px;
+  margin-bottom: 14px;
+  border: 1px solid rgba(192, 139, 139, 0.12);
+  text-transform: uppercase;
+}
+
+.newyear-popup-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px;
+  font-weight: 600;
+  color: #2d2d2d;
+  margin: 0 0 10px 0;
+  letter-spacing: 1px;
+  line-height: 1.2;
+}
+
+.newyear-popup-subtitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #888;
+  margin: 0 0 22px 0;
+  line-height: 1.7;
+}
+
+/* ============================================
+   FEATURES
+   ============================================ */
+.newyear-popup-features {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  flex-wrap: nowrap;
+}
+
+.newyear-feature {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: #fdfafa;
+  border: 1px solid rgba(192, 139, 139, 0.18);
+  border-radius: 30px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.newyear-feature:hover {
+  background: #fff5f5;
+  border-color: rgba(192, 139, 139, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(192, 139, 139, 0.1);
+}
+
+.newyear-feature-icon {
+  font-size: 16px;
+  line-height: 1;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.newyear-feature-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+  letter-spacing: 0.3px;
+  line-height: 1;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.newyear-popup-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.newyear-btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 28px;
+  background: linear-gradient(135deg, #c08b8b 0%, #d4a5a5 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(192, 139, 139, 0.35);
+}
+
+.newyear-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(192, 139, 139, 0.45);
+  background: linear-gradient(135deg, #b07d7d 0%, #c99a9a 100%);
+}
+
+.newyear-btn-primary svg {
+  transition: transform 0.3s ease;
+}
+
+.newyear-btn-primary:hover svg {
+  transform: translateX(4px);
+}
+
+.newyear-btn-secondary {
+  background: transparent;
+  border: none;
+  color: #aaa;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 10px;
+}
+
+.newyear-btn-secondary:hover {
+  color: #777;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.newyear-popup-footer {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(192, 139, 139, 0.1);
+}
+
+.newyear-popup-footer span {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  color: #b8a0a0;
+  letter-spacing: 0.5px;
+  font-weight: 400;
+}
+
+/* ============================================
+   RESPONSIVE - MOBILE
+   ============================================ */
+@media (max-width: 480px) {
+  /* Fireworks Mobile */
+  .fireworks-title {
+    font-size: 42px;
+    letter-spacing: 2px;
+  }
+
+  .fireworks-year {
+    font-size: 72px;
+  }
+
+  .fireworks-sparkle {
+    font-size: 28px;
+  }
+
+  .fireworks-logo {
+    width: 70px;
+    height: 70px;
+  }
+
+  /* Popup Mobile */
+  .newyear-popup-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .newyear-popup-container {
+    border-radius: 20px 20px 0 0;
+    max-width: 100%;
+    animation: slideUpMobile 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes slideUpMobile {
+    from {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .newyear-popup-container.closing {
+    animation: slideDownMobile 0.3s ease forwards;
+  }
+
+  @keyframes slideDownMobile {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+  }
+
+  .newyear-popup-hero {
+    height: 160px;
+  }
+
+  .newyear-popup-content {
+    padding: 16px 20px 24px;
+  }
+
+  .newyear-popup-title {
+    font-size: 28px;
+  }
+
+  .newyear-popup-subtitle {
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+
+  .newyear-popup-features {
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .newyear-feature {
+    padding: 8px 12px;
+    gap: 5px;
+  }
+
+  .newyear-feature-icon {
+    font-size: 14px;
+  }
+
+  .newyear-feature-text {
+    font-size: 10px;
+  }
+
+  .newyear-btn-primary {
+    padding: 14px 24px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+
+  .newyear-popup-close {
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .newyear-popup-footer {
+    margin-top: 14px;
+    padding-top: 12px;
+  }
+
+  .newyear-popup-footer span {
+    font-size: 10px;
+  }
+
+  .newyear-popup-badge {
+    font-size: 9px;
+    padding: 6px 14px;
+  }
+}
+
+@media (max-width: 380px) {
+  .fireworks-title {
+    font-size: 36px;
+  }
+
+  .fireworks-year {
+    font-size: 60px;
+  }
+
+  .fireworks-sparkle {
+    font-size: 24px;
+  }
+
+  .fireworks-logo {
+    width: 60px;
+    height: 60px;
+  }
+
+  .newyear-popup-hero {
+    height: 140px;
+  }
+
+  .newyear-popup-content {
+    padding: 14px 16px 22px;
+  }
+
+  .newyear-popup-title {
+    font-size: 24px;
+  }
+
+  .newyear-popup-subtitle {
+    font-size: 12px;
+  }
+
+  .newyear-feature {
+    padding: 6px 10px;
+    gap: 4px;
+  }
+
+  .newyear-feature-icon {
+    font-size: 12px;
+  }
+
+  .newyear-feature-text {
+    font-size: 9px;
+  }
+
+  .newyear-btn-primary {
+    padding: 12px 20px;
+    font-size: 12px;
+  }
+}
+
+/* ============================================
+   RTL SUPPORT
+   ============================================ */
+body.rtl .newyear-popup-close {
+  right: auto;
+  left: 12px;
+}
+
+body.rtl .newyear-btn-primary {
+  flex-direction: row-reverse;
+}
+
+body.rtl .newyear-btn-primary svg {
+  transform: rotate(180deg);
+}
+
+body.rtl .newyear-btn-primary:hover svg {
+  transform: rotate(180deg) translateX(4px);
+}
+
+body.rtl .newyear-popup-title,
+body.rtl .fireworks-title {
+  font-family: 'Amiri', serif;
+}
+
+body.rtl .newyear-popup-subtitle,
+body.rtl .newyear-feature-text,
+body.rtl .newyear-btn-primary,
+body.rtl .newyear-btn-secondary,
+body.rtl .newyear-popup-badge,
+body.rtl .newyear-popup-footer span {
+  font-family: 'Amiri', serif;
+}
+
+@media (max-width: 480px) {
+  body.rtl .newyear-popup-close {
+    left: 10px;
+    right: auto;
+  }
+}
