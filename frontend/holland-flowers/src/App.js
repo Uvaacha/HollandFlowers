@@ -43,6 +43,7 @@ import Cart from './components/Cart';
 import Checkout from './components/Checkout';
 import WhatsAppButton from './components/WhatsAppButton';
 import Account from './components/Account';
+import OAuthCallback from './components/OAuthCallback';
 import productService from './services/productService';
 import PaymentSuccess from './components/PaymentSuccess';
 import PaymentFailure from './components/PaymentFailure';
@@ -1163,6 +1164,8 @@ function App() {
             <Route path="/admin/*" element={<AdminApp />} />
             <Route path="/payment/success" element={<PaymentSuccess />} />
             <Route path="/payment/failure" element={<PaymentFailure />} />
+            <Route path="/oauth/callback" element={<OAuthCallback />} />
+            <Route path="/login/oauth2/code/google" element={<OAuthCallback />} />
             <Route path="/*" element={<AppContent currentLang={currentLang} />} />
           </Routes>
         </Router>

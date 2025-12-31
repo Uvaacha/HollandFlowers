@@ -281,11 +281,128 @@ const Account = () => {
     }
   };
 
-  const handleGoogleLogin = () => {
-    // Implement Google OAuth
-    console.log('Google login clicked');
-    const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api/v1';
-    window.location.href = `${API_BASE_URL}/oauth2/authorization/google`;
+  // Initialize Google Sign-In
+  useEffect(() => {
+    // Load Google Identity Services script
+    const loadGoogleScript = () => {
+      if (document.getElementById('google-identity-script')) return;
+      
+      const script = document.createElement('script');
+      script.id = 'google-identity-script';
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      document.body.appendChild(script);
+    };
+    
+    loadGoogleScript();
+  }, []);
+
+  const handleGoogleLogin = async () => {
+    setLoading(true);
+    setError('');
+    
+    try {
+      // Check if Google Identity Services is loaded
+      if (!window.google?.accounts?.oauth2) {
+        // Fallback: Try loading the script again
+        await new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = 'https://accounts.google.com/gsi/client';
+          script.onload = resolve;
+          script.onerror = reject;
+          document.body.appendChild(script);
+        });
+        
+        // Wait a bit for initialization
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+
+      // Your Google Client ID - Replace with your actual Client ID from Google Cloud Console
+      const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID || 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+      
+      if (GOOGLE_CLIENT_ID === 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com') {
+        setError('Google Sign-In is not configured. Please contact support.');
+        setLoading(false);
+        return;
+      }
+
+      // Initialize Google OAuth2 client
+      const client = window.google.accounts.oauth2.initTokenClient({
+        client_id: GOOGLE_CLIENT_ID,
+        scope: 'email profile',
+        callback: async (response) => {
+          if (response.error) {
+            console.error('Google OAuth error:', response);
+            setError('Google sign-in failed. Please try again.');
+            setLoading(false);
+            return;
+          }
+
+          try {
+            // Get user info from Google
+            const userInfoResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+              headers: { Authorization: `Bearer ${response.access_token}` }
+            });
+            
+            const userInfo = await userInfoResponse.json();
+            
+            // Send to your backend for authentication/registration
+            const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://www.flowerskw.com/api/v1';
+            
+            const backendResponse = await fetch(`${API_BASE_URL}/auth/google`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                googleId: userInfo.sub,
+                email: userInfo.email,
+                name: userInfo.name,
+                picture: userInfo.picture,
+                accessToken: response.access_token
+              })
+            });
+            
+            const data = await backendResponse.json();
+            
+            if (data.success && data.data) {
+              // Store tokens
+              const { accessToken, refreshToken, user } = data.data;
+              localStorage.setItem('accessToken', accessToken);
+              localStorage.setItem('adminToken', accessToken);
+              if (refreshToken) {
+                localStorage.setItem('refreshToken', refreshToken);
+              }
+              localStorage.setItem('user', JSON.stringify(user));
+              
+              setSuccess(text.loginSuccess);
+              
+              // Redirect to home
+              setTimeout(() => {
+                navigate('/');
+                window.location.reload();
+              }, 500);
+            } else {
+              setError(data.message || 'Google sign-in failed. Please try again.');
+            }
+          } catch (err) {
+            console.error('Backend auth error:', err);
+            setError('Failed to complete sign-in. Please try again.');
+          } finally {
+            setLoading(false);
+          }
+        },
+      });
+
+      // Trigger Google sign-in popup
+      client.requestAccessToken();
+      
+    } catch (err) {
+      console.error('Google login error:', err);
+      setError('Failed to initialize Google sign-in. Please try again.');
+      setLoading(false);
+    }
   };
 
   const getSelectedCountryData = () => {

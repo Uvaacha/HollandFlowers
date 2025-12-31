@@ -8,6 +8,7 @@ import api, { TokenManager } from './api';
 const AUTH_ENDPOINTS = {
   SIGNUP: '/auth/signup',
   LOGIN: '/auth/login',
+  GOOGLE_AUTH: '/auth/google',
   OTP_REQUEST: '/auth/otp/request',
   OTP_VERIFY: '/auth/otp/verify',
   REFRESH_TOKEN: '/auth/refresh-token',
@@ -45,6 +46,27 @@ const authService = {
   login: async (loginData) => {
     try {
       const response = await api.post(AUTH_ENDPOINTS.LOGIN, loginData);
+      
+      if (response.success && response.data) {
+        const { accessToken, refreshToken, user } = response.data;
+        TokenManager.setTokens(accessToken, refreshToken);
+        TokenManager.setUser(user);
+      }
+      
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  /**
+   * Login with Google OAuth token
+   * @param {Object} googleData - { idToken } or { code } from Google
+   * @returns {Promise} AuthResponse with tokens and user data
+   */
+  googleLogin: async (googleData) => {
+    try {
+      const response = await api.post(AUTH_ENDPOINTS.GOOGLE_AUTH, googleData);
       
       if (response.success && response.data) {
         const { accessToken, refreshToken, user } = response.data;
