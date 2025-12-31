@@ -1,8 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from './CartContext';
 import { useAuth } from '../contexts/AuthContext';
 import './Header.css';
+
+// API base URL
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://hollandflowers.onrender.com/api/v1';
 
 const Header = () => {
   const [currentLang, setCurrentLang] = useState('en');
@@ -10,10 +13,14 @@ const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [productResults, setProductResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
   const [bannerIndex, setBannerIndex] = useState(0);
   const [expandedMenu, setExpandedMenu] = useState(null);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const [allProducts, setAllProducts] = useState([]);
   const userDropdownRef = useRef(null);
+  const searchTimeoutRef = useRef(null);
   const navigate = useNavigate();
   const { getCartCount, isCartOpen } = useCart();
   const { user, isAuthenticated, logout, isLoading } = useAuth();
@@ -38,6 +45,24 @@ const Header = () => {
       'أبسط طريقة لإرسال "الحب" في الكويت 💐',
     ]
   };
+
+  // Fetch all products on component mount for search
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/products?size=500`);
+        if (response.ok) {
+          const data = await response.json();
+          // Handle different API response structures
+          const products = data.data?.content || data.content || data.data || data || [];
+          setAllProducts(Array.isArray(products) ? products : []);
+        }
+      } catch (error) {
+        console.error('Error fetching products for search:', error);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   // Rotate banner every 10 seconds
   useEffect(() => {
@@ -122,6 +147,10 @@ const Header = () => {
       profile: 'Profile',
       welcome: 'Welcome',
       language: 'English',
+      categories: 'Categories',
+      products: 'Products',
+      searching: 'Searching...',
+      viewAll: 'View All Results',
     },
     ar: {
       banner: 'أرسل الحب في الكويت 💐',
@@ -171,54 +200,80 @@ const Header = () => {
       profile: 'الملف الشخصي',
       welcome: 'مرحباً',
       language: 'عربي',
+      categories: 'الفئات',
+      products: 'المنتجات',
+      searching: 'جاري البحث...',
+      viewAll: 'عرض جميع النتائج',
     }
   };
 
   const t = translations[currentLang];
 
-  // All searchable items with their routes and categories
+  // All searchable categories/pages with their routes and keywords
   const searchableItems = [
     // Occasions
-    { nameEn: 'Valentine Day Special', nameAr: 'عيد الحب الخاص', path: '/valentine-special', category: 'Occasions', categoryAr: 'المناسبات', icon: '❤️' },
-    { nameEn: "Mother's Day Specials", nameAr: 'عروض عيد الأم', path: '/mothers-day', category: 'Occasions', categoryAr: 'المناسبات', icon: '💐' },
-    { nameEn: 'Blessed Month of Ramadan', nameAr: 'شهر رمضان المبارك', path: '/ramadan', category: 'Occasions', categoryAr: 'المناسبات', icon: '🌙' },
-    { nameEn: 'Eid Collection', nameAr: 'مجموعة العيد', path: '/eid-collection', category: 'Occasions', categoryAr: 'المناسبات', icon: '🎉' },
+    { nameEn: 'Valentine Day Special', nameAr: 'عيد الحب الخاص', path: '/valentine-special', category: 'Occasions', categoryAr: 'المناسبات', icon: '❤️', keywords: ['valentine', 'love', 'romantic', 'heart', 'red roses', 'حب', 'فالنتاين', 'رومانسي'] },
+    { nameEn: "Mother's Day Specials", nameAr: 'عروض عيد الأم', path: '/mothers-day', category: 'Occasions', categoryAr: 'المناسبات', icon: '💐', keywords: ['mother', 'mom', 'mum', 'mama', 'أم', 'ماما', 'عيد الأم'] },
+    { nameEn: 'Blessed Month of Ramadan', nameAr: 'شهر رمضان المبارك', path: '/ramadan', category: 'Occasions', categoryAr: 'المناسبات', icon: '🌙', keywords: ['ramadan', 'رمضان', 'iftar', 'إفطار', 'islamic'] },
+    { nameEn: 'Eid Collection', nameAr: 'مجموعة العيد', path: '/eid-collection', category: 'Occasions', categoryAr: 'المناسبات', icon: '🎉', keywords: ['eid', 'عيد', 'celebration', 'احتفال', 'fitr', 'adha'] },
+    { nameEn: 'Birthday Flowers', nameAr: 'زهور عيد الميلاد', path: '/birthday-bouquet', category: 'Occasions', categoryAr: 'المناسبات', icon: '🎂', keywords: ['birthday', 'عيد ميلاد', 'celebration', 'party', 'حفلة'] },
+    { nameEn: 'Anniversary Flowers', nameAr: 'زهور الذكرى السنوية', path: '/grand-bouquet', category: 'Occasions', categoryAr: 'المناسبات', icon: '💕', keywords: ['anniversary', 'ذكرى', 'wedding anniversary', 'زواج'] },
+    { nameEn: 'Congratulations', nameAr: 'تهنئة', path: '/bouquets', category: 'Occasions', categoryAr: 'المناسبات', icon: '🎊', keywords: ['congratulations', 'congrats', 'تهنئة', 'مبروك'] },
+    { nameEn: 'Get Well Soon', nameAr: 'سلامات', path: '/bouquets', category: 'Occasions', categoryAr: 'المناسبات', icon: '💚', keywords: ['get well', 'recovery', 'سلامات', 'شفاء'] },
+    { nameEn: 'Sympathy Flowers', nameAr: 'زهور التعزية', path: '/bouquets', category: 'Occasions', categoryAr: 'المناسبات', icon: '🤍', keywords: ['sympathy', 'condolence', 'تعزية', 'عزاء'] },
+    { nameEn: 'Graduation', nameAr: 'تخرج', path: '/bouquets', category: 'Occasions', categoryAr: 'المناسبات', icon: '🎓', keywords: ['graduation', 'تخرج', 'graduate', 'diploma'] },
     
-    // Flowers
-    { nameEn: 'Tulips', nameAr: 'التوليب', path: '/tulips', category: 'Flowers', categoryAr: 'الزهور', icon: '🌷' },
-    { nameEn: 'Lilium Arrangements', nameAr: 'ترتيبات الزنبق', path: '/lilium-arrangement', category: 'Flowers', categoryAr: 'الزهور', icon: '🌸' },
-    { nameEn: 'Holland Small Arrangements', nameAr: 'ترتيبات هولندا الصغيرة', path: '/holland-small', category: 'Flowers', categoryAr: 'الزهور', icon: '🌺' },
-    { nameEn: 'Vase Arrangement', nameAr: 'ترتيب المزهريات', path: '/vase-arrangement', category: 'Flowers', categoryAr: 'الزهور', icon: '🏺' },
-    { nameEn: 'Baby Roses', nameAr: 'ورود صغيرة', path: '/baby-roses', category: 'Flowers', categoryAr: 'الزهور', icon: '🌹' },
-    { nameEn: 'Single Flower', nameAr: 'زهرة واحدة', path: '/single-flower', category: 'Flowers', categoryAr: 'الزهور', icon: '🌼' },
-    { nameEn: 'Holland Style', nameAr: 'أسلوب هولندا', path: '/holland-style', category: 'Flowers', categoryAr: 'الزهور', icon: '🇳🇱' },
-    { nameEn: 'Roses Petals', nameAr: 'بتلات الورد', path: '/roses-petals', category: 'Flowers', categoryAr: 'الزهور', icon: '🌹' },
-    { nameEn: 'Flowers Vase 10 To 25', nameAr: 'مزهرية الزهور من 10 إلى 25', path: '/flowers-vase-10-25', category: 'Flowers', categoryAr: 'الزهور', icon: '🏺' },
-    { nameEn: 'Cylinder Vases 10 To 20', nameAr: 'المزهريات الأسطوانية من 10 إلى 20', path: '/cylinder-vases', category: 'Flowers', categoryAr: 'الزهور', icon: '🏺' },
-    { nameEn: 'Flowers With Mabkhar', nameAr: 'زهور مع مبخرة', path: '/flowers-mabkhar', category: 'Flowers', categoryAr: 'الزهور', icon: '🪔' },
-    { nameEn: 'Flowers With Perfume', nameAr: 'زهور مع عطر', path: '/combos/flowers-perfume', category: 'Flowers', categoryAr: 'الزهور', icon: '🌸' },
+    // Flowers - Types
+    { nameEn: 'Tulips', nameAr: 'التوليب', path: '/tulips', category: 'Flowers', categoryAr: 'الزهور', icon: '🌷', keywords: ['tulip', 'tulips', 'توليب', 'spring flowers'] },
+    { nameEn: 'Roses', nameAr: 'ورد', path: '/bouquets', category: 'Flowers', categoryAr: 'الزهور', icon: '🌹', keywords: ['rose', 'roses', 'ورد', 'وردة', 'red rose', 'white rose', 'pink rose', 'ورد أحمر', 'ورد أبيض', 'ورد وردي'] },
+    { nameEn: 'Red Roses', nameAr: 'ورد أحمر', path: '/bouquets', category: 'Flowers', categoryAr: 'الزهور', icon: '🌹', keywords: ['red rose', 'red roses', 'ورد أحمر', 'romantic', 'love'] },
+    { nameEn: 'White Roses', nameAr: 'ورد أبيض', path: '/bouquets', category: 'Flowers', categoryAr: 'الزهور', icon: '🤍', keywords: ['white rose', 'white roses', 'ورد أبيض', 'pure', 'wedding'] },
+    { nameEn: 'Pink Roses', nameAr: 'ورد وردي', path: '/bouquets', category: 'Flowers', categoryAr: 'الزهور', icon: '🌸', keywords: ['pink rose', 'pink roses', 'ورد وردي', 'romantic'] },
+    { nameEn: 'Yellow Rose Bouquet', nameAr: 'باقة الورد الأصفر', path: '/yellow-rose-bouquet', category: 'Flowers', categoryAr: 'الزهور', icon: '🌻', keywords: ['yellow rose', 'yellow roses', 'ورد أصفر', 'friendship', 'صداقة'] },
+    { nameEn: 'Orchids', nameAr: 'أوركيد', path: '/orchid-plants', category: 'Flowers', categoryAr: 'الزهور', icon: '🌺', keywords: ['orchid', 'orchids', 'أوركيد', 'exotic', 'elegant'] },
+    { nameEn: 'Lilies', nameAr: 'زنبق', path: '/lilium-bouquets', category: 'Flowers', categoryAr: 'الزهور', icon: '🌸', keywords: ['lily', 'lilies', 'lilium', 'زنبق', 'ليليوم'] },
+    { nameEn: 'Sunflowers', nameAr: 'عباد الشمس', path: '/bouquets', category: 'Flowers', categoryAr: 'الزهور', icon: '🌻', keywords: ['sunflower', 'sunflowers', 'عباد الشمس', 'دوار الشمس', 'yellow', 'bright'] },
+    { nameEn: 'Carnations', nameAr: 'قرنفل', path: '/bouquets', category: 'Flowers', categoryAr: 'الزهور', icon: '🌸', keywords: ['carnation', 'carnations', 'قرنفل'] },
+    { nameEn: 'Gerbera', nameAr: 'جربيرا', path: '/bouquets', category: 'Flowers', categoryAr: 'الزهور', icon: '🌼', keywords: ['gerbera', 'daisy', 'جربيرا'] },
+    { nameEn: 'Mixed Flowers', nameAr: 'زهور مشكلة', path: '/bouquets', category: 'Flowers', categoryAr: 'الزهور', icon: '💐', keywords: ['mixed', 'assorted', 'مشكل', 'متنوع'] },
+    { nameEn: 'Lilium Arrangements', nameAr: 'ترتيبات الزنبق', path: '/lilium-arrangement', category: 'Flowers', categoryAr: 'الزهور', icon: '🌸', keywords: ['lilium', 'lily arrangement', 'ترتيب زنبق'] },
+    { nameEn: 'Holland Small Arrangements', nameAr: 'ترتيبات هولندا الصغيرة', path: '/holland-small', category: 'Flowers', categoryAr: 'الزهور', icon: '🌺', keywords: ['small', 'mini', 'صغير', 'holland'] },
+    { nameEn: 'Vase Arrangement', nameAr: 'ترتيب المزهريات', path: '/vase-arrangement', category: 'Flowers', categoryAr: 'الزهور', icon: '🏺', keywords: ['vase', 'مزهرية', 'arrangement'] },
+    { nameEn: 'Baby Roses', nameAr: 'ورود صغيرة', path: '/baby-roses', category: 'Flowers', categoryAr: 'الزهور', icon: '🌹', keywords: ['baby rose', 'mini rose', 'small rose', 'ورد صغير'] },
+    { nameEn: 'Single Flower', nameAr: 'زهرة واحدة', path: '/single-flower', category: 'Flowers', categoryAr: 'الزهور', icon: '🌼', keywords: ['single', 'one flower', 'زهرة واحدة'] },
+    { nameEn: 'Holland Style', nameAr: 'أسلوب هولندا', path: '/holland-style', category: 'Flowers', categoryAr: 'الزهور', icon: '🇳🇱', keywords: ['holland', 'dutch', 'هولندي'] },
+    { nameEn: 'Roses Petals', nameAr: 'بتلات الورد', path: '/roses-petals', category: 'Flowers', categoryAr: 'الزهور', icon: '🌹', keywords: ['petals', 'rose petals', 'بتلات'] },
+    { nameEn: 'Flowers Vase 10 To 25', nameAr: 'مزهرية الزهور من 10 إلى 25', path: '/flowers-vase-10-25', category: 'Flowers', categoryAr: 'الزهور', icon: '🏺', keywords: ['vase', 'مزهرية'] },
+    { nameEn: 'Cylinder Vases 10 To 20', nameAr: 'المزهريات الأسطوانية من 10 إلى 20', path: '/cylinder-vases', category: 'Flowers', categoryAr: 'الزهور', icon: '🏺', keywords: ['cylinder', 'vase', 'أسطوانة', 'مزهرية'] },
+    { nameEn: 'Flowers With Mabkhar', nameAr: 'زهور مع مبخرة', path: '/flowers-mabkhar', category: 'Flowers', categoryAr: 'الزهور', icon: '🪔', keywords: ['mabkhar', 'incense', 'مبخرة', 'بخور'] },
+    { nameEn: 'Flowers With Perfume', nameAr: 'زهور مع عطر', path: '/combos/flowers-perfume', category: 'Flowers', categoryAr: 'الزهور', icon: '🌸', keywords: ['perfume', 'عطر', 'fragrance'] },
     
     // Bouquets
-    { nameEn: 'Flower Bouquets', nameAr: 'باقات الزهور', path: '/bouquets', category: 'Bouquets', categoryAr: 'الباقات', icon: '💐' },
-    { nameEn: 'Hand Bouquets', nameAr: 'باقات يدوية', path: '/hand-bouquets', category: 'Bouquets', categoryAr: 'الباقات', icon: '💐' },
-    { nameEn: 'Orchid Plants', nameAr: 'نباتات الأوركيد', path: '/orchid-plants', category: 'Bouquets', categoryAr: 'الباقات', icon: '🌺' },
-    { nameEn: 'Lilium Bouquets', nameAr: 'باقات الزنبق', path: '/lilium-bouquets', category: 'Bouquets', categoryAr: 'الباقات', icon: '🌸' },
-    { nameEn: 'Birthday Bouquet', nameAr: 'باقة عيد الميلاد', path: '/birthday-bouquet', category: 'Bouquets', categoryAr: 'الباقات', icon: '🎂' },
-    { nameEn: 'Yellow Rose Bouquet', nameAr: 'باقة الورد الأصفر', path: '/yellow-rose-bouquet', category: 'Bouquets', categoryAr: 'الباقات', icon: '🌻' },
-    { nameEn: 'Grand Bouquet', nameAr: 'الباقة الكبرى', path: '/grand-bouquet', category: 'Bouquets', categoryAr: 'الباقات', icon: '👑' },
+    { nameEn: 'Flower Bouquets', nameAr: 'باقات الزهور', path: '/bouquets', category: 'Bouquets', categoryAr: 'الباقات', icon: '💐', keywords: ['bouquet', 'باقة', 'bunch', 'flowers'] },
+    { nameEn: 'Hand Bouquets', nameAr: 'باقات يدوية', path: '/hand-bouquets', category: 'Bouquets', categoryAr: 'الباقات', icon: '💐', keywords: ['hand bouquet', 'باقة يدوية', 'hand tied'] },
+    { nameEn: 'Orchid Plants', nameAr: 'نباتات الأوركيد', path: '/orchid-plants', category: 'Bouquets', categoryAr: 'الباقات', icon: '🌺', keywords: ['orchid', 'plant', 'أوركيد', 'نبات'] },
+    { nameEn: 'Lilium Bouquets', nameAr: 'باقات الزنبق', path: '/lilium-bouquets', category: 'Bouquets', categoryAr: 'الباقات', icon: '🌸', keywords: ['lilium', 'lily', 'زنبق', 'ليليوم'] },
+    { nameEn: 'Birthday Bouquet', nameAr: 'باقة عيد الميلاد', path: '/birthday-bouquet', category: 'Bouquets', categoryAr: 'الباقات', icon: '🎂', keywords: ['birthday', 'عيد ميلاد', 'celebration'] },
+    { nameEn: 'Grand Bouquet', nameAr: 'الباقة الكبرى', path: '/grand-bouquet', category: 'Bouquets', categoryAr: 'الباقات', icon: '👑', keywords: ['grand', 'large', 'luxury', 'فاخر', 'كبير'] },
+    { nameEn: 'Luxury Bouquets', nameAr: 'باقات فاخرة', path: '/grand-bouquet', category: 'Bouquets', categoryAr: 'الباقات', icon: '💎', keywords: ['luxury', 'premium', 'فاخر', 'premium', 'expensive'] },
+    { nameEn: 'Wedding Bouquets', nameAr: 'باقات الزفاف', path: '/grand-bouquet', category: 'Bouquets', categoryAr: 'الباقات', icon: '💒', keywords: ['wedding', 'bridal', 'زفاف', 'عروس', 'bride'] },
     
     // Add-Ons
-    { nameEn: 'Helium Balloons', nameAr: 'بالونات الهيليوم', path: '/add-ons/helium-balloons', category: 'Add-Ons', categoryAr: 'الإضافات', icon: '🎈' },
-    { nameEn: 'Crown for Head', nameAr: 'تاج للرأس', path: '/add-ons/crown-for-head', category: 'Add-Ons', categoryAr: 'الإضافات', icon: '👑' },
-    { nameEn: 'Acrylic Celebration Toppers', nameAr: 'توبر احتفال أكريليك', path: '/add-ons/acrylic-toppers', category: 'Add-Ons', categoryAr: 'الإضافات', icon: '🎉' },
+    { nameEn: 'Helium Balloons', nameAr: 'بالونات الهيليوم', path: '/add-ons/helium-balloons', category: 'Add-Ons', categoryAr: 'الإضافات', icon: '🎈', keywords: ['balloon', 'balloons', 'helium', 'بالون', 'بالونات', 'هيليوم'] },
+    { nameEn: 'Crown for Head', nameAr: 'تاج للرأس', path: '/add-ons/crown-for-head', category: 'Add-Ons', categoryAr: 'الإضافات', icon: '👑', keywords: ['crown', 'tiara', 'تاج', 'princess'] },
+    { nameEn: 'Acrylic Celebration Toppers', nameAr: 'توبر احتفال أكريليك', path: '/add-ons/acrylic-toppers', category: 'Add-Ons', categoryAr: 'الإضافات', icon: '🎉', keywords: ['topper', 'acrylic', 'توبر', 'أكريليك', 'cake topper'] },
+    { nameEn: 'Teddy Bear', nameAr: 'دبدوب', path: '/add-ons', category: 'Add-Ons', categoryAr: 'الإضافات', icon: '🧸', keywords: ['teddy', 'bear', 'دبدوب', 'دب', 'stuffed'] },
     
-    // Combos
-    { nameEn: 'Gift Combos', nameAr: 'الباقات المميزة', path: '/combos', category: 'Combos', categoryAr: 'كومبو', icon: '🎁' },
-    { nameEn: 'Flowers With Chocolates', nameAr: 'زهور مع شوكولاتة', path: '/combos/flowers-chocolates', category: 'Combos', categoryAr: 'كومبو', icon: '🍫' },
+    // Combos & Gifts
+    { nameEn: 'Gift Combos', nameAr: 'الباقات المميزة', path: '/combos', category: 'Combos', categoryAr: 'كومبو', icon: '🎁', keywords: ['gift', 'combo', 'هدية', 'كومبو', 'set'] },
+    { nameEn: 'Flowers With Chocolates', nameAr: 'زهور مع شوكولاتة', path: '/combos/flowers-chocolates', category: 'Combos', categoryAr: 'كومبو', icon: '🍫', keywords: ['chocolate', 'chocolates', 'شوكولاتة', 'شوكولا', 'candy'] },
+    { nameEn: 'Flowers With Perfume', nameAr: 'زهور مع عطر', path: '/combos/flowers-perfume', category: 'Combos', categoryAr: 'كومبو', icon: '✨', keywords: ['perfume', 'fragrance', 'عطر'] },
+    { nameEn: 'Flowers With Cake', nameAr: 'زهور مع كيك', path: '/combos', category: 'Combos', categoryAr: 'كومبو', icon: '🎂', keywords: ['cake', 'كيك', 'birthday cake'] },
     
     // Other Pages
-    { nameEn: 'Pick For You', nameAr: 'اختيارنا لك', path: '/pick-for-you', category: 'Featured', categoryAr: 'مميز', icon: '⭐' },
-    { nameEn: '50% Discount Offers', nameAr: 'خصم 50٪', path: '/offers', category: 'Offers', categoryAr: 'العروض', icon: '🏷️' },
+    { nameEn: 'Pick For You', nameAr: 'اختيارنا لك', path: '/pick-for-you', category: 'Featured', categoryAr: 'مميز', icon: '⭐', keywords: ['recommended', 'best', 'popular', 'مميز', 'أفضل'] },
+    { nameEn: '50% Discount Offers', nameAr: 'خصم 50٪', path: '/offers', category: 'Offers', categoryAr: 'العروض', icon: '🏷️', keywords: ['discount', 'sale', 'offer', 'خصم', 'عرض', 'تخفيض', 'cheap', 'رخيص'] },
+    { nameEn: 'Same Day Delivery', nameAr: 'توصيل في نفس اليوم', path: '/bouquets', category: 'Services', categoryAr: 'الخدمات', icon: '🚚', keywords: ['same day', 'delivery', 'fast', 'توصيل', 'سريع', 'نفس اليوم'] },
   ];
 
   useEffect(() => {
@@ -261,40 +316,105 @@ const Header = () => {
     navigate('/');
   };
 
-  // Search functionality
-  const handleSearchChange = (e) => {
+  // Enhanced search functionality with products and keywords
+  const handleSearchChange = useCallback((e) => {
     const query = e.target.value;
     setSearchQuery(query);
     
     if (query.trim() === '') {
       setSearchResults([]);
+      setProductResults([]);
+      setIsSearching(false);
       return;
     }
 
-    const filteredResults = searchableItems.filter(item => {
-      const searchTerm = query.toLowerCase();
-      return (
-        item.nameEn.toLowerCase().includes(searchTerm) ||
-        item.nameAr.includes(query) ||
-        item.category.toLowerCase().includes(searchTerm) ||
-        item.categoryAr.includes(query)
-      );
-    });
+    setIsSearching(true);
 
-    setSearchResults(filteredResults);
-  };
+    // Clear previous timeout
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+
+    // Debounce search
+    searchTimeoutRef.current = setTimeout(() => {
+      const searchTerm = query.toLowerCase().trim();
+      const searchTerms = searchTerm.split(' ').filter(term => term.length > 0);
+
+      // Search categories/pages with keywords
+      const filteredCategories = searchableItems.filter(item => {
+        const nameMatch = item.nameEn.toLowerCase().includes(searchTerm) ||
+                         item.nameAr.includes(query) ||
+                         item.category.toLowerCase().includes(searchTerm) ||
+                         item.categoryAr.includes(query);
+        
+        // Search in keywords
+        const keywordMatch = item.keywords?.some(keyword => 
+          keyword.toLowerCase().includes(searchTerm) ||
+          searchTerms.some(term => keyword.toLowerCase().includes(term))
+        );
+
+        return nameMatch || keywordMatch;
+      });
+
+      setSearchResults(filteredCategories);
+
+      // Search actual products
+      const filteredProducts = allProducts.filter(product => {
+        if (!product || !product.productName) return false;
+        
+        const productName = (product.productName || '').toLowerCase();
+        const productDesc = (product.description || '').toLowerCase();
+        const categoryName = (product.categoryName || product.category?.categoryName || '').toLowerCase();
+        const sku = (product.sku || '').toLowerCase();
+
+        // Check if any search term matches
+        return searchTerms.some(term => 
+          productName.includes(term) ||
+          productDesc.includes(term) ||
+          categoryName.includes(term) ||
+          sku.includes(term)
+        ) || 
+        productName.includes(searchTerm) ||
+        productDesc.includes(searchTerm);
+      }).slice(0, 8); // Limit to 8 products
+
+      setProductResults(filteredProducts);
+      setIsSearching(false);
+    }, 300);
+  }, [allProducts]);
 
   const handleSearchResultClick = (path) => {
     setIsSearchOpen(false);
     setSearchQuery('');
     setSearchResults([]);
+    setProductResults([]);
     navigate(path);
+  };
+
+  const handleProductClick = (product) => {
+    setIsSearchOpen(false);
+    setSearchQuery('');
+    setSearchResults([]);
+    setProductResults([]);
+    // Navigate to product detail page or category
+    const categorySlug = product.categoryName?.toLowerCase().replace(/\s+/g, '-') || 'bouquets';
+    navigate(`/product/${product.productId || product.id}`);
+  };
+
+  const handleViewAllResults = () => {
+    const query = searchQuery;
+    setIsSearchOpen(false);
+    setSearchQuery('');
+    setSearchResults([]);
+    setProductResults([]);
+    navigate(`/search?q=${encodeURIComponent(query)}`);
   };
 
   const handleSearchClose = () => {
     setIsSearchOpen(false);
     setSearchQuery('');
     setSearchResults([]);
+    setProductResults([]);
   };
 
   // Group search results by category
@@ -321,6 +441,11 @@ const Header = () => {
   const getFirstName = () => {
     if (!user?.name) return '';
     return user.name.split(' ')[0];
+  };
+
+  // Format price
+  const formatPrice = (price) => {
+    return `${parseFloat(price || 0).toFixed(3)} KWD`;
   };
 
   return (
@@ -582,32 +707,88 @@ const Header = () => {
             {searchQuery.trim() !== '' && (
               <div className="search-results-dropdown">
                 <div className="search-results-container">
-                  {searchResults.length > 0 ? (
-                    Object.entries(groupedResults).map(([category, items]) => (
-                      <div key={category} className="search-category-group">
-                        <div className="search-category-title">{category}</div>
-                        {items.map((item, index) => (
-                          <div 
-                            key={index} 
-                            className="search-result-item"
-                            onClick={() => handleSearchResultClick(item.path)}
-                          >
-                            <span className="search-result-icon">{item.icon}</span>
-                            <span className="search-result-name">
-                              {currentLang === 'ar' ? item.nameAr : item.nameEn}
-                            </span>
-                            <svg className="search-result-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                              <path d="M9 18l6-6-6-6"/>
-                            </svg>
-                          </div>
-                        ))}
-                      </div>
-                    ))
-                  ) : (
-                    <div className="search-no-results">
-                      <span className="no-results-icon">🔍</span>
-                      <span>{t.noResults}</span>
+                  {isSearching ? (
+                    <div className="search-loading">
+                      <span className="search-loading-spinner"></span>
+                      <span>{t.searching}</span>
                     </div>
+                  ) : (
+                    <>
+                      {/* Product Results */}
+                      {productResults.length > 0 && (
+                        <div className="search-category-group">
+                          <div className="search-category-title">
+                            {t.products} ({productResults.length})
+                          </div>
+                          {productResults.map((product, index) => (
+                            <div 
+                              key={`product-${product.productId || index}`} 
+                              className="search-result-item search-product-item"
+                              onClick={() => handleProductClick(product)}
+                            >
+                              <div className="search-product-image">
+                                {product.imageUrl ? (
+                                  <img src={product.imageUrl} alt={product.productName} />
+                                ) : (
+                                  <span className="search-result-icon">🌸</span>
+                                )}
+                              </div>
+                              <div className="search-product-info">
+                                <span className="search-product-name">{product.productName}</span>
+                                <span className="search-product-price">{formatPrice(product.finalPrice || product.actualPrice)}</span>
+                              </div>
+                              <svg className="search-result-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M9 18l6-6-6-6"/>
+                              </svg>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Category Results */}
+                      {Object.entries(groupedResults).length > 0 && (
+                        <>
+                          {Object.entries(groupedResults).map(([category, items]) => (
+                            <div key={category} className="search-category-group">
+                              <div className="search-category-title">{category}</div>
+                              {items.slice(0, 5).map((item, index) => (
+                                <div 
+                                  key={index} 
+                                  className="search-result-item"
+                                  onClick={() => handleSearchResultClick(item.path)}
+                                >
+                                  <span className="search-result-icon">{item.icon}</span>
+                                  <span className="search-result-name">
+                                    {currentLang === 'ar' ? item.nameAr : item.nameEn}
+                                  </span>
+                                  <svg className="search-result-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <path d="M9 18l6-6-6-6"/>
+                                  </svg>
+                                </div>
+                              ))}
+                            </div>
+                          ))}
+                        </>
+                      )}
+
+                      {/* No Results */}
+                      {searchResults.length === 0 && productResults.length === 0 && (
+                        <div className="search-no-results">
+                          <span className="no-results-icon">🔍</span>
+                          <span>{t.noResults}</span>
+                        </div>
+                      )}
+
+                      {/* View All Results Button */}
+                      {(searchResults.length > 0 || productResults.length > 0) && (
+                        <div className="search-view-all" onClick={handleViewAllResults}>
+                          <span>{t.viewAll}</span>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                          </svg>
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
               </div>
