@@ -57,6 +57,9 @@ public class User {
     @Column(name = "profile_image_url")
     private String profileImageUrl;
 
+    @Column(name = "google_id", unique = true)
+    private String googleId;
+
     @Column(name = "last_login_at")
     private LocalDateTime lastLoginAt;
 

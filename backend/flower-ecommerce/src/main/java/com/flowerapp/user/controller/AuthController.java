@@ -85,4 +85,13 @@ public class AuthController {
         userService.resetPassword(request);
         return ResponseEntity.ok(ApiResponse.success("Password reset successful"));
     }
+
+    @PostMapping("/google")
+    @Operation(summary = "Google OAuth login", description = "Authenticate or register user with Google account")
+    public ResponseEntity<ApiResponse<AuthResponse>> googleAuth(
+            @Valid @RequestBody GoogleAuthRequest request) {
+        log.info("Google authentication request for email: {}", request.getEmail());
+        AuthResponse response = userService.authenticateWithGoogle(request);
+        return ResponseEntity.ok(ApiResponse.success("Login successful", response));
+    }
 }

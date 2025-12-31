@@ -306,6 +306,79 @@ public class UserService {
         log.info("Password reset successful for: {}", request.getEmail());
     }
 
+    /**
+     * Authenticate user with Google OAuth
+     * Creates a new user if one doesn't exist with the Google ID or email
+     */
+    @Transactional
+    public AuthResponse authenticateWithGoogle(GoogleAuthRequest request) {
+        log.info("Processing Google authentication for email: {}", request.getEmail());
+
+        // First try to find user by Google ID
+        User user = userRepository.findByGoogleId(request.getGoogleId()).orElse(null);
+
+        if (user == null) {
+            // Try to find by email
+            user = userRepository.findByEmail(request.getEmail().toLowerCase().trim()).orElse(null);
+        }
+
+        if (user != null) {
+            // Existing user - update Google info if needed
+            if (user.getGoogleId() == null) {
+                user.setGoogleId(request.getGoogleId());
+                log.info("Linking Google account to existing user: {}", user.getEmail());
+            }
+            if (user.getProfileImageUrl() == null && request.getPicture() != null) {
+                user.setProfileImageUrl(request.getPicture());
+            }
+            // Mark email as verified since Google has verified it
+            if (!Boolean.TRUE.equals(user.getIsEmailVerified())) {
+                user.setIsEmailVerified(true);
+            }
+            user = userRepository.save(user);
+        } else {
+            // New user - create account
+            log.info("Creating new user from Google account: {}", request.getEmail());
+
+            user = User.builder()
+                    .name(request.getName() != null ? request.getName() : request.getEmail().split("@")[0])
+                    .email(request.getEmail().toLowerCase().trim())
+                    .googleId(request.getGoogleId())
+                    .profileImageUrl(request.getPicture())
+                    .password(passwordEncoder.encode(UUID.randomUUID().toString())) // Random password for Google users
+                    .roleId(RoleType.USER.getRoleNumber())
+                    .isActive(true)
+                    .isEmailVerified(true) // Google accounts are pre-verified
+                    .build();
+
+            user = userRepository.save(user);
+            log.info("New Google user created with ID: {}", user.getUserId());
+        }
+
+        // Check if user is active
+        if (!user.getIsActive()) {
+            throw new CustomException("Account is disabled. Please contact support.", HttpStatus.FORBIDDEN, "ACCOUNT_DISABLED");
+        }
+
+        // Update last login time
+        userRepository.updateLastLoginTime(user.getUserId(), LocalDateTime.now());
+
+        // Generate tokens
+        CustomUserDetails userDetails = new CustomUserDetails(user);
+        String accessToken = jwtTokenProvider.generateToken(userDetails);
+        String refreshToken = jwtTokenProvider.generateRefreshToken(userDetails);
+
+        log.info("Google authentication successful for: {}", user.getEmail());
+
+        return AuthResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .tokenType("Bearer")
+                .expiresIn(86400L)
+                .user(mapToUserResponse(user))
+                .build();
+    }
+
     private User findByEmailOrPhone(String emailOrPhone) {
         // First try exact match
         Optional<User> user = userRepository.findByEmailOrPhoneNumber(emailOrPhone, emailOrPhone);

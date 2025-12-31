@@ -167,4 +167,21 @@ public class UserDto {
                 message = "Password must contain at least one uppercase, one lowercase, one digit, and one special character")
         private String newPassword;
     }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class GoogleAuthRequest {
+        @NotBlank(message = "Google ID is required")
+        private String googleId;
+
+        @NotBlank(message = "Email is required")
+        @Email(message = "Please provide a valid email address")
+        private String email;
+
+        private String name;
+        private String picture;
+        private String accessToken;
+    }
 }
