@@ -48,15 +48,18 @@ const NewYearCelebration = () => {
     const particles = [];
     const fireworks = [];
     
-    // Brand colors for fireworks
+    // Vibrant pastel colors for light background
     const colors = [
-      '#c08b8b', // Pink
-      '#d4a5a5', // Light pink
-      '#FFD700', // Gold
-      '#FFA500', // Orange
-      '#FF69B4', // Hot pink
-      '#ffffff', // White
-      '#f8e8e8', // Soft pink
+      '#E88B9C', // Rose pink
+      '#7ECEC0', // Teal mint
+      '#B888D8', // Lavender purple
+      '#F5A962', // Warm peach
+      '#8B9FD8', // Periwinkle blue
+      '#c08b8b', // Brand pink
+      '#E87D94', // Coral pink
+      '#6BC5D2', // Sky blue
+      '#D4A5A5', // Dusty rose
+      '#9B88D8', // Soft purple
     ];
 
     class Particle {
@@ -168,7 +171,8 @@ const NewYearCelebration = () => {
 
     let frameCount = 0;
     const animate = () => {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+      // Light background fade effect
+      ctx.fillStyle = 'rgba(255, 245, 247, 0.2)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // Launch new fireworks
