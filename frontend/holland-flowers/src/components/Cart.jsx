@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from './CartContext';
 import './Cart.css';
+import CartSuggestions from './CartSuggestions';
 
 const Cart = () => {
   const { 
@@ -303,6 +304,9 @@ const Cart = () => {
                 );
               })}
             </div>
+
+            {/* NEW: Product Suggestions */}
+            <CartSuggestions currentLang={currentLang} />
 
             {/* Delivery Instructions */}
             <div className="delivery-section">

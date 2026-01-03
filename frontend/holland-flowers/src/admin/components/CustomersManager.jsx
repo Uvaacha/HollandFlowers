@@ -241,7 +241,7 @@ const CustomersManager = () => {
           <thead>
             <tr>
               <th>#</th>
-              <th>Customer</th>
+              <th>Customer Name</th>
               <th>Phone</th>
               <th>Email</th>
               <th>Orders</th>
@@ -257,18 +257,10 @@ const CustomersManager = () => {
                 <tr key={customer.userId} className={!customer.isActive ? 'inactive-row' : ''}>
                   <td>{currentPage * 10 + index + 1}</td>
                   <td>
-                    <div className="customer-cell">
-                      <div className="customer-avatar">
-                        {customer.profileImageUrl ? (
-                          <img src={customer.profileImageUrl} alt={customer.name} />
-                        ) : (
-                          <span>{customer.name?.charAt(0)?.toUpperCase()}</span>
-                        )}
-                      </div>
-                      <div className="customer-info">
-                        <span className="customer-name">{customer.name}</span>
-                        {customer.isEmailVerified && <span className="verified-badge">✓ Verified</span>}
-                      </div>
+                    {/* NO AVATAR - Just name and verified badge */}
+                    <div className="customer-name-cell">
+                      <span className="customer-name-text">{customer.name}</span>
+                      {customer.isEmailVerified && <span className="verified-badge">✓ Verified</span>}
                     </div>
                   </td>
                   <td>{customer.phoneNumber || '-'}</td>
@@ -346,7 +338,7 @@ const CustomersManager = () => {
         )}
       </div>
 
-      {/* Customer Details Modal */}
+      {/* Customer Details Modal - NO AVATAR */}
       {showModal && selectedCustomer && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal customer-modal" onClick={(e) => e.stopPropagation()}>
@@ -368,14 +360,8 @@ const CustomersManager = () => {
               ) : (
                 <>
                   <div className="customer-profile">
-                    <div className="customer-avatar large">
-                      {(customerDetails || selectedCustomer).profileImageUrl ? (
-                        <img src={(customerDetails || selectedCustomer).profileImageUrl} alt="Profile" />
-                      ) : (
-                        <span>{(customerDetails || selectedCustomer).name?.charAt(0)?.toUpperCase()}</span>
-                      )}
-                    </div>
-                    <h3 className="customer-name">{(customerDetails || selectedCustomer).name}</h3>
+                    {/* NO AVATAR - Just name */}
+                    <h3 className="customer-modal-name">{(customerDetails || selectedCustomer).name}</h3>
                     <div className="customer-badges">
                       {(customerDetails || selectedCustomer).isEmailVerified && (
                         <span className="badge badge-success">✓ Email Verified</span>

@@ -83,6 +83,44 @@ const countries = [
   { code: 'GB', name: 'United Kingdom', nameAr: 'المملكة المتحدة', flag: '🇬🇧' },
 ];
 
+// ============ VALIDATION HELPERS ============
+const isValidEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+const isValidPhone = (phone) => {
+  // Remove spaces, dashes, and plus sign for validation
+  const cleanPhone = phone.replace(/[\s\-\+\(\)]/g, '');
+  // Check if it's only digits and has proper length (8-15 digits)
+  const phoneRegex = /^\d{8,15}$/;
+  return phoneRegex.test(cleanPhone);
+};
+
+const validateEmailOrPhone = (value) => {
+  if (!value || value.trim() === '') {
+    return { valid: false, type: null, message: 'Please enter email or phone number' };
+  }
+
+  const trimmedValue = value.trim();
+
+  // Check if it looks like an email (contains @)
+  if (trimmedValue.includes('@')) {
+    if (isValidEmail(trimmedValue)) {
+      return { valid: true, type: 'email', message: null };
+    } else {
+      return { valid: false, type: 'email', message: 'Please enter a valid email address' };
+    }
+  } else {
+    // Treat as phone number
+    if (isValidPhone(trimmedValue)) {
+      return { valid: true, type: 'phone', message: null };
+    } else {
+      return { valid: false, type: 'phone', message: 'Please enter a valid phone number (8-15 digits)' };
+    }
+  }
+};
+
 const Checkout = () => {
   // eslint-disable-next-line no-unused-vars
   const { cartItems, getCartTotal, clearCart } = useCart();
@@ -92,6 +130,7 @@ const Checkout = () => {
   const [currentLang, setCurrentLang] = useState('en');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [contactError, setContactError] = useState(null); // Separate error for contact field
   
   // Form states
   const [contact, setContact] = useState({
@@ -252,6 +291,23 @@ const Checkout = () => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+    
+    // Clear contact error when user types
+    if (name === 'emailOrPhone') {
+      setContactError(null);
+    }
+  };
+
+  // Validate contact on blur
+  const handleContactBlur = () => {
+    if (contact.emailOrPhone.trim()) {
+      const validation = validateEmailOrPhone(contact.emailOrPhone);
+      if (!validation.valid) {
+        setContactError(validation.message);
+      } else {
+        setContactError(null);
+      }
+    }
   };
 
   const handleDeliveryChange = (e) => {
@@ -286,10 +342,12 @@ const Checkout = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+    setContactError(null);
     
-    // Validate required fields
-    if (!contact.emailOrPhone) {
-      setError(currentLang === 'ar' ? 'يرجى إدخال البريد الإلكتروني أو رقم الهاتف' : 'Please enter email or phone number');
+    // ============ VALIDATE EMAIL OR PHONE ============
+    const contactValidation = validateEmailOrPhone(contact.emailOrPhone);
+    if (!contactValidation.valid) {
+      setContactError(contactValidation.message);
       return;
     }
 
@@ -305,6 +363,12 @@ const Checkout = () => {
 
     if (!delivery.phone) {
       setError(currentLang === 'ar' ? 'يرجى إدخال رقم الهاتف' : 'Please enter phone number');
+      return;
+    }
+
+    // Validate recipient phone
+    if (!isValidPhone(delivery.phone)) {
+      setError(currentLang === 'ar' ? 'يرجى إدخال رقم هاتف صحيح للمستلم' : 'Please enter a valid recipient phone number');
       return;
     }
 
@@ -392,6 +456,9 @@ const Checkout = () => {
       // Build full address
       const fullAddress = delivery.address + (delivery.apartment ? ', ' + delivery.apartment : '');
 
+      // Determine if contact is email or phone
+      const isEmail = contactValidation.type === 'email';
+
       // Build order payload matching backend OrderDto.CreateOrderRequest
       // Works for both logged-in users and guests
       const orderPayload = {
@@ -407,15 +474,16 @@ const Checkout = () => {
         deliveryNotes: delivery.apartment || '',
         cardMessage: cartItems[0]?.cardMessage || '',
         deliveryFee: shippingCost,
-        // Guest checkout fields
-        guestEmail: contact.emailOrPhone.includes('@') ? contact.emailOrPhone : null,
-        guestPhone: !contact.emailOrPhone.includes('@') ? contact.emailOrPhone : delivery.phone,
+        // Guest checkout fields - properly parsed
+        guestEmail: isEmail ? contact.emailOrPhone.trim() : null,
+        guestPhone: !isEmail ? contact.emailOrPhone.trim() : delivery.phone,
         isGuestOrder: !isAuthenticated
       };
       
       console.log('========== ORDER PAYLOAD BEING SENT ==========');
       console.log(JSON.stringify(orderPayload, null, 2));
       console.log('Is Guest Order:', !isAuthenticated);
+      console.log('Contact Type:', contactValidation.type);
       console.log('===============================================');
       
       // Create order using api service
@@ -451,7 +519,7 @@ const Checkout = () => {
       const paymentPayload = {
         orderId: orderId,
         showAllPaymentMethods: true, // Show all payment options (KNET, Visa, Mastercard, Apple Pay, etc.)
-        customerEmail: contact.emailOrPhone.includes('@') ? contact.emailOrPhone : null,
+        customerEmail: isEmail ? contact.emailOrPhone.trim() : null,
         customerPhone: delivery.phone,
         customerName: `${delivery.firstName || ''} ${delivery.lastName}`.trim(),
         deviceType: 'WEB'
@@ -496,7 +564,7 @@ const Checkout = () => {
           items: cartItems.length,
           timestamp: new Date().toISOString(),
           isGuestOrder: !isAuthenticated,
-          guestEmail: contact.emailOrPhone
+          guestEmail: isEmail ? contact.emailOrPhone.trim() : null
         }));
         
         console.log('Redirecting to Hesabe checkout:', checkoutUrl);
@@ -584,7 +652,9 @@ const Checkout = () => {
       saveInfo: 'Save this information for next time',
       enterShipping: 'Enter shipping address',
       guestCheckout: 'Continue as Guest',
-      or: 'or'
+      or: 'or',
+      invalidEmail: 'Please enter a valid email address',
+      invalidPhone: 'Please enter a valid phone number'
     },
     ar: {
       checkout: 'الدفع',
@@ -637,7 +707,9 @@ const Checkout = () => {
       saveInfo: 'احفظ هذه المعلومات للمرة القادمة',
       enterShipping: 'أدخل عنوان الشحن',
       guestCheckout: 'المتابعة كضيف',
-      or: 'أو'
+      or: 'أو',
+      invalidEmail: 'يرجى إدخال بريد إلكتروني صحيح',
+      invalidPhone: 'يرجى إدخال رقم هاتف صحيح'
     }
   };
 
@@ -700,10 +772,15 @@ const Checkout = () => {
                   name="emailOrPhone"
                   value={contact.emailOrPhone}
                   onChange={handleContactChange}
+                  onBlur={handleContactBlur}
                   placeholder={text.emailOrPhone}
                   required
-                  className="checkout-input"
+                  className={`checkout-input ${contactError ? 'input-error' : ''}`}
                 />
+                {/* Contact field error message */}
+                {contactError && (
+                  <span className="field-error">{contactError}</span>
+                )}
               </div>
               
               <label className="checkbox-label">

@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useCart } from './CartContext';
 import './ProductDetail.css';
 import productService from '../services/productService';
+import AddToCartModal from './AddToCartModal';
 
 const ProductDetail = () => {
   const { productId } = useParams();
@@ -19,6 +20,10 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [formErrors, setFormErrors] = useState({ deliveryDate: false, deliveryTime: false });
+  
+  // NEW: States for Add to Cart Modal
+  const [showCartModal, setShowCartModal] = useState(false);
+  const [addedProduct, setAddedProduct] = useState(null);
 
   useEffect(() => {
     const savedLang = localStorage.getItem('preferredLanguage') || 'en';
@@ -8544,6 +8549,14 @@ const ProductDetail = () => {
     // Add to cart
     addToCart(product, 1, cartOptions);
     
+    // NEW: Show the popup modal with suggestions
+    setAddedProduct({
+      ...product,
+      image: product.images[0],
+      price: cartOptions.price
+    });
+    setShowCartModal(true);
+    
     setTimeout(() => {
       setIsAddingToCart(false);
     }, 500);
@@ -8790,6 +8803,15 @@ const ProductDetail = () => {
           </div>
         </div>
       </div>
+
+      {/* NEW: Add to Cart Modal with Suggestions */}
+      {showCartModal && addedProduct && (
+        <AddToCartModal
+          product={addedProduct}
+          onClose={() => setShowCartModal(false)}
+          currentLang={currentLang}
+        />
+      )}
     </div>
   );
 };

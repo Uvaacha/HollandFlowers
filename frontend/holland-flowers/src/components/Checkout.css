@@ -1476,3 +1476,72 @@ html {
   overscroll-behavior: none;
 }
 
+/* Add these styles to your Checkout.css */
+
+/* ============================================
+   INPUT ERROR STYLING
+   ============================================ */
+
+/* Error state for input field */
+.checkout-input.input-error {
+  border-color: #ef4444 !important;
+  background-color: #fef2f2;
+}
+
+.checkout-input.input-error:focus {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+/* Field-level error message */
+.field-error {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #ef4444;
+  font-weight: 500;
+}
+
+/* Error icon before message (optional) */
+.field-error::before {
+  content: '⚠ ';
+}
+
+/* ============================================
+   FORM GROUP WITH ERROR
+   ============================================ */
+.form-group.has-error .checkout-input {
+  border-color: #ef4444;
+}
+
+.form-group.has-error label {
+  color: #ef4444;
+}
+
+/* ============================================
+   SHAKE ANIMATION FOR ERRORS
+   ============================================ */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.checkout-input.input-error {
+  animation: shake 0.5s ease-in-out;
+}
+
+/* ============================================
+   RTL SUPPORT FOR ERRORS
+   ============================================ */
+.rtl .field-error {
+  text-align: right;
+}
+
+.rtl .field-error::before {
+  content: ' ⚠';
+}
+
+.rtl .field-error::after {
+  content: '';
+}
