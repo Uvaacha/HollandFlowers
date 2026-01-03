@@ -51,7 +51,6 @@ import OrderHistory from './components/OrderHistory';
 import OrderDetail from './components/OrderDetail';
 import RefundPolicy from './components/RefundPolicy';
 import PrivacyPolicy from './components/PrivacyPolicy';
-import NewYearCelebration from './components/NewYearCelebration';
 import './App.css';
 
 // ============================================
@@ -1083,7 +1082,6 @@ const AppContent = ({ currentLang }) => {
     <div className={`app ${currentLang === 'ar' ? 'rtl' : 'ltr'}`}>
       <ScrollToTop />
       <Header />
-      <NewYearCelebration />
       
       <Routes>
         <Route path="/" element={<HomePage currentLang={currentLang} />} />
