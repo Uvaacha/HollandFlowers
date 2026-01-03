@@ -57,6 +57,220 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
     private static final String AES_DECRYPT_ALGORITHM = "AES/CBC/NoPadding";
     private static final java.util.HexFormat HEX = java.util.HexFormat.of();
 
+    // ============ GUEST PAYMENT - NO LOGIN REQUIRED ============
+    @Override
+    @Transactional
+    public PaymentResponse initiateGuestPayment(InitiatePaymentRequest request) throws Exception {
+        log.info("========== INITIATING GUEST PAYMENT ==========");
+        log.info("Order ID: {}", request.getOrderId());
+        log.info("Customer Email: {}", request.getCustomerEmail());
+        log.info("Customer Phone: {}", request.getCustomerPhone());
+
+        // Get order
+        Order order = orderRepository.findById(request.getOrderId())
+                .orElseThrow(() -> new PaymentException("Order not found"));
+
+        // Check if order is already paid
+        if (order.getPaymentStatus() == PaymentStatus.COMPLETED) {
+            throw new PaymentException("Order is already paid");
+        }
+
+        // Calculate amount (Hesabe expects amount in KWD)
+        Double amountKwd = order.getTotalAmount().doubleValue();
+
+        // Validate amount
+        if (amountKwd < 0.200) {
+            throw new PaymentException("Minimum payment amount is 0.200 KWD");
+        }
+        if (amountKwd > 100000) {
+            throw new PaymentException("Maximum payment amount is 100,000 KWD");
+        }
+
+        // Generate unique payment reference
+        String paymentReference = generatePaymentReference();
+
+        // Create payment record WITHOUT user
+        Payment payment = Payment.builder()
+                .paymentReference(paymentReference)
+                .order(order)
+                .user(null)  // NO USER FOR GUEST PAYMENT
+                .paymentMethod(request.getPaymentMethod())
+                .status(PaymentStatus.PENDING)
+                .amount(amountKwd)
+                .amountInFils(Math.round(amountKwd * 1000))
+                .currency("KWD")
+                .customerEmail(request.getCustomerEmail() != null ? request.getCustomerEmail() : order.getGuestEmail())
+                .customerPhone(request.getCustomerPhone() != null ? request.getCustomerPhone() : order.getGuestPhone())
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        // Handle Cash on Delivery separately
+        if (request.getPaymentMethod() == PaymentMethod.CASH_ON_DELIVERY) {
+            return handleGuestCashOnDelivery(payment, order);
+        }
+
+        // Determine payment type
+        Integer paymentType = 0; // Default: show all payment methods
+
+        if (!request.isShowAllPaymentMethods() && request.getPaymentMethod() != null
+                && request.getPaymentMethod() != PaymentMethod.CASH_ON_DELIVERY) {
+            paymentType = Integer.parseInt(request.getPaymentMethod().getHesabeCode());
+        }
+
+        log.info("Using paymentType={} for guest payment", paymentType);
+
+        // Build Hesabe checkout request for guest
+        HesabeCheckoutRequest checkoutRequest = HesabeCheckoutRequest.builder()
+                .merchantCode(hesabeConfig.getMerchantCode())
+                .amount(amountKwd)
+                .paymentType(paymentType)
+                .orderReferenceNumber(order.getOrderNumber())
+                .responseUrl(hesabeConfig.getResponseUrl())
+                .failureUrl(hesabeConfig.getFailureUrl())
+                .webhookUrl(hesabeConfig.getWebhookUrl())
+                .version("2.0")
+                .currency("KWD")
+                .customerName(order.getRecipientName())  // Use recipient name for guest
+                .customerEmail(payment.getCustomerEmail())
+                .customerMobile(payment.getCustomerPhone())
+                .variable1(paymentReference)
+                .variable2(order.getOrderNumber())
+                .variable3(String.valueOf(order.getOrderId()))
+                .variable4("GUEST")  // Mark as guest payment
+                .variable5(order.getGuestEmail())  // Store guest email
+                .orderDescription("Guest Order #" + order.getOrderNumber())
+                .build();
+
+        log.info("Guest Checkout Request: {}", objectMapper.writeValueAsString(checkoutRequest));
+
+        // Encrypt request
+        String encryptedRequest = encryptData(objectMapper.writeValueAsString(checkoutRequest));
+
+        // Call Hesabe API
+        HesabeCheckoutResponse hesabeResponse = callHesabeCheckoutApi(encryptedRequest);
+
+        if (!hesabeResponse.isSuccessResponse()) {
+            payment.setStatus(PaymentStatus.FAILED);
+            payment.setErrorDetails(hesabeResponse.getMessage());
+            paymentRepository.save(payment);
+
+            return PaymentResponse.builder()
+                    .success(false)
+                    .message(hesabeResponse.getMessage())
+                    .errorCode(hesabeResponse.getCode())
+                    .errorMessage(hesabeResponse.getMessage())
+                    .build();
+        }
+
+        // Update payment with Hesabe response
+        payment.setHesabePaymentId(hesabeResponse.getResponse().getPaymentId());
+        payment.setHesabeCheckoutToken(hesabeResponse.getResponse().getData());
+
+        String checkoutUrl = hesabeResponse.getResponse().getFullCheckoutUrl(hesabeConfig.getBaseUrl());
+        payment.setCheckoutUrl(checkoutUrl);
+        payment.setStatus(PaymentStatus.PROCESSING);
+        paymentRepository.save(payment);
+
+        // Update order payment status
+        order.setPaymentStatus(PaymentStatus.PROCESSING);
+        orderRepository.save(order);
+
+        log.info("Guest payment initiated successfully!");
+        log.info("Reference: {}, Checkout URL: {}", paymentReference, checkoutUrl);
+        log.info("========== GUEST PAYMENT INITIATION COMPLETE ==========");
+
+        return PaymentResponse.builder()
+                .success(true)
+                .message("Payment initiated successfully")
+                .paymentReference(paymentReference)
+                .paymentId(payment.getHesabePaymentId())
+                .checkoutUrl(payment.getCheckoutUrl())
+                .paymentToken(payment.getHesabeCheckoutToken())
+                .status(payment.getStatus())
+                .paymentMethod(payment.getPaymentMethod())
+                .amount(amountKwd)
+                .currency("KWD")
+                .orderId(order.getOrderId())
+                .orderReference(String.valueOf(order.getOrderId()))
+                .expiresAt(LocalDateTime.now().plusHours(1).format(DateTimeFormatter.ISO_DATE_TIME))
+                .build();
+    }
+
+    /**
+     * Handle Cash on Delivery for guest orders
+     */
+    private PaymentResponse handleGuestCashOnDelivery(Payment payment, Order order) {
+        payment.setStatus(PaymentStatus.PENDING);
+        paymentRepository.save(payment);
+
+        order.setPaymentStatus(PaymentStatus.PENDING);
+        order.setDeliveryStatus(DeliveryStatus.CONFIRMED);
+        orderRepository.save(order);
+
+        // Send order confirmation for guest COD orders
+        try {
+            String customerEmail = order.getGuestEmail();
+            if (customerEmail != null && !customerEmail.isEmpty()) {
+                emailService.sendOrderConfirmationEmail(
+                        customerEmail,
+                        order.getOrderNumber(),
+                        "Total Amount: KWD " + order.getTotalAmount() + " (Cash on Delivery)"
+                );
+                log.info("Guest COD order confirmation email sent to: {}", customerEmail);
+            }
+        } catch (Exception e) {
+            log.error("Failed to send guest COD order confirmation email", e);
+        }
+
+        // Send owner notification for guest COD orders
+        try {
+            StringBuilder itemsBuilder = new StringBuilder();
+            if (order.getOrderItems() != null) {
+                for (var item : order.getOrderItems()) {
+                    itemsBuilder.append(String.format(
+                            "<div style='padding:10px;background:#f5f5f5;margin:5px 0;border-radius:5px;'>" +
+                                    "<strong>%s</strong> × %d = KWD %.3f</div>",
+                            item.getProduct().getProductName(),
+                            item.getQuantity(),
+                            item.getTotalPrice()
+                    ));
+                }
+            }
+
+            emailService.sendNewOrderNotificationToOwner(
+                    order.getOrderNumber(),
+                    "Guest Customer",
+                    order.getGuestEmail() != null ? order.getGuestEmail() : "-",
+                    order.getGuestPhone() != null ? order.getGuestPhone() : "-",
+                    order.getRecipientName(),
+                    order.getRecipientPhone(),
+                    order.getDeliveryAddress(),
+                    order.getDeliveryArea(),
+                    order.getPreferredDeliveryDate() != null ? order.getPreferredDeliveryDate().toString() : null,
+                    order.getCardMessage(),
+                    order.getDeliveryNotes(),
+                    itemsBuilder.toString(),
+                    order.getTotalAmount().toString(),
+                    "Cash on Delivery (GUEST)"
+            );
+            log.info("Owner notification sent for guest COD order: {}", order.getOrderNumber());
+        } catch (Exception e) {
+            log.error("Failed to send owner notification for guest COD order", e);
+        }
+
+        return PaymentResponse.builder()
+                .success(true)
+                .message("Guest order placed with Cash on Delivery")
+                .paymentReference(payment.getPaymentReference())
+                .status(PaymentStatus.PENDING)
+                .paymentMethod(PaymentMethod.CASH_ON_DELIVERY)
+                .amount(payment.getAmount())
+                .currency("KWD")
+                .orderId(order.getOrderId())
+                .build();
+    }
+
+    // ============ AUTHENTICATED USER PAYMENT ============
     @Transactional
     @Override
     public PaymentResponse initiatePayment(InitiatePaymentRequest request, User user) throws Exception {
@@ -67,7 +281,7 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
                 .orElseThrow(() -> new PaymentException("Order not found"));
 
         // Validate order belongs to user
-        if (!order.getUser().getUserId().equals(user.getUserId())) {
+        if (order.getUser() == null || !order.getUser().getUserId().equals(user.getUserId())) {
             throw new PaymentException("Order does not belong to user");
         }
 
@@ -268,9 +482,9 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
             throw new PaymentException("Failed to parse payment callback data");
         }
 
-        log.info("Payment callback - Reference: {}, Result: {}, Variable1: {}, Variable2: {}, Variable3: {}",
+        log.info("Payment callback - Reference: {}, Result: {}, Variable1: {}, Variable2: {}, Variable3: {}, Variable4: {}",
                 paymentData.getOrderReferenceNumber(), paymentData.getResultCode(),
-                paymentData.getVariable1(), paymentData.getVariable2(), paymentData.getVariable3());
+                paymentData.getVariable1(), paymentData.getVariable2(), paymentData.getVariable3(), paymentData.getVariable4());
 
         // Try to find payment using multiple strategies
         String orderRef = paymentData.getOrderReferenceNumber();
@@ -360,42 +574,53 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
         }
 
         // Update status based on result
+        Order order = payment.getOrder();
+
         if (paymentData.isSuccessful()) {
             payment.setStatus(PaymentStatus.COMPLETED);
             payment.setCompletedAt(LocalDateTime.now());
 
             // Update order status
-            Order order = payment.getOrder();
             order.setPaymentStatus(PaymentStatus.COMPLETED);
             order.setDeliveryStatus(DeliveryStatus.CONFIRMED);
             orderRepository.save(order);
 
             log.info("Payment successful for reference: {}", payment.getPaymentReference());
 
-            // ============ SEND EMAILS AFTER SUCCESSFUL PAYMENT ============
+            // ============ SEND EMAILS - HANDLE BOTH GUEST AND REGISTERED USERS ============
+
+            // Determine customer email
+            String customerEmail = order.isGuest() ? order.getGuestEmail() :
+                    (order.getUser() != null ? order.getUser().getEmail() : null);
+            String customerName = order.isGuest() ? "Guest Customer" :
+                    (order.getUser() != null ? order.getUser().getName() : "Customer");
+            String customerPhone = order.isGuest() ? order.getGuestPhone() :
+                    (order.getUser() != null ? order.getUser().getPhoneNumber() : "-");
 
             // 1. Send order confirmation email to CUSTOMER
-            try {
-                emailService.sendOrderConfirmationEmail(
-                        order.getUser().getEmail(),
-                        order.getOrderNumber(),
-                        "Total Amount: KWD " + order.getTotalAmount()
-                );
-                log.info("Order confirmation email sent for order: {}", order.getOrderNumber());
-            } catch (Exception e) {
-                log.error("Failed to send order confirmation email for order: {}", order.getOrderNumber(), e);
-            }
+            if (customerEmail != null && !customerEmail.isEmpty()) {
+                try {
+                    emailService.sendOrderConfirmationEmail(
+                            customerEmail,
+                            order.getOrderNumber(),
+                            "Total Amount: KWD " + order.getTotalAmount()
+                    );
+                    log.info("Order confirmation email sent for order: {} to: {}", order.getOrderNumber(), customerEmail);
+                } catch (Exception e) {
+                    log.error("Failed to send order confirmation email for order: {}", order.getOrderNumber(), e);
+                }
 
-            // 2. Send payment confirmation email to CUSTOMER
-            try {
-                emailService.sendPaymentConfirmationEmail(
-                        order.getUser().getEmail(),
-                        order.getOrderNumber(),
-                        "KWD " + payment.getAmount()
-                );
-                log.info("Payment confirmation email sent for order: {}", order.getOrderNumber());
-            } catch (Exception e) {
-                log.error("Failed to send payment confirmation email for order: {}", order.getOrderNumber(), e);
+                // 2. Send payment confirmation email to CUSTOMER
+                try {
+                    emailService.sendPaymentConfirmationEmail(
+                            customerEmail,
+                            order.getOrderNumber(),
+                            "KWD " + payment.getAmount()
+                    );
+                    log.info("Payment confirmation email sent for order: {}", order.getOrderNumber());
+                } catch (Exception e) {
+                    log.error("Failed to send payment confirmation email for order: {}", order.getOrderNumber(), e);
+                }
             }
 
             // 3. SEND NEW ORDER NOTIFICATION TO SHOP OWNER
@@ -416,9 +641,9 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
 
                 emailService.sendNewOrderNotificationToOwner(
                         order.getOrderNumber(),
-                        order.getUser() != null ? order.getUser().getName() : "Guest",
-                        order.getUser() != null ? order.getUser().getEmail() : "-",
-                        order.getUser() != null ? order.getUser().getPhoneNumber() : "-",
+                        customerName,
+                        customerEmail != null ? customerEmail : "-",
+                        customerPhone,
                         order.getRecipientName(),
                         order.getRecipientPhone(),
                         order.getDeliveryAddress(),
@@ -430,7 +655,7 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
                         order.getTotalAmount().toString(),
                         payment.getPaymentMethod() != null ? payment.getPaymentMethod().name() : "Online"
                 );
-                log.info("Owner notification sent for new order: {}", order.getOrderNumber());
+                log.info("Owner notification sent for new order: {} (Guest: {})", order.getOrderNumber(), order.isGuest());
             } catch (Exception e) {
                 log.error("Failed to send owner notification for order: {}", order.getOrderNumber(), e);
             }
@@ -440,7 +665,6 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
             payment.setErrorDetails(paymentData.getResponseMessage());
 
             // Update order status
-            Order order = payment.getOrder();
             order.setPaymentStatus(PaymentStatus.FAILED);
             orderRepository.save(order);
 
@@ -668,33 +892,42 @@ public class HesabePaymentServiceImpl implements HesabePaymentService {
         payment.setWebhookReceived(true);
         payment.setWebhookReceivedAt(LocalDateTime.now());
 
+        Order order = payment.getOrder();
+
         if (response.isSuccessful() && payment.getStatus() != PaymentStatus.COMPLETED) {
             payment.setStatus(PaymentStatus.COMPLETED);
             payment.setCompletedAt(LocalDateTime.now());
             payment.setTransactionId(response.getTransactionId());
 
-            Order order = payment.getOrder();
             order.setPaymentStatus(PaymentStatus.COMPLETED);
             order.setDeliveryStatus(DeliveryStatus.CONFIRMED);
             orderRepository.save(order);
 
             // Send emails on webhook success (backup in case callback didn't send)
-            try {
-                emailService.sendOrderConfirmationEmail(
-                        order.getUser().getEmail(),
-                        order.getOrderNumber(),
-                        "Total Amount: KWD " + order.getTotalAmount()
-                );
-            } catch (Exception e) {
-                log.error("Failed to send order confirmation email via webhook", e);
+            // Handle both guest and registered users
+            String customerEmail = order.isGuest() ? order.getGuestEmail() :
+                    (order.getUser() != null ? order.getUser().getEmail() : null);
+
+            if (customerEmail != null && !customerEmail.isEmpty()) {
+                try {
+                    emailService.sendOrderConfirmationEmail(
+                            customerEmail,
+                            order.getOrderNumber(),
+                            "Total Amount: KWD " + order.getTotalAmount()
+                    );
+                } catch (Exception e) {
+                    log.error("Failed to send order confirmation email via webhook", e);
+                }
             }
 
             // Send owner notification via webhook (backup)
             try {
+                String customerName = order.isGuest() ? "Guest Customer" :
+                        (order.getUser() != null ? order.getUser().getName() : "Customer");
                 emailService.sendNewOrderNotificationToOwner(
                         order.getOrderNumber(),
                         order.getTotalAmount().toString(),
-                        order.getUser() != null ? order.getUser().getName() : "Guest"
+                        customerName
                 );
                 log.info("Owner notification sent via webhook for order: {}", order.getOrderNumber());
             } catch (Exception e) {

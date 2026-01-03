@@ -17,12 +17,14 @@ import java.util.UUID;
 public interface HesabePaymentService {
 
     /**
-     * Initiate a payment for an order
+     * Initiate a payment for an order (authenticated user)
      */
     PaymentResponse initiatePayment(InitiatePaymentRequest request, User user) throws Exception;
 
-    @Transactional
-//    PaymentResponse initiatePayment(InitiatePaymentRequest request, User user) throws Exception;
+    /**
+     * Initiate a payment for a guest order (NO LOGIN REQUIRED)
+     */
+    PaymentResponse initiateGuestPayment(InitiatePaymentRequest request) throws Exception;
 
     /**
      * Create payment order for multiple orders (cart checkout)

@@ -40,8 +40,140 @@ public class OrderService {
     private final UserRepository userRepository;
     private final EmailService emailService;
 
+    // ============ GUEST CHECKOUT - Create order without login ============
     /**
-     * Create a new order
+     * Create a guest order (no user account required)
+     */
+    public OrderResponse createGuestOrder(CreateOrderRequest request) {
+        log.info("========== CREATING GUEST ORDER ==========");
+        log.info("Guest Email: {}", request.getGuestEmail());
+        log.info("Guest Phone: {}", request.getGuestPhone());
+
+        // Validate guest email or phone is provided
+        if ((request.getGuestEmail() == null || request.getGuestEmail().isEmpty()) &&
+                (request.getGuestPhone() == null || request.getGuestPhone().isEmpty())) {
+            throw CustomException.badRequest("Guest email or phone is required for guest checkout");
+        }
+
+        // Validate and process order items
+        List<OrderItem> orderItems = new ArrayList<>();
+        BigDecimal subtotal = BigDecimal.ZERO;
+
+        for (OrderItemRequest itemRequest : request.getItems()) {
+            Product product = productRepository.findById(itemRequest.getProductId())
+                    .orElseThrow(() -> CustomException.notFound("Product not found: " + itemRequest.getProductId()));
+
+            if (!product.getIsActive()) {
+                throw CustomException.badRequest("Product is not available: " + product.getProductName());
+            }
+
+            if (!product.isInStock() || product.getStockQuantity() < itemRequest.getQuantity()) {
+                throw CustomException.badRequest("Insufficient stock for product: " + product.getProductName());
+            }
+
+            // Calculate item total
+            BigDecimal itemTotal = product.getFinalPrice().multiply(BigDecimal.valueOf(itemRequest.getQuantity()));
+            subtotal = subtotal.add(itemTotal);
+
+            // Parse delivery date if provided
+            LocalDate deliveryDate = null;
+            if (itemRequest.getDeliveryDate() != null && !itemRequest.getDeliveryDate().isEmpty()) {
+                try {
+                    deliveryDate = LocalDate.parse(itemRequest.getDeliveryDate());
+                } catch (Exception e) {
+                    log.warn("Failed to parse delivery date: {}", itemRequest.getDeliveryDate());
+                }
+            }
+
+            // Build order item
+            OrderItem orderItem = OrderItem.builder()
+                    .product(product)
+                    .quantity(itemRequest.getQuantity())
+                    .unitPrice(product.getFinalPrice())
+                    .totalPrice(itemTotal)
+                    .productName(product.getProductName())
+                    .productImageUrl(product.getImageUrl())
+                    .specialInstructions(itemRequest.getSpecialInstructions())
+                    .cardMessage(itemRequest.getCardMessage())
+                    .deliveryDate(deliveryDate)
+                    .deliveryTimeSlot(itemRequest.getDeliveryTimeSlot())
+                    .build();
+
+            orderItems.add(orderItem);
+        }
+
+        // Get delivery fee from request (default to 0 if not provided)
+        BigDecimal deliveryFee = request.getDeliveryFee() != null ? request.getDeliveryFee() : BigDecimal.ZERO;
+
+        // Calculate total amount = subtotal + deliveryFee
+        BigDecimal totalAmount = subtotal.add(deliveryFee);
+
+        // Create GUEST order (user = null)
+        Order order = Order.builder()
+                .user(null)  // No user for guest orders
+                .isGuestOrder(true)
+                .guestEmail(request.getGuestEmail())
+                .guestPhone(request.getGuestPhone())
+                .deliveryStatus(DeliveryStatus.PENDING)
+                .paymentStatus(PaymentStatus.PENDING)
+                .senderName(request.getSenderName())
+                .senderPhone(request.getSenderPhone())
+                .cardMessage(request.getCardMessage())
+                .instructionMessage(request.getInstructionMessage())
+                .deliveryAddress(request.getDeliveryAddress())
+                .deliveryArea(request.getDeliveryArea())
+                .deliveryCity(request.getDeliveryCity())
+                .deliveryNotes(request.getDeliveryNotes())
+                .recipientName(request.getRecipientName())
+                .recipientPhone(request.getRecipientPhone())
+                .preferredDeliveryDate(request.getPreferredDeliveryDate())
+                .subtotal(subtotal)
+                .deliveryFee(deliveryFee)
+                .totalAmount(totalAmount)
+                .couponCode(request.getCouponCode())
+                .build();
+
+        Order savedOrder = orderRepository.save(order);
+
+        // Save order items and decrease stock
+        for (OrderItem item : orderItems) {
+            item.setOrder(savedOrder);
+            orderItemRepository.save(item);
+
+            // Decrease product stock
+            int updated = productRepository.decreaseStock(item.getProduct().getProductId(), item.getQuantity());
+            if (updated == 0) {
+                throw CustomException.badRequest("Failed to update stock for product: " + item.getProductName());
+            }
+        }
+
+        log.info("Guest order created successfully!");
+        log.info("Order ID: {}", savedOrder.getOrderId());
+        log.info("Order Number: {}", savedOrder.getOrderNumber());
+        log.info("Total Amount: {}", savedOrder.getTotalAmount());
+        log.info("========== GUEST ORDER CREATED ==========");
+
+        return mapToGuestOrderResponse(savedOrder, orderItems);
+    }
+
+    /**
+     * Get guest order by order number and email (for order tracking)
+     */
+    @Transactional(readOnly = true)
+    public OrderResponse getGuestOrderByOrderNumber(String orderNumber, String email) {
+        log.info("Looking up guest order: {} for email: {}", orderNumber, email);
+
+        Order order = orderRepository.findByOrderNumberAndGuestEmail(orderNumber, email)
+                .orElseThrow(() -> CustomException.notFound(
+                        "Order not found or email does not match"));
+
+        List<OrderItem> items = orderItemRepository.findByOrderOrderId(order.getOrderId());
+        return mapToGuestOrderResponse(order, items);
+    }
+
+    // ============ AUTHENTICATED USER - Create order with login ============
+    /**
+     * Create a new order for authenticated user
      */
     public OrderResponse createOrder(UUID userId, CreateOrderRequest request) {
         User user = userRepository.findById(userId)
@@ -103,6 +235,7 @@ public class OrderService {
         // Create order
         Order order = Order.builder()
                 .user(user)
+                .isGuestOrder(false)
                 .deliveryStatus(DeliveryStatus.PENDING)
                 .paymentStatus(PaymentStatus.PENDING)
                 .senderName(request.getSenderName())              // NEW
@@ -148,7 +281,7 @@ public class OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> CustomException.notFound("Order not found"));
 
-        if (!order.getUser().getUserId().equals(userId)) {
+        if (order.getUser() == null || !order.getUser().getUserId().equals(userId)) {
             throw CustomException.forbidden("You don't have access to this order");
         }
 
@@ -164,6 +297,11 @@ public class OrderService {
                 .orElseThrow(() -> CustomException.notFound("Order not found"));
 
         List<OrderItem> items = orderItemRepository.findByOrderOrderId(orderId);
+
+        // Check if it's a guest order
+        if (order.isGuest()) {
+            return mapToGuestOrderResponse(order, items);
+        }
         return mapToOrderResponse(order, items);
     }
 
@@ -175,7 +313,7 @@ public class OrderService {
         Order order = orderRepository.findByOrderNumber(orderNumber)
                 .orElseThrow(() -> CustomException.notFound("Order not found"));
 
-        if (!order.getUser().getUserId().equals(userId)) {
+        if (order.getUser() == null || !order.getUser().getUserId().equals(userId)) {
             throw CustomException.forbidden("You don't have access to this order");
         }
 
@@ -208,7 +346,7 @@ public class OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> CustomException.notFound("Order not found"));
 
-        if (!order.getUser().getUserId().equals(userId)) {
+        if (order.getUser() == null || !order.getUser().getUserId().equals(userId)) {
             throw CustomException.forbidden("You don't have access to this order");
         }
 
@@ -260,13 +398,16 @@ public class OrderService {
 
         Order savedOrder = orderRepository.save(order);
 
-        // Send status update email
+        // Send status update email - handle both guest and registered users
         try {
-            emailService.sendOrderStatusUpdateEmail(
-                    order.getUser().getEmail(),
-                    order.getOrderNumber(),
-                    newStatus.name()
-            );
+            String email = order.isGuest() ? order.getGuestEmail() : order.getUser().getEmail();
+            if (email != null && !email.isEmpty()) {
+                emailService.sendOrderStatusUpdateEmail(
+                        email,
+                        order.getOrderNumber(),
+                        newStatus.name()
+                );
+            }
         } catch (Exception e) {
             log.error("Failed to send order status update email", e);
         }
@@ -274,6 +415,10 @@ public class OrderService {
         log.info("Order {} delivery status updated from {} to {}", order.getOrderNumber(), oldStatus, newStatus);
 
         List<OrderItem> items = orderItemRepository.findByOrderOrderId(orderId);
+
+        if (order.isGuest()) {
+            return mapToGuestOrderResponse(savedOrder, items);
+        }
         return mapToOrderResponse(savedOrder, items);
     }
 
@@ -354,26 +499,33 @@ public class OrderService {
                 .build();
     }
 
+    // ============ MAPPING METHODS ============
+
     /**
-     * Map Order entity to OrderResponse DTO
+     * Map Order entity to OrderResponse DTO (for authenticated users)
      */
     private OrderResponse mapToOrderResponse(Order order, List<OrderItem> items) {
         List<OrderItemResponse> itemResponses = items.stream()
                 .map(this::mapToOrderItemResponse)
                 .collect(Collectors.toList());
 
-        UserSummary userSummary = UserSummary.builder()
-                .userId(order.getUser().getUserId())
-                .name(order.getUser().getName())
-                .email(order.getUser().getEmail())
-                .phone(order.getUser().getPhoneNumber())
-                .build();
+        UserSummary userSummary = null;
+        if (order.getUser() != null) {
+            userSummary = UserSummary.builder()
+                    .userId(order.getUser().getUserId())
+                    .name(order.getUser().getName())
+                    .email(order.getUser().getEmail())
+                    .phone(order.getUser().getPhoneNumber())
+                    .build();
+        }
 
         return OrderResponse.builder()
                 .orderId(order.getOrderId())
                 .orderNumber(order.getOrderNumber())
                 .deliveryStatus(order.getDeliveryStatus())
                 .paymentStatus(order.getPaymentStatus())
+                .isGuestOrder(order.getIsGuestOrder())
+                .guestEmail(order.getGuestEmail())
                 .senderName(order.getSenderName())
                 .senderPhone(order.getSenderPhone())
                 .cardMessage(order.getCardMessage())
@@ -401,17 +553,61 @@ public class OrderService {
     }
 
     /**
+     * Map Guest Order entity to OrderResponse DTO
+     */
+    private OrderResponse mapToGuestOrderResponse(Order order, List<OrderItem> items) {
+        List<OrderItemResponse> itemResponses = items.stream()
+                .map(this::mapToOrderItemResponse)
+                .collect(Collectors.toList());
+
+        return OrderResponse.builder()
+                .orderId(order.getOrderId())
+                .orderNumber(order.getOrderNumber())
+                .deliveryStatus(order.getDeliveryStatus())
+                .paymentStatus(order.getPaymentStatus())
+                .isGuestOrder(true)
+                .guestEmail(order.getGuestEmail())
+                .senderName(order.getSenderName())
+                .senderPhone(order.getSenderPhone())
+                .cardMessage(order.getCardMessage())
+                .instructionMessage(order.getInstructionMessage())
+                .recipientName(order.getRecipientName())
+                .recipientPhone(order.getRecipientPhone())
+                .deliveryAddress(order.getDeliveryAddress())
+                .deliveryArea(order.getDeliveryArea())
+                .deliveryCity(order.getDeliveryCity())
+                .deliveryNotes(order.getDeliveryNotes())
+                .preferredDeliveryDate(order.getPreferredDeliveryDate())
+                .actualDeliveryDate(order.getActualDeliveryDate())
+                .subtotal(order.getSubtotal())
+                .deliveryFee(order.getDeliveryFee())
+                .discountAmount(order.getDiscountAmount())
+                .totalAmount(order.getTotalAmount())
+                .couponCode(order.getCouponCode())
+                .items(itemResponses)
+                .user(null)  // No user for guest orders
+                .createdAt(order.getCreatedAt())
+                .updatedAt(order.getUpdatedAt())
+                .cancelledAt(order.getCancelledAt())
+                .cancellationReason(order.getCancellationReason())
+                .build();
+    }
+
+    /**
      * Map Order entity to OrderListResponse DTO (summary)
      */
     private OrderListResponse mapToOrderListResponse(Order order) {
         int itemCount = orderItemRepository.countByOrderOrderId(order.getOrderId());
 
-        UserSummary userSummary = UserSummary.builder()
-                .userId(order.getUser().getUserId())
-                .name(order.getUser().getName())
-                .email(order.getUser().getEmail())
-                .phone(order.getUser().getPhoneNumber())
-                .build();
+        UserSummary userSummary = null;
+        if (order.getUser() != null) {
+            userSummary = UserSummary.builder()
+                    .userId(order.getUser().getUserId())
+                    .name(order.getUser().getName())
+                    .email(order.getUser().getEmail())
+                    .phone(order.getUser().getPhoneNumber())
+                    .build();
+        }
 
         return OrderListResponse.builder()
                 .orderId(order.getOrderId())
@@ -426,6 +622,8 @@ public class OrderService {
                 .preferredDeliveryDate(order.getPreferredDeliveryDate())
                 .createdAt(order.getCreatedAt())
                 .user(userSummary)
+                .isGuestOrder(order.getIsGuestOrder())
+                .guestEmail(order.getGuestEmail())
                 .build();
     }
 

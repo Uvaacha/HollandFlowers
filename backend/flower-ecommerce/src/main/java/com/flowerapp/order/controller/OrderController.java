@@ -24,69 +24,97 @@ import java.util.UUID;
 @RequestMapping("/orders")
 @RequiredArgsConstructor
 @Tag(name = "Orders", description = "Order management for users")
-@SecurityRequirement(name = "bearerAuth")
 public class OrderController {
 
     private final OrderService orderService;
 
+    // ============ GUEST CHECKOUT ENDPOINT (NO AUTH REQUIRED) ============
+    @PostMapping("/guest")
+    @Operation(summary = "Create a guest order (no login required)")
+    public ResponseEntity<ApiResponse<OrderResponse>> createGuestOrder(
+            @Valid @RequestBody CreateOrderRequest request) {
+
+        // Use existing CreateOrderRequest - pass null for userId to indicate guest
+        OrderResponse order = orderService.createGuestOrder(request);
+        return ResponseEntity.ok(ApiResponse.success("Order created successfully", order));
+    }
+
+    // ============ GUEST ORDER TRACKING (NO AUTH REQUIRED) ============
+    @GetMapping("/guest/track")
+    @Operation(summary = "Track guest order by order number and email")
+    public ResponseEntity<ApiResponse<OrderResponse>> trackGuestOrder(
+            @RequestParam String orderNumber,
+            @RequestParam String email) {
+
+        OrderResponse order = orderService.getGuestOrderByOrderNumber(orderNumber, email);
+        return ResponseEntity.ok(ApiResponse.success("Order retrieved successfully", order));
+    }
+
+    // ============ AUTHENTICATED ENDPOINTS ============
     @PostMapping
-    @Operation(summary = "Create a new order")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Create a new order (requires login)")
     public ResponseEntity<ApiResponse<OrderResponse>> createOrder(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @Valid @RequestBody CreateOrderRequest request) {
-        
+
         OrderResponse order = orderService.createOrder(userDetails.getUserId(), request);
         return ResponseEntity.ok(ApiResponse.success("Order created successfully", order));
     }
 
     @GetMapping
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Get user's orders")
     public ResponseEntity<ApiResponse<Page<OrderListResponse>>> getUserOrders(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @PageableDefault(size = 10) Pageable pageable) {
-        
+
         Page<OrderListResponse> orders = orderService.getUserOrders(userDetails.getUserId(), pageable);
         return ResponseEntity.ok(ApiResponse.success("Orders retrieved successfully", orders));
     }
 
     @GetMapping("/{orderId}")
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Get order by ID")
     public ResponseEntity<ApiResponse<OrderResponse>> getOrderById(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @PathVariable Long orderId) {
-        
+
         OrderResponse order = orderService.getOrderById(orderId, userDetails.getUserId());
         return ResponseEntity.ok(ApiResponse.success("Order retrieved successfully", order));
     }
 
     @GetMapping("/number/{orderNumber}")
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Get order by order number")
     public ResponseEntity<ApiResponse<OrderResponse>> getOrderByNumber(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @PathVariable String orderNumber) {
-        
+
         OrderResponse order = orderService.getOrderByOrderNumber(orderNumber, userDetails.getUserId());
         return ResponseEntity.ok(ApiResponse.success("Order retrieved successfully", order));
     }
 
     @GetMapping("/delivery-status/{status}")
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Get user's orders by delivery status")
     public ResponseEntity<ApiResponse<Page<OrderListResponse>>> getUserOrdersByDeliveryStatus(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @PathVariable DeliveryStatus status,
             @PageableDefault(size = 10) Pageable pageable) {
-        
+
         Page<OrderListResponse> orders = orderService.getUserOrdersByDeliveryStatus(
                 userDetails.getUserId(), status, pageable);
         return ResponseEntity.ok(ApiResponse.success("Orders retrieved successfully", orders));
     }
 
     @PutMapping("/{orderId}/cancel")
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Cancel an order (only pending orders)")
     public ResponseEntity<ApiResponse<OrderResponse>> cancelOrder(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @PathVariable Long orderId) {
-        
+
         OrderResponse order = orderService.cancelOrder(orderId, userDetails.getUserId());
         return ResponseEntity.ok(ApiResponse.success("Order cancelled successfully", order));
     }

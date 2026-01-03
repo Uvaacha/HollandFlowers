@@ -18,7 +18,8 @@ import java.util.List;
         @Index(name = "idx_order_user", columnList = "user_id"),
         @Index(name = "idx_order_delivery_status", columnList = "delivery_status"),
         @Index(name = "idx_order_payment_status", columnList = "payment_status"),
-        @Index(name = "idx_order_created_at", columnList = "created_at")
+        @Index(name = "idx_order_created_at", columnList = "created_at"),
+        @Index(name = "idx_order_guest_email", columnList = "guest_email")
 })
 @Getter
 @Setter
@@ -33,7 +34,7 @@ public class Order {
     private Long orderId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = true)  // CHANGED: nullable = true for guest orders
     private User user;
 
     @Column(name = "order_number", unique = true, nullable = false, length = 20)
@@ -48,6 +49,17 @@ public class Order {
     @Column(name = "payment_status", nullable = false, length = 30)
     @Builder.Default
     private PaymentStatus paymentStatus = PaymentStatus.PENDING;
+
+    // ============ GUEST CHECKOUT FIELDS (NEW) ============
+    @Column(name = "is_guest_order")
+    @Builder.Default
+    private Boolean isGuestOrder = false;
+
+    @Column(name = "guest_email", length = 255)
+    private String guestEmail;
+
+    @Column(name = "guest_phone", length = 50)
+    private String guestPhone;
 
     // ============ SENDER INFORMATION (Person placing the order) ============
     @Column(name = "sender_name", length = 100)
@@ -155,6 +167,11 @@ public class Order {
 
     public boolean isDelivered() {
         return this.deliveryStatus == DeliveryStatus.DELIVERED;
+    }
+
+    // Helper to check if this is a guest order
+    public boolean isGuest() {
+        return Boolean.TRUE.equals(this.isGuestOrder) || this.user == null;
     }
 
     @PrePersist

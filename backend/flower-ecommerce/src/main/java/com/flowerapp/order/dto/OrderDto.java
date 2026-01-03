@@ -25,6 +25,23 @@ public class OrderDto {
         @Valid
         private List<OrderItemRequest> items;
 
+        // ============ GUEST CHECKOUT FIELDS (NEW) ============
+        /**
+         * Flag to indicate this is a guest order (no login required)
+         */
+        private Boolean isGuestOrder;
+
+        /**
+         * Guest email - required for guest orders
+         */
+        @Email(message = "Invalid email format")
+        private String guestEmail;
+
+        /**
+         * Guest phone - alternative contact for guest orders
+         */
+        private String guestPhone;
+
         // ============ SENDER INFORMATION ============
         @Size(max = 100, message = "Sender name cannot exceed 100 characters")
         private String senderName;
@@ -148,6 +165,10 @@ public class OrderDto {
         private DeliveryStatus deliveryStatus;
         private PaymentStatus paymentStatus;
 
+        // ============ GUEST INFO (NEW) ============
+        private Boolean isGuestOrder;
+        private String guestEmail;
+
         // ============ SENDER INFO ============
         private String senderName;
         private String senderPhone;
@@ -176,7 +197,7 @@ public class OrderDto {
         // ============ ITEMS ============
         private List<OrderItemResponse> items;
 
-        // ============ USER INFO (for admin view) ============
+        // ============ USER INFO (for admin view) - can be null for guest orders ============
         private UserSummary user;
 
         // ============ TIMESTAMPS ============
@@ -203,6 +224,10 @@ public class OrderDto {
         private LocalDateTime preferredDeliveryDate;
         private LocalDateTime createdAt;
         private UserSummary user;
+
+        // ============ GUEST INFO (NEW) ============
+        private Boolean isGuestOrder;
+        private String guestEmail;
     }
 
     @Data

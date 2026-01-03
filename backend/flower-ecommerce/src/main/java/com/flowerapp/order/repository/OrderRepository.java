@@ -25,7 +25,36 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
 
     boolean existsByOrderNumber(String orderNumber);
 
-    // User-specific queries
+    // ============ GUEST ORDER QUERIES (NEW) ============
+    /**
+     * Find guest order by order number and guest email
+     * Used for guest order tracking without login
+     */
+    Optional<Order> findByOrderNumberAndGuestEmail(String orderNumber, String guestEmail);
+
+    /**
+     * Find all guest orders by email
+     */
+    List<Order> findByGuestEmailOrderByCreatedAtDesc(String guestEmail);
+
+    /**
+     * Find guest orders by phone
+     */
+    List<Order> findByGuestPhoneOrderByCreatedAtDesc(String guestPhone);
+
+    /**
+     * Count guest orders
+     */
+    @Query("SELECT COUNT(o) FROM Order o WHERE o.isGuestOrder = true")
+    long countGuestOrders();
+
+    /**
+     * Find all guest orders (admin)
+     */
+    @Query("SELECT o FROM Order o WHERE o.isGuestOrder = true ORDER BY o.createdAt DESC")
+    Page<Order> findAllGuestOrders(Pageable pageable);
+
+    // ============ USER-SPECIFIC QUERIES ============
     Page<Order> findByUserUserId(UUID userId, Pageable pageable);
 
     Page<Order> findByUserUserIdOrderByCreatedAtDesc(UUID userId, Pageable pageable);
@@ -88,11 +117,12 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
     @Query("SELECT COUNT(o) FROM Order o WHERE o.user.userId = :userId AND o.deliveryStatus = 'DELIVERED'")
     long countDeliveredOrdersByUser(@Param("userId") UUID userId);
 
-    // Search queries
+    // Search queries - UPDATED to include guest orders
     @Query("SELECT o FROM Order o WHERE " +
             "(LOWER(o.orderNumber) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
             "LOWER(o.recipientName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-            "LOWER(o.recipientPhone) LIKE LOWER(CONCAT('%', :keyword, '%')))")
+            "LOWER(o.recipientPhone) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(o.guestEmail) LIKE LOWER(CONCAT('%', :keyword, '%')))")
     Page<Order> searchOrders(@Param("keyword") String keyword, Pageable pageable);
 
     // Update queries

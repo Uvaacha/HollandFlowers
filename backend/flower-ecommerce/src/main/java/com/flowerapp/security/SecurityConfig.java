@@ -51,7 +51,9 @@ public class SecurityConfig {
             "/payments/callback",      // Hesabe callback - no auth
             "/payments/webhook",       // Hesabe webhook - no auth
             "/payments/verify",        // Payment verification - no auth
-            "/payments/methods"        // Payment methods - public
+            "/payments/methods",       // Payment methods - public
+            "/orders/guest",           // Guest checkout - no auth
+            "/payments/guest/**"       // Guest payment - no auth
     };
 
     // User endpoints (Role = 1, 2, 3) - Requires authentication
@@ -83,6 +85,12 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        // ============ GUEST CHECKOUT ENDPOINTS (NO AUTH) ============
+                        // IMPORTANT: These MUST come BEFORE authenticated /orders/** and /payments/**
+                        .requestMatchers(HttpMethod.POST, "/orders/guest").permitAll()      // Guest order creation
+                        .requestMatchers(HttpMethod.POST, "/payments/guest/initiate").permitAll()  // Guest payment
+                        .requestMatchers(HttpMethod.GET, "/orders/guest/**").permitAll()   // Guest order tracking
+
                         // ============ PUBLIC ENDPOINTS (NO AUTH) ============
                         // IMPORTANT: Specific payment endpoints MUST come BEFORE general /payments/**
                         .requestMatchers("/payments/callback").permitAll()   // Hesabe callback - NO AUTH

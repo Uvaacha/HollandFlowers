@@ -41,11 +41,49 @@ public class PaymentController {
         return ResponseEntity.ok(methods);
     }
 
+    // ============ GUEST PAYMENT ENDPOINT (NO AUTH REQUIRED) ============
     /**
-     * Initiate a payment
+     * Initiate a guest payment (no login required)
+     */
+    @PostMapping("/guest/initiate")
+    @Operation(summary = "Initiate guest payment (no login required)",
+            description = "Initiates a payment for a guest order. Returns checkout URL for redirect-based payment methods.")
+    public ResponseEntity<PaymentResponse> initiateGuestPayment(
+            @RequestBody InitiatePaymentRequest request) {
+
+        try {
+            log.info("========== GUEST PAYMENT INITIATION ==========");
+            log.info("Order ID: {}", request.getOrderId());
+            log.info("Customer Email: {}", request.getCustomerEmail());
+            log.info("Customer Phone: {}", request.getCustomerPhone());
+
+            // Process payment without user authentication
+            PaymentResponse response = paymentService.initiateGuestPayment(request);
+
+            if (response.isSuccess()) {
+                log.info("Guest payment initiated successfully. Checkout URL: {}", response.getCheckoutUrl());
+                return ResponseEntity.ok(response);
+            } else {
+                log.warn("Guest payment initiation failed: {}", response.getErrorMessage());
+                return ResponseEntity.badRequest().body(response);
+            }
+        } catch (Exception e) {
+            log.error("Guest payment initiation failed: {}", e.getMessage(), e);
+            return ResponseEntity.badRequest().body(
+                    PaymentResponse.builder()
+                            .success(false)
+                            .message("Payment initiation failed")
+                            .errorMessage(e.getMessage())
+                            .build()
+            );
+        }
+    }
+
+    /**
+     * Initiate a payment (requires authentication)
      */
     @PostMapping("/initiate")
-    @Operation(summary = "Initiate payment",
+    @Operation(summary = "Initiate payment (requires login)",
             description = "Initiates a payment for an order. Returns checkout URL for redirect-based payment methods.")
     public ResponseEntity<PaymentResponse> initiatePayment(
             @RequestBody InitiatePaymentRequest request,
