@@ -282,12 +282,17 @@ const Checkout = () => {
     return country ? country.flag : '🌍';
   };
 
-  // ============ UPDATED: Handle form submission - Create order and redirect to Hesabe ============
+  // ============ GUEST CHECKOUT ENABLED - Create order and redirect to Hesabe ============
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     
     // Validate required fields
+    if (!contact.emailOrPhone) {
+      setError(currentLang === 'ar' ? 'يرجى إدخال البريد الإلكتروني أو رقم الهاتف' : 'Please enter email or phone number');
+      return;
+    }
+
     if (!delivery.governorate) {
       setError(currentLang === 'ar' ? 'يرجى اختيار المحافظة' : 'Please select a governorate');
       return;
@@ -345,184 +350,167 @@ const Checkout = () => {
     }
 
     try {
-      // Check if user is logged in
-      const authToken = localStorage.getItem('accessToken') || localStorage.getItem('adminToken');
+      // ============ TRANSFORM CART ITEMS FOR BACKEND ============
+      // Extract sender info from first item (sender is same for all items in cart)
+      const firstItemWithSender = cartItems.find(item => item.senderInfo);
+      let senderName = '';
+      let senderPhone = '';
       
-      if (authToken) {
-        // ============ TRANSFORM CART ITEMS FOR BACKEND ============
-        // Extract sender info from first item (sender is same for all items in cart)
-        const firstItemWithSender = cartItems.find(item => item.senderInfo);
-        let senderName = '';
-        let senderPhone = '';
-        
-        if (firstItemWithSender && firstItemWithSender.senderInfo) {
-          // senderInfo format: "tunga and 7836733333"
-          const senderParts = firstItemWithSender.senderInfo.split(' and ');
-          if (senderParts.length === 2) {
-            senderName = senderParts[0].trim();
-            senderPhone = senderParts[1].trim();
-          } else {
-            senderName = firstItemWithSender.senderInfo;
-          }
-        }
-
-        // Transform cart items to backend format
-        const transformedItems = cartItems.map(item => {
-          // Get the product UUID - try multiple possible field names
-          const productId = item.productId || item.id || item.product_id;
-          
-          console.log('Cart item:', item);
-          console.log('Product ID found:', productId);
-          
-          return {
-            productId: productId,
-            quantity: item.quantity || 1,
-            cardMessage: item.cardMessage || '',
-            deliveryDate: item.deliveryDate || '',
-            deliveryTimeSlot: item.deliveryTime || '',
-            specialInstructions: item.specialInstructions || ''
-          };
-        });
-
-        // Get governorate display name
-        const selectedGov = governorates.find(g => g.id === delivery.governorate);
-        const governorateName = selectedGov ? (currentLang === 'ar' ? selectedGov.nameAr : selectedGov.name) : delivery.governorate;
-
-        // Build full address
-        const fullAddress = delivery.address + (delivery.apartment ? ', ' + delivery.apartment : '');
-
-        // Build order payload matching backend OrderDto.CreateOrderRequest
-        const orderPayload = {
-          items: transformedItems,
-          senderName: senderName || `${delivery.firstName || ''} ${delivery.lastName}`.trim() || 'Customer',
-          senderPhone: senderPhone || delivery.phone,
-          recipientName: `${delivery.firstName || ''} ${delivery.lastName}`.trim() || 'Recipient',
-          recipientPhone: delivery.phone,
-          deliveryAddress: fullAddress,
-          deliveryArea: delivery.city || governorateName,
-          deliveryCity: governorateName,
-          instructionMessage: deliveryInstructions || '',
-          deliveryNotes: delivery.apartment || '',
-          cardMessage: cartItems[0]?.cardMessage || '',
-          deliveryFee: shippingCost  // ADDED: Include delivery fee in order
-        };
-        
-        console.log('========== ORDER PAYLOAD BEING SENT ==========');
-        console.log(JSON.stringify(orderPayload, null, 2));
-        console.log('===============================================');
-        
-        // Create order using api service
-        const orderResponse = await api.post('/orders', orderPayload);
-        
-        console.log('Order API Response:', orderResponse);
-        
-        // Extract order ID from response - handle different response structures
-        let orderId = null;
-        if (orderResponse?.data?.data?.orderId) {
-          orderId = orderResponse.data.data.orderId;
-        } else if (orderResponse?.data?.orderId) {
-          orderId = orderResponse.data.orderId;
-        } else if (orderResponse?.data?.id) {
-          orderId = orderResponse.data.id;
-        } else if (orderResponse?.orderId) {
-          orderId = orderResponse.orderId;
-        } else if (orderResponse?.id) {
-          orderId = orderResponse.id;
-        } else if (orderResponse?.data?.orderNumber) {
-          orderId = orderResponse.data.orderNumber;
-        }
-        
-        if (!orderId) {
-          console.error('Order response structure:', orderResponse);
-          throw new Error('Failed to get order ID from response');
-        }
-        
-        console.log('Extracted orderId:', orderId);
-        
-        // ============ INITIATE PAYMENT WITH HESABE ============
-        const paymentPayload = {
-          orderId: orderId,
-          showAllPaymentMethods: true, // Show all payment options (KNET, Visa, Mastercard, Apple Pay, etc.)
-          // paymentMethod is not set - this will default to showing all methods on Hesabe page
-          customerEmail: contact.emailOrPhone.includes('@') ? contact.emailOrPhone : null,
-          customerPhone: delivery.phone,
-          customerName: `${delivery.firstName || ''} ${delivery.lastName}`.trim(),
-          deviceType: 'WEB'
-        };
-        
-        console.log('========== PAYMENT PAYLOAD BEING SENT ==========');
-        console.log(JSON.stringify(paymentPayload, null, 2));
-        console.log('=================================================');
-        
-        // FIXED: Correct API endpoint path (without /api prefix since api service adds base URL)
-        const paymentResponse = await api.post('/payments/initiate', paymentPayload);
-        
-        console.log('Payment API Response:', paymentResponse);
-
-        // Extract checkout URL from response - handle different response structures
-        let checkoutUrl = null;
-        let paymentReference = null;
-        
-        // Try different response structures
-        if (paymentResponse?.data?.checkoutUrl) {
-          checkoutUrl = paymentResponse.data.checkoutUrl;
-          paymentReference = paymentResponse.data.paymentReference;
-        } else if (paymentResponse?.checkoutUrl) {
-          checkoutUrl = paymentResponse.checkoutUrl;
-          paymentReference = paymentResponse.paymentReference;
-        } else if (paymentResponse?.data?.data?.checkoutUrl) {
-          checkoutUrl = paymentResponse.data.data.checkoutUrl;
-          paymentReference = paymentResponse.data.data.paymentReference;
-        }
-        
-        // Check if payment was successful
-        const isSuccess = paymentResponse?.success || 
-                          paymentResponse?.data?.success || 
-                          checkoutUrl !== null;
-
-        if (isSuccess && checkoutUrl) {
-          // Store pending order info for verification after payment
-          localStorage.setItem('pendingOrder', JSON.stringify({
-            orderId: orderId,
-            paymentReference: paymentReference,
-            total: total,
-            items: cartItems.length,
-            timestamp: new Date().toISOString()
-          }));
-          
-          console.log('Redirecting to Hesabe checkout:', checkoutUrl);
-          
-          // Redirect to Hesabe payment page
-          window.location.href = checkoutUrl;
+      if (firstItemWithSender && firstItemWithSender.senderInfo) {
+        // senderInfo format: "tunga and 7836733333"
+        const senderParts = firstItemWithSender.senderInfo.split(' and ');
+        if (senderParts.length === 2) {
+          senderName = senderParts[0].trim();
+          senderPhone = senderParts[1].trim();
         } else {
-          // Payment initiation failed
-          const errorMessage = paymentResponse?.message || 
-                               paymentResponse?.data?.message || 
-                               paymentResponse?.errorMessage ||
-                               paymentResponse?.data?.errorMessage ||
-                               'Failed to initiate payment';
-          throw new Error(errorMessage);
+          senderName = firstItemWithSender.senderInfo;
         }
-      } else {
-        // Guest checkout - redirect to login
-        // Store checkout data for after login
-        localStorage.setItem('pendingCheckout', JSON.stringify({
-          cartItems,
-          delivery,
-          contact,
-          billingDetails,
-          billingAddress,
-          deliveryInstructions,
-          total
+      }
+
+      // Transform cart items to backend format
+      const transformedItems = cartItems.map(item => {
+        // Get the product UUID - try multiple possible field names
+        const productId = item.productId || item.id || item.product_id;
+        
+        console.log('Cart item:', item);
+        console.log('Product ID found:', productId);
+        
+        return {
+          productId: productId,
+          quantity: item.quantity || 1,
+          cardMessage: item.cardMessage || '',
+          deliveryDate: item.deliveryDate || '',
+          deliveryTimeSlot: item.deliveryTime || '',
+          specialInstructions: item.specialInstructions || ''
+        };
+      });
+
+      // Get governorate display name
+      const selectedGov = governorates.find(g => g.id === delivery.governorate);
+      const governorateName = selectedGov ? (currentLang === 'ar' ? selectedGov.nameAr : selectedGov.name) : delivery.governorate;
+
+      // Build full address
+      const fullAddress = delivery.address + (delivery.apartment ? ', ' + delivery.apartment : '');
+
+      // Build order payload matching backend OrderDto.CreateOrderRequest
+      // Works for both logged-in users and guests
+      const orderPayload = {
+        items: transformedItems,
+        senderName: senderName || `${delivery.firstName || ''} ${delivery.lastName}`.trim() || 'Customer',
+        senderPhone: senderPhone || delivery.phone,
+        recipientName: `${delivery.firstName || ''} ${delivery.lastName}`.trim() || 'Recipient',
+        recipientPhone: delivery.phone,
+        deliveryAddress: fullAddress,
+        deliveryArea: delivery.city || governorateName,
+        deliveryCity: governorateName,
+        instructionMessage: deliveryInstructions || '',
+        deliveryNotes: delivery.apartment || '',
+        cardMessage: cartItems[0]?.cardMessage || '',
+        deliveryFee: shippingCost,
+        // Guest checkout fields
+        guestEmail: contact.emailOrPhone.includes('@') ? contact.emailOrPhone : null,
+        guestPhone: !contact.emailOrPhone.includes('@') ? contact.emailOrPhone : delivery.phone,
+        isGuestOrder: !isAuthenticated
+      };
+      
+      console.log('========== ORDER PAYLOAD BEING SENT ==========');
+      console.log(JSON.stringify(orderPayload, null, 2));
+      console.log('Is Guest Order:', !isAuthenticated);
+      console.log('===============================================');
+      
+      // Create order using api service
+      // The backend should handle both authenticated and guest orders
+      const orderResponse = await api.post('/orders/guest', orderPayload);
+      
+      console.log('Order API Response:', orderResponse);
+      
+      // Extract order ID from response - handle different response structures
+      let orderId = null;
+      if (orderResponse?.data?.data?.orderId) {
+        orderId = orderResponse.data.data.orderId;
+      } else if (orderResponse?.data?.orderId) {
+        orderId = orderResponse.data.orderId;
+      } else if (orderResponse?.data?.id) {
+        orderId = orderResponse.data.id;
+      } else if (orderResponse?.orderId) {
+        orderId = orderResponse.orderId;
+      } else if (orderResponse?.id) {
+        orderId = orderResponse.id;
+      } else if (orderResponse?.data?.orderNumber) {
+        orderId = orderResponse.data.orderNumber;
+      }
+      
+      if (!orderId) {
+        console.error('Order response structure:', orderResponse);
+        throw new Error('Failed to get order ID from response');
+      }
+      
+      console.log('Extracted orderId:', orderId);
+      
+      // ============ INITIATE PAYMENT WITH HESABE ============
+      const paymentPayload = {
+        orderId: orderId,
+        showAllPaymentMethods: true, // Show all payment options (KNET, Visa, Mastercard, Apple Pay, etc.)
+        customerEmail: contact.emailOrPhone.includes('@') ? contact.emailOrPhone : null,
+        customerPhone: delivery.phone,
+        customerName: `${delivery.firstName || ''} ${delivery.lastName}`.trim(),
+        deviceType: 'WEB'
+      };
+      
+      console.log('========== PAYMENT PAYLOAD BEING SENT ==========');
+      console.log(JSON.stringify(paymentPayload, null, 2));
+      console.log('=================================================');
+      
+      // Initiate payment - works for both guest and authenticated users
+      const paymentResponse = await api.post('/payments/guest/initiate', paymentPayload);
+      
+      console.log('Payment API Response:', paymentResponse);
+
+      // Extract checkout URL from response - handle different response structures
+      let checkoutUrl = null;
+      let paymentReference = null;
+      
+      // Try different response structures
+      if (paymentResponse?.data?.checkoutUrl) {
+        checkoutUrl = paymentResponse.data.checkoutUrl;
+        paymentReference = paymentResponse.data.paymentReference;
+      } else if (paymentResponse?.checkoutUrl) {
+        checkoutUrl = paymentResponse.checkoutUrl;
+        paymentReference = paymentResponse.paymentReference;
+      } else if (paymentResponse?.data?.data?.checkoutUrl) {
+        checkoutUrl = paymentResponse.data.data.checkoutUrl;
+        paymentReference = paymentResponse.data.data.paymentReference;
+      }
+      
+      // Check if payment was successful
+      const isSuccess = paymentResponse?.success || 
+                        paymentResponse?.data?.success || 
+                        checkoutUrl !== null;
+
+      if (isSuccess && checkoutUrl) {
+        // Store pending order info for verification after payment
+        localStorage.setItem('pendingOrder', JSON.stringify({
+          orderId: orderId,
+          paymentReference: paymentReference,
+          total: total,
+          items: cartItems.length,
+          timestamp: new Date().toISOString(),
+          isGuestOrder: !isAuthenticated,
+          guestEmail: contact.emailOrPhone
         }));
         
-        setError(currentLang === 'ar' 
-          ? 'يرجى تسجيل الدخول للمتابعة' 
-          : 'Please login to continue');
+        console.log('Redirecting to Hesabe checkout:', checkoutUrl);
         
-        // Optionally redirect to login page
-        // navigate('/account?redirect=checkout');
-        setIsLoading(false);
+        // Redirect to Hesabe payment page
+        window.location.href = checkoutUrl;
+      } else {
+        // Payment initiation failed
+        const errorMessage = paymentResponse?.message || 
+                             paymentResponse?.data?.message || 
+                             paymentResponse?.errorMessage ||
+                             paymentResponse?.data?.errorMessage ||
+                             'Failed to initiate payment';
+        throw new Error(errorMessage);
       }
       
     } catch (err) {
@@ -549,7 +537,7 @@ const Checkout = () => {
       checkout: 'Checkout',
       contact: 'Contact',
       signIn: 'Sign in',
-      emailOrPhone: 'Sender Email or Phone Number',
+      emailOrPhone: 'Email or Phone Number',
       emailOffers: 'Email me with news and offers',
       delivery: 'Delivery',
       countryRegion: 'Country/Region',
@@ -594,13 +582,15 @@ const Checkout = () => {
       cardMessage: 'Card Message',
       senderInfo: 'Sender',
       saveInfo: 'Save this information for next time',
-      enterShipping: 'Enter shipping address'
+      enterShipping: 'Enter shipping address',
+      guestCheckout: 'Continue as Guest',
+      or: 'or'
     },
     ar: {
       checkout: 'الدفع',
       contact: 'معلومات الاتصال',
       signIn: 'تسجيل الدخول',
-      emailOrPhone: 'البريد الإلكتروني أو رقم هاتف المرسل',
+      emailOrPhone: 'البريد الإلكتروني أو رقم الهاتف',
       emailOffers: 'أرسل لي العروض والأخبار عبر البريد',
       delivery: 'التوصيل',
       countryRegion: 'الدولة/المنطقة',
@@ -645,7 +635,9 @@ const Checkout = () => {
       cardMessage: 'رسالة البطاقة',
       senderInfo: 'المرسل',
       saveInfo: 'احفظ هذه المعلومات للمرة القادمة',
-      enterShipping: 'أدخل عنوان الشحن'
+      enterShipping: 'أدخل عنوان الشحن',
+      guestCheckout: 'المتابعة كضيف',
+      or: 'أو'
     }
   };
 
@@ -698,7 +690,7 @@ const Checkout = () => {
               <div className="section-header-row">
                 <h2>{text.contact}</h2>
                 {!isAuthenticated && (
-                  <Link to="/account" className="sign-in-link">{text.signIn}</Link>
+                  <Link to="/account?redirect=checkout" className="sign-in-link">{text.signIn}</Link>
                 )}
               </div>
               
