@@ -6,6 +6,7 @@ import productService from '../services/productService';
 import MobileFilterBar from './MobileFilterBar';
 import MobileFilterDrawer, { FilterSection, PriceRangeFilter, CheckboxFilter, ColorFilter } from './MobileFilterDrawer';
 import './LiliumArrangement.css';
+import AddToCartModal from './AddToCartModal';
 
 const LiliumArrangement = () => {
   const [currentLang, setCurrentLang] = useState('en');
@@ -21,6 +22,10 @@ const LiliumArrangement = () => {
   const [sortBy, setSortBy] = useState('default');
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState({ price: true, arrangement: true, color: true });
+
+  // AddToCart Modal state
+  const [showCartModal, setShowCartModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
     const savedLang = localStorage.getItem('preferredLanguage') || 'en';
@@ -299,6 +304,15 @@ const LiliumArrangement = () => {
     });
     
     setTimeout(() => setAddingToCart(prev => ({ ...prev, [pid]: false })), 800);
+    
+    // Show the AddToCart modal with suggestions
+    setSelectedProduct({
+      ...product,
+      productId: product.productId || product.id,
+      productName: product.productName || product.name,
+      imageUrl: product.imageUrl || product.primaryImageUrl || product.image,
+    });
+    setShowCartModal(true);
   };
 
   const clearFilters = () => {
@@ -306,6 +320,11 @@ const LiliumArrangement = () => {
     setSelectedArrangements([]);
     setSelectedColors([]);
     setSortBy('default');
+  };
+
+  const handleCloseModal = () => {
+    setShowCartModal(false);
+    setSelectedProduct(null);
   };
 
   const toggleArrangement = (arr) => {
@@ -655,6 +674,15 @@ const LiliumArrangement = () => {
           </div>
         </div>
       </section>
+      {/* AddToCart Modal with Suggestions */}
+      {showCartModal && selectedProduct && (
+        <AddToCartModal
+          isOpen={showCartModal}
+          onClose={handleCloseModal}
+          product={selectedProduct}
+          currentLang={currentLang}
+        />
+      )}
     </div>
   );
 };

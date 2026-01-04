@@ -6,6 +6,7 @@ import productService from '../services/productService';
 import MobileFilterBar from './MobileFilterBar';
 import MobileFilterDrawer, { FilterSection, PriceRangeFilter, CheckboxFilter } from './MobileFilterDrawer';
 import './Offers50.css';
+import AddToCartModal from './AddToCartModal';
 
 const Offers50 = () => {
   const [currentLang, setCurrentLang] = useState('en');
@@ -24,6 +25,10 @@ const Offers50 = () => {
     price: true,
     arrangement: true
   });
+
+  // AddToCart Modal state
+  const [showCartModal, setShowCartModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
 
   const CATEGORY_NAME = '50% DISCOUNT';
@@ -298,7 +303,9 @@ const Offers50 = () => {
     
     const cartItem = {
       id: productId,
+      productId: productId,
       name: product.productName || product.nameEn || product.name,
+      productName: product.productName || product.nameEn || product.name,
       nameEn: product.productName || product.nameEn || product.name,
       nameAr: product.productNameAr || product.nameAr || product.productName,
       price: finalPrice,
@@ -307,6 +314,7 @@ const Offers50 = () => {
       originalPrice: originalPrice,
       actualPrice: originalPrice,
       image: getProductImage(product),
+      imageUrl: getProductImage(product),
       quantity: 1,
     };
     
@@ -315,6 +323,15 @@ const Offers50 = () => {
     setTimeout(() => {
       setAddingToCart(prev => ({ ...prev, [productId]: false }));
     }, 800);
+    
+    // Show the AddToCart modal with suggestions
+    setSelectedProduct(cartItem);
+    setShowCartModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowCartModal(false);
+    setSelectedProduct(null);
   };
 
   return (
@@ -609,6 +626,16 @@ const Offers50 = () => {
           </div>
         </div>
       </div>
+      
+      {/* AddToCart Modal with Suggestions */}
+      {showCartModal && selectedProduct && (
+        <AddToCartModal
+          isOpen={showCartModal}
+          onClose={handleCloseModal}
+          product={selectedProduct}
+          currentLang={currentLang}
+        />
+      )}
     </div>
   );
 };

@@ -154,6 +154,7 @@ const Checkout = () => {
   // Save info checkbox state
   const [saveInfo, setSaveInfo] = useState(false);
   
+  const [showMorePayments, setShowMorePayments] = useState(false);
   const [selectedShipping, setSelectedShipping] = useState('');
   const [billingAddress, setBillingAddress] = useState('same');
   const [deliveryInstructions, setDeliveryInstructions] = useState('');
@@ -983,7 +984,7 @@ const Checkout = () => {
               </section>
             )}
 
-            {/* Payment Section */}
+            {/* Payment Section - KNET, K FAST, Mastercard, +2 (click to show VISA & AMEX) */}
             <section className="checkout-section payment-section">
               <h2>{text.payment}</h2>
               <div className="payment-secure-row">
@@ -994,15 +995,23 @@ const Checkout = () => {
                 <div className="payment-header">
                   <span className="payment-name">{text.hesabeGateway}</span>
                   <div className="payment-icons">
+                    {/* KNET */}
                     <span className="payment-icon">
                       <svg width="34" height="22" viewBox="0 0 34 22" fill="none">
-                        <rect width="34" height="22" rx="3" fill="#1A1F71"/>
-                        <path d="M13.5 15.5L15 6.5H17.5L16 15.5H13.5Z" fill="white"/>
-                        <path d="M22 6.5L20 12.5L19.5 6.5H17L18.5 15.5H21L25 6.5H22Z" fill="white"/>
-                        <path d="M12 6.5L9.5 12.5L9.25 11.25C8.75 10 7.5 8.5 6 7.5L8 15.5H10.5L14.5 6.5H12Z" fill="white"/>
-                        <path d="M7.5 6.5H4L4 6.75C7 7.5 9 9.5 9.5 11.25L8.75 7.25C8.625 6.75 8.25 6.5 7.5 6.5Z" fill="#F9A533"/>
+                        <rect width="34" height="22" rx="3" fill="#00205B"/>
+                        <text x="6" y="14" fill="#fff" fontSize="8" fontWeight="bold" fontFamily="Arial">knet</text>
+                        <text x="6" y="10" fill="#fff" fontSize="4" fontFamily="Arial">شبكة</text>
                       </svg>
                     </span>
+                    {/* K FAST */}
+                    <span className="payment-icon">
+                      <svg width="34" height="22" viewBox="0 0 34 22" fill="none">
+                        <rect width="34" height="22" rx="3" fill="#FFD100"/>
+                        <text x="4" y="10" fill="#00205B" fontSize="6" fontWeight="bold" fontFamily="Arial">K</text>
+                        <text x="10" y="15" fill="#00205B" fontSize="6" fontWeight="bold" fontFamily="Arial">FAST</text>
+                      </svg>
+                    </span>
+                    {/* Mastercard */}
                     <span className="payment-icon">
                       <svg width="34" height="22" viewBox="0 0 34 22" fill="none">
                         <rect width="34" height="22" rx="3" fill="#000"/>
@@ -1011,7 +1020,36 @@ const Checkout = () => {
                         <path d="M17 5.5C18.5 6.75 19.5 8.75 19.5 11C19.5 13.25 18.5 15.25 17 16.5C15.5 15.25 14.5 13.25 14.5 11C14.5 8.75 15.5 6.75 17 5.5Z" fill="#FF5F00"/>
                       </svg>
                     </span>
-                    <span className="more-payment">+4</span>
+                    
+                    {/* Show VISA & AMEX when +2 is clicked */}
+                    {showMorePayments && (
+                      <>
+                        {/* VISA */}
+                        <span className="payment-icon">
+                          <svg width="34" height="22" viewBox="0 0 34 22" fill="none">
+                            <rect width="34" height="22" rx="3" fill="#1A1F71"/>
+                            <text x="7" y="14" fill="#fff" fontSize="9" fontWeight="bold" fontFamily="Arial">VISA</text>
+                          </svg>
+                        </span>
+                        {/* AMEX */}
+                        <span className="payment-icon">
+                          <svg width="34" height="22" viewBox="0 0 34 22" fill="none">
+                            <rect width="34" height="22" rx="3" fill="#006FCF"/>
+                            <text x="4" y="14" fill="#fff" fontSize="7" fontWeight="bold" fontFamily="Arial">AMEX</text>
+                          </svg>
+                        </span>
+                      </>
+                    )}
+                    
+                    {/* +2 Button - Click to show/hide VISA & AMEX */}
+                    <button 
+                      type="button"
+                      className={`more-payment-btn ${showMorePayments ? 'active' : ''}`}
+                      onClick={() => setShowMorePayments(!showMorePayments)}
+                      aria-label="Show more payment methods"
+                    >
+                      {showMorePayments ? '−2' : '+2'}
+                    </button>
                   </div>
                 </div>
                 <div className="payment-body">
@@ -1208,38 +1246,37 @@ const Checkout = () => {
                     <img src={item.image} alt={currentLang === 'ar' ? item.nameAr : item.nameEn} />
                     <span className="product-qty-badge">{item.quantity}</span>
                   </div>
-                  <div className="product-info">
+                  <div className="product-details">
                     <span className="product-name">
                       {currentLang === 'ar' ? item.nameAr : item.nameEn}
                     </span>
+                    <span className="product-price-inline">
+                      {item.originalPrice && item.originalPrice > item.price && (
+                        <span className="price-original">{text.kwd} {(item.originalPrice * item.quantity).toFixed(3)}</span>
+                      )}
+                      <span className="price-current">{text.kwd} {(item.price * item.quantity).toFixed(3)}</span>
+                    </span>
                     {item.deliveryDate && (
-                      <span className="product-delivery-info">
-                        {text.deliveryDate} :: {item.deliveryDate}
+                      <span className="product-meta-info">
+                        <span className="meta-label">{text.deliveryDate}:</span>
+                        <span className="meta-value">{item.deliveryDate}</span>
                       </span>
                     )}
                     {item.deliveryTime && (
-                      <span className="product-delivery-info">
-                        {text.deliveryTime} :: {item.deliveryTime}
-                      </span>
-                    )}
-                    {item.senderInfo && (
-                      <span className="product-delivery-info">
-                        {text.senderInfo} :: {item.senderInfo}
+                      <span className="product-meta-info">
+                        <span className="meta-label">{text.deliveryTime}:</span>
+                        <span className="meta-value">{item.deliveryTime}</span>
                       </span>
                     )}
                     {item.cardMessage && (
                       <div className="product-card-message">
-                        <span className="message-icon">💌</span>
-                        <span className="message-label">{text.cardMessage}:</span>
-                        <span className="message-text">"{item.cardMessage}"</span>
+                        <span className="card-icon">💌</span>
+                        <div className="card-content">
+                          <span className="card-label">{text.cardMessage}:</span>
+                          <span className="card-text">"{item.cardMessage}"</span>
+                        </div>
                       </div>
                     )}
-                  </div>
-                  <div className="product-price-col">
-                    {item.originalPrice && item.originalPrice > item.price && (
-                      <span className="price-original">{text.kwd} {(item.originalPrice * item.quantity).toFixed(3)}</span>
-                    )}
-                    <span className="price-current">{text.kwd} {(item.price * item.quantity).toFixed(3)}</span>
                   </div>
                 </div>
               ))}

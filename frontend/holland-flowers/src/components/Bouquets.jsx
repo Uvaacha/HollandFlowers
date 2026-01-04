@@ -5,6 +5,7 @@ import categoryService from '../services/categoryService';
 import productService from '../services/productService';
 import MobileFilterBar from './MobileFilterBar';
 import MobileFilterDrawer, { FilterSection, PriceRangeFilter, CheckboxFilter, ColorFilter } from './MobileFilterDrawer';
+import AddToCartModal from './AddToCartModal';
 import './Bouquets.css';
 
 const Bouquets = () => {
@@ -21,6 +22,10 @@ const Bouquets = () => {
   const [sortBy, setSortBy] = useState('default');
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState({ price: true, arrangement: true, color: true });
+  
+  // AddToCart Modal state
+  const [showCartModal, setShowCartModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
     const savedLang = localStorage.getItem('preferredLanguage') || 'en';
@@ -274,9 +279,11 @@ const Bouquets = () => {
     const pid = getProductSlug(product);
     setAddingToCart(prev => ({ ...prev, [pid]: true }));
     
-    addToCart({
+    const cartItem = {
       id: product.productId || product.id,
+      productId: product.productId || product.id,
       name: getProductName(product),
+      productName: getProductName(product),
       nameEn: product.productName || product.nameEn || product.name,
       nameAr: product.productNameAr || product.nameAr || product.productName,
       price: getFinalPrice(product),
@@ -285,10 +292,22 @@ const Bouquets = () => {
       originalPrice: getOriginalPrice(product),
       actualPrice: getOriginalPrice(product),
       image: getProductImage(product),
+      imageUrl: getProductImage(product),
       quantity: 1,
-    });
+    };
+    
+    addToCart(cartItem);
     
     setTimeout(() => setAddingToCart(prev => ({ ...prev, [pid]: false })), 800);
+    
+    // Show the AddToCart modal with suggestions
+    setSelectedProduct(cartItem);
+    setShowCartModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowCartModal(false);
+    setSelectedProduct(null);
   };
 
   const clearFilters = () => {
@@ -643,6 +662,16 @@ const Bouquets = () => {
           </div>
         </div>
       </section>
+      
+      {/* AddToCart Modal with Suggestions */}
+      {showCartModal && selectedProduct && (
+        <AddToCartModal
+          isOpen={showCartModal}
+          onClose={handleCloseModal}
+          product={selectedProduct}
+          currentLang={currentLang}
+        />
+      )}
     </div>
   );
 };

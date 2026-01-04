@@ -6,6 +6,7 @@ import productService from '../services/productService';
 import MobileFilterBar from './MobileFilterBar';
 import MobileFilterDrawer, { FilterSection, PriceRangeFilter, CheckboxFilter, ColorFilter } from './MobileFilterDrawer';
 import './OrchidPlants.css';
+import AddToCartModal from './AddToCartModal';
 
 const OrchidPlants = () => {
   const [currentLang, setCurrentLang] = useState('en');
@@ -21,6 +22,10 @@ const OrchidPlants = () => {
   const [sortBy, setSortBy] = useState('default');
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState({ price: true, arrangement: true, color: true });
+
+  // AddToCart Modal state
+  const [showCartModal, setShowCartModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
     const savedLang = localStorage.getItem('preferredLanguage') || 'en';
@@ -141,10 +146,24 @@ const OrchidPlants = () => {
       quantity: 1,
     });
     setTimeout(() => setAddingToCart(prev => ({ ...prev, [pid]: false })), 800);
+    
+    // Show the AddToCart modal with suggestions
+    setSelectedProduct({
+      ...product,
+      productId: product.productId || product.id,
+      productName: product.productName || product.name,
+      imageUrl: product.imageUrl || product.primaryImageUrl || product.image,
+    });
+    setShowCartModal(true);
   };
 
   const clearFilters = () => { setPriceRange({ min: '', max: '' }); setSelectedArrangements([]);
     setSelectedColors([]); setSortBy('default'); };
+
+  const handleCloseModal = () => {
+    setShowCartModal(false);
+    setSelectedProduct(null);
+  };
   const toggleArrangement = (arr) => setSelectedArrangements(prev => prev.includes(arr) ? prev.filter(a => a !== arr) : [...prev, arr]);
   const toggleColor = (color) => setSelectedColors(prev => prev.includes(color) ? prev.filter(c => c !== color) : [...prev, color]);
   const hasActiveFilters = priceRange.min !== '' || priceRange.max !== '' || selectedArrangements.length > 0 || selectedColors.length > 0;
@@ -372,6 +391,15 @@ const OrchidPlants = () => {
           </div>
         </div>
       </section>
+      {/* AddToCart Modal with Suggestions */}
+      {showCartModal && selectedProduct && (
+        <AddToCartModal
+          isOpen={showCartModal}
+          onClose={handleCloseModal}
+          product={selectedProduct}
+          currentLang={currentLang}
+        />
+      )}
     </div>
   );
 };

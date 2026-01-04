@@ -9,8 +9,8 @@ const AddToCartModal = ({ isOpen = true, onClose, addedProduct, product, current
   const navigate = useNavigate();
   const [suggestions, setSuggestions] = useState({});
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState('Recommended');
-  const [categories, setCategories] = useState(['Recommended']);
+  const [activeTab, setActiveTab] = useState('Acrylic Toppers');
+  const [categories, setCategories] = useState(['Acrylic Toppers']);
   const [addingToCart, setAddingToCart] = useState({});
 
   // Support both 'product' and 'addedProduct' prop names
@@ -39,7 +39,6 @@ const AddToCartModal = ({ isOpen = true, onClose, addedProduct, product, current
       
       // Define tabs with display names and search keywords
       const tabConfig = [
-        { displayName: 'Recommended', keywords: [] },
         { displayName: 'Acrylic Toppers', keywords: ['acrylic', 'topper'] },
         { displayName: 'Helium Balloons', keywords: ['helium', 'balloon'] },
         { displayName: 'Crown for Head', keywords: ['crown'] },
@@ -49,37 +48,24 @@ const AddToCartModal = ({ isOpen = true, onClose, addedProduct, product, current
       
       // Fetch products for each category
       for (const tab of tabConfig) {
-        if (tab.displayName === 'Recommended') {
-          // For recommended, get a mix of products
+        // Find matching category by keywords
+        const category = allCategories.find(c => {
+          const catName = (c.categoryName || '').toLowerCase();
+          return tab.keywords.some(keyword => catName.includes(keyword.toLowerCase()));
+        });
+        
+        if (category) {
           try {
-            const response = await api.get('/products', {
-              params: { page: 0, size: 10, active: true }
+            const prodResponse = await api.get(`/products/category/${category.categoryId}`, {
+              params: { page: 0, size: 10 }
             });
-            const products = response.data?.content || response.data?.data?.content || response.data || [];
-            suggestionsByTab['Recommended'] = Array.isArray(products) ? products.slice(0, 6) : [];
+            const products = prodResponse.data?.content || prodResponse.data?.data?.content || prodResponse.data || [];
+            suggestionsByTab[tab.displayName] = Array.isArray(products) ? products : [];
           } catch (e) {
-            suggestionsByTab['Recommended'] = [];
-          }
-        } else {
-          // Find matching category by keywords
-          const category = allCategories.find(c => {
-            const catName = (c.categoryName || '').toLowerCase();
-            return tab.keywords.some(keyword => catName.includes(keyword.toLowerCase()));
-          });
-          
-          if (category) {
-            try {
-              const prodResponse = await api.get(`/products/category/${category.categoryId}`, {
-                params: { page: 0, size: 10 }
-              });
-              const products = prodResponse.data?.content || prodResponse.data?.data?.content || prodResponse.data || [];
-              suggestionsByTab[tab.displayName] = Array.isArray(products) ? products : [];
-            } catch (e) {
-              suggestionsByTab[tab.displayName] = [];
-            }
-          } else {
             suggestionsByTab[tab.displayName] = [];
           }
+        } else {
+          suggestionsByTab[tab.displayName] = [];
         }
       }
       
@@ -87,12 +73,14 @@ const AddToCartModal = ({ isOpen = true, onClose, addedProduct, product, current
 
       // Filter out empty categories and set state
       const activeTabs = tabCategories.filter(tab => suggestionsByTab[tab]?.length > 0);
-      setCategories(activeTabs.length > 0 ? activeTabs : ['Recommended']);
+      setCategories(activeTabs.length > 0 ? activeTabs : tabCategories);
       setSuggestions(suggestionsByTab);
       
-      // Set active tab to first available
-      if (activeTabs.length > 0 && !activeTabs.includes(activeTab)) {
+      // Set active tab to first available with products, or first tab
+      if (activeTabs.length > 0) {
         setActiveTab(activeTabs[0]);
+      } else {
+        setActiveTab(tabCategories[0]);
       }
       
     } catch (error) {
@@ -113,7 +101,7 @@ const AddToCartModal = ({ isOpen = true, onClose, addedProduct, product, current
                        (suggestionProduct.images && suggestionProduct.images[0]) ||
                        '/placeholder-cake.jpg';
       
-      // Get price
+      // Get price (offer price if available, otherwise regular price)
       const price = suggestionProduct.offerPrice || 
                     suggestionProduct.price || 
                     suggestionProduct.basePrice ||
@@ -131,7 +119,7 @@ const AddToCartModal = ({ isOpen = true, onClose, addedProduct, product, current
       // Brief success state
       setTimeout(() => {
         setAddingToCart(prev => ({ ...prev, [productId]: false }));
-      }, 1000);
+      }, 1500);
       
     } catch (error) {
       console.error('Error adding to cart:', error);
@@ -156,6 +144,17 @@ const AddToCartModal = ({ isOpen = true, onClose, addedProduct, product, current
            prod.price || 
            prod.basePrice ||
            (prod.sizeOptions?.[0]?.price) || 0;
+  };
+
+  const getOriginalPrice = (prod) => {
+    // Return original price only if there's an offer price
+    if (prod.offerPrice && prod.price && prod.offerPrice < prod.price) {
+      return prod.price;
+    }
+    if (prod.offerPrice && prod.basePrice && prod.offerPrice < prod.basePrice) {
+      return prod.basePrice;
+    }
+    return null;
   };
 
   const hasVariants = (prod) => {
@@ -216,30 +215,64 @@ const AddToCartModal = ({ isOpen = true, onClose, addedProduct, product, current
             currentSuggestions.map((prod) => {
               const productId = prod.productId || prod.id;
               const isAdding = addingToCart[productId];
+              const originalPrice = getOriginalPrice(prod);
+              const currentPrice = getProductPrice(prod);
               
               return (
                 <div key={productId} className="suggestion-product-card">
-                  <Link to={`/product/${productId}`} onClick={onClose}>
-                    <div className="suggestion-product-image">
-                      <img 
-                        src={getProductImage(prod)} 
-                        alt={prod.productName || prod.name}
-                        onError={(e) => { e.target.src = '/placeholder-cake.jpg'; }}
-                      />
-                    </div>
-                  </Link>
+                  <div className="suggestion-product-image-wrapper">
+                    <Link to={`/product/${productId}`} onClick={onClose}>
+                      <div className="suggestion-product-image">
+                        <img 
+                          src={getProductImage(prod)} 
+                          alt={prod.productName || prod.name}
+                          onError={(e) => { e.target.src = '/placeholder-cake.jpg'; }}
+                        />
+                      </div>
+                    </Link>
+                    
+                    {/* Circular Add Button */}
+                    {!hasVariants(prod) && (
+                      <button
+                        className={`suggestion-add-circle-btn ${isAdding ? 'added' : ''}`}
+                        onClick={() => handleAddToCart(prod)}
+                        disabled={isAdding}
+                        aria-label={currentLang === 'ar' ? 'أضف إلى السلة' : 'Add to cart'}
+                      >
+                        {isAdding ? (
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                          </svg>
+                        ) : (
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                          </svg>
+                        )}
+                      </button>
+                    )}
+                  </div>
                   
                   <div className="suggestion-product-info">
-                    <p className="suggestion-product-price">
-                      KWD {parseFloat(getProductPrice(prod)).toFixed(3)}
-                    </p>
+                    {/* Price Display with Original/Offer Price */}
+                    <div className="suggestion-price-wrapper">
+                      {originalPrice && (
+                        <span className="suggestion-original-price">
+                          KD {parseFloat(originalPrice).toFixed(3)}
+                        </span>
+                      )}
+                      <span className={`suggestion-product-price ${originalPrice ? 'has-discount' : ''}`}>
+                        KD {parseFloat(currentPrice).toFixed(3)}
+                      </span>
+                    </div>
+                    
                     <h4 className="suggestion-product-name">
                       {currentLang === 'ar' 
                         ? (prod.productNameAr || prod.productName || prod.name)
                         : (prod.productName || prod.name)}
                     </h4>
                     
-                    {hasVariants(prod) ? (
+                    {hasVariants(prod) && (
                       <Link 
                         to={`/product/${productId}`} 
                         className="suggestion-select-btn"
@@ -247,16 +280,6 @@ const AddToCartModal = ({ isOpen = true, onClose, addedProduct, product, current
                       >
                         {currentLang === 'ar' ? 'اختر الخيارات' : 'Select Options'}
                       </Link>
-                    ) : (
-                      <button
-                        className={`suggestion-add-btn ${isAdding ? 'added' : ''}`}
-                        onClick={() => handleAddToCart(prod)}
-                        disabled={isAdding}
-                      >
-                        {isAdding 
-                          ? (currentLang === 'ar' ? 'تمت الإضافة ✓' : 'Added ✓')
-                          : (currentLang === 'ar' ? 'أضف' : 'Add')}
-                      </button>
                     )}
                   </div>
                 </div>
@@ -286,11 +309,9 @@ const AddToCartModal = ({ isOpen = true, onClose, addedProduct, product, current
 // Helper function for Arabic category names
 const getArabicCategoryName = (name) => {
   const translations = {
-    'Recommended': 'موصى به',
     'Acrylic Toppers': 'توبرات أكريليك',
     'Helium Balloons': 'بالونات هيليوم',
     'Crown for Head': 'تاج للرأس',
-    'ADD ON\'S': 'إضافات',
   };
   return translations[name] || name;
 };

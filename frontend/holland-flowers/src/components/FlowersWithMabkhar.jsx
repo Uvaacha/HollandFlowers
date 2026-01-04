@@ -6,6 +6,7 @@ import productService from '../services/productService';
 import MobileFilterBar from './MobileFilterBar';
 import MobileFilterDrawer, { FilterSection, PriceRangeFilter, CheckboxFilter, ColorFilter } from './MobileFilterDrawer';
 import './FlowersWithMabkhar.css';
+import AddToCartModal from './AddToCartModal';
 
 const FlowersWithMabkhar = () => {
   const [currentLang, setCurrentLang] = useState('en');
@@ -21,6 +22,10 @@ const FlowersWithMabkhar = () => {
   const [sortBy, setSortBy] = useState('default');
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState({ price: true, arrangement: true, color: true });
+
+  // AddToCart Modal state
+  const [showCartModal, setShowCartModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
     const savedLang = localStorage.getItem('preferredLanguage') || 'en';
@@ -304,6 +309,15 @@ const FlowersWithMabkhar = () => {
     });
     
     setTimeout(() => setAddingToCart(prev => ({ ...prev, [pid]: false })), 800);
+    
+    // Show the AddToCart modal with suggestions
+    setSelectedProduct({
+      ...product,
+      productId: product.productId || product.id,
+      productName: product.productName || product.name,
+      imageUrl: product.imageUrl || product.primaryImageUrl || product.image,
+    });
+    setShowCartModal(true);
   };
 
   const clearFilters = () => {
@@ -311,6 +325,11 @@ const FlowersWithMabkhar = () => {
     setSelectedArrangements([]);
     setSelectedColors([]);
     setSortBy('default');
+  };
+
+  const handleCloseModal = () => {
+    setShowCartModal(false);
+    setSelectedProduct(null);
   };
 
   const toggleArrangement = (arr) => {
@@ -646,6 +665,15 @@ const FlowersWithMabkhar = () => {
           </div>
         </div>
       </section>
+      {/* AddToCart Modal with Suggestions */}
+      {showCartModal && selectedProduct && (
+        <AddToCartModal
+          isOpen={showCartModal}
+          onClose={handleCloseModal}
+          product={selectedProduct}
+          currentLang={currentLang}
+        />
+      )}
     </div>
   );
 };

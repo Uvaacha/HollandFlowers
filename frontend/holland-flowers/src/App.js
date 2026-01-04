@@ -51,6 +51,7 @@ import OrderHistory from './components/OrderHistory';
 import OrderDetail from './components/OrderDetail';
 import RefundPolicy from './components/RefundPolicy';
 import PrivacyPolicy from './components/PrivacyPolicy';
+import AddToCartModal from './components/AddToCartModal';
 import './App.css';
 
 // ============================================
@@ -60,12 +61,10 @@ const ScrollToTop = () => {
   const { pathname } = useLocation();
 
   useLayoutEffect(() => {
-    // Force scroll to top immediately when route changes
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
     
-    // Also scroll any scrollable container
     const root = document.getElementById('root');
     if (root) {
       root.scrollTop = 0;
@@ -128,51 +127,6 @@ const Icons = {
       <path d="M26 56L32 58L38 56" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   ),
-  
-  Bouquet: () => (
-    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M32 58V38" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-      <path d="M26 58L32 38L38 58" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      <ellipse cx="32" cy="26" rx="8" ry="10" stroke="currentColor" strokeWidth="2"/>
-      <ellipse cx="22" cy="22" rx="6" ry="8" stroke="currentColor" strokeWidth="2"/>
-      <ellipse cx="42" cy="22" rx="6" ry="8" stroke="currentColor" strokeWidth="2"/>
-      <ellipse cx="26" cy="14" rx="5" ry="6" stroke="currentColor" strokeWidth="2"/>
-      <ellipse cx="38" cy="14" rx="5" ry="6" stroke="currentColor" strokeWidth="2"/>
-      <path d="M24 38H40" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-    </svg>
-  ),
-  
-  Rose: () => (
-    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M32 58V34" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-      <path d="M32 34C24 34 18 28 18 20C18 12 24 6 32 6C40 6 46 12 46 20C46 28 40 34 32 34Z" stroke="currentColor" strokeWidth="2"/>
-      <path d="M32 6C32 6 28 10 28 16C28 22 32 26 32 26C32 26 36 22 36 16C36 10 32 6 32 6Z" stroke="currentColor" strokeWidth="2"/>
-      <path d="M26 42L20 50" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-      <path d="M38 42L44 50" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-    </svg>
-  ),
-  
-  GiftBox: () => (
-    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="10" y="24" width="44" height="32" rx="2" stroke="currentColor" strokeWidth="2"/>
-      <rect x="8" y="16" width="48" height="10" rx="2" stroke="currentColor" strokeWidth="2"/>
-      <path d="M32 16V56" stroke="currentColor" strokeWidth="2"/>
-      <path d="M8 21H56" stroke="currentColor" strokeWidth="2"/>
-      <path d="M32 16C32 16 24 16 20 10C16 4 22 2 26 6C30 10 32 16 32 16Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-      <path d="M32 16C32 16 40 16 44 10C48 4 42 2 38 6C34 10 32 16 32 16Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-    </svg>
-  ),
-  
-  Balloon: () => (
-    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="26" cy="24" rx="12" ry="16" stroke="currentColor" strokeWidth="2"/>
-      <ellipse cx="42" cy="22" rx="10" ry="14" stroke="currentColor" strokeWidth="2"/>
-      <path d="M26 40L26 48L30 52" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M42 36L42 48L38 52" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M30 52C30 52 32 56 34 56C36 56 38 52 38 52" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-      <path d="M34 56V60" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-    </svg>
-  ),
 
   Heart: () => (
     <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -221,18 +175,18 @@ const Icons = {
 
 
 // ============================================
-// PRODUCT CARD COMPONENT (Separate for Add to Cart)
+// PRODUCT CARD COMPONENT
 // ============================================
 const ProductCard = ({ 
   product, 
   currentLang, 
   badgeType,
-  cardClassName = 'carousel-product-card'
+  cardClassName = 'carousel-product-card',
+  onAddToCart
 }) => {
   const { addToCart } = useCart();
   const [isAdding, setIsAdding] = useState(false);
 
-  // Helper functions
   const getProductName = (product) => {
     if (currentLang === 'ar') {
       return product.productNameAr || product.nameAr || product.productName || product.name || 'Unknown';
@@ -240,7 +194,6 @@ const ProductCard = ({
     return product.productName || product.nameEn || product.name || 'Unknown';
   };
 
-  // Get category name and format it nicely
   const getCategoryName = (product) => {
     let categoryName = '';
     if (currentLang === 'ar') {
@@ -259,7 +212,6 @@ const ProductCard = ({
     return '';
   };
 
-  // Get default description based on category
   const getDefaultDescription = (product) => {
     const category = (product.categoryName || '').toLowerCase();
     
@@ -350,30 +302,37 @@ const ProductCard = ({
   const showDiscount = hasDiscount(product);
   const discountPercent = getDiscountPercent(product);
 
-  // Handle Add to Cart
   const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
     
     setIsAdding(true);
     
-    addToCart({
+    const cartItem = {
       productId: product.productId || product.id,
       name: productName,
+      productName: productName,
       nameAr: product.productNameAr || product.nameAr || productName,
       price: finalPrice,
       image: productImage,
+      imageUrl: productImage,
       quantity: 1
-    });
+    };
+    
+    addToCart(cartItem);
 
     setTimeout(() => {
       setIsAdding(false);
     }, 800);
+    
+    // Trigger the modal callback if provided
+    if (onAddToCart) {
+      onAddToCart(cartItem);
+    }
   };
 
   return (
     <div className={cardClassName}>
-      {/* Category Badge - Top Left */}
       {categoryName && (
         <span className="product-category-badge">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
@@ -383,7 +342,6 @@ const ProductCard = ({
         </span>
       )}
 
-      {/* Bestseller/New Badge - Top Right (if no discount) */}
       {badgeType === 'bestseller' && !showDiscount && (
         <span className="product-type-badge bestseller-badge-tag">
           {currentLang === 'ar' ? 'الأكثر مبيعاً' : 'BESTSELLER'}
@@ -395,14 +353,12 @@ const ProductCard = ({
         </span>
       )}
       
-      {/* Discount Badge - Top Right */}
       {showDiscount && (
         <span className="carousel-discount-badge">
           {discountPercent}% {currentLang === 'ar' ? 'خصم' : 'OFF'}
         </span>
       )}
       
-      {/* Product Link - Image Section */}
       <Link to={`/product/${productSlug}`} className="carousel-image-link">
         <div className="carousel-image-wrapper">
           <img 
@@ -414,14 +370,12 @@ const ProductCard = ({
         </div>
       </Link>
 
-      {/* Product Info */}
       <div className="carousel-product-info">
         <Link to={`/product/${productSlug}`} className="product-info-link">
           <h3 className="carousel-product-name">{productName}</h3>
           <p className="carousel-product-description">{productDescription}</p>
         </Link>
 
-        {/* Price Row with Add to Cart */}
         <div className="carousel-price-row">
           <div className="carousel-price-wrapper">
             {showDiscount && (
@@ -434,7 +388,6 @@ const ProductCard = ({
             </p>
           </div>
 
-          {/* Add to Cart Button */}
           <button 
             className={`carousel-add-to-cart ${isAdding ? 'adding' : ''}`}
             onClick={handleAddToCart}
@@ -473,7 +426,8 @@ const ProductCarousel = ({
   tagText,
   tagTextAr,
   cardClassName = 'carousel-product-card',
-  badgeType = null
+  badgeType = null,
+  onAddToCart
 }) => {
   const carouselRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -541,7 +495,6 @@ const ProductCarousel = ({
 
   return (
     <section className="product-carousel-section">
-      {/* Floating Decorations */}
       <div className="carousel-decorations">
         <div className="floating-item floating-flower-1">🌸</div>
         <div className="floating-item floating-flower-2">🌷</div>
@@ -569,11 +522,7 @@ const ProductCarousel = ({
         
         <div className="product-carousel-wrapper">
           {canScrollLeft && (
-            <button 
-              className="carousel-arrow carousel-arrow-left" 
-              onClick={scrollLeft}
-              aria-label="Scroll left"
-            >
+            <button className="carousel-arrow carousel-arrow-left" onClick={scrollLeft} aria-label="Scroll left">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M15 18l-6-6 6-6"/>
               </svg>
@@ -588,16 +537,13 @@ const ProductCarousel = ({
                 currentLang={currentLang}
                 badgeType={badgeType}
                 cardClassName={cardClassName}
+                onAddToCart={onAddToCart}
               />
             ))}
           </div>
 
           {canScrollRight && (
-            <button 
-              className="carousel-arrow carousel-arrow-right" 
-              onClick={scrollRight}
-              aria-label="Scroll right"
-            >
+            <button className="carousel-arrow carousel-arrow-right" onClick={scrollRight} aria-label="Scroll right">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M9 18l6-6-6-6"/>
               </svg>
@@ -616,7 +562,7 @@ const ProductCarousel = ({
 // ============================================
 // FEATURED PRODUCTS CAROUSEL
 // ============================================
-const FeaturedProductsCarousel = ({ currentLang }) => {
+const FeaturedProductsCarousel = ({ currentLang, onAddToCart }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -625,12 +571,10 @@ const FeaturedProductsCarousel = ({ currentLang }) => {
       try {
         setLoading(true);
         const response = await productService.getFeaturedProducts({ size: 20 });
-        
         let productsData = [];
         if (response.success && response.data) {
           productsData = response.data.content || response.data || [];
         }
-        
         const activeProducts = productsData.filter(p => p.isActive !== false);
         setProducts(activeProducts);
       } catch (error) {
@@ -640,7 +584,6 @@ const FeaturedProductsCarousel = ({ currentLang }) => {
         setLoading(false);
       }
     };
-
     fetchProducts();
   }, []);
 
@@ -652,6 +595,7 @@ const FeaturedProductsCarousel = ({ currentLang }) => {
       title="Our Featured Products"
       titleAr="منتجاتنا المميزة"
       badgeType="featured"
+      onAddToCart={onAddToCart}
     />
   );
 };
@@ -659,7 +603,7 @@ const FeaturedProductsCarousel = ({ currentLang }) => {
 // ============================================
 // BEST SELLERS CAROUSEL
 // ============================================
-const BestSellersCarousel = ({ currentLang }) => {
+const BestSellersCarousel = ({ currentLang, onAddToCart }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -668,12 +612,10 @@ const BestSellersCarousel = ({ currentLang }) => {
       try {
         setLoading(true);
         const response = await productService.getBestSellers({ size: 20 });
-        
         let productsData = [];
         if (response.success && response.data) {
           productsData = response.data.content || response.data || [];
         }
-        
         const activeProducts = productsData.filter(p => p.isActive !== false);
         setProducts(activeProducts);
       } catch (error) {
@@ -683,7 +625,6 @@ const BestSellersCarousel = ({ currentLang }) => {
         setLoading(false);
       }
     };
-
     fetchProducts();
   }, []);
 
@@ -697,6 +638,7 @@ const BestSellersCarousel = ({ currentLang }) => {
       subtitle="Customer favorites you'll love"
       subtitleAr="المنتجات المفضلة لدى عملائنا"
       badgeType="bestseller"
+      onAddToCart={onAddToCart}
     />
   );
 };
@@ -704,7 +646,7 @@ const BestSellersCarousel = ({ currentLang }) => {
 // ============================================
 // NEW ARRIVALS CAROUSEL
 // ============================================
-const NewArrivalsCarousel = ({ currentLang }) => {
+const NewArrivalsCarousel = ({ currentLang, onAddToCart }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -713,12 +655,10 @@ const NewArrivalsCarousel = ({ currentLang }) => {
       try {
         setLoading(true);
         const response = await productService.getNewArrivals({ size: 20 });
-        
         let productsData = [];
         if (response.success && response.data) {
           productsData = response.data.content || response.data || [];
         }
-        
         const activeProducts = productsData.filter(p => p.isActive !== false);
         setProducts(activeProducts);
       } catch (error) {
@@ -728,7 +668,6 @@ const NewArrivalsCarousel = ({ currentLang }) => {
         setLoading(false);
       }
     };
-
     fetchProducts();
   }, []);
 
@@ -743,6 +682,7 @@ const NewArrivalsCarousel = ({ currentLang }) => {
       tagText="✨ Just Arrived"
       tagTextAr="✨ وصل حديثاً"
       badgeType="new"
+      onAddToCart={onAddToCart}
     />
   );
 };
@@ -751,143 +691,60 @@ const NewArrivalsCarousel = ({ currentLang }) => {
 // HOME PAGE COMPONENT
 // ============================================
 const HomePage = ({ currentLang }) => {
+  // AddToCart Modal state
+  const [showCartModal, setShowCartModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const handleAddToCartWithModal = (product) => {
+    setSelectedProduct(product);
+    setShowCartModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowCartModal(false);
+    setSelectedProduct(null);
+  };
+
   const occasions = [
-    { 
-      id: 1, 
-      name: currentLang === 'ar' ? 'عيد الحب' : "Valentine's Day", 
-      image: '/images/Valentine Day Special/Valentine Love Gift Flower.webp',
-      link: '/valentine-special', 
-      color: '#D4A5A5',
-      icon: Icons.Heart
-    },
-    { 
-      id: 2, 
-      name: currentLang === 'ar' ? 'عيد ميلاد' : 'Birthday', 
-      image: '/images/Birthday and get well soon bouquet/Happy Birthday Peach Baby Rose 11.webp',
-      link: '/birthday-bouquet', 
-      color: '#C9B8D4',
-      icon: Icons.Cake
-    },
-    { 
-      id: 3, 
-      name: currentLang === 'ar' ? 'عيد الأم' : "Mother's Day", 
-      image: "/images/Mother's day specials/Mom New Box -023.webp",
-      link: '/mothers-day', 
-      color: '#E8C9B8',
-      icon: Icons.MotherHeart
-    },
-    { 
-      id: 4, 
-      name: currentLang === 'ar' ? 'زفاف' : 'Wedding', 
-      image: '/images/Grand Bouquet/Grand Bouquet -19.webp',
-      link: '/grand-bouquet', 
-      color: '#D4C4A8',
-      icon: Icons.Ring
-    },
-    { 
-      id: 5, 
-      name: currentLang === 'ar' ? 'العيد' : 'Eid', 
-      image: '/images/Eid collection/Eid Mubarak Arrangement.webp',
-      link: '/eid-collection', 
-      color: '#B8D4BE',
-      icon: Icons.Crescent
-    },
+    { id: 1, name: currentLang === 'ar' ? 'عيد الحب' : "Valentine's Day", image: '/images/Valentine Day Special/Valentine Love Gift Flower.webp', link: '/valentine-special', color: '#D4A5A5', icon: Icons.Heart },
+    { id: 2, name: currentLang === 'ar' ? 'عيد ميلاد' : 'Birthday', image: '/images/Birthday and get well soon bouquet/Happy Birthday Peach Baby Rose 11.webp', link: '/birthday-bouquet', color: '#C9B8D4', icon: Icons.Cake },
+    { id: 3, name: currentLang === 'ar' ? 'عيد الأم' : "Mother's Day", image: "/images/Mother's day specials/Mom New Box -023.webp", link: '/mothers-day', color: '#E8C9B8', icon: Icons.MotherHeart },
+    { id: 4, name: currentLang === 'ar' ? 'زفاف' : 'Wedding', image: '/images/Grand Bouquet/Grand Bouquet -19.webp', link: '/grand-bouquet', color: '#D4C4A8', icon: Icons.Ring },
+    { id: 5, name: currentLang === 'ar' ? 'العيد' : 'Eid', image: '/images/Eid collection/Eid Mubarak Arrangement.webp', link: '/eid-collection', color: '#B8D4BE', icon: Icons.Crescent },
   ];
 
   const features = [
-    { 
-      id: 1, 
-      Icon: Icons.DeliveryTruck, 
-      titleEn: 'Fast Delivery', 
-      titleAr: 'توصيل سريع', 
-      descEn: 'Delivery across all of Kuwait', 
-      descAr: 'توصيل في جميع أنحاء الكويت',
-      color: '#D4A5A5'
-    },
-    { 
-      id: 2, 
-      Icon: Icons.FreshFlower, 
-      titleEn: 'Fresh Flowers', 
-      titleAr: 'زهور طازجة', 
-      descEn: 'Handpicked fresh flowers daily', 
-      descAr: 'زهور طازجة مختارة يدوياً يومياً',
-      color: '#B8D4BE'
-    },
-    { 
-      id: 3, 
-      Icon: Icons.Clock, 
-      titleEn: 'Same Day Delivery', 
-      titleAr: 'توصيل في نفس اليوم', 
-      descEn: 'Order before 9 PM for same day', 
-      descAr: 'اطلب قبل 9 مساءً للتوصيل نفس اليوم',
-      color: '#C9B8D4'
-    },
-    { 
-      id: 4, 
-      Icon: Icons.QualityBadge, 
-      titleEn: 'Quality Guarantee', 
-      titleAr: 'ضمان الجودة', 
-      descEn: '100% satisfaction guaranteed', 
-      descAr: 'ضمان الرضا 100٪',
-      color: '#E8C9B8'
-    },
+    { id: 1, Icon: Icons.DeliveryTruck, titleEn: 'Fast Delivery', titleAr: 'توصيل سريع', descEn: 'Delivery across all of Kuwait', descAr: 'توصيل في جميع أنحاء الكويت', color: '#D4A5A5' },
+    { id: 2, Icon: Icons.FreshFlower, titleEn: 'Fresh Flowers', titleAr: 'زهور طازجة', descEn: 'Handpicked fresh flowers daily', descAr: 'زهور طازجة مختارة يدوياً يومياً', color: '#B8D4BE' },
+    { id: 3, Icon: Icons.Clock, titleEn: 'Same Day Delivery', titleAr: 'توصيل في نفس اليوم', descEn: 'Order before 9 PM for same day', descAr: 'اطلب قبل 9 مساءً للتوصيل نفس اليوم', color: '#C9B8D4' },
+    { id: 4, Icon: Icons.QualityBadge, titleEn: 'Quality Guarantee', titleAr: 'ضمان الجودة', descEn: '100% satisfaction guaranteed', descAr: 'ضمان الرضا 100٪', color: '#E8C9B8' },
   ];
 
   const categories = [
-    { 
-      id: 1, 
-      nameEn: 'Flower Bouquets', 
-      nameAr: 'باقات الزهور', 
-      link: '/flower-bouquets',
-      image: '/images/Flower Bouquet/25 Pink Roses Bouquet 888.webp',
-      color: '#D4A5A5'
-    },
-    { 
-      id: 2, 
-      nameEn: 'Hand Bouquets', 
-      nameAr: 'باقات يدوية', 
-      link: '/hand-bouquets',
-      image: '/images/Hand Bouquet/Coloured Baby Rose Bouquet - 13.webp',
-      color: '#E8C9B8'
-    },
-    { 
-      id: 3, 
-      nameEn: 'Gift Combos', 
-      nameAr: 'كومبو هدايا', 
-      link: '/combos',
-      image: '/images/Flowers With Perfume/Fragrant Red Roses Handle.webp',
-      color: '#C9B8D4'
-    },
-    { 
-      id: 4, 
-      nameEn: 'Add-Ons', 
-      nameAr: 'إضافات', 
-      link: '/add-ons',
-      image: '/images/Crown for head/Crown Pink For Head -1.webp',
-      color: '#B8D4BE'
-    },
+    { id: 1, nameEn: 'Flower Bouquets', nameAr: 'باقات الزهور', link: '/flower-bouquets', image: '/images/Flower Bouquet/25 Pink Roses Bouquet 888.webp', color: '#D4A5A5' },
+    { id: 2, nameEn: 'Hand Bouquets', nameAr: 'باقات يدوية', link: '/hand-bouquets', image: '/images/Hand Bouquet/Coloured Baby Rose Bouquet - 13.webp', color: '#E8C9B8' },
+    { id: 3, nameEn: 'Gift Combos', nameAr: 'كومبو هدايا', link: '/combos', image: '/images/Flowers With Perfume/Fragrant Red Roses Handle.webp', color: '#C9B8D4' },
+    { id: 4, nameEn: 'Add-Ons', nameAr: 'إضافات', link: '/add-ons', image: '/images/Crown for head/Crown Pink For Head -1.webp', color: '#B8D4BE' },
   ];
 
   const testimonials = [
-    { id: 1, name: currentLang === 'ar' ? 'سارة أحمد' : 'Sarah Ahmed', text: currentLang === 'ar' ? 'زهور جميلة جداً وتوصيل سريع! أنصح بشدة' : 'Beautiful flowers and fast delivery! Highly recommended', rating: 5, image: '/images/testimonials/user1.jpg' },
-    { id: 2, name: currentLang === 'ar' ? 'محمد علي' : 'Mohammed Ali', text: currentLang === 'ar' ? 'أفضل متجر زهور في الكويت. الجودة ممتازة دائماً' : 'Best flower shop in Kuwait. Quality is always excellent', rating: 5, image: '/images/testimonials/user2.jpg' },
-    { id: 3, name: currentLang === 'ar' ? 'فاطمة خالد' : 'Fatima Khalid', text: currentLang === 'ar' ? 'طلبت لعيد ميلاد أمي وكانت سعيدة جداً. شكراً هولاند فلاورز' : 'Ordered for my mom\'s birthday and she was so happy. Thank you Holland Flowers', rating: 5, image: '/images/testimonials/user3.jpg' },
+    { id: 1, name: currentLang === 'ar' ? 'سارة أحمد' : 'Sarah Ahmed', text: currentLang === 'ar' ? 'زهور جميلة جداً وتوصيل سريع! أنصح بشدة' : 'Beautiful flowers and fast delivery! Highly recommended', rating: 5 },
+    { id: 2, name: currentLang === 'ar' ? 'محمد علي' : 'Mohammed Ali', text: currentLang === 'ar' ? 'أفضل متجر زهور في الكويت. الجودة ممتازة دائماً' : 'Best flower shop in Kuwait. Quality is always excellent', rating: 5 },
+    { id: 3, name: currentLang === 'ar' ? 'فاطمة خالد' : 'Fatima Khalid', text: currentLang === 'ar' ? 'طلبت لعيد ميلاد أمي وكانت سعيدة جداً. شكراً هولاند فلاورز' : "Ordered for my mom's birthday and she was so happy. Thank you Holland Flowers", rating: 5 },
   ];
 
   return (
     <main className="home-page">
       <ImageSlideshow currentLang={currentLang} />
       
-      <FeaturedProductsCarousel currentLang={currentLang} />
-      <BestSellersCarousel currentLang={currentLang} />
+      <FeaturedProductsCarousel currentLang={currentLang} onAddToCart={handleAddToCartWithModal} />
+      <BestSellersCarousel currentLang={currentLang} onAddToCart={handleAddToCartWithModal} />
 
       {/* Shop by Occasion */}
       <section className="occasions-section">
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">
-              {currentLang === 'ar' ? 'تسوق حسب المناسبة' : 'Shop by Occasion'}
-            </h2>
+            <h2 className="section-title">{currentLang === 'ar' ? 'تسوق حسب المناسبة' : 'Shop by Occasion'}</h2>
             <div className="section-underline"></div>
           </div>
           
@@ -895,35 +752,17 @@ const HomePage = ({ currentLang }) => {
             {occasions.map((occasion) => {
               const IconComponent = occasion.icon;
               return (
-                <Link 
-                  to={occasion.link} 
-                  key={occasion.id} 
-                  className="occasion-card"
-                  style={{ '--occasion-color': occasion.color }}
-                >
+                <Link to={occasion.link} key={occasion.id} className="occasion-card" style={{ '--occasion-color': occasion.color }}>
                   <div className="occasion-image-wrapper">
-                    <img 
-                      src={occasion.image} 
-                      alt={occasion.name}
-                      className="occasion-image"
-                      onError={(e) => { 
-                        console.log('Image failed to load:', occasion.image);
-                        e.target.src = '/images/placeholder.webp';
-                      }}
-                    />
+                    <img src={occasion.image} alt={occasion.name} className="occasion-image" onError={(e) => { e.target.src = '/images/placeholder.webp'; }}/>
                     <div className="occasion-overlay"></div>
                   </div>
-                  
                   <div className="occasion-content">
-                    <div className="occasion-icon-wrapper">
-                      <IconComponent />
-                    </div>
+                    <div className="occasion-icon-wrapper"><IconComponent /></div>
                     <h3 className="occasion-name">{occasion.name}</h3>
                     <span className="occasion-shop-btn">
                       {currentLang === 'ar' ? 'تسوق الآن' : 'Shop Now'}
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M5 12h14M12 5l7 7-7 7"/>
-                      </svg>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </span>
                   </div>
                 </Link>
@@ -933,15 +772,13 @@ const HomePage = ({ currentLang }) => {
         </div>
       </section>
 
-      <NewArrivalsCarousel currentLang={currentLang} />
+      <NewArrivalsCarousel currentLang={currentLang} onAddToCart={handleAddToCartWithModal} />
 
       {/* Why Choose Us */}
       <section className="why-us-section">
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">
-              {currentLang === 'ar' ? 'لماذا تختارنا؟' : 'Why Choose Us?'}
-            </h2>
+            <h2 className="section-title">{currentLang === 'ar' ? 'لماذا تختارنا؟' : 'Why Choose Us?'}</h2>
             <div className="section-underline"></div>
           </div>
           
@@ -949,20 +786,10 @@ const HomePage = ({ currentLang }) => {
             {features.map((feature) => {
               const IconComponent = feature.Icon;
               return (
-                <div 
-                  key={feature.id} 
-                  className="feature-card"
-                  style={{ '--feature-color': feature.color }}
-                >
-                  <div className="feature-icon-wrapper">
-                    <IconComponent />
-                  </div>
-                  <h3 className="feature-title">
-                    {currentLang === 'ar' ? feature.titleAr : feature.titleEn}
-                  </h3>
-                  <p className="feature-desc">
-                    {currentLang === 'ar' ? feature.descAr : feature.descEn}
-                  </p>
+                <div key={feature.id} className="feature-card" style={{ '--feature-color': feature.color }}>
+                  <div className="feature-icon-wrapper"><IconComponent /></div>
+                  <h3 className="feature-title">{currentLang === 'ar' ? feature.titleAr : feature.titleEn}</h3>
+                  <p className="feature-desc">{currentLang === 'ar' ? feature.descAr : feature.descEn}</p>
                 </div>
               );
             })}
@@ -974,40 +801,25 @@ const HomePage = ({ currentLang }) => {
       <section className="categories-section">
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">
-              {currentLang === 'ar' ? 'تصفح الفئات' : 'Browse Categories'}
-            </h2>
+            <h2 className="section-title">{currentLang === 'ar' ? 'تصفح الفئات' : 'Browse Categories'}</h2>
             <div className="section-underline"></div>
           </div>
           
           <div className="categories-grid">
-            {categories.map((category) => {
-              return (
-                <Link 
-                  to={category.link} 
-                  key={category.id} 
-                  className="category-card"
-                >
-                  <div className="category-image-wrapper">
-                    <img 
-                      src={category.image} 
-                      alt={currentLang === 'ar' ? category.nameAr : category.nameEn}
-                      className="category-image"
-                      loading="lazy"
-                    />
-                    <div className="category-overlay"></div>
-                  </div>
-                  <div className="category-content">
-                    <h3>{currentLang === 'ar' ? category.nameAr : category.nameEn}</h3>
-                    <span className="category-arrow">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M5 12h14M12 5l7 7-7 7"/>
-                      </svg>
-                    </span>
-                  </div>
-                </Link>
-              );
-            })}
+            {categories.map((category) => (
+              <Link to={category.link} key={category.id} className="category-card">
+                <div className="category-image-wrapper">
+                  <img src={category.image} alt={currentLang === 'ar' ? category.nameAr : category.nameEn} className="category-image" loading="lazy"/>
+                  <div className="category-overlay"></div>
+                </div>
+                <div className="category-content">
+                  <h3>{currentLang === 'ar' ? category.nameAr : category.nameEn}</h3>
+                  <span className="category-arrow">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  </span>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
@@ -1016,22 +828,16 @@ const HomePage = ({ currentLang }) => {
       <section className="testimonials-section">
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">
-              {currentLang === 'ar' ? 'ماذا يقول عملاؤنا' : 'What Our Customers Say'}
-            </h2>
+            <h2 className="section-title">{currentLang === 'ar' ? 'ماذا يقول عملاؤنا' : 'What Our Customers Say'}</h2>
             <div className="section-underline"></div>
           </div>
           
           <div className="testimonials-grid">
             {testimonials.map((testimonial) => (
               <div key={testimonial.id} className="testimonial-card">
-                <div className="testimonial-stars">
-                  {'⭐'.repeat(testimonial.rating)}
-                </div>
+                <div className="testimonial-stars">{'⭐'.repeat(testimonial.rating)}</div>
                 <p className="testimonial-text">"{testimonial.text}"</p>
-                <div className="testimonial-author">
-                  <span className="testimonial-name">{testimonial.name}</span>
-                </div>
+                <div className="testimonial-author"><span className="testimonial-name">{testimonial.name}</span></div>
               </div>
             ))}
           </div>
@@ -1047,18 +853,22 @@ const HomePage = ({ currentLang }) => {
               <p>{currentLang === 'ar' ? 'احصل على أحدث العروض والمنتجات الجديدة مباشرة في بريدك الإلكتروني' : 'Get the latest offers and new products delivered straight to your inbox'}</p>
             </div>
             <form className="newsletter-form" onSubmit={(e) => e.preventDefault()}>
-              <input 
-                type="email" 
-                placeholder={currentLang === 'ar' ? 'أدخل بريدك الإلكتروني' : 'Enter your email address'} 
-                className="newsletter-input"
-              />
-              <button type="submit" className="newsletter-btn">
-                {currentLang === 'ar' ? 'اشترك' : 'Subscribe'}
-              </button>
+              <input type="email" placeholder={currentLang === 'ar' ? 'أدخل بريدك الإلكتروني' : 'Enter your email address'} className="newsletter-input"/>
+              <button type="submit" className="newsletter-btn">{currentLang === 'ar' ? 'اشترك' : 'Subscribe'}</button>
             </form>
           </div>
         </div>
       </section>
+
+      {/* AddToCart Modal with Suggestions */}
+      {showCartModal && selectedProduct && (
+        <AddToCartModal
+          isOpen={showCartModal}
+          onClose={handleCloseModal}
+          product={selectedProduct}
+          currentLang={currentLang}
+        />
+      )}
     </main>
   );
 };

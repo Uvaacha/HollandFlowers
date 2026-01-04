@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useCart } from './CartContext';
 import categoryService from '../services/categoryService';
 import productService from '../services/productService';
+import AddToCartModal from './AddToCartModal';
 import './CategoryPageLayout.css';
 
 const CategoryPageLayout = ({
@@ -40,6 +41,10 @@ const CategoryPageLayout = ({
   // Mobile filter drawer state
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [mobileSortOpen, setMobileSortOpen] = useState(false);
+  
+  // AddToCart Modal state
+  const [showCartModal, setShowCartModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const arrangementTypes = ['Basket', 'Bouquet', 'Box', 'Other', 'Vase'];
   
@@ -375,13 +380,25 @@ const CategoryPageLayout = ({
     
     const cartItem = {
       id: product.productId || product.id,
+      productId: product.productId || product.id,
       name: getProductName(product),
+      productName: getProductName(product),
       price: getFinalPrice(product),
       image: getProductImage(product),
+      imageUrl: getProductImage(product),
       quantity: 1,
     };
     
     addToCart(cartItem);
+    
+    // Show the AddToCart modal with suggestions
+    setSelectedProduct(cartItem);
+    setShowCartModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowCartModal(false);
+    setSelectedProduct(null);
   };
 
   const toggleArrangement = (arrangement) => {
@@ -987,6 +1004,16 @@ const CategoryPageLayout = ({
           </div>
         </div>
       </div>
+      
+      {/* AddToCart Modal with Suggestions */}
+      {showCartModal && selectedProduct && (
+        <AddToCartModal
+          isOpen={showCartModal}
+          onClose={handleCloseModal}
+          product={selectedProduct}
+          currentLang={currentLang}
+        />
+      )}
     </div>
   );
 };
