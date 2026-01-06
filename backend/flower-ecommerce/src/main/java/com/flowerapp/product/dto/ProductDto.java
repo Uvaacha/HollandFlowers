@@ -141,6 +141,12 @@ public class ProductDto {
         private BigDecimal offerPercentage;
         private BigDecimal finalPrice;
         private String categoryName;
+
+        // ============ FIXED: Added shortDescription ============
+        private String shortDescription;
+        private String description;
+        // =======================================================
+
         private Integer stockQuantity;
         private Boolean inStock;
         private Boolean isActive;

@@ -398,6 +398,7 @@ public class ProductService {
                 .build();
     }
 
+    // ============ FIXED: Added shortDescription and description ============
     private ProductListResponse mapToListResponse(Product product) {
         return ProductListResponse.builder()
                 .productId(product.getProductId())
@@ -409,6 +410,8 @@ public class ProductService {
                 .offerPercentage(product.getOfferPercentage())
                 .finalPrice(product.getFinalPrice())
                 .categoryName(product.getCategory().getCategoryName())
+                .shortDescription(product.getShortDescription())  // <-- ADDED
+                .description(product.getDescription())            // <-- ADDED
                 .stockQuantity(product.getStockQuantity())
                 .inStock(product.isInStock())
                 .isActive(product.getIsActive())
@@ -418,4 +421,5 @@ public class ProductService {
                 .tags(product.getTags())
                 .build();
     }
+    // =======================================================================
 }

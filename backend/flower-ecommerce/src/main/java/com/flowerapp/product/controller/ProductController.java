@@ -107,6 +107,7 @@ public class ProductController {
                 .map(this::mapToListResponse);
     }
 
+    // ============ FIXED: Added shortDescription and description ============
     private ProductListResponse mapToListResponse(Product product) {
         return ProductListResponse.builder()
                 .productId(product.getProductId())
@@ -116,12 +117,15 @@ public class ProductController {
                 .offerPercentage(product.getOfferPercentage())
                 .finalPrice(product.getFinalPrice())
                 .categoryName(product.getCategory().getCategoryName())
+                .shortDescription(product.getShortDescription())  // <-- ADDED
+                .description(product.getDescription())            // <-- ADDED
                 .inStock(product.isInStock())
                 .isFeatured(product.getIsFeatured())
                 .isNewArrival(product.getIsNewArrival())
                 .isBestSeller(product.getIsBestSeller())
                 .build();
     }
+    // =======================================================================
 
     private Sort buildSort(String sortBy, String sortDirection) {
         Sort.Direction direction = "asc".equalsIgnoreCase(sortDirection)
