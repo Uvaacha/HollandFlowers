@@ -226,6 +226,7 @@ const CategoriesManager = () => {
       {/* CLEAN TABLE/LIST VIEW - NO IMAGES */}
       <div className="categories-table">
         <div className="table-header">
+          <div className="th-position">Position</div>
           <div className="th-name">Category Name</div>
           <div className="th-description">Description</div>
           <div className="th-products">Products</div>
@@ -240,6 +241,9 @@ const CategoriesManager = () => {
                 key={category.categoryId} 
                 className={`table-row ${!category.isActive ? 'inactive' : ''}`}
               >
+                <div className="td-position">
+                  <span className="position-badge">{category.displayOrder || '-'}</span>
+                </div>
                 <div className="td-name">
                   <div className="category-icon-small">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -373,17 +377,21 @@ const CategoriesManager = () => {
                 </div>
 
                 <div className="form-group">
-                  <label>Display Order</label>
+                  <label>Menu Position</label>
                   <input
                     type="number"
                     name="displayOrder"
                     value={formData.displayOrder}
                     onChange={handleInputChange}
-                    placeholder="0"
-                    min="0"
+                    placeholder="1"
+                    min="1"
                     disabled={saving}
                   />
-                  <small className="form-hint">Lower numbers appear first in the list</small>
+                  <div className="form-hint-box">
+                    <p><strong>This controls where the category appears on your website menu.</strong></p>
+                    <p>Example: Position 1 = First, Position 2 = Second, etc.</p>
+                    <p>Leave empty to add at the end.</p>
+                  </div>
                 </div>
               </form>
             </div>

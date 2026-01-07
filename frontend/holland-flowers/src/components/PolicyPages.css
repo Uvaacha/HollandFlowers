@@ -1,0 +1,266 @@
+/* ============ POLICY PAGES CSS ============ */
+
+.policy-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fdf8f3 0%, #fff 50%, #f8f5f0 100%);
+  padding: 40px 20px 80px;
+}
+
+.policy-page.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.policy-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  padding: 40px 50px;
+}
+
+/* Back Link */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  color: #c17f59;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 24px;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: #a66b48;
+}
+
+/* Policy Header */
+.policy-header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+  border-bottom: 2px solid #f0e8e0;
+}
+
+.policy-header h1 {
+  font-size: 32px;
+  color: #2d3436;
+  margin: 0 0 12px;
+  font-weight: 700;
+}
+
+.policy-subtitle {
+  font-size: 16px;
+  color: #c17f59;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Policy Content */
+.policy-content {
+  line-height: 1.8;
+  color: #4a5568;
+}
+
+.policy-intro {
+  font-size: 17px;
+  color: #2d3436;
+  background: linear-gradient(135deg, #fef9f5 0%, #fff5ee 100%);
+  padding: 20px 24px;
+  border-radius: 12px;
+  border-left: 4px solid #c17f59;
+  margin-bottom: 32px;
+}
+
+.rtl .policy-intro {
+  border-left: none;
+  border-right: 4px solid #c17f59;
+}
+
+/* Policy Sections */
+.policy-section {
+  margin-bottom: 32px;
+}
+
+.policy-section h2 {
+  font-size: 20px;
+  color: #2d3436;
+  margin: 0 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+
+.section-icon {
+  font-size: 24px;
+}
+
+.policy-section p {
+  margin: 0 0 12px;
+  font-size: 15px;
+}
+
+/* Contact Info */
+.contact-info {
+  background: #f8f9fa;
+  padding: 16px 20px;
+  border-radius: 10px;
+  margin-top: 12px;
+}
+
+.email-link {
+  color: #c17f59;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-block;
+  margin-top: 8px;
+  transition: color 0.2s;
+}
+
+.email-link:hover {
+  color: #a66b48;
+}
+
+/* Policy Steps (Numbered List) */
+.policy-steps {
+  margin: 16px 0;
+  padding-left: 24px;
+}
+
+.rtl .policy-steps {
+  padding-left: 0;
+  padding-right: 24px;
+}
+
+.policy-steps li {
+  margin-bottom: 10px;
+  font-size: 15px;
+  padding-left: 8px;
+}
+
+.rtl .policy-steps li {
+  padding-left: 0;
+  padding-right: 8px;
+}
+
+/* Policy List (Bullet Points) */
+.policy-list {
+  margin: 16px 0;
+  padding-left: 24px;
+  list-style-type: disc;
+}
+
+.rtl .policy-list {
+  padding-left: 0;
+  padding-right: 24px;
+}
+
+.policy-list li {
+  margin-bottom: 8px;
+  font-size: 15px;
+  color: #4a5568;
+}
+
+/* Highlight Box */
+.highlight-box {
+  background: linear-gradient(135deg, #fff9e6 0%, #fff5d6 100%);
+  padding: 16px 20px;
+  border-radius: 10px;
+  border-left: 4px solid #f0c040;
+  font-size: 14px;
+  color: #856404;
+  margin-top: 16px;
+}
+
+.rtl .highlight-box {
+  border-left: none;
+  border-right: 4px solid #f0c040;
+}
+
+/* Policy Footer */
+.policy-footer {
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 2px solid #f0e8e0;
+  text-align: center;
+}
+
+.back-home-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, #c17f59 0%, #a66b48 100%);
+  color: #fff;
+  padding: 14px 32px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(193, 127, 89, 0.3);
+}
+
+.back-home-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(193, 127, 89, 0.4);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .policy-page {
+    padding: 20px 16px 60px;
+  }
+
+  .policy-container {
+    padding: 28px 24px;
+    border-radius: 12px;
+  }
+
+  .policy-header h1 {
+    font-size: 24px;
+  }
+
+  .policy-subtitle {
+    font-size: 14px;
+  }
+
+  .policy-intro {
+    font-size: 15px;
+    padding: 16px 18px;
+  }
+
+  .policy-section h2 {
+    font-size: 18px;
+  }
+
+  .section-icon {
+    font-size: 20px;
+  }
+
+  .policy-section p,
+  .policy-steps li,
+  .policy-list li {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .policy-container {
+    padding: 24px 20px;
+  }
+
+  .policy-header h1 {
+    font-size: 22px;
+  }
+
+  .policy-section h2 {
+    font-size: 16px;
+    flex-wrap: wrap;
+  }
+
+  .back-home-btn {
+    padding: 12px 28px;
+    font-size: 14px;
+  }
+}

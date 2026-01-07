@@ -52,6 +52,7 @@ const Footer = () => {
       privacy: 'Privacy Policy',
       terms: 'Terms of Service',
       refund: 'Refund Policy',
+      shipping: 'Shipping Policy',
       viewMap: 'View on Map',
     },
     ar: {
@@ -79,6 +80,7 @@ const Footer = () => {
       privacy: 'سياسة الخصوصية',
       terms: 'شروط الخدمة',
       refund: 'سياسة الاسترداد',
+      shipping: 'سياسة الشحن',
       viewMap: 'عرض على الخريطة',
     }
   };
@@ -368,11 +370,23 @@ const Footer = () => {
       <div className="footer-bottom">
         <div className="container">
           <div className="footer-bottom-content">
-            <p className="copyright">{text.copyright}</p>
+            <p className="copyright">
+              © 2025 Holland Flowers Kuwait, Developed By{' '}
+              <a 
+                href="https://www.uvaacha.co.in/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="developer-link"
+              >
+                Uvaacha
+              </a>
+            </p>
             <div className="footer-legal">
               <span onClick={() => handleLinkClick('/privacy')}>{text.privacy}</span>
               <span className="divider">|</span>
               <span onClick={() => handleLinkClick('/refund-policy')}>{text.refund}</span>
+              <span className="divider">|</span>
+              <span onClick={() => handleLinkClick('/shipping-policy')}>{text.shipping}</span>
               <span className="divider">|</span>
               <span onClick={() => handleLinkClick('/terms')}>{text.terms}</span>
             </div>

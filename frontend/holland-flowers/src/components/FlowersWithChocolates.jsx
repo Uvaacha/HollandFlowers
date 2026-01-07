@@ -447,6 +447,7 @@ const FlowersWithChocolates = () => {
                         <div className="product-image-wrapper"><img src={productImage} alt={productName} className="product-image" loading="lazy" onError={(e) => { e.target.src = '/images/placeholder.webp'; }}/></div>
                         <div className="product-info">
                           <h3 className="product-name">{productName}</h3>
+                          <p className="product-description">{getProductDescription(product)}</p>
                           <div className="product-footer">
                             <div className="price-wrapper">
                               {showDiscount && <span className="original-price">{parseFloat(originalPrice).toFixed(3)} KWD</span>}

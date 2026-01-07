@@ -8,7 +8,9 @@ const ProductsManager = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
+  const [offerFilter, setOfferFilter] = useState('all'); // NEW: Offer filter
   const [showModal, setShowModal] = useState(false);
+  const [showBulkOfferModal, setShowBulkOfferModal] = useState(false); // NEW: Bulk offer modal
   const [editingProduct, setEditingProduct] = useState(null);
   const [saving, setSaving] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
@@ -22,7 +24,6 @@ const ProductsManager = () => {
     shortDescription: '',
     actualPrice: '',
     offerPercentage: '0',
-    stockQuantity: '',
     imageUrl: '',
     additionalImages: [],
     isFeatured: false,
@@ -30,6 +31,15 @@ const ProductsManager = () => {
     isBestSeller: false,
     tags: ''
   });
+
+  // NEW: Bulk offer form data
+  const [bulkOfferData, setBulkOfferData] = useState({
+    selectedCategories: [],
+    offerPercentage: '',
+    startDate: '',
+    endDate: ''
+  });
+  const [applyingBulkOffer, setApplyingBulkOffer] = useState(false);
 
   // Check if user is Super Admin (can write)
   const isSuperAdmin = authAPI.isSuperAdmin();
@@ -49,7 +59,7 @@ const ProductsManager = () => {
   // Reset to first page when filters change
   useEffect(() => {
     setCurrentPage(0);
-  }, [debouncedSearchTerm, categoryFilter]);
+  }, [debouncedSearchTerm, categoryFilter, offerFilter]);
 
   // Fetch categories once
   useEffect(() => {
@@ -94,10 +104,19 @@ const ProductsManager = () => {
       }
 
       if (response.success && response.data) {
-        const productsData = response.data.content || response.data || [];
-        setProducts(Array.isArray(productsData) ? productsData : []);
+        let productsData = response.data.content || response.data || [];
+        productsData = Array.isArray(productsData) ? productsData : [];
+        
+        // NEW: Apply offer filter on client side
+        if (offerFilter === 'with-offer') {
+          productsData = productsData.filter(p => p.offerPercentage && p.offerPercentage > 0);
+        } else if (offerFilter === 'without-offer') {
+          productsData = productsData.filter(p => !p.offerPercentage || p.offerPercentage === 0);
+        }
+        
+        setProducts(productsData);
         setTotalPages(response.data.totalPages || 1);
-        setTotalElements(response.data.totalElements || productsData.length);
+        setTotalElements(offerFilter === 'all' ? (response.data.totalElements || productsData.length) : productsData.length);
       } else {
         setProducts([]);
         setTotalPages(1);
@@ -109,7 +128,7 @@ const ProductsManager = () => {
     } finally {
       setLoading(false);
     }
-  }, [currentPage, debouncedSearchTerm, categoryFilter]);
+  }, [currentPage, debouncedSearchTerm, categoryFilter, offerFilter]);
 
   useEffect(() => {
     fetchProducts();
@@ -124,7 +143,7 @@ const ProductsManager = () => {
   };
 
   const handleAddProduct = () => {
-    if (!isSuperAdmin) return; // Extra safety check
+    if (!isSuperAdmin) return;
     setEditingProduct(null);
     setFormData({
       categoryId: categories[0]?.categoryId || '',
@@ -134,7 +153,6 @@ const ProductsManager = () => {
       shortDescription: '',
       actualPrice: '',
       offerPercentage: '0',
-      stockQuantity: '',
       imageUrl: '',
       additionalImages: [],
       isFeatured: false,
@@ -146,7 +164,7 @@ const ProductsManager = () => {
   };
 
   const handleEditProduct = (product) => {
-    if (!isSuperAdmin) return; // Extra safety check
+    if (!isSuperAdmin) return;
     setEditingProduct(product);
     setFormData({
       categoryId: product.categoryId || '',
@@ -156,7 +174,6 @@ const ProductsManager = () => {
       shortDescription: product.shortDescription || '',
       actualPrice: product.actualPrice?.toString() || '',
       offerPercentage: product.offerPercentage?.toString() || '0',
-      stockQuantity: product.stockQuantity?.toString() || '',
       imageUrl: product.imageUrl || '',
       additionalImages: product.additionalImages || [],
       isFeatured: product.isFeatured || false,
@@ -168,7 +185,7 @@ const ProductsManager = () => {
   };
 
   const handleDeleteProduct = async (productId) => {
-    if (!isSuperAdmin) return; // Extra safety check
+    if (!isSuperAdmin) return;
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
         const response = await productsAPI.delete(productId);
@@ -202,7 +219,7 @@ const ProductsManager = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!isSuperAdmin) return; // Extra safety check
+    if (!isSuperAdmin) return;
     setSaving(true);
 
     try {
@@ -214,7 +231,7 @@ const ProductsManager = () => {
         shortDescription: formData.shortDescription?.trim() || null,
         actualPrice: parseFloat(formData.actualPrice),
         offerPercentage: parseFloat(formData.offerPercentage) || 0,
-        stockQuantity: parseInt(formData.stockQuantity, 10) || 0,
+        stockQuantity: 50, // Default stock value since we removed the field
         imageUrl: formData.imageUrl?.trim() || null,
         additionalImages: formData.additionalImages || [],
         isFeatured: formData.isFeatured,
@@ -245,6 +262,7 @@ const ProductsManager = () => {
   const handleClearFilters = () => {
     setSearchTerm('');
     setCategoryFilter('all');
+    setOfferFilter('all');
     setCurrentPage(0);
   };
 
@@ -259,7 +277,152 @@ const ProductsManager = () => {
     return price - (price * discount / 100);
   };
 
-  const hasActiveFilters = searchTerm || categoryFilter !== 'all';
+  // NEW: Bulk Offer Functions
+  const handleOpenBulkOfferModal = () => {
+    setBulkOfferData({
+      selectedCategories: [],
+      offerPercentage: '',
+      startDate: '',
+      endDate: ''
+    });
+    setShowBulkOfferModal(true);
+  };
+
+  const handleBulkOfferInputChange = (e) => {
+    const { name, value } = e.target;
+    setBulkOfferData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleCategorySelect = (categoryId) => {
+    setBulkOfferData(prev => {
+      const isSelected = prev.selectedCategories.includes(categoryId);
+      return {
+        ...prev,
+        selectedCategories: isSelected
+          ? prev.selectedCategories.filter(id => id !== categoryId)
+          : [...prev.selectedCategories, categoryId]
+      };
+    });
+  };
+
+  const handleSelectAllCategories = () => {
+    setBulkOfferData(prev => ({
+      ...prev,
+      selectedCategories: prev.selectedCategories.length === categories.length
+        ? []
+        : categories.map(c => c.categoryId)
+    }));
+  };
+
+  const handleApplyBulkOffer = async (e) => {
+    e.preventDefault();
+    if (!isSuperAdmin) return;
+    
+    if (bulkOfferData.selectedCategories.length === 0) {
+      alert('Please select at least one category');
+      return;
+    }
+    
+    if (!bulkOfferData.offerPercentage || parseFloat(bulkOfferData.offerPercentage) <= 0) {
+      alert('Please enter a valid offer percentage');
+      return;
+    }
+
+    const confirmMsg = `Apply ${bulkOfferData.offerPercentage}% discount to ${bulkOfferData.selectedCategories.length} categories?\n\nStart: ${bulkOfferData.startDate || 'Immediately'}\nEnd: ${bulkOfferData.endDate || 'No end date'}`;
+    
+    if (!window.confirm(confirmMsg)) return;
+
+    setApplyingBulkOffer(true);
+
+    try {
+      // Apply offer to each selected category's products
+      let successCount = 0;
+      let errorCount = 0;
+
+      for (const categoryId of bulkOfferData.selectedCategories) {
+        try {
+          // Get all products in this category
+          const response = await productsAPI.getByCategory(categoryId, { page: 0, size: 1000 });
+          if (response.success && response.data) {
+            const categoryProducts = response.data.content || response.data || [];
+            
+            // Update each product with the offer
+            for (const product of categoryProducts) {
+              try {
+                await productsAPI.update(product.productId, {
+                  ...product,
+                  offerPercentage: parseFloat(bulkOfferData.offerPercentage)
+                });
+                successCount++;
+              } catch (err) {
+                errorCount++;
+                console.error(`Failed to update product ${product.productId}:`, err);
+              }
+            }
+          }
+        } catch (err) {
+          console.error(`Failed to get products for category ${categoryId}:`, err);
+        }
+      }
+
+      alert(`Bulk offer applied!\n✅ ${successCount} products updated\n${errorCount > 0 ? `❌ ${errorCount} failed` : ''}`);
+      setShowBulkOfferModal(false);
+      fetchProducts();
+    } catch (error) {
+      console.error('Failed to apply bulk offer:', error);
+      alert('Failed to apply bulk offer: ' + error.message);
+    } finally {
+      setApplyingBulkOffer(false);
+    }
+  };
+
+  const handleRemoveBulkOffer = async () => {
+    if (!isSuperAdmin) return;
+    
+    if (bulkOfferData.selectedCategories.length === 0) {
+      alert('Please select at least one category');
+      return;
+    }
+
+    if (!window.confirm(`Remove all offers from ${bulkOfferData.selectedCategories.length} categories?`)) return;
+
+    setApplyingBulkOffer(true);
+
+    try {
+      let successCount = 0;
+
+      for (const categoryId of bulkOfferData.selectedCategories) {
+        const response = await productsAPI.getByCategory(categoryId, { page: 0, size: 1000 });
+        if (response.success && response.data) {
+          const categoryProducts = response.data.content || response.data || [];
+          
+          for (const product of categoryProducts) {
+            if (product.offerPercentage > 0) {
+              await productsAPI.update(product.productId, {
+                ...product,
+                offerPercentage: 0
+              });
+              successCount++;
+            }
+          }
+        }
+      }
+
+      alert(`Offers removed from ${successCount} products!`);
+      setShowBulkOfferModal(false);
+      fetchProducts();
+    } catch (error) {
+      console.error('Failed to remove bulk offer:', error);
+      alert('Failed to remove bulk offer: ' + error.message);
+    } finally {
+      setApplyingBulkOffer(false);
+    }
+  };
+
+  const hasActiveFilters = searchTerm || categoryFilter !== 'all' || offerFilter !== 'all';
 
   if (loading && products.length === 0) {
     return (
@@ -280,11 +443,18 @@ const ProductsManager = () => {
             {isSuperAdmin ? 'Add, edit, and manage your products' : 'View products (Read-only access)'}
           </p>
         </div>
-        {isSuperAdmin && (
-          <button className="btn btn-primary" onClick={handleAddProduct}>
-            + Add Product
-          </button>
-        )}
+        <div className="header-actions">
+          {isSuperAdmin && (
+            <>
+              <button className="btn btn-secondary" onClick={handleOpenBulkOfferModal}>
+                🏷️ Bulk Offer
+              </button>
+              <button className="btn btn-primary" onClick={handleAddProduct}>
+                + Add Product
+              </button>
+            </>
+          )}
+        </div>
       </div>
 
       {/* Read-only notice for Admin */}
@@ -330,6 +500,16 @@ const ProductsManager = () => {
             </option>
           ))}
         </select>
+        {/* NEW: Offer Filter */}
+        <select
+          value={offerFilter}
+          onChange={(e) => setOfferFilter(e.target.value)}
+          className="filter-select offer-filter"
+        >
+          <option value="all">All Products</option>
+          <option value="with-offer">🏷️ With Offer</option>
+          <option value="without-offer">No Offer</option>
+        </select>
         {hasActiveFilters && (
           <button className="clear-filters-btn" onClick={handleClearFilters}>
             Clear Filters
@@ -349,7 +529,7 @@ const ProductsManager = () => {
         )}
       </div>
 
-      {/* Products Table */}
+      {/* Products Table - STOCK COLUMN REMOVED */}
       <div className="table-container">
         {loading && (
           <div className="table-loading-overlay">
@@ -366,7 +546,6 @@ const ProductsManager = () => {
               <th>PRICE</th>
               <th>OFFER %</th>
               <th>FINAL PRICE</th>
-              <th>STOCK</th>
               <th>STATUS</th>
               {isSuperAdmin && <th>ACTIONS</th>}
             </tr>
@@ -374,7 +553,7 @@ const ProductsManager = () => {
           <tbody>
             {products.length === 0 ? (
               <tr>
-                <td colSpan={isSuperAdmin ? "10" : "9"} style={{ textAlign: 'center', padding: '40px' }}>
+                <td colSpan={isSuperAdmin ? "9" : "8"} style={{ textAlign: 'center', padding: '40px' }}>
                   {hasActiveFilters ? (
                     <div>
                       <p>No products found matching your filters.</p>
@@ -418,7 +597,6 @@ const ProductsManager = () => {
                     ) : '-'}
                   </td>
                   <td className="final-price">KD {parseFloat(product.finalPrice || product.actualPrice || 0).toFixed(3)}</td>
-                  <td>{product.stockQuantity}</td>
                   <td>
                     {isSuperAdmin ? (
                       <button
@@ -481,7 +659,7 @@ const ProductsManager = () => {
         </div>
       )}
 
-      {/* Modal - Only shown for Super Admin */}
+      {/* Product Modal - STOCK FIELD REMOVED */}
       {showModal && isSuperAdmin && (
         <div className="modal-overlay" onClick={() => !saving && setShowModal(false)}>
           <div className="modal-box" onClick={e => e.stopPropagation()}>
@@ -554,11 +732,11 @@ const ProductsManager = () => {
                 </div>
               </div>
 
-              {/* Pricing */}
+              {/* Pricing - STOCK REMOVED */}
               <div className="form-section">
-                <h3>Pricing & Stock</h3>
+                <h3>Pricing</h3>
                 
-                <div className="form-row three">
+                <div className="form-row">
                   <div className="form-group">
                     <label>Price (KD) *</label>
                     <input
@@ -581,18 +759,6 @@ const ProductsManager = () => {
                       onChange={handleInputChange}
                       min="0"
                       max="100"
-                      placeholder="0"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>Stock Qty *</label>
-                    <input
-                      type="number"
-                      name="stockQuantity"
-                      value={formData.stockQuantity}
-                      onChange={handleInputChange}
-                      required
-                      min="0"
                       placeholder="0"
                     />
                   </div>
@@ -696,6 +862,130 @@ const ProductsManager = () => {
                 <button type="submit" className="btn-save" disabled={saving}>
                   {saving ? 'Saving...' : (editingProduct ? 'Update Product' : 'Create Product')}
                 </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* NEW: Bulk Offer Modal */}
+      {showBulkOfferModal && isSuperAdmin && (
+        <div className="modal-overlay" onClick={() => !applyingBulkOffer && setShowBulkOfferModal(false)}>
+          <div className="modal-box bulk-offer-modal" onClick={e => e.stopPropagation()}>
+            {/* Header */}
+            <div className="modal-header">
+              <h2>🏷️ Bulk Offer Management</h2>
+              <button className="close-btn" onClick={() => !applyingBulkOffer && setShowBulkOfferModal(false)}>✕</button>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleApplyBulkOffer} className="modal-form">
+              {/* Category Selection */}
+              <div className="form-section">
+                <h3>Select Categories</h3>
+                <p className="section-hint">Choose categories to apply the bulk offer</p>
+                
+                <div className="select-all-row">
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      checked={bulkOfferData.selectedCategories.length === categories.length}
+                      onChange={handleSelectAllCategories}
+                    />
+                    <strong>Select All Categories ({categories.length})</strong>
+                  </label>
+                </div>
+
+                <div className="categories-grid">
+                  {categories.map(cat => (
+                    <label key={cat.categoryId} className="category-checkbox">
+                      <input
+                        type="checkbox"
+                        checked={bulkOfferData.selectedCategories.includes(cat.categoryId)}
+                        onChange={() => handleCategorySelect(cat.categoryId)}
+                      />
+                      <span className="category-name">{cat.categoryName}</span>
+                      <span className="product-count">({cat.productCount || 0} products)</span>
+                    </label>
+                  ))}
+                </div>
+
+                {bulkOfferData.selectedCategories.length > 0 && (
+                  <div className="selected-count">
+                    ✓ {bulkOfferData.selectedCategories.length} categories selected
+                  </div>
+                )}
+              </div>
+
+              {/* Offer Details */}
+              <div className="form-section">
+                <h3>Offer Details</h3>
+                
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Discount Percentage *</label>
+                    <div className="input-with-suffix">
+                      <input
+                        type="number"
+                        name="offerPercentage"
+                        value={bulkOfferData.offerPercentage}
+                        onChange={handleBulkOfferInputChange}
+                        min="0"
+                        max="100"
+                        placeholder="e.g. 20"
+                        required
+                      />
+                      <span className="suffix">%</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Start Date (Optional)</label>
+                    <input
+                      type="date"
+                      name="startDate"
+                      value={bulkOfferData.startDate}
+                      onChange={handleBulkOfferInputChange}
+                    />
+                    <small>Leave empty to apply immediately</small>
+                  </div>
+                  <div className="form-group">
+                    <label>End Date (Optional)</label>
+                    <input
+                      type="date"
+                      name="endDate"
+                      value={bulkOfferData.endDate}
+                      onChange={handleBulkOfferInputChange}
+                    />
+                    <small>Leave empty for no end date</small>
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="modal-footer bulk-offer-footer">
+                <button 
+                  type="button" 
+                  className="btn-danger" 
+                  onClick={handleRemoveBulkOffer}
+                  disabled={applyingBulkOffer || bulkOfferData.selectedCategories.length === 0}
+                >
+                  Remove Offers
+                </button>
+                <div className="footer-right">
+                  <button type="button" className="btn-cancel" onClick={() => setShowBulkOfferModal(false)}>
+                    Cancel
+                  </button>
+                  <button 
+                    type="submit" 
+                    className="btn-save" 
+                    disabled={applyingBulkOffer || bulkOfferData.selectedCategories.length === 0}
+                  >
+                    {applyingBulkOffer ? 'Applying...' : 'Apply Offer'}
+                  </button>
+                </div>
               </div>
             </form>
           </div>

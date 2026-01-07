@@ -1,0 +1,56 @@
+/* ============================================================
+   PRODUCT DESCRIPTION STYLING
+   Add this CSS to ALL category page CSS files:
+   - Bouquets.css, HandBouquets.css, Combos.css, etc.
+   ============================================================ */
+
+.product-description {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.45;
+  margin: 6px 0 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 38px;
+  padding: 0 2px;
+}
+
+/* RTL Support for Arabic */
+.rtl .product-description {
+  text-align: right;
+}
+
+/* Hover effect */
+.product-card:hover .product-description {
+  color: #555;
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+  .product-description {
+    font-size: 12.5px;
+    min-height: 36px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .product-description {
+    font-size: 12px;
+    -webkit-line-clamp: 2;
+    min-height: 34px;
+    margin: 4px 0 10px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .product-description {
+    font-size: 11px;
+    min-height: 30px;
+    margin: 4px 0 8px;
+  }
+}

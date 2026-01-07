@@ -1628,3 +1628,43 @@ html {
 .rtl .field-error::after {
   content: '';
 }
+
+/* ============ CHECKOUT ADDITIONS CSS ============ */
+
+/* Field error message styling */
+.field-error {
+  display: block;
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 6px;
+  padding-left: 2px;
+}
+
+/* Input error state */
+.checkout-input.input-error {
+  border-color: #dc3545;
+  background-color: #fff5f5;
+}
+
+.checkout-input.input-error:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.15);
+}
+
+/* Field hint text - for city auto-fill hint */
+.field-hint {
+  display: block;
+  color: #6b7280;
+  font-size: 11px;
+  margin-top: 4px;
+  padding-left: 2px;
+  font-style: italic;
+}
+
+/* RTL Support for hints and errors */
+.rtl .field-error,
+.rtl .field-hint {
+  padding-left: 0;
+  padding-right: 2px;
+  text-align: right;
+}

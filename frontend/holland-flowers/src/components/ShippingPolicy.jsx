@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import './ShippingPolicy.css';
+import './PolicyPages.css';
 
 const ShippingPolicy = () => {
   const [currentLang, setCurrentLang] = useState('en');
@@ -102,8 +102,8 @@ const ShippingPolicy = () => {
   const t = content[currentLang];
 
   return (
-    <div className={`shipping-policy-page ${currentLang === 'ar' ? 'rtl' : ''}`}>
-      <div className="shipping-policy-container">
+    <div className={`policy-page ${currentLang === 'ar' ? 'rtl' : ''}`}>
+      <div className="policy-container">
         <Link to="/" className="back-link">{t.backHome}</Link>
         
         <div className="policy-header">

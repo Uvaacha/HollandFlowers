@@ -39,7 +39,7 @@ const AddToCartModal = ({ isOpen = true, onClose, addedProduct, product, current
       
       // Define tabs with display names and search keywords
       const tabConfig = [
-        { displayName: 'Acrylic Toppers', keywords: ['acrylic', 'topper'] },
+        { displayName: 'Acrylic Toppers', keywords: ['acrylic', 'topper', 'celebration'] },
         { displayName: 'Helium Balloons', keywords: ['helium', 'balloon'] },
         { displayName: 'Crown for Head', keywords: ['crown'] },
       ];
@@ -50,18 +50,20 @@ const AddToCartModal = ({ isOpen = true, onClose, addedProduct, product, current
       for (const tab of tabConfig) {
         // Find matching category by keywords
         const category = allCategories.find(c => {
-          const catName = (c.categoryName || '').toLowerCase();
+          const catName = (c.categoryName || c.name || '').toLowerCase();
           return tab.keywords.some(keyword => catName.includes(keyword.toLowerCase()));
         });
         
         if (category) {
           try {
-            const prodResponse = await api.get(`/products/category/${category.categoryId}`, {
+            const categoryId = category.categoryId || category.id;
+            const prodResponse = await api.get(`/products/category/${categoryId}`, {
               params: { page: 0, size: 10 }
             });
-            const products = prodResponse.data?.content || prodResponse.data?.data?.content || prodResponse.data || [];
+            const products = prodResponse.data?.data?.content || prodResponse.data?.content || prodResponse.data?.data || prodResponse.data || [];
             suggestionsByTab[tab.displayName] = Array.isArray(products) ? products : [];
           } catch (e) {
+            console.error(`Error fetching ${tab.displayName}:`, e);
             suggestionsByTab[tab.displayName] = [];
           }
         } else {
@@ -95,17 +97,8 @@ const AddToCartModal = ({ isOpen = true, onClose, addedProduct, product, current
     setAddingToCart(prev => ({ ...prev, [productId]: true }));
     
     try {
-      // Get product image
-      const imageUrl = suggestionProduct.imageUrl || 
-                       suggestionProduct.image ||
-                       (suggestionProduct.images && suggestionProduct.images[0]) ||
-                       '/placeholder-cake.jpg';
-      
-      // Get price (offer price if available, otherwise regular price)
-      const price = suggestionProduct.offerPrice || 
-                    suggestionProduct.price || 
-                    suggestionProduct.basePrice ||
-                    (suggestionProduct.sizeOptions?.[0]?.price) || 0;
+      const imageUrl = getProductImage(suggestionProduct);
+      const price = getProductPrice(suggestionProduct);
 
       const cartItem = {
         ...suggestionProduct,
@@ -116,7 +109,6 @@ const AddToCartModal = ({ isOpen = true, onClose, addedProduct, product, current
 
       addToCart(cartItem, 1, { price: price });
       
-      // Brief success state
       setTimeout(() => {
         setAddingToCart(prev => ({ ...prev, [productId]: false }));
       }, 1500);
@@ -135,36 +127,56 @@ const AddToCartModal = ({ isOpen = true, onClose, addedProduct, product, current
   const getProductImage = (prod) => {
     return prod.imageUrl || 
            prod.image || 
-           (prod.images && prod.images[0]) ||
+           prod.productImage ||
+           (prod.images && prod.images.length > 0 ? prod.images[0] : null) ||
            '/placeholder-cake.jpg';
   };
 
+  // Get product price - using YOUR EXACT API field names
   const getProductPrice = (prod) => {
-    return prod.offerPrice || 
-           prod.price || 
-           prod.basePrice ||
-           (prod.sizeOptions?.[0]?.price) || 0;
+    // Primary: finalPrice (price after discount)
+    if (prod.finalPrice !== undefined && prod.finalPrice !== null) {
+      const price = parseFloat(prod.finalPrice);
+      if (!isNaN(price) && price > 0) return price;
+    }
+    
+    // Fallback: actualPrice (original price)
+    if (prod.actualPrice !== undefined && prod.actualPrice !== null) {
+      const price = parseFloat(prod.actualPrice);
+      if (!isNaN(price) && price > 0) return price;
+    }
+    
+    // Other fallbacks
+    if (prod.price) return parseFloat(prod.price);
+    if (prod.salePrice) return parseFloat(prod.salePrice);
+    if (prod.offerPrice) return parseFloat(prod.offerPrice);
+    
+    return 0;
   };
 
+  // Get original price for showing crossed-out price
   const getOriginalPrice = (prod) => {
-    // Return original price only if there's an offer price
-    if (prod.offerPrice && prod.price && prod.offerPrice < prod.price) {
-      return prod.price;
+    const currentPrice = getProductPrice(prod);
+    
+    // Check if there's a discount (offerPercentage > 0)
+    if (prod.offerPercentage && parseFloat(prod.offerPercentage) > 0) {
+      // If actualPrice is higher than finalPrice, show it crossed out
+      if (prod.actualPrice && parseFloat(prod.actualPrice) > currentPrice) {
+        return parseFloat(prod.actualPrice);
+      }
     }
-    if (prod.offerPrice && prod.basePrice && prod.offerPrice < prod.basePrice) {
-      return prod.basePrice;
-    }
+    
     return null;
   };
 
   const hasVariants = (prod) => {
     return (prod.sizeOptions && prod.sizeOptions.length > 1) ||
-           (prod.variants && prod.variants.length > 0);
+           (prod.variants && prod.variants.length > 0) ||
+           (prod.hasVariants === true);
   };
 
   const currentSuggestions = suggestions[activeTab] || [];
 
-  // Don't render if no product data
   if (!productData) return null;
 
   return (
@@ -254,9 +266,9 @@ const AddToCartModal = ({ isOpen = true, onClose, addedProduct, product, current
                   </div>
                   
                   <div className="suggestion-product-info">
-                    {/* Price Display with Original/Offer Price */}
+                    {/* Price Display */}
                     <div className="suggestion-price-wrapper">
-                      {originalPrice && (
+                      {originalPrice && originalPrice > currentPrice && (
                         <span className="suggestion-original-price">
                           KD {parseFloat(originalPrice).toFixed(3)}
                         </span>
@@ -268,7 +280,7 @@ const AddToCartModal = ({ isOpen = true, onClose, addedProduct, product, current
                     
                     <h4 className="suggestion-product-name">
                       {currentLang === 'ar' 
-                        ? (prod.productNameAr || prod.productName || prod.name)
+                        ? (prod.productNameAr || prod.nameAr || prod.productName || prod.name)
                         : (prod.productName || prod.name)}
                     </h4>
                     

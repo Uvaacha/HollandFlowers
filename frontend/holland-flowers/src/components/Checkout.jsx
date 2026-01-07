@@ -5,12 +5,14 @@ import { useAuth } from '../contexts/AuthContext';
 import api from '../services/api';
 import './Checkout.css';
 
-// Move governorates outside component - static data
+// Move governorates outside component - static data with areas/cities
 const governorates = [
   { 
     id: 'al-ahmadi', 
     name: 'Al Ahmadi', 
     nameAr: 'الأحمدي',
+    // Areas/cities in Al Ahmadi governorate
+    areas: ['ahmadi', 'fahaheel', 'mangaf', 'mahboula', 'abu halifa', 'fintas', 'egaila', 'sabahiya', 'riqqa', 'hadiya', 'jaber al ali', 'ali sabah al salem', 'fahad al ahmad', 'sabah al ahmad', 'khiran', 'wafra', 'mina abdullah', 'shuaiba', 'zour', 'bneidar', 'julaia', 'nuwaiseeb'],
     shippingOptions: [
       { id: 'standard', name: 'Standard', nameAr: 'عادي', price: 1.000 },
       { id: 'outer1', name: 'Outer City Delivery', nameAr: 'توصيل خارج المدينة', areas: 'Ali Sabah al Salem, Umm al Hayman', areasAr: 'علي صباح السالم، أم الهيمان', price: 5.000 },
@@ -21,6 +23,8 @@ const governorates = [
     id: 'al-asimah', 
     name: 'Al Asimah', 
     nameAr: 'العاصمة',
+    // Areas/cities in Capital governorate
+    areas: ['kuwait city', 'sharq', 'mirqab', 'qibla', 'dasman', 'salhiya', 'sawaber', 'bneid al qar', 'kaifan', 'mansouriya', 'abdullah al salem', 'nuzha', 'faiha', 'shamiya', 'rawda', 'adailiya', 'khaldiya', 'qadsiya', 'yarmouk', 'shuwaikh', 'sulaibikhat', 'doha', 'granada', 'north west sulaibikhat'],
     shippingOptions: [
       { id: 'standard', name: 'Standard', nameAr: 'عادي', price: 1.000 },
       { id: 'outer1', name: 'Outer City Delivery', nameAr: 'توصيل خارج المدينة', areas: 'Ali Sabah al Salem, Umm al Hayman', areasAr: 'علي صباح السالم، أم الهيمان', price: 5.000 },
@@ -31,6 +35,8 @@ const governorates = [
     id: 'al-farwaniyah', 
     name: 'Al Farwaniyah', 
     nameAr: 'الفروانية',
+    // Areas/cities in Farwaniyah governorate
+    areas: ['farwaniyah', 'khaitan', 'jleeb al shuyoukh', 'ardiya', 'rai', 'andalous', 'riggae', 'omariya', 'rabiya', 'rehab', 'sabah al nasser', 'ishbiliya', 'firdous', 'abbasiya', 'airport', 'ardhiya industrial', 'farwaniyah industrial'],
     shippingOptions: [
       { id: 'standard', name: 'Standard', nameAr: 'عادي', price: 1.000 },
       { id: 'outer1', name: 'Outer City Delivery', nameAr: 'توصيل خارج المدينة', areas: 'Ali Sabah al Salem, Umm al Hayman', areasAr: 'علي صباح السالم، أم الهيمان', price: 5.000 },
@@ -41,6 +47,8 @@ const governorates = [
     id: 'al-jahra', 
     name: 'Al Jahra', 
     nameAr: 'الجهراء',
+    // Areas/cities in Jahra governorate
+    areas: ['jahra', 'waha', 'qasr', 'naseem', 'taima', 'saad al abdullah', 'abdali', 'mutla', 'sulaibiya', 'sulaibiya industrial', 'amghara', 'naeem', 'qayrawan', 'jaber al ahmad', 'south saad al abdullah', 'silk'],
     shippingOptions: [
       { id: 'delivery', name: 'Delivery Charge', nameAr: 'رسوم التوصيل', price: 3.000 }
     ]
@@ -49,6 +57,8 @@ const governorates = [
     id: 'hawalli', 
     name: 'Hawalli', 
     nameAr: 'حولي',
+    // Areas/cities in Hawalli governorate
+    areas: ['hawalli', 'salmiya', 'salwa', 'rumaithiya', 'bayan', 'mishref', 'jabriya', 'shaab', 'maidan hawalli', 'hitteen', 'zahra', 'shuhada', 'mubarak al abdullah', 'south surra', 'nigra'],
     shippingOptions: [
       { id: 'standard', name: 'Standard', nameAr: 'عادي', price: 1.000 },
       { id: 'outer1', name: 'Outer City Delivery', nameAr: 'توصيل خارج المدينة', areas: 'Ali Sabah al Salem, Umm al Hayman', areasAr: 'علي صباح السالم، أم الهيمان', price: 5.000 },
@@ -59,6 +69,8 @@ const governorates = [
     id: 'mubarak-al-kabeer', 
     name: 'Mubarak Al-Kabeer', 
     nameAr: 'مبارك الكبير',
+    // Areas/cities in Mubarak Al-Kabeer governorate
+    areas: ['mubarak al kabeer', 'qurain', 'adan', 'qusour', 'sabah al salem', 'messila', 'abu fatira', 'abu al hasaniya', 'fnaitees', 'al qusor', 'south wista', 'west abu fatira', 'mubarak al kabir'],
     shippingOptions: [
       { id: 'standard', name: 'Standard', nameAr: 'عادي', price: 1.000 },
       { id: 'outer1', name: 'Outer City Delivery', nameAr: 'توصيل خارج المدينة', areas: 'Ali Sabah al Salem, Umm al Hayman', areasAr: 'علي صباح السالم، أم الهيمان', price: 5.000 },
@@ -116,9 +128,30 @@ const validateEmailOrPhone = (value) => {
     if (isValidPhone(trimmedValue)) {
       return { valid: true, type: 'phone', message: null };
     } else {
-      return { valid: false, type: 'phone', message: 'Please enter a valid phone number (8-15 digits)' };
+      return { valid: false, type: 'phone', message: 'Please enter a valid phone number (8-15 digits) or email address' };
     }
   }
+};
+
+// ============ FIND GOVERNORATE BY CITY/AREA NAME ============
+const findGovernorateByCity = (cityName) => {
+  if (!cityName || cityName.trim().length < 2) return null;
+  
+  const searchTerm = cityName.toLowerCase().trim();
+  
+  for (const gov of governorates) {
+    // Check if any area matches the search term
+    const matchedArea = gov.areas.find(area => 
+      area.toLowerCase().includes(searchTerm) || 
+      searchTerm.includes(area.toLowerCase())
+    );
+    
+    if (matchedArea) {
+      return gov.id;
+    }
+  }
+  
+  return null;
 };
 
 const Checkout = () => {
@@ -252,6 +285,19 @@ const Checkout = () => {
     }
   }, [saveInfo, delivery]);
 
+  // ============ AUTO-FILL GOVERNORATE BASED ON CITY ============
+  useEffect(() => {
+    if (delivery.city && delivery.city.length >= 2) {
+      const matchedGovernorate = findGovernorateByCity(delivery.city);
+      if (matchedGovernorate && matchedGovernorate !== delivery.governorate) {
+        setDelivery(prev => ({
+          ...prev,
+          governorate: matchedGovernorate
+        }));
+      }
+    }
+  }, [delivery.city, delivery.governorate]);
+
   // Get current governorate data
   const getCurrentGovernorate = useCallback(() => {
     return governorates.find(g => g.id === delivery.governorate);
@@ -293,9 +339,19 @@ const Checkout = () => {
       [name]: type === 'checkbox' ? checked : value
     }));
     
-    // Clear contact error when user types
+    // ============ REAL-TIME VALIDATION FOR EMAIL/PHONE ============
     if (name === 'emailOrPhone') {
-      setContactError(null);
+      // Only validate if user has typed something
+      if (value.trim().length > 0) {
+        const validation = validateEmailOrPhone(value);
+        if (!validation.valid) {
+          setContactError(validation.message);
+        } else {
+          setContactError(null);
+        }
+      } else {
+        setContactError(null);
+      }
     }
   };
 
@@ -519,7 +575,7 @@ const Checkout = () => {
       // ============ INITIATE PAYMENT WITH HESABE ============
       const paymentPayload = {
         orderId: orderId,
-        showAllPaymentMethods: true, // Show all payment options (KNET, Visa, Mastercard, Apple Pay, etc.)
+        showAllPaymentMethods: true, // Show all payment options (KNET, Visa, Mastercard, Apple Pay, Google Pay, etc.)
         customerEmail: isEmail ? contact.emailOrPhone.trim() : null,
         customerPhone: delivery.phone,
         customerName: `${delivery.firstName || ''} ${delivery.lastName}`.trim(),
@@ -616,7 +672,7 @@ const Checkout = () => {
       apartment: 'Apartment, suite, etc. (optional)',
       postalCode: 'Postal code (optional)',
       pinCode: 'PIN code',
-      city: 'City',
+      city: 'City / Area',
       state: 'State',
       governorate: 'Governorate',
       selectGovernorate: 'Select Governorate',
@@ -655,7 +711,7 @@ const Checkout = () => {
       guestCheckout: 'Continue as Guest',
       or: 'or',
       invalidEmail: 'Please enter a valid email address',
-      invalidPhone: 'Please enter a valid phone number'
+      invalidPhone: 'Please enter a valid phone number',
     },
     ar: {
       checkout: 'الدفع',
@@ -671,7 +727,7 @@ const Checkout = () => {
       apartment: 'شقة، جناح، إلخ (اختياري)',
       postalCode: 'الرمز البريدي (اختياري)',
       pinCode: 'الرمز البريدي',
-      city: 'المدينة',
+      city: 'المدينة / المنطقة',
       state: 'الولاية',
       governorate: 'المحافظة',
       selectGovernorate: 'اختر المحافظة',
@@ -710,7 +766,8 @@ const Checkout = () => {
       guestCheckout: 'المتابعة كضيف',
       or: 'أو',
       invalidEmail: 'يرجى إدخال بريد إلكتروني صحيح',
-      invalidPhone: 'يرجى إدخال رقم هاتف صحيح'
+      invalidPhone: 'يرجى إدخال رقم هاتف صحيح',
+      cityHint: 'اكتب اسم المنطقة لاختيار المحافظة تلقائياً'
     }
   };
 
@@ -778,7 +835,7 @@ const Checkout = () => {
                   required
                   className={`checkout-input ${contactError ? 'input-error' : ''}`}
                 />
-                {/* Contact field error message */}
+                {/* Contact field error message - Shows validation error */}
                 {contactError && (
                   <span className="field-error">{contactError}</span>
                 )}
@@ -879,7 +936,10 @@ const Checkout = () => {
                     onChange={handleDeliveryChange}
                     placeholder={text.city}
                     className="checkout-input"
+                    title={text.cityHint}
                   />
+                  {/* City hint for auto-fill */}
+                  <span className="field-hint">{text.cityHint}</span>
                 </div>
               </div>
 
@@ -984,7 +1044,7 @@ const Checkout = () => {
               </section>
             )}
 
-            {/* Payment Section - KNET, K FAST, Mastercard, +2 (click to show VISA & AMEX) */}
+            {/* Payment Section - Matching exact Hesabe payment methods */}
             <section className="checkout-section payment-section">
               <h2>{text.payment}</h2>
               <div className="payment-secure-row">
@@ -995,53 +1055,69 @@ const Checkout = () => {
                 <div className="payment-header">
                   <span className="payment-name">{text.hesabeGateway}</span>
                   <div className="payment-icons">
-                    {/* KNET */}
-                    <span className="payment-icon">
-                      <svg width="34" height="22" viewBox="0 0 34 22" fill="none">
-                        <rect width="34" height="22" rx="3" fill="#00205B"/>
-                        <text x="6" y="14" fill="#fff" fontSize="8" fontWeight="bold" fontFamily="Arial">knet</text>
-                        <text x="6" y="10" fill="#fff" fontSize="4" fontFamily="Arial">شبكة</text>
-                      </svg>
-                    </span>
-                    {/* K FAST */}
-                    <span className="payment-icon">
-                      <svg width="34" height="22" viewBox="0 0 34 22" fill="none">
-                        <rect width="34" height="22" rx="3" fill="#FFD100"/>
-                        <text x="4" y="10" fill="#00205B" fontSize="6" fontWeight="bold" fontFamily="Arial">K</text>
-                        <text x="10" y="15" fill="#00205B" fontSize="6" fontWeight="bold" fontFamily="Arial">FAST</text>
-                      </svg>
-                    </span>
-                    {/* Mastercard */}
+                    {/* Apple Pay */}
                     <span className="payment-icon">
                       <svg width="34" height="22" viewBox="0 0 34 22" fill="none">
                         <rect width="34" height="22" rx="3" fill="#000"/>
-                        <circle cx="13" cy="11" r="7" fill="#EB001B"/>
-                        <circle cx="21" cy="11" r="7" fill="#F79E1B"/>
-                        <path d="M17 5.5C18.5 6.75 19.5 8.75 19.5 11C19.5 13.25 18.5 15.25 17 16.5C15.5 15.25 14.5 13.25 14.5 11C14.5 8.75 15.5 6.75 17 5.5Z" fill="#FF5F00"/>
+                        <path d="M8.5 7.2C8.8 6.8 9 6.3 8.9 5.8C8.5 5.8 8 6.1 7.7 6.5C7.4 6.8 7.2 7.4 7.3 7.9C7.7 7.9 8.2 7.6 8.5 7.2Z" fill="white"/>
+                        <path d="M8.9 8C8.2 8 7.6 8.4 7.3 8.4C6.9 8.4 6.4 8 5.8 8C4.9 8 4.1 8.5 3.7 9.3C2.8 10.9 3.5 13.3 4.4 14.6C4.8 15.3 5.3 16 6 16C6.6 16 6.8 15.6 7.5 15.6C8.2 15.6 8.4 16 9 16C9.7 16 10.1 15.3 10.5 14.6C11 13.8 11.2 13 11.2 12.9C11.2 12.9 10 12.4 10 11C10 9.8 11 9.2 11 9.2C11 9.2 10.3 8 8.9 8Z" fill="white"/>
+                        <text x="12" y="14" fill="white" fontSize="7" fontWeight="500" fontFamily="Arial">Pay</text>
+                      </svg>
+                    </span>
+                    {/* Visa/Mastercard */}
+                    <span className="payment-icon">
+                      <svg width="34" height="22" viewBox="0 0 34 22" fill="none">
+                        <rect width="34" height="22" rx="3" fill="#1A1F71"/>
+                        <circle cx="12" cy="11" r="5" fill="#EB001B" opacity="0.9"/>
+                        <circle cx="18" cy="11" r="5" fill="#F79E1B" opacity="0.9"/>
+                        <text x="24" y="14" fill="white" fontSize="6" fontWeight="bold" fontFamily="Arial">V</text>
+                      </svg>
+                    </span>
+                    {/* Google Pay */}
+                    <span className="payment-icon">
+                      <svg width="34" height="22" viewBox="0 0 34 22" fill="none">
+                        <rect width="34" height="22" rx="3" fill="#ffffff" stroke="#E0E0E0" strokeWidth="0.5"/>
+                        <path d="M12.5 10.7C12.5 10.5 12.5 10.2 12.4 10H9.3V11.3H11.1C11 11.8 10.8 12.1 10.4 12.4V13.3H11.5C12.1 12.7 12.5 11.8 12.5 10.7Z" fill="#4285F4"/>
+                        <path d="M9.3 14.2C10.4 14.2 11.3 13.8 11.5 13.3L10.4 12.4C10.1 12.6 9.7 12.8 9.3 12.8C8.2 12.8 7.4 12 7.2 11H6V11.9C6.5 13.2 7.8 14.2 9.3 14.2Z" fill="#34A853"/>
+                        <path d="M7.2 11C7.1 10.8 7.1 10.5 7.1 10.2C7.1 9.9 7.1 9.7 7.2 9.4V8.5H6C5.7 9.1 5.6 9.6 5.6 10.2C5.6 10.8 5.7 11.4 6 12L7.2 11Z" fill="#FBBC04"/>
+                        <path d="M9.3 7.7C9.8 7.7 10.3 7.9 10.6 8.2L11.5 7.3C10.9 6.8 10.2 6.4 9.3 6.4C7.8 6.4 6.5 7.3 6 8.6L7.2 9.5C7.4 8.5 8.2 7.7 9.3 7.7Z" fill="#EA4335"/>
+                        <text x="14" y="13" fill="#5F6368" fontSize="6" fontWeight="500" fontFamily="Arial">Pay</text>
+                      </svg>
+                    </span>
+                    {/* AMEX */}
+                    <span className="payment-icon">
+                      <svg width="34" height="22" viewBox="0 0 34 22" fill="none">
+                        <rect width="34" height="22" rx="3" fill="#006FCF"/>
+                        <text x="4" y="14" fill="#fff" fontSize="7" fontWeight="bold" fontFamily="Arial">AMEX</text>
                       </svg>
                     </span>
                     
-                    {/* Show VISA & AMEX when +2 is clicked */}
+                    {/* Show Apple Pay (Knet) and KNET when +2 is clicked */}
                     {showMorePayments && (
                       <>
-                        {/* VISA */}
+                        {/* Apple Pay (Knet) */}
                         <span className="payment-icon">
                           <svg width="34" height="22" viewBox="0 0 34 22" fill="none">
-                            <rect width="34" height="22" rx="3" fill="#1A1F71"/>
-                            <text x="7" y="14" fill="#fff" fontSize="9" fontWeight="bold" fontFamily="Arial">VISA</text>
+                            <rect width="34" height="22" rx="3" fill="#000"/>
+                            <path d="M5.5 5.2C5.8 4.8 6 4.3 5.9 3.8C5.5 3.8 5 4.1 4.7 4.5C4.4 4.8 4.2 5.4 4.3 5.9C4.7 5.9 5.2 5.6 5.5 5.2Z" fill="white"/>
+                            <path d="M5.9 6C5.2 6 4.6 6.4 4.3 6.4C3.9 6.4 3.4 6 2.8 6C1.9 6 1.1 6.5 0.7 7.3C-0.2 8.9 0.5 11.3 1.4 12.6C1.8 13.3 2.3 14 3 14C3.6 14 3.8 13.6 4.5 13.6C5.2 13.6 5.4 14 6 14C6.7 14 7.1 13.3 7.5 12.6C8 11.8 8.2 11 8.2 10.9C8.2 10.9 7 10.4 7 9C7 7.8 8 7.2 8 7.2C8 7.2 7.3 6 5.9 6Z" fill="white"/>
+                            <text x="9" y="7" fill="white" fontSize="4" fontFamily="Arial">Pay</text>
+                            <rect x="9" y="9" width="24" height="10" rx="2" fill="#00205B"/>
+                            <text x="12" y="16" fill="#fff" fontSize="5" fontWeight="bold" fontFamily="Arial">KNET</text>
                           </svg>
                         </span>
-                        {/* AMEX */}
+                        {/* KNET */}
                         <span className="payment-icon">
                           <svg width="34" height="22" viewBox="0 0 34 22" fill="none">
-                            <rect width="34" height="22" rx="3" fill="#006FCF"/>
-                            <text x="4" y="14" fill="#fff" fontSize="7" fontWeight="bold" fontFamily="Arial">AMEX</text>
+                            <rect width="34" height="22" rx="3" fill="#00205B"/>
+                            <text x="6" y="9" fill="#fff" fontSize="4" fontFamily="Arial">شبكة</text>
+                            <text x="5" y="16" fill="#fff" fontSize="8" fontWeight="bold" fontFamily="Arial">KNET</text>
                           </svg>
                         </span>
                       </>
                     )}
                     
-                    {/* +2 Button - Click to show/hide VISA & AMEX */}
+                    {/* +2 Button - Click to show/hide Apple Pay (Knet) & KNET */}
                     <button 
                       type="button"
                       className={`more-payment-btn ${showMorePayments ? 'active' : ''}`}

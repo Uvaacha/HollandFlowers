@@ -636,6 +636,7 @@ const LiliumArrangement = () => {
                         </div>
                         <div className="product-info">
                           <h3 className="product-name">{productName}</h3>
+                          <p className="product-description">{getProductDescription(product)}</p>
                           <div className="product-footer">
                             <div className="price-wrapper">
                               {showDiscount && (

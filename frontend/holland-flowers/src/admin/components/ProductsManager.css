@@ -794,3 +794,260 @@
     align-items: flex-start;
   }
 }
+/* ==========================================
+   NEW STYLES - Offer Filter, Bulk Offer Modal
+   ========================================== */
+
+/* Header Actions - Multiple Buttons */
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn-secondary {
+  background: white;
+  color: var(--warm);
+  border: 2px solid var(--warm);
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-secondary:hover {
+  background: var(--warm-light);
+  transform: translateY(-2px);
+}
+
+/* Offer Filter */
+.offer-filter {
+  min-width: 160px;
+}
+
+/* Status Badge (for read-only Admin) */
+.status-badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-badge.active {
+  background: var(--accent-lighter);
+  color: var(--accent-dark);
+}
+
+.status-badge.inactive {
+  background: var(--error-light);
+  color: var(--error-dark);
+}
+
+/* Read-only notice */
+.read-only-notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #92400e;
+}
+
+.read-only-notice svg {
+  flex-shrink: 0;
+  color: #f59e0b;
+}
+
+/* ==========================================
+   BULK OFFER MODAL
+   ========================================== */
+
+.bulk-offer-modal {
+  max-width: 700px;
+}
+
+.section-hint {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: -8px 0 16px;
+}
+
+/* Select All Row */
+.select-all-row {
+  padding: 12px 16px;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.select-all-row .checkbox-label {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+/* Categories Grid */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.category-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 13px;
+}
+
+.category-checkbox:hover {
+  background: var(--bg-primary);
+  border-color: var(--warm);
+}
+
+.category-checkbox input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--warm);
+  cursor: pointer;
+}
+
+.category-checkbox input:checked ~ .category-name {
+  color: var(--warm-dark);
+  font-weight: 600;
+}
+
+.category-checkbox:has(input:checked) {
+  background: var(--warm-light);
+  border-color: var(--warm);
+}
+
+.category-name {
+  flex: 1;
+  color: #334155;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-count {
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--bg-secondary);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+/* Selected Count */
+.selected-count {
+  margin-top: 12px;
+  padding: 10px 16px;
+  background: var(--accent-lighter);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-dark);
+}
+
+/* Input with Suffix */
+.input-with-suffix {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.input-with-suffix input {
+  padding-right: 40px;
+}
+
+.input-with-suffix .suffix {
+  position: absolute;
+  right: 14px;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Bulk Offer Footer */
+.bulk-offer-footer {
+  justify-content: space-between;
+}
+
+.bulk-offer-footer .footer-right {
+  display: flex;
+  gap: 12px;
+}
+
+/* Danger Button */
+.btn-danger {
+  padding: 10px 20px;
+  background: var(--error-light);
+  color: var(--error-dark);
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #fecaca;
+  border-color: #f87171;
+}
+
+.btn-danger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive for Bulk Offer */
+@media (max-width: 768px) {
+  .header-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .header-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .categories-grid {
+    grid-template-columns: 1fr;
+    max-height: 200px;
+  }
+  
+  .bulk-offer-footer {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .bulk-offer-footer .footer-right {
+    width: 100%;
+  }
+  
+  .bulk-offer-footer .btn-danger,
+  .bulk-offer-footer .btn-cancel,
+  .bulk-offer-footer .btn-save {
+    width: 100%;
+    text-align: center;
+  }
+}

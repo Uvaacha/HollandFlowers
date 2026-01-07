@@ -110,6 +110,23 @@ const ValentineSpecial = () => {
     return product.productId || product.sku || product.slug || product.id;
   };
 
+  // Get Product Description from API
+  const getProductDescription = (product) => {
+    if (currentLang === 'ar') {
+      if (product.shortDescriptionAr && product.shortDescriptionAr.trim()) return product.shortDescriptionAr;
+      if (product.descriptionAr && product.descriptionAr.trim()) {
+        return product.descriptionAr.length > 80 ? product.descriptionAr.substring(0, 80) + '...' : product.descriptionAr;
+      }
+    }
+    if (product.shortDescription && product.shortDescription.trim()) return product.shortDescription;
+    if (product.shortDescriptionEn && product.shortDescriptionEn.trim()) return product.shortDescriptionEn;
+    if (product.description && product.description.trim()) {
+      return product.description.length > 80 ? product.description.substring(0, 80) + '...' : product.description;
+    }
+    return currentLang === 'ar' ? 'تنسيق زهور طازجة وأنيقة' : 'Fresh elegant flower arrangement';
+  };
+
+
   const maxPrice = useMemo(() => products.length === 0 ? 100 : Math.ceil(Math.max(...products.map(p => getFinalPrice(p)))), [products]);
 
   const filteredAndSortedProducts = useMemo(() => {

@@ -1001,3 +1001,16 @@ html {
   overscroll-behavior: none;
 }
 
+
+/* Developer Credit Section */
+.developer-link {
+  color: #c9a86c;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.developer-link:hover {
+  color: #e8c992;
+  text-decoration: underline;
+}

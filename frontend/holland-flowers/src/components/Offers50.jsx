@@ -585,6 +585,7 @@ const Offers50 = () => {
                         {/* Product Info */}
                         <div className="product-info">
                           <h3 className="product-name">{productName}</h3>
+                          <p className="product-description">{getProductDescription(product)}</p>
                           {/* Price Row */}
                           <div className="product-footer">
                             <div className="price-wrapper">

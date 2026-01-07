@@ -1,0 +1,70 @@
+/* ============================================================
+   PRODUCT DESCRIPTION STYLING
+   File: src/components/ProductDescription.css
+   
+   Import in App.js: import './components/ProductDescription.css';
+   ============================================================ */
+
+.product-description {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+  margin: 8px 0 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 40px;
+  padding: 0 2px;
+}
+
+.rtl .product-description,
+[dir="rtl"] .product-description {
+  text-align: right;
+}
+
+.product-card:hover .product-description {
+  color: #555;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .product-description {
+    font-size: 12px;
+    min-height: 36px;
+    margin: 6px 0 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-description {
+    font-size: 11px;
+    min-height: 32px;
+    margin: 4px 0 8px;
+  }
+}
+
+/* Carousel product description */
+.carousel-product-description {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.45;
+  margin: 6px 0 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 38px;
+}
+
+.carousel-product-card:hover .carousel-product-description {
+  color: #555;
+}
+
+@media (max-width: 768px) {
+  .carousel-product-description {
+    font-size: 12px;
+    min-height: 34px;
+  }
+}
