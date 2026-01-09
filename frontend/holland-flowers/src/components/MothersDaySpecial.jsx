@@ -113,13 +113,21 @@ const MothersDaySpecial = () => {
   // Get Product Description from API
   const getProductDescription = (product) => {
     if (currentLang === 'ar') {
+      // Check both camelCase and snake_case for Arabic
       if (product.shortDescriptionAr && product.shortDescriptionAr.trim()) return product.shortDescriptionAr;
+      if (product.short_description_ar && product.short_description_ar.trim()) return product.short_description_ar;
       if (product.descriptionAr && product.descriptionAr.trim()) {
         return product.descriptionAr.length > 80 ? product.descriptionAr.substring(0, 80) + '...' : product.descriptionAr;
       }
+      if (product.description_ar && product.description_ar.trim()) {
+        return product.description_ar.length > 80 ? product.description_ar.substring(0, 80) + '...' : product.description_ar;
+      }
     }
+    // Check both camelCase and snake_case for English
     if (product.shortDescription && product.shortDescription.trim()) return product.shortDescription;
+    if (product.short_description && product.short_description.trim()) return product.short_description;
     if (product.shortDescriptionEn && product.shortDescriptionEn.trim()) return product.shortDescriptionEn;
+    if (product.short_description_en && product.short_description_en.trim()) return product.short_description_en;
     if (product.description && product.description.trim()) {
       return product.description.length > 80 ? product.description.substring(0, 80) + '...' : product.description;
     }
@@ -352,20 +360,12 @@ const MothersDaySpecial = () => {
                         </div>
                         <div className="product-info">
                           <h3 className="product-name">{productName}</h3>
-                          <p className="product-desc">{currentLang === 'ar' ? 'هدية جميلة للأم' : 'Beautiful gift for Mom'}</p>
+                          <p className="product-desc">{getProductDescription(product)}</p>
                           <div className="product-footer">
                             <div className="price-wrapper">
                               {showDiscount && <span className="original-price">{parseFloat(originalPrice).toFixed(3)} KWD</span>}
                               <span className="sale-price">{parseFloat(finalPrice).toFixed(3)} KWD</span>
                             </div>
-                            
-                            <button className={`add-btn ${addingToCart[productSlug] ? 'adding' : ''}`} onClick={(e) => handleAddToCart(e, product)}>
-                              {addingToCart[productSlug] ? (
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
-                              ) : (
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                              )}
-                            </button>
                           </div>
                         </div>
                       </Link>

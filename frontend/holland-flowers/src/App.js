@@ -187,7 +187,7 @@ const ProductCard = ({
   onAddToCart
 }) => {
   const { addToCart } = useCart();
-  const [isAdding, setIsAdding] = useState(false);
+  // REMOVED: const [isAdding, setIsAdding] = useState(false);
 
   const getProductName = (product) => {
     if (currentLang === 'ar') {
@@ -345,34 +345,7 @@ const ProductCard = ({
   const showDiscount = hasDiscount(product);
   const discountPercent = getDiscountPercent(product);
 
-  const handleAddToCart = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    setIsAdding(true);
-    
-    const cartItem = {
-      productId: product.productId || product.id,
-      name: productName,
-      productName: productName,
-      nameAr: product.productNameAr || product.nameAr || productName,
-      price: finalPrice,
-      image: productImage,
-      imageUrl: productImage,
-      quantity: 1
-    };
-    
-    addToCart(cartItem);
-
-    setTimeout(() => {
-      setIsAdding(false);
-    }, 800);
-    
-    // Trigger the modal callback if provided
-    if (onAddToCart) {
-      onAddToCart(cartItem);
-    }
-  };
+  // REMOVED: handleAddToCart function - users must click card to view details
 
   return (
     <div className={cardClassName}>
@@ -431,22 +404,7 @@ const ProductCard = ({
             </p>
           </div>
 
-          <button 
-            className={`carousel-add-to-cart ${isAdding ? 'adding' : ''}`}
-            onClick={handleAddToCart}
-            aria-label={currentLang === 'ar' ? 'أضف للسلة' : 'Add to cart'}
-          >
-            {isAdding ? (
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            ) : (
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <line x1="12" y1="5" x2="12" y2="19"/>
-                <line x1="5" y1="12" x2="19" y2="12"/>
-              </svg>
-            )}
-          </button>
+          {/* Plus button removed - click card to view details */}
         </div>
       </div>
     </div>
@@ -735,18 +693,12 @@ const NewArrivalsCarousel = ({ currentLang, onAddToCart }) => {
 // ============================================
 const HomePage = ({ currentLang }) => {
   // AddToCart Modal state
-  const [showCartModal, setShowCartModal] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  // REMOVED: const [showCartModal, setShowCartModal] = useState(false);
+  // REMOVED: const [selectedProduct, setSelectedProduct] = useState(null);
 
-  const handleAddToCartWithModal = (product) => {
-    setSelectedProduct(product);
-    setShowCartModal(true);
-  };
+  // REMOVED: handleAddToCartWithModal
 
-  const handleCloseModal = () => {
-    setShowCartModal(false);
-    setSelectedProduct(null);
-  };
+  // REMOVED: handleCloseModal
 
   const occasions = [
     { id: 1, name: currentLang === 'ar' ? 'عيد الحب' : "Valentine's Day", image: '/images/Valentine Day Special/Valentine Love Gift Flower.webp', link: '/valentine-special', color: '#D4A5A5', icon: Icons.Heart },
@@ -780,8 +732,8 @@ const HomePage = ({ currentLang }) => {
     <main className="home-page">
       <ImageSlideshow currentLang={currentLang} />
       
-      <FeaturedProductsCarousel currentLang={currentLang} onAddToCart={handleAddToCartWithModal} />
-      <BestSellersCarousel currentLang={currentLang} onAddToCart={handleAddToCartWithModal} />
+      <FeaturedProductsCarousel currentLang={currentLang} />
+      <BestSellersCarousel currentLang={currentLang} />
 
       {/* Shop by Occasion */}
       <section className="occasions-section">
@@ -815,7 +767,7 @@ const HomePage = ({ currentLang }) => {
         </div>
       </section>
 
-      <NewArrivalsCarousel currentLang={currentLang} onAddToCart={handleAddToCartWithModal} />
+      <NewArrivalsCarousel currentLang={currentLang} />
 
       {/* Why Choose Us */}
       <section className="why-us-section">
@@ -904,14 +856,7 @@ const HomePage = ({ currentLang }) => {
       </section>
 
       {/* AddToCart Modal with Suggestions */}
-      {showCartModal && selectedProduct && (
-        <AddToCartModal
-          isOpen={showCartModal}
-          onClose={handleCloseModal}
-          product={selectedProduct}
-          currentLang={currentLang}
-        />
-      )}
+      {/* REMOVED: AddToCartModal */}
     </main>
   );
 };

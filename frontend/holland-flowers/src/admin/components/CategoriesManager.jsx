@@ -11,8 +11,7 @@ const CategoriesManager = () => {
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
     categoryName: '',
-    description: '',
-    displayOrder: ''
+    description: ''
   });
 
   // Check if user is Super Admin (can write)
@@ -54,8 +53,7 @@ const CategoriesManager = () => {
     setEditingCategory(null);
     setFormData({
       categoryName: '',
-      description: '',
-      displayOrder: ''
+      description: ''
     });
     setShowModal(true);
   };
@@ -67,8 +65,7 @@ const CategoriesManager = () => {
     setEditingCategory(category);
     setFormData({
       categoryName: category.categoryName || '',
-      description: category.description || '',
-      displayOrder: category.displayOrder?.toString() || ''
+      description: category.description || ''
     });
     setShowModal(true);
   };
@@ -119,8 +116,7 @@ const CategoriesManager = () => {
     try {
       const categoryData = {
         categoryName: formData.categoryName.trim(),
-        description: formData.description?.trim() || null,
-        displayOrder: formData.displayOrder ? parseInt(formData.displayOrder, 10) : null
+        description: formData.description?.trim() || null
       };
 
       console.log('Sending category data:', categoryData);
@@ -149,8 +145,7 @@ const CategoriesManager = () => {
       setShowModal(false);
       setFormData({
         categoryName: '',
-        description: '',
-        displayOrder: ''
+        description: ''
       });
     } catch (error) {
       console.error('Failed to save category:', error);
@@ -226,7 +221,6 @@ const CategoriesManager = () => {
       {/* CLEAN TABLE/LIST VIEW - NO IMAGES */}
       <div className="categories-table">
         <div className="table-header">
-          <div className="th-position">Position</div>
           <div className="th-name">Category Name</div>
           <div className="th-description">Description</div>
           <div className="th-products">Products</div>
@@ -241,9 +235,6 @@ const CategoriesManager = () => {
                 key={category.categoryId} 
                 className={`table-row ${!category.isActive ? 'inactive' : ''}`}
               >
-                <div className="td-position">
-                  <span className="position-badge">{category.displayOrder || '-'}</span>
-                </div>
                 <div className="td-name">
                   <div className="category-icon-small">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -374,24 +365,6 @@ const CategoriesManager = () => {
                     maxLength={500}
                     disabled={saving}
                   />
-                </div>
-
-                <div className="form-group">
-                  <label>Menu Position</label>
-                  <input
-                    type="number"
-                    name="displayOrder"
-                    value={formData.displayOrder}
-                    onChange={handleInputChange}
-                    placeholder="1"
-                    min="1"
-                    disabled={saving}
-                  />
-                  <div className="form-hint-box">
-                    <p><strong>This controls where the category appears on your website menu.</strong></p>
-                    <p>Example: Position 1 = First, Position 2 = Second, etc.</p>
-                    <p>Leave empty to add at the end.</p>
-                  </div>
                 </div>
               </form>
             </div>

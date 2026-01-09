@@ -826,7 +826,19 @@
 
 /* Offer Filter */
 .offer-filter {
-  min-width: 160px;
+  min-width: 200px;
+  font-weight: 500;
+  background: linear-gradient(to bottom, #ffffff, #fef9f3);
+  border: 1.5px solid var(--warm-light);
+}
+
+.offer-filter:hover {
+  border-color: var(--warm);
+}
+
+.offer-filter:focus {
+  border-color: var(--warm);
+  box-shadow: 0 0 0 3px rgba(201, 168, 108, 0.15);
 }
 
 /* Status Badge (for read-only Admin) */

@@ -296,3 +296,75 @@
     grid-template-columns: 1fr 1fr;
   }
 }
+/* =====================================================
+   NEW ORDER HIGHLIGHTING - DASHBOARD
+   ===================================================== */
+
+/* Highlight stat card for new orders */
+.stat-card-highlight {
+  border: 2px solid #10b981;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(255, 255, 255, 1) 100%);
+  animation: highlight-pulse 2s ease-in-out infinite;
+}
+
+@keyframes highlight-pulse {
+  0%, 100% {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  50% {
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+  }
+}
+
+.stat-badge {
+  display: inline-block;
+  background: #10b981;
+  color: white;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  margin-top: 8px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+/* New Order Badge in tables */
+.new-order-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+  margin-left: 8px;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+  animation: pulse-badge 2s ease-in-out infinite;
+}
+
+@keyframes pulse-badge {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.05);
+  }
+}
+
+/* New Order Row Highlighting */
+.new-order-row {
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.08) 0%, rgba(255, 255, 255, 0) 100%);
+  border-left: 4px solid #10b981;
+}
+
+.new-order-row:hover {
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.12) 0%, rgba(255, 255, 255, 0.5) 100%);
+}
+
+.new-order-row .order-id {
+  font-weight: 600;
+  color: #059669;
+}

@@ -8,9 +8,9 @@ const ProductsManager = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
-  const [offerFilter, setOfferFilter] = useState('all'); // NEW: Offer filter
+  const [offerFilter, setOfferFilter] = useState('all'); // Offer filter
   const [showModal, setShowModal] = useState(false);
-  const [showBulkOfferModal, setShowBulkOfferModal] = useState(false); // NEW: Bulk offer modal
+  const [showBulkOfferModal, setShowBulkOfferModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [saving, setSaving] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
@@ -32,7 +32,7 @@ const ProductsManager = () => {
     tags: ''
   });
 
-  // NEW: Bulk offer form data
+  // Bulk offer form data
   const [bulkOfferData, setBulkOfferData] = useState({
     selectedCategories: [],
     offerPercentage: '',
@@ -107,11 +107,23 @@ const ProductsManager = () => {
         let productsData = response.data.content || response.data || [];
         productsData = Array.isArray(productsData) ? productsData : [];
         
-        // NEW: Apply offer filter on client side
-        if (offerFilter === 'with-offer') {
-          productsData = productsData.filter(p => p.offerPercentage && p.offerPercentage > 0);
-        } else if (offerFilter === 'without-offer') {
+        // Apply offer/discount filter on client side
+        if (offerFilter === 'no-offer') {
+          // No offer (0%)
           productsData = productsData.filter(p => !p.offerPercentage || p.offerPercentage === 0);
+        } else if (offerFilter === 'any-offer') {
+          // Any offer (> 0%)
+          productsData = productsData.filter(p => p.offerPercentage && p.offerPercentage > 0);
+        } else if (offerFilter !== 'all') {
+          // Specific percentage (10, 15, 20, 25, 30, 50)
+          const targetPercentage = parseInt(offerFilter);
+          if (!isNaN(targetPercentage)) {
+            // Filter products with exact percentage match (with 2% tolerance for flexibility)
+            productsData = productsData.filter(p => {
+              const discount = p.offerPercentage || 0;
+              return discount >= targetPercentage - 2 && discount <= targetPercentage + 2;
+            });
+          }
         }
         
         setProducts(productsData);
@@ -231,7 +243,7 @@ const ProductsManager = () => {
         shortDescription: formData.shortDescription?.trim() || null,
         actualPrice: parseFloat(formData.actualPrice),
         offerPercentage: parseFloat(formData.offerPercentage) || 0,
-        stockQuantity: 50, // Default stock value since we removed the field
+        stockQuantity: 50, // Default stock value
         imageUrl: formData.imageUrl?.trim() || null,
         additionalImages: formData.additionalImages || [],
         isFeatured: formData.isFeatured,
@@ -277,7 +289,7 @@ const ProductsManager = () => {
     return price - (price * discount / 100);
   };
 
-  // NEW: Bulk Offer Functions
+  // Bulk Offer Functions
   const handleOpenBulkOfferModal = () => {
     setBulkOfferData({
       selectedCategories: [],
@@ -338,18 +350,15 @@ const ProductsManager = () => {
     setApplyingBulkOffer(true);
 
     try {
-      // Apply offer to each selected category's products
       let successCount = 0;
       let errorCount = 0;
 
       for (const categoryId of bulkOfferData.selectedCategories) {
         try {
-          // Get all products in this category
           const response = await productsAPI.getByCategory(categoryId, { page: 0, size: 1000 });
           if (response.success && response.data) {
             const categoryProducts = response.data.content || response.data || [];
             
-            // Update each product with the offer
             for (const product of categoryProducts) {
               try {
                 await productsAPI.update(product.productId, {
@@ -500,15 +509,21 @@ const ProductsManager = () => {
             </option>
           ))}
         </select>
-        {/* NEW: Offer Filter */}
+        {/* Discount Filter with Specific Percentages */}
         <select
           value={offerFilter}
           onChange={(e) => setOfferFilter(e.target.value)}
           className="filter-select offer-filter"
         >
-          <option value="all">All Products</option>
-          <option value="with-offer">🏷️ With Offer</option>
-          <option value="without-offer">No Offer</option>
+          <option value="all">All Offers</option>
+          <option value="no-offer">No Offer (0%)</option>
+          <option value="10">🔖 10% Discount</option>
+          <option value="15">🏷️ 15% Discount</option>
+          <option value="20">💰 20% Discount</option>
+          <option value="25">🎯 25% Discount</option>
+          <option value="30">⭐ 30% Discount</option>
+          <option value="50">🔥 50% Discount</option>
+          <option value="any-offer">✨ Any Offer</option>
         </select>
         {hasActiveFilters && (
           <button className="clear-filters-btn" onClick={handleClearFilters}>
@@ -529,7 +544,7 @@ const ProductsManager = () => {
         )}
       </div>
 
-      {/* Products Table - STOCK COLUMN REMOVED */}
+      {/* Products Table */}
       <div className="table-container">
         {loading && (
           <div className="table-loading-overlay">
@@ -659,17 +674,15 @@ const ProductsManager = () => {
         </div>
       )}
 
-      {/* Product Modal - STOCK FIELD REMOVED */}
+      {/* Product Modal */}
       {showModal && isSuperAdmin && (
         <div className="modal-overlay" onClick={() => !saving && setShowModal(false)}>
           <div className="modal-box" onClick={e => e.stopPropagation()}>
-            {/* Header */}
             <div className="modal-header">
               <h2>{editingProduct ? 'Edit Product' : 'Add New Product'}</h2>
               <button className="close-btn" onClick={() => !saving && setShowModal(false)}>✕</button>
             </div>
 
-            {/* Form */}
             <form onSubmit={handleSubmit} className="modal-form">
               {/* Basic Info */}
               <div className="form-section">
@@ -732,7 +745,7 @@ const ProductsManager = () => {
                 </div>
               </div>
 
-              {/* Pricing - STOCK REMOVED */}
+              {/* Pricing */}
               <div className="form-section">
                 <h3>Pricing</h3>
                 
@@ -868,19 +881,16 @@ const ProductsManager = () => {
         </div>
       )}
 
-      {/* NEW: Bulk Offer Modal */}
+      {/* Bulk Offer Modal */}
       {showBulkOfferModal && isSuperAdmin && (
         <div className="modal-overlay" onClick={() => !applyingBulkOffer && setShowBulkOfferModal(false)}>
           <div className="modal-box bulk-offer-modal" onClick={e => e.stopPropagation()}>
-            {/* Header */}
             <div className="modal-header">
               <h2>🏷️ Bulk Offer Management</h2>
               <button className="close-btn" onClick={() => !applyingBulkOffer && setShowBulkOfferModal(false)}>✕</button>
             </div>
 
-            {/* Form */}
             <form onSubmit={handleApplyBulkOffer} className="modal-form">
-              {/* Category Selection */}
               <div className="form-section">
                 <h3>Select Categories</h3>
                 <p className="section-hint">Choose categories to apply the bulk offer</p>
@@ -917,7 +927,6 @@ const ProductsManager = () => {
                 )}
               </div>
 
-              {/* Offer Details */}
               <div className="form-section">
                 <h3>Offer Details</h3>
                 
@@ -964,7 +973,6 @@ const ProductsManager = () => {
                 </div>
               </div>
 
-              {/* Footer */}
               <div className="modal-footer bulk-offer-footer">
                 <button 
                   type="button" 

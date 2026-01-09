@@ -600,22 +600,7 @@ const Offers50 = () => {
                             </div>
                             
                             {/* Add Button */}
-                            <button 
-                              className={`add-btn ${isAdding ? 'adding' : ''}`}
-                              onClick={(e) => handleAddToCart(e, product)}
-                              aria-label={t.addToCart}
-                            >
-                              {isAdding ? (
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                  <polyline points="20 6 9 17 4 12"/>
-                                </svg>
-                              ) : (
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                  <line x1="12" y1="5" x2="12" y2="19"></line>
-                                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                                </svg>
-                              )}
-                            </button>
+                            {/* Plus button removed - click card to view details */}
                           </div>
                         </div>
                       </Link>

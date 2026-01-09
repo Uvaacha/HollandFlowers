@@ -11,6 +11,7 @@ const Dashboard = () => {
     totalRevenue: 0
   });
   const [pendingOrders, setPendingOrders] = useState([]);
+  const [newOrdersCount, setNewOrdersCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -33,7 +34,16 @@ const Dashboard = () => {
       
       if (pendingOrdersResponse.success && pendingOrdersResponse.data) {
         // Orders come as paginated response with 'content' array
-        setPendingOrders(pendingOrdersResponse.data.content || []);
+        const orders = pendingOrdersResponse.data.content || [];
+        setPendingOrders(orders);
+        
+        // Count new orders (processing/completed payment + pending delivery)
+        const newOrders = orders.filter(order => {
+          const paymentCompleted = ['COMPLETED', 'PROCESSING'].includes(order.paymentStatus?.toUpperCase());
+          const deliveryPending = order.deliveryStatus?.toUpperCase() === 'PENDING';
+          return paymentCompleted && deliveryPending;
+        });
+        setNewOrdersCount(newOrders.length);
       }
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);
@@ -59,6 +69,12 @@ const Dashboard = () => {
     return status?.replace(/_/g, ' ') || 'Pending';
   };
 
+  const isNewOrder = (order) => {
+    const paymentCompleted = ['COMPLETED', 'PROCESSING'].includes(order.paymentStatus?.toUpperCase());
+    const deliveryPending = order.deliveryStatus?.toUpperCase() === 'PENDING';
+    return paymentCompleted && deliveryPending;
+  };
+
   if (loading) {
     return (
       <div className="dashboard-loading">
@@ -78,6 +94,20 @@ const Dashboard = () => {
       </div>
 
       <div className="stats-grid">
+        <div className="stat-card stat-card-highlight">
+          <div className="stat-icon" style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+          </div>
+          <div className="stat-content">
+            <p className="stat-label">New Orders (Payment Processing/Completed)</p>
+            <h3 className="stat-value">{newOrdersCount}</h3>
+            <span className="stat-badge">Awaiting Processing</span>
+          </div>
+        </div>
+
         <div className="stat-card">
           <div className="stat-icon" style={{ background: '#3b82f6' }}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -153,8 +183,13 @@ const Dashboard = () => {
             <tbody>
               {pendingOrders.length > 0 ? (
                 pendingOrders.map((order) => (
-                  <tr key={order.orderId}>
-                    <td className="order-id">{order.orderNumber}</td>
+                  <tr key={order.orderId} className={isNewOrder(order) ? 'new-order-row' : ''}>
+                    <td className="order-id">
+                      {order.orderNumber}
+                      {isNewOrder(order) && (
+                        <span className="new-order-badge">NEW</span>
+                      )}
+                    </td>
                     <td>{order.recipientName}</td>
                     <td>{order.itemCount || '-'} items</td>
                     <td className="amount">KD {order.totalAmount?.toFixed(3)}</td>

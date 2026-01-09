@@ -128,22 +128,22 @@ const PrivacyPolicy = () => {
           title: 'Data Security',
           content: 'We use technical and organizational measures to safeguard your data, including:',
           securityList: [
-            '🔐 HTTPS encryption',
-            '🔐 Secure payment redirection (no card data stored by us)',
-            '🔐 Access control and staff confidentiality',
-            '🔐 System monitoring and threat prevention'
+            'HTTPS encryption',
+            'Secure payment redirection (no card data stored by us)',
+            'Access control and staff confidentiality',
+            'System monitoring and threat prevention'
           ]
         },
         {
           title: 'Your Legal Rights',
           content: 'You have the right to:',
           rightsList: [
-            '✔️ Access your data',
-            '✔️ Correct inaccurate information',
-            '✔️ Request deletion (where applicable)',
-            '✔️ Object to marketing',
-            '✔️ Restrict processing',
-            '✔️ Withdraw consent anytime'
+            'Access your data',
+            'Correct inaccurate information',
+            'Request deletion (where applicable)',
+            'Object to marketing',
+            'Restrict processing',
+            'Withdraw consent anytime'
           ],
           note: 'To exercise any rights: hollandaflowers@gmail.com'
         },
@@ -338,13 +338,13 @@ const PrivacyPolicy = () => {
               )}
 
               {section.securityList && (
-                <ul className="icon-list">
+                <ul className="security-list">
                   {section.securityList.map((item, i) => <li key={i}>{item}</li>)}
                 </ul>
               )}
 
               {section.rightsList && (
-                <ul className="icon-list rights-list">
+                <ul className="rights-list">
                   {section.rightsList.map((item, i) => <li key={i}>{item}</li>)}
                 </ul>
               )}

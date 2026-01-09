@@ -7,6 +7,7 @@ const OrdersManager = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [paymentFilter, setPaymentFilter] = useState('all');
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
@@ -61,8 +62,18 @@ const OrdersManager = () => {
     const matchesSearch = 
       order.orderNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       order.recipientName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.recipientPhone?.includes(searchTerm);
-    return matchesSearch;
+      order.recipientPhone?.includes(searchTerm) ||
+      order.user?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.user?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.user?.phone?.includes(searchTerm) ||
+      order.user?.phoneNumber?.includes(searchTerm) ||
+      order.senderName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.senderPhone?.includes(searchTerm);
+    
+    const matchesPayment = paymentFilter === 'all' || 
+      order.paymentStatus?.toUpperCase() === paymentFilter.toUpperCase();
+    
+    return matchesSearch && matchesPayment;
   });
 
   const getDeliveryStatusClass = (status) => {
@@ -93,6 +104,13 @@ const OrdersManager = () => {
 
   const formatStatus = (status) => {
     return status?.replace(/_/g, ' ') || 'Pending';
+  };
+
+  const isNewOrder = (order) => {
+    // Order is "new" if payment is completed/processing but delivery is still pending
+    const paymentCompleted = ['COMPLETED', 'PROCESSING'].includes(order.paymentStatus?.toUpperCase());
+    const deliveryPending = order.deliveryStatus?.toUpperCase() === 'PENDING';
+    return paymentCompleted && deliveryPending;
   };
 
   const formatDate = (dateString) => {
@@ -160,7 +178,7 @@ const OrdersManager = () => {
           </svg>
           <input
             type="text"
-            placeholder="Search by Order #, Name or Phone..."
+            placeholder="Search by Order #, Customer, Recipient, Email or Phone..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -178,6 +196,20 @@ const OrdersManager = () => {
           <option value="DELIVERED">Delivered</option>
           <option value="CANCELLED">Cancelled</option>
         </select>
+        <select 
+          value={paymentFilter} 
+          onChange={(e) => { setPaymentFilter(e.target.value); setCurrentPage(0); }}
+          className="filter-select"
+        >
+          <option value="all">All Payment Status</option>
+          <option value="COMPLETED">✅ Completed</option>
+          <option value="CAPTURED">Captured</option>
+          <option value="PENDING">Pending</option>
+          <option value="PROCESSING">Processing</option>
+          <option value="FAILED">Failed</option>
+          <option value="CANCELLED">Cancelled</option>
+          <option value="REFUNDED">Refunded</option>
+        </select>
       </div>
 
       <div className="table-container">
@@ -185,8 +217,8 @@ const OrdersManager = () => {
           <thead>
             <tr>
               <th>Order #</th>
-              <th>Customer</th>
-              <th>Phone</th>
+              <th>Customer (Placed By)</th>
+              <th>Recipient (Delivered To)</th>
               <th>Area</th>
               <th>Amount</th>
               <th>Date</th>
@@ -198,10 +230,25 @@ const OrdersManager = () => {
           <tbody>
             {filteredOrders.length > 0 ? (
               filteredOrders.map((order) => (
-                <tr key={order.orderId}>
-                  <td className="order-id">{order.orderNumber}</td>
-                  <td>{order.recipientName}</td>
-                  <td>{order.recipientPhone}</td>
+                <tr key={order.orderId} className={isNewOrder(order) ? 'new-order-row' : ''}>
+                  <td className="order-id">
+                    {order.orderNumber}
+                    {isNewOrder(order) && (
+                      <span className="new-order-badge">NEW</span>
+                    )}
+                  </td>
+                  <td className="customer-info">
+                    <div className="customer-details">
+                      <strong>{order.user?.name || order.senderName || '-'}</strong>
+                      <small>{order.user?.email || order.user?.phone || order.user?.phoneNumber || order.senderPhone || '-'}</small>
+                    </div>
+                  </td>
+                  <td className="recipient-info">
+                    <div className="recipient-details">
+                      <strong>{order.recipientName || '-'}</strong>
+                      <small>{order.recipientPhone || '-'}</small>
+                    </div>
+                  </td>
                   <td>{order.deliveryArea}</td>
                   <td className="amount">{formatCurrency(order.totalAmount)}</td>
                   <td>{formatDate(order.createdAt)}</td>
