@@ -52,6 +52,7 @@ import OrderDetail from './components/OrderDetail';
 import RefundPolicy from './components/RefundPolicy';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import ShippingPolicy from './components/ShippingPolicy';
+import TermsOfService from './components/TermsOfService';
 import AddToCartModal from './components/AddToCartModal';
 import './App.css';
 import './components/ProductDescription.css';
@@ -929,6 +930,7 @@ const AppContent = ({ currentLang }) => {
         <Route path="/refund-policy" element={<RefundPolicy />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/shipping-policy" element={<ShippingPolicy />} />
+        <Route path="/terms" element={<TermsOfService />} />
         <Route path="/anniversary" element={<PlaceholderPage title="Anniversary Collection" currentLang={currentLang} />} />
         <Route path="/birthday" element={<BirthdayBouquets />} />
         <Route path="*" element={<PlaceholderPage title="Page Not Found" currentLang={currentLang} />} />

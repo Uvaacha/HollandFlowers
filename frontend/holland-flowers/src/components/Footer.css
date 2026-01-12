@@ -282,6 +282,10 @@
 /* Footer Columns */
 .footer-column {
   padding: 0 10px;
+  /* Ensure no white background */
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
 /* Accordion Styles - Hidden on Desktop */
@@ -291,6 +295,10 @@
 
 .footer-accordion-content {
   display: block;
+  /* Ensure no white background */
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
 .footer-heading {
@@ -367,6 +375,10 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  /* Ensure no white background */
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
 .contact-info li {
@@ -377,6 +389,10 @@
   font-family: 'Poppins', sans-serif;
   font-size: 14px;
   color: var(--accent-dark);
+  /* Ensure no white background */
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
 .site-footer.rtl .contact-info li {
@@ -768,6 +784,10 @@
   .footer-accordion {
     border-bottom: 1px solid rgba(156, 169, 134, 0.2);
     padding: 0;
+    /* Remove any white background */
+    background: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
   }
 
   .footer-accordion:last-child {
@@ -808,17 +828,28 @@
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease, padding 0.3s ease;
+    /* Remove white background */
+    background: transparent;
   }
 
   .footer-accordion.open .footer-accordion-content {
     max-height: 500px;
     padding-bottom: 20px;
+    /* Remove white background and card styling */
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
   }
 
   .footer-accordion .footer-links,
   .footer-accordion .contact-info,
   .footer-accordion .delivery-hours {
     text-align: left;
+    /* Remove any card/background styling */
+    background: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
   }
 
   .site-footer.rtl .footer-accordion .footer-links,
@@ -830,6 +861,11 @@
   .footer-accordion .contact-info li,
   .footer-accordion .delivery-hours li {
     justify-content: flex-start;
+    /* Remove any white background */
+    background: transparent !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
   }
 
   .site-footer.rtl .footer-accordion .contact-info li,
@@ -870,6 +906,10 @@
   
   .footer-column {
     padding: 0;
+    /* Remove any white background */
+    background: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
   }
 
   .footer-heading {
@@ -1000,7 +1040,6 @@
 html {
   overscroll-behavior: none;
 }
-
 
 /* Developer Credit Section */
 .developer-link {

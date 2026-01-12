@@ -154,13 +154,50 @@ const ProductsManager = () => {
     }));
   };
 
-  const handleAddProduct = () => {
+  // Generate next SKU number based on existing products
+  const generateNextSKU = async () => {
+    try {
+      // Fetch all products to find the maximum SKU
+      const response = await productsAPI.getAll({ page: 0, size: 1000 });
+      
+      if (response.success && response.data) {
+        const allProducts = response.data.content || response.data || [];
+        
+        // Find the maximum numeric SKU
+        let maxSKU = 0;
+        allProducts.forEach(product => {
+          if (product.sku) {
+            const skuNumber = parseInt(product.sku);
+            if (!isNaN(skuNumber) && skuNumber > maxSKU) {
+              maxSKU = skuNumber;
+            }
+          }
+        });
+        
+        // Return next SKU (max + 1)
+        return (maxSKU + 1).toString();
+      }
+      
+      // If no products found, start from 1
+      return '1';
+    } catch (error) {
+      console.error('Failed to generate SKU:', error);
+      // Fallback to timestamp-based SKU if API fails
+      return Date.now().toString().slice(-6);
+    }
+  };
+
+  const handleAddProduct = async () => {
     if (!isSuperAdmin) return;
+    
+    // Generate next SKU automatically
+    const nextSKU = await generateNextSKU();
+    
     setEditingProduct(null);
     setFormData({
       categoryId: categories[0]?.categoryId || '',
       productName: '',
-      sku: '',
+      sku: nextSKU,
       description: '',
       shortDescription: '',
       actualPrice: '',
@@ -701,14 +738,27 @@ const ProductsManager = () => {
                     />
                   </div>
                   <div className="form-group">
-                    <label>SKU</label>
+                    <label>
+                      SKU 
+                      {!editingProduct && <span className="auto-label">(Auto-generated)</span>}
+                      {editingProduct && <span className="auto-label">(Non-editable)</span>}
+                    </label>
                     <input
                       type="text"
                       name="sku"
                       value={formData.sku}
-                      onChange={handleInputChange}
-                      placeholder="e.g. RRB-001"
+                      placeholder={!editingProduct ? "Auto-generated sequence number" : "SKU cannot be changed"}
+                      disabled={true}
+                      readOnly={true}
+                      className="read-only-field sku-field"
+                      title={editingProduct ? "SKU cannot be modified" : "SKU is auto-generated"}
                     />
+                    {!editingProduct && (
+                      <small className="field-hint">✓ Next available SKU: {formData.sku}</small>
+                    )}
+                    {editingProduct && (
+                      <small className="field-hint">⚠️ SKU is permanent and cannot be changed</small>
+                    )}
                   </div>
                 </div>
 

@@ -384,11 +384,11 @@ const Footer = () => {
             <div className="footer-legal">
               <span onClick={() => handleLinkClick('/privacy')}>{text.privacy}</span>
               <span className="divider">|</span>
+              <span onClick={() => handleLinkClick('/terms')}>{text.terms}</span>
+              <span className="divider">|</span>
               <span onClick={() => handleLinkClick('/refund-policy')}>{text.refund}</span>
               <span className="divider">|</span>
               <span onClick={() => handleLinkClick('/shipping-policy')}>{text.shipping}</span>
-              <span className="divider">|</span>
-              <span onClick={() => handleLinkClick('/terms')}>{text.terms}</span>
             </div>
           </div>
         </div>
