@@ -471,7 +471,7 @@ const Header = () => {
 
           <Link to="/" className="logo" onClick={handleLinkClick}>
             <img 
-              src="/Holland-logo.png" 
+              src="/Holland-Logo.png" 
               alt={currentLang === 'ar' ? 'فلورا كويت' : 'Flora Kuwait'} 
               className="logo-image"
             />
