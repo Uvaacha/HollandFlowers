@@ -4,6 +4,7 @@ import { useCart } from './CartContext';
 import './ProductDetail.css';
 import productService from '../services/productService';
 import AddToCartModal from './AddToCartModal';
+import ProductReviews from './ProductReviews';
 
 const ProductDetail = () => {
   const { productId } = useParams();
@@ -8803,6 +8804,11 @@ const ProductDetail = () => {
           </div>
         </div>
       </div>
+
+      {/* Product Reviews Section */}
+      {product && product.id && (
+        <ProductReviews productId={product.id} />
+      )}
 
       {/* NEW: Add to Cart Modal with Suggestions */}
       {showCartModal && addedProduct && (

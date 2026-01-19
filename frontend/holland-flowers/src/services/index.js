@@ -12,6 +12,7 @@ export { default as authService } from './authService';
 // Public APIs
 export { default as productService } from './productService';
 export { default as categoryService } from './categoryService';
+export { default as reviewService } from './reviewService';
 
 // User APIs (requires authentication)
 export { default as orderService, ORDER_STATUS, ORDER_STATUS_DISPLAY } from './orderService';

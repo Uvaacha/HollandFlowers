@@ -851,18 +851,31 @@ const AppContent = ({ currentLang }) => {
       <Header />
       
       <Routes>
+        {/* Home & Product Routes */}
         <Route path="/" element={<HomePage currentLang={currentLang} />} />
         <Route path="/product/:productId" element={<ProductDetail />} />
+        
+        {/* Cart & Checkout Routes */}
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
+        
+        {/* Account & Orders Routes */}
         <Route path="/account" element={<Account />} />
         <Route path="/login" element={<Account />} />
         <Route path="/orders" element={<OrderHistory />} />
         <Route path="/orders/:orderId" element={<OrderDetail />} />
+        
+        {/* Featured Collections */}
         <Route path="/pick-for-you" element={<PickForYou />} />
         <Route path="/offers" element={<Offers50 />} />
+        
+        {/* Main Categories */}
         <Route path="/flowers" element={<PlaceholderPage title="Flowers" currentLang={currentLang} />} />
         <Route path="/bouquets" element={<Bouquets />} />
+        <Route path="/flower-bouquets" element={<Bouquets />} />
+        <Route path="/hand-bouquets" element={<HandBouquets />} />
+        
+        {/* Combos & Add-Ons */}
         <Route path="/combos" element={<Combos />} />
         <Route path="/combos/flowers-perfume" element={<FlowersWithPerfume />} />
         <Route path="/combos/flowers-chocolates" element={<FlowersWithChocolates />} />
@@ -870,37 +883,47 @@ const AppContent = ({ currentLang }) => {
         <Route path="/add-ons/acrylic-toppers" element={<AcrylicToppers />} />
         <Route path="/add-ons/helium-balloons" element={<HeliumBalloons />} />
         <Route path="/add-ons/crown-for-head" element={<CrownForHead />} />
+        
+        {/* Occasions */}
         <Route path="/valentine" element={<PlaceholderPage title="Valentine's Day Special" currentLang={currentLang} />} />
+        <Route path="/valentine-special" element={<ValentineSpecial />} />
+        <Route path="/mothers-day" element={<MothersDaySpecial />} />
         <Route path="/ramadan" element={<RamadanSpecial />} />
         <Route path="/eid-collection" element={<EidCollection />} />
-        <Route path="/tulips" element={<TulipsArrangement />} />
+        <Route path="/birthday" element={<BirthdayBouquets />} />
+        <Route path="/birthday-bouquet" element={<BirthdayBouquets />} />
+        <Route path="/anniversary" element={<PlaceholderPage title="Anniversary Collection" currentLang={currentLang} />} />
+        
+        {/* Flower Types */}
+        <Route path="/orchid-plants" element={<OrchidPlants />} />
+        <Route path="/lilium-bouquets" element={<LiliumBouquets />} />
         <Route path="/lilium-arrangement" element={<LiliumArrangement />} />
-        <Route path="/holland-small" element={<HollandSmallArrangements />} />
-        <Route path="/vase-arrangement" element={<VaseArrangement />} />
+        <Route path="/yellow-rose-bouquet" element={<YellowRoseBouquets />} />
         <Route path="/baby-roses" element={<BabyRoses />} />
         <Route path="/single-flower" element={<SingleFlower />} />
+        <Route path="/tulips" element={<TulipsArrangement />} />
+        
+        {/* Arrangements */}
+        <Route path="/grand-bouquet" element={<GrandBouquets />} />
+        <Route path="/holland-small" element={<HollandSmallArrangements />} />
         <Route path="/holland-style" element={<HollandStyle />} />
+        <Route path="/vase-arrangement" element={<VaseArrangement />} />
         <Route path="/roses-petals" element={<RosesPetals />} />
         <Route path="/flowers-vase-10-25" element={<FlowersVase />} />
         <Route path="/cylinder-vases" element={<CylinderVases />} />
+        
+        {/* Special Items */}
         <Route path="/flowers-mabkhar" element={<FlowersWithMabkhar />} />
         <Route path="/flowers-perfume" element={<FlowersWithPerfume />} />
-        <Route path="/flower-bouquets" element={<Bouquets />} />
-        <Route path="/hand-bouquets" element={<HandBouquets />} />
-        <Route path="/orchid-plants" element={<OrchidPlants />} />
-        <Route path="/lilium-bouquets" element={<LiliumBouquets />} />
-        <Route path="/birthday-bouquet" element={<BirthdayBouquets />} />
-        <Route path="/yellow-rose-bouquet" element={<YellowRoseBouquets />} />
-        <Route path="/grand-bouquet" element={<GrandBouquets />} />
-        <Route path="/valentine-special" element={<ValentineSpecial />} />
-        <Route path="/mothers-day" element={<MothersDaySpecial />} />
         <Route path="/cakes" element={<Cakes />} />
+        
+        {/* Policy Pages */}
         <Route path="/refund-policy" element={<RefundPolicy />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/shipping-policy" element={<ShippingPolicy />} />
         <Route path="/terms" element={<TermsOfService />} />
-        <Route path="/anniversary" element={<PlaceholderPage title="Anniversary Collection" currentLang={currentLang} />} />
-        <Route path="/birthday" element={<BirthdayBouquets />} />
+        
+        {/* 404 Page */}
         <Route path="*" element={<PlaceholderPage title="Page Not Found" currentLang={currentLang} />} />
       </Routes>
       
@@ -933,11 +956,18 @@ function App() {
       <CartProvider>
         <Router>
           <Routes>
+            {/* Admin Routes */}
             <Route path="/admin/*" element={<AdminApp />} />
+            
+            {/* Payment Routes */}
             <Route path="/payment/success" element={<PaymentSuccess />} />
             <Route path="/payment/failure" element={<PaymentFailure />} />
+            
+            {/* OAuth Routes */}
             <Route path="/oauth/callback" element={<OAuthCallback />} />
             <Route path="/login/oauth2/code/google" element={<OAuthCallback />} />
+            
+            {/* Main App Routes */}
             <Route path="/*" element={<AppContent currentLang={currentLang} />} />
           </Routes>
         </Router>
