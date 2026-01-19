@@ -53,12 +53,11 @@ import RefundPolicy from './components/RefundPolicy';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import ShippingPolicy from './components/ShippingPolicy';
 import TermsOfService from './components/TermsOfService';
-import AddToCartModal from './components/AddToCartModal';
 import './App.css';
 import './components/ProductDescription.css';
 
 // ============================================
-// SCROLL TO TOP COMPONENT - Fixed version
+// SCROLL TO TOP COMPONENT
 // ============================================
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -176,7 +175,6 @@ const Icons = {
   ),
 };
 
-
 // ============================================
 // PRODUCT CARD COMPONENT
 // ============================================
@@ -184,12 +182,8 @@ const ProductCard = ({
   product, 
   currentLang, 
   badgeType,
-  cardClassName = 'carousel-product-card',
-  onAddToCart
+  cardClassName = 'carousel-product-card'
 }) => {
-  const { addToCart } = useCart();
-  // REMOVED: const [isAdding, setIsAdding] = useState(false);
-
   const getProductName = (product) => {
     if (currentLang === 'ar') {
       return product.productNameAr || product.nameAr || product.productName || product.name || 'Unknown';
@@ -215,11 +209,8 @@ const ProductCard = ({
     return '';
   };
 
-  // ============ FIXED: Get actual short description from API ============
   const getProductDescription = (product) => {
-    // First, try to get the actual short description from API
     if (currentLang === 'ar') {
-      // Try Arabic description first
       if (product.shortDescriptionAr && product.shortDescriptionAr.trim()) {
         return product.shortDescriptionAr;
       }
@@ -230,7 +221,6 @@ const ProductCard = ({
       }
     }
     
-    // Try English short description
     if (product.shortDescription && product.shortDescription.trim()) {
       return product.shortDescription;
     }
@@ -238,7 +228,6 @@ const ProductCard = ({
       return product.shortDescriptionEn;
     }
     
-    // Try full description as fallback
     if (product.description && product.description.trim()) {
       return product.description.length > 100 
         ? product.description.substring(0, 100) + '...' 
@@ -250,11 +239,9 @@ const ProductCard = ({
         : product.descriptionEn;
     }
     
-    // If no description found, return default based on category
     return getDefaultDescription(product);
   };
 
-  // Fallback default descriptions (only used if API has no description)
   const getDefaultDescription = (product) => {
     const category = (product.categoryName || '').toLowerCase();
     
@@ -337,7 +324,6 @@ const ProductCard = ({
 
   const productName = getProductName(product);
   const categoryName = getCategoryName(product);
-  // ============ FIXED: Use actual description from API ============
   const productDescription = getProductDescription(product);
   const productImage = getProductImage(product);
   const finalPrice = getFinalPrice(product);
@@ -345,8 +331,6 @@ const ProductCard = ({
   const productSlug = getProductSlug(product);
   const showDiscount = hasDiscount(product);
   const discountPercent = getDiscountPercent(product);
-
-  // REMOVED: handleAddToCart function - users must click card to view details
 
   return (
     <div className={cardClassName}>
@@ -404,14 +388,11 @@ const ProductCard = ({
               {currentLang === 'ar' ? 'د.ك' : 'KD'} {parseFloat(finalPrice).toFixed(3)}
             </p>
           </div>
-
-          {/* Plus button removed - click card to view details */}
         </div>
       </div>
     </div>
   );
 };
-
 
 // ============================================
 // REUSABLE PRODUCT CAROUSEL COMPONENT
@@ -428,8 +409,7 @@ const ProductCarousel = ({
   tagText,
   tagTextAr,
   cardClassName = 'carousel-product-card',
-  badgeType = null,
-  onAddToCart
+  badgeType = null
 }) => {
   const carouselRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -539,7 +519,6 @@ const ProductCarousel = ({
                 currentLang={currentLang}
                 badgeType={badgeType}
                 cardClassName={cardClassName}
-                onAddToCart={onAddToCart}
               />
             ))}
           </div>
@@ -564,7 +543,7 @@ const ProductCarousel = ({
 // ============================================
 // FEATURED PRODUCTS CAROUSEL
 // ============================================
-const FeaturedProductsCarousel = ({ currentLang, onAddToCart }) => {
+const FeaturedProductsCarousel = ({ currentLang }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -597,7 +576,6 @@ const FeaturedProductsCarousel = ({ currentLang, onAddToCart }) => {
       title="Our Featured Products"
       titleAr="منتجاتنا المميزة"
       badgeType="featured"
-      onAddToCart={onAddToCart}
     />
   );
 };
@@ -605,7 +583,7 @@ const FeaturedProductsCarousel = ({ currentLang, onAddToCart }) => {
 // ============================================
 // BEST SELLERS CAROUSEL
 // ============================================
-const BestSellersCarousel = ({ currentLang, onAddToCart }) => {
+const BestSellersCarousel = ({ currentLang }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -640,7 +618,6 @@ const BestSellersCarousel = ({ currentLang, onAddToCart }) => {
       subtitle="Customer favorites you'll love"
       subtitleAr="المنتجات المفضلة لدى عملائنا"
       badgeType="bestseller"
-      onAddToCart={onAddToCart}
     />
   );
 };
@@ -648,7 +625,7 @@ const BestSellersCarousel = ({ currentLang, onAddToCart }) => {
 // ============================================
 // NEW ARRIVALS CAROUSEL
 // ============================================
-const NewArrivalsCarousel = ({ currentLang, onAddToCart }) => {
+const NewArrivalsCarousel = ({ currentLang }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -684,7 +661,6 @@ const NewArrivalsCarousel = ({ currentLang, onAddToCart }) => {
       tagText="✨ Just Arrived"
       tagTextAr="✨ وصل حديثاً"
       badgeType="new"
-      onAddToCart={onAddToCart}
     />
   );
 };
@@ -693,14 +669,6 @@ const NewArrivalsCarousel = ({ currentLang, onAddToCart }) => {
 // HOME PAGE COMPONENT
 // ============================================
 const HomePage = ({ currentLang }) => {
-  // AddToCart Modal state
-  // REMOVED: const [showCartModal, setShowCartModal] = useState(false);
-  // REMOVED: const [selectedProduct, setSelectedProduct] = useState(null);
-
-  // REMOVED: handleAddToCartWithModal
-
-  // REMOVED: handleCloseModal
-
   const occasions = [
     { id: 1, name: currentLang === 'ar' ? 'عيد الحب' : "Valentine's Day", image: '/images/Valentine Day Special/Valentine Love Gift Flower.webp', link: '/valentine-special', color: '#D4A5A5', icon: Icons.Heart },
     { id: 2, name: currentLang === 'ar' ? 'عيد ميلاد' : 'Birthday', image: '/images/Birthday and get well soon bouquet/Happy Birthday Peach Baby Rose 11.webp', link: '/birthday-bouquet', color: '#C9B8D4', icon: Icons.Cake },
@@ -855,13 +823,13 @@ const HomePage = ({ currentLang }) => {
           </div>
         </div>
       </section>
-
-      {/* AddToCart Modal with Suggestions */}
-      {/* REMOVED: AddToCartModal */}
     </main>
   );
 };
 
+// ============================================
+// PLACEHOLDER PAGE
+// ============================================
 const PlaceholderPage = ({ title, currentLang }) => {
   return (
     <main className="placeholder-page">
@@ -942,6 +910,9 @@ const AppContent = ({ currentLang }) => {
   );
 };
 
+// ============================================
+// MAIN APP COMPONENT
+// ============================================
 function App() {
   const [currentLang, setCurrentLang] = useState('en');
 

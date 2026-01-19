@@ -1,0 +1,208 @@
+.review-prompt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease;
+  padding: 20px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.review-prompt-modal {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.4s ease;
+  position: relative;
+  text-align: center;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #95a5a6;
+  cursor: pointer;
+  line-height: 1;
+  padding: 5px 10px;
+  transition: color 0.3s ease;
+}
+
+.close-button:hover {
+  color: #2c3e50;
+}
+
+.prompt-icon {
+  margin-bottom: 20px;
+  color: #fbbc04;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.review-prompt-modal h2 {
+  font-size: 2rem;
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.prompt-message {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+.benefits-list {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 25px;
+}
+
+.benefit-item {
+  padding: 10px 0;
+  font-size: 1rem;
+  color: #2c3e50;
+  text-align: left;
+}
+
+.prompt-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.review-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 30px;
+  background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(66, 133, 244, 0.3);
+}
+
+.review-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(66, 133, 244, 0.4);
+}
+
+.later-button {
+  padding: 12px 30px;
+  background: transparent;
+  color: #7f8c8d;
+  border: 2px solid #e0e0e0;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.later-button:hover {
+  background: #f8f9fa;
+  border-color: #bdc3c7;
+  color: #2c3e50;
+}
+
+/* RTL Support */
+.review-prompt-overlay.rtl .close-button {
+  right: auto;
+  left: 15px;
+}
+
+.review-prompt-overlay.rtl .benefit-item {
+  text-align: right;
+}
+
+.review-prompt-overlay.rtl .review-button {
+  flex-direction: row-reverse;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .review-prompt-modal {
+    padding: 30px 20px;
+    margin: 20px;
+  }
+
+  .review-prompt-modal h2 {
+    font-size: 1.5rem;
+  }
+
+  .prompt-message {
+    font-size: 1rem;
+  }
+
+  .review-button {
+    padding: 12px 24px;
+    font-size: 1rem;
+  }
+
+  .later-button {
+    padding: 10px 24px;
+  }
+}
+
+/* Mobile Small Screens */
+@media (max-width: 480px) {
+  .review-prompt-overlay {
+    padding: 10px;
+  }
+
+  .review-prompt-modal {
+    padding: 25px 15px;
+  }
+
+  .prompt-icon svg {
+    width: 50px;
+    height: 50px;
+  }
+}

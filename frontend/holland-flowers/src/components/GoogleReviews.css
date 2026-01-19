@@ -1,0 +1,137 @@
+.google-reviews-section {
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.reviews-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.reviews-header h2 {
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.reviews-header p {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+}
+
+.google-reviews-widget {
+  margin: 40px 0;
+  min-height: 400px;
+}
+
+/* Leave a Review CTA */
+.review-cta {
+  text-align: center;
+  margin: 40px 0;
+}
+
+.leave-review-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 30px;
+  background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(66, 133, 244, 0.3);
+}
+
+.leave-review-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(66, 133, 244, 0.4);
+}
+
+.leave-review-btn svg {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Google Badge */
+.google-badge {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.google-badge-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px 30px;
+  background: white;
+  border-radius: 15px;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.google-badge-link:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.badge-stars {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.stars {
+  color: #fbbc04;
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+}
+
+.rating-text {
+  font-size: 0.9rem;
+  color: #5f6368;
+  margin-top: 2px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .google-reviews-section {
+    padding: 40px 15px;
+  }
+
+  .reviews-header h2 {
+    font-size: 2rem;
+  }
+
+  .leave-review-btn {
+    padding: 12px 24px;
+    font-size: 1rem;
+  }
+
+  .google-badge-link {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+/* Arabic Language Support */
+[dir="rtl"] .leave-review-btn,
+[dir="rtl"] .google-badge-link {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .badge-stars {
+  align-items: flex-end;
+}

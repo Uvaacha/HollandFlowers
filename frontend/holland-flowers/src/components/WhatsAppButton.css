@@ -4,7 +4,7 @@
 
 .whatsapp-float-container {
   position: fixed;
-  bottom: 25px;
+  bottom: 90px; /* Increased from 25px to avoid footer overlap */
   right: 25px;
   z-index: 9999;
   display: flex;
@@ -148,7 +148,7 @@
 
 @media (max-width: 768px) {
   .whatsapp-float-container {
-    bottom: 20px;
+    bottom: 80px; /* Increased from 20px */
     right: 20px;
   }
 
@@ -180,7 +180,7 @@
 
 @media (max-width: 480px) {
   .whatsapp-float-container {
-    bottom: 15px;
+    bottom: 70px; /* Increased from 15px */
     right: 15px;
   }
 
@@ -212,7 +212,7 @@
 
 @media (max-width: 360px) {
   .whatsapp-float-container {
-    bottom: 12px;
+    bottom: 65px; /* Increased from 12px */
     right: 12px;
   }
 
@@ -266,8 +266,8 @@
     display: none;
   }
 }
+
 /* PREVENT OVERSCROLL / BOUNCE EFFECT */
 html {
   overscroll-behavior: none;
 }
-
