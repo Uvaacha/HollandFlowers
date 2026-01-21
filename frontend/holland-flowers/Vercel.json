@@ -1,4 +1,26 @@
 {
+  "redirects": [
+    {
+      "source": "/flowers-in-kuwait",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/flower-delivery-kuwait",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/same-day-flower-delivery-kuwait",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/birthday-flowers-kuwait",
+      "destination": "/",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/sitemap.xml",
