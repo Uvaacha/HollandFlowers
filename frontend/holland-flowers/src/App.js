@@ -4,6 +4,15 @@ import { CartProvider, useCart } from './components/CartContext';
 import { AuthProvider } from './contexts/AuthContext';
 import Header from './components/Header';
 import AdminApp from './admin/AdminApp';
+
+// ============================================
+// SEO KEYWORD PAGES - NEW IMPORTS
+// ============================================
+import FlowersInKuwait from './pages/FlowersInKuwait';
+import FlowerDeliveryKuwait from './pages/FlowerDeliveryKuwait';
+import SameDayDeliveryKuwait from './pages/SameDayDeliveryKuwait';
+import BirthdayFlowersKuwait from './pages/BirthdayFlowersKuwait';
+
 import ImageSlideshow from './components/ImageSlideshow';
 import AddOns from './components/AddOns';
 import AcrylicToppers from './components/AcrylicToppers';
@@ -854,6 +863,14 @@ const AppContent = ({ currentLang }) => {
         {/* Home & Product Routes */}
         <Route path="/" element={<HomePage currentLang={currentLang} />} />
         <Route path="/product/:productId" element={<ProductDetail />} />
+        
+        {/* ============================================ */}
+        {/* SEO KEYWORD PAGES - NEW ROUTES */}
+        {/* ============================================ */}
+        <Route path="/flowers-in-kuwait" element={<FlowersInKuwait />} />
+        <Route path="/flower-delivery-kuwait" element={<FlowerDeliveryKuwait />} />
+        <Route path="/same-day-flower-delivery-kuwait" element={<SameDayDeliveryKuwait />} />
+        <Route path="/birthday-flowers-kuwait" element={<BirthdayFlowersKuwait />} />
         
         {/* Cart & Checkout Routes */}
         <Route path="/cart" element={<Cart />} />
