@@ -858,6 +858,11 @@ const AppContent = ({ currentLang }) => {
       <Routes>
         {/* Home & Product Routes */}
         <Route path="/" element={<HomePage currentLang={currentLang} />} />
+        {/* SEO Landing Pages */}
+        <Route path="/flowers-in-kuwait" element={<HomePage currentLang={currentLang} />} />
+        <Route path="/flower-delivery-kuwait" element={<HomePage currentLang={currentLang} />} />
+        <Route path="/same-day-flower-delivery-kuwait" element={<HomePage currentLang={currentLang} />} />
+        <Route path="/birthday-flowers-kuwait" element={<HomePage currentLang={currentLang} />} />
         <Route path="/product/:productId" element={<ProductDetail />} />
         
         
