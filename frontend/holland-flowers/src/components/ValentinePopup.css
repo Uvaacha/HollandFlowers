@@ -1,0 +1,651 @@
+/* ============================================
+   VALENTINE'S DAY POPUP STYLES
+   ============================================ */
+
+/* Backdrop */
+.valentine-popup-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  z-index: 9998;
+  animation: fadeIn 0.3s ease-out;
+  overflow: hidden;
+}
+
+/* Popup Container */
+.valentine-popup-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  background: linear-gradient(135deg, #fff0f5 0%, #ffe4e9 50%, #ffd6dd 100%);
+  border-radius: 25px;
+  padding: 25px 20px;
+  box-shadow: 
+    0 20px 60px rgba(255, 105, 135, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+  z-index: 9999;
+  animation: popupSlideIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Close Button */
+.valentine-popup-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #ff69a5;
+  color: #ff1744;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.valentine-popup-close:hover {
+  background: #ff1744;
+  color: white;
+  transform: rotate(90deg) scale(1.1);
+  box-shadow: 0 5px 20px rgba(255, 23, 68, 0.4);
+}
+
+/* Decorative Corner Hearts */
+.valentine-popup-hearts {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+.heart-left {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 30px;
+  animation: heartBeat 1.5s ease-in-out infinite;
+}
+
+.heart-right {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 30px;
+  animation: heartBeat 1.5s ease-in-out 0.5s infinite;
+}
+
+/* Content Area */
+.valentine-popup-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* Header */
+.valentine-popup-header {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.valentine-popup-title {
+  font-size: 28px;
+  font-weight: bold;
+  background: linear-gradient(135deg, #ff1744 0%, #ff6b9d 50%, #ff1744 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  animation: titlePulse 2s ease-in-out infinite;
+}
+
+.title-heart {
+  animation: heartBounce 2s ease-in-out infinite;
+}
+
+.valentine-popup-subtitle {
+  font-size: 14px;
+  color: #d81b60;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* Countdown */
+.valentine-countdown {
+  background: linear-gradient(135deg, #ff1744 0%, #f50057 100%);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 15px;
+  text-align: center;
+  margin-bottom: 15px;
+  box-shadow: 0 8px 20px rgba(255, 23, 68, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.countdown-label {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.countdown-number {
+  font-size: 30px;
+  font-weight: bold;
+  animation: numberPulse 1s ease-in-out infinite;
+}
+
+/* Offers List */
+.valentine-offers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.valentine-offer-item {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  border: 2px solid rgba(255, 105, 165, 0.2);
+  transition: all 0.3s ease;
+}
+
+.valentine-offer-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(255, 105, 165, 0.3);
+  border-color: #ff69a5;
+}
+
+.offer-icon {
+  font-size: 28px;
+}
+
+.offer-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: #d81b60;
+  line-height: 1.3;
+}
+
+/* Discount Badge */
+.valentine-discount {
+  background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+  padding: 15px;
+  border-radius: 15px;
+  text-align: center;
+  margin-bottom: 15px;
+  box-shadow: 
+    0 8px 20px rgba(255, 20, 147, 0.4),
+    0 0 0 3px white inset;
+  position: relative;
+  overflow: hidden;
+}
+
+.valentine-discount::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shimmer 3s infinite;
+}
+
+.discount-text {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+}
+
+.discount-number {
+  display: block;
+  font-size: 36px;
+  font-weight: bold;
+  color: white;
+  margin: 3px 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.discount-subtext {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+}
+
+/* Action Buttons */
+.valentine-popup-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.btn-shop-now {
+  background: linear-gradient(135deg, #ff1744 0%, #f50057 100%);
+  color: white;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(255, 23, 68, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shop-now::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.btn-shop-now:hover::before {
+  left: 100%;
+}
+
+.btn-shop-now:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(255, 23, 68, 0.5);
+}
+
+.btn-shop-now:active {
+  transform: translateY(-1px);
+}
+
+.btn-icon,
+.btn-sparkle {
+  font-size: 20px;
+  animation: bounce 1s ease-in-out infinite;
+}
+
+.btn-remind-later {
+  background: transparent;
+  color: #d81b60;
+  border: 2px solid #ff69a5;
+  padding: 12px 25px;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-remind-later:hover {
+  background: rgba(255, 105, 165, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Footer Message */
+.valentine-popup-footer {
+  text-align: center;
+  font-size: 13px;
+  color: #d81b60;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* Floating Hearts Animation */
+.floating-heart {
+  position: absolute;
+  font-size: 30px;
+  animation: floatUp 8s ease-in-out infinite;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.heart-1 { left: 10%; animation-delay: 0s; }
+.heart-2 { left: 20%; animation-delay: 1s; }
+.heart-3 { left: 30%; animation-delay: 2s; }
+.heart-4 { left: 40%; animation-delay: 0.5s; }
+.heart-5 { left: 50%; animation-delay: 1.5s; }
+.heart-6 { left: 60%; animation-delay: 2.5s; }
+.heart-7 { left: 70%; animation-delay: 3s; }
+.heart-8 { left: 80%; animation-delay: 1s; }
+.heart-9 { left: 90%; animation-delay: 2s; }
+.heart-10 { left: 15%; animation-delay: 3.5s; }
+.heart-11 { left: 25%; animation-delay: 0.8s; }
+.heart-12 { left: 35%; animation-delay: 1.8s; }
+.heart-13 { left: 65%; animation-delay: 2.8s; }
+.heart-14 { left: 75%; animation-delay: 0.3s; }
+.heart-15 { left: 85%; animation-delay: 1.3s; }
+
+/* Decorative Rose Petals */
+.valentine-petals {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.petal {
+  position: absolute;
+  font-size: 20px;
+  animation: petalFall 10s ease-in-out infinite;
+  opacity: 0;
+}
+
+.petal-1 { left: 5%; animation-delay: 0s; }
+.petal-2 { left: 15%; animation-delay: 2s; }
+.petal-3 { left: 25%; animation-delay: 4s; }
+.petal-4 { left: 35%; animation-delay: 1s; }
+.petal-5 { left: 45%; animation-delay: 3s; }
+.petal-6 { left: 55%; animation-delay: 5s; }
+.petal-7 { left: 65%; animation-delay: 2s; }
+.petal-8 { left: 75%; animation-delay: 4s; }
+.petal-9 { left: 85%; animation-delay: 1s; }
+.petal-10 { left: 95%; animation-delay: 3s; }
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes popupSlideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes heartBeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.1);
+  }
+  50% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes heartBounce {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-10px) scale(1.1);
+  }
+}
+
+@keyframes titlePulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes numberPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) translateY(-100%);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes floatUp {
+  0% {
+    bottom: -10%;
+    opacity: 0;
+    transform: translateX(0) rotate(0deg);
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    bottom: 110%;
+    opacity: 0;
+    transform: translateX(100px) rotate(360deg);
+  }
+}
+
+@keyframes petalFall {
+  0% {
+    top: -10%;
+    opacity: 0;
+    transform: translateX(0) rotate(0deg);
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    top: 110%;
+    opacity: 0;
+    transform: translateX(-50px) rotate(360deg);
+  }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 768px) {
+  .valentine-popup-container {
+    width: 95%;
+    padding: 20px 15px;
+    max-height: 90vh;
+  }
+
+  .valentine-popup-title {
+    font-size: 24px;
+  }
+
+  .valentine-popup-subtitle {
+    font-size: 13px;
+  }
+
+  .countdown-number {
+    font-size: 26px;
+  }
+
+  .countdown-label {
+    font-size: 14px;
+  }
+
+  .valentine-offers {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .valentine-offer-item {
+    padding: 8px;
+  }
+
+  .offer-icon {
+    font-size: 24px;
+  }
+
+  .offer-text {
+    font-size: 12px;
+  }
+
+  .discount-number {
+    font-size: 32px;
+  }
+
+  .btn-shop-now {
+    font-size: 15px;
+    padding: 14px 20px;
+  }
+
+  .floating-heart {
+    font-size: 24px;
+  }
+
+  .heart-left,
+  .heart-right {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .valentine-popup-container {
+    padding: 18px 12px;
+  }
+
+  .valentine-popup-title {
+    font-size: 22px;
+  }
+
+  .countdown-label {
+    font-size: 13px;
+  }
+
+  .countdown-number {
+    font-size: 24px;
+  }
+
+  .offer-icon {
+    font-size: 22px;
+  }
+
+  .offer-text {
+    font-size: 11px;
+  }
+
+  .discount-number {
+    font-size: 28px;
+  }
+
+  .btn-shop-now {
+    font-size: 14px;
+    padding: 12px 18px;
+  }
+
+  .valentine-popup-close {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+  }
+}
+
+/* Dark Mode Support (Optional) */
+@media (prefers-color-scheme: dark) {
+  .valentine-popup-container {
+    background: linear-gradient(135deg, #2c1a1e 0%, #3d2025 50%, #4a2028 100%);
+  }
+
+  .valentine-offer-item {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 105, 165, 0.3);
+  }
+
+  .offer-text {
+    color: #ff8fa3;
+  }
+
+  .valentine-popup-subtitle,
+  .valentine-popup-footer {
+    color: #ff8fa3;
+  }
+}
+
+/* Accessibility */
+.valentine-popup-close:focus,
+.btn-shop-now:focus,
+.btn-remind-later:focus {
+  outline: 3px solid #ff69a5;
+  outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+  .valentine-popup-backdrop,
+  .valentine-popup-container {
+    display: none;
+  }
+}
