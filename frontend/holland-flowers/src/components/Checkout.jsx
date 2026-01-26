@@ -797,7 +797,7 @@ const Checkout = () => {
           <div className="checkout-header">
             <div className="checkout-logo">
               <Link to="/">
-                <img src="/Holland Logo.png" alt="Holland Flowers" />
+                <img src="/Holland-Logo.jpg" alt="Holland Flowers" />
               </Link>
             </div>
             <Link to="/cart" className="back-to-cart-link">

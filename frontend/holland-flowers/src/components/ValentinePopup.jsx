@@ -59,7 +59,7 @@ const ValentinePopup = () => {
       {/* Backdrop */}
       <div className="valentine-popup-backdrop" onClick={handleClose}>
         {/* Floating Hearts Animation */}
-        {[...Array(15)].map((_, i) => (
+        {[...Array(20)].map((_, i) => (
           <div key={i} className={`floating-heart heart-${i + 1}`}>
             ❤️
           </div>
@@ -68,41 +68,47 @@ const ValentinePopup = () => {
 
       {/* Popup Container */}
       <div className="valentine-popup-container" onClick={(e) => e.stopPropagation()}>
+        
+        {/* Decorative flowers in corners */}
+        <div className="corner-flower top-left">🌸</div>
+        <div className="corner-flower top-right">🌸</div>
+        <div className="corner-flower side-left">🌸</div>
+        
         {/* Close Button */}
         <button className="valentine-popup-close" onClick={handleClose} aria-label="Close popup">
-          ✕
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+          </svg>
         </button>
-
-        {/* Decorative Hearts */}
-        <div className="valentine-popup-hearts">
-          <span className="heart-left">💕</span>
-          <span className="heart-right">💕</span>
-        </div>
 
         {/* Content */}
         <div className="valentine-popup-content">
+          
           {/* Header */}
           <div className="valentine-popup-header">
+            <div className="header-hearts">
+              <span className="heart-icon">💕</span>
+            </div>
             <h2 className="valentine-popup-title">
-              <span className="title-heart">💝</span>
               Valentine's Day Special
-              <span className="title-heart">💝</span>
             </h2>
             <p className="valentine-popup-subtitle">
+              <span className="subtitle-flower">🌸</span>
               Celebrate Love with Our Exclusive Collection
+              <span className="subtitle-flower">🌸</span>
             </p>
           </div>
 
           {/* Countdown */}
           {daysLeft > 0 && daysLeft <= 30 && (
             <div className="valentine-countdown">
-              <span className="countdown-label">Only</span>
+              <span className="countdown-text">Only</span>
               <span className="countdown-number">{daysLeft}</span>
-              <span className="countdown-label">{daysLeft === 1 ? 'Day' : 'Days'} Left!</span>
+              <span className="countdown-text">Days Left!</span>
             </div>
           )}
 
-          {/* Offers */}
+          {/* Offers Grid */}
           <div className="valentine-offers">
             <div className="valentine-offer-item">
               <span className="offer-icon">🌹</span>
@@ -124,7 +130,7 @@ const ValentinePopup = () => {
 
           {/* Discount Badge */}
           <div className="valentine-discount">
-            <span className="discount-text">Up to</span>
+            <span className="discount-label">Up to</span>
             <span className="discount-number">20% OFF</span>
             <span className="discount-subtext">on Valentine's Collection</span>
           </div>
@@ -145,15 +151,6 @@ const ValentinePopup = () => {
           <p className="valentine-popup-footer">
             Make this Valentine's Day unforgettable! 💕
           </p>
-        </div>
-
-        {/* Decorative Rose Petals */}
-        <div className="valentine-petals">
-          {[...Array(10)].map((_, i) => (
-            <div key={i} className={`petal petal-${i + 1}`}>
-              🌸
-            </div>
-          ))}
         </div>
       </div>
     </>

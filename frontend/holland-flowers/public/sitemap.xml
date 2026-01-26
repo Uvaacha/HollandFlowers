@@ -1,352 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  
-  <!-- ============================================ -->
-  <!-- HOMEPAGE - HIGHEST PRIORITY -->
-  <!-- ============================================ -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- HOMEPAGE -->
   <url>
     <loc>https://www.flowerskw.com/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.flowerskw.com/"/>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://www.flowerskw.com/?lang=ar"/>
-    <lastmod>2026-01-21</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-01-26</lastmod>
     <priority>1.0</priority>
   </url>
 
-  <!-- ============================================ -->
-  <!-- SEO KEYWORD PAGES - HIGH PRIORITY (NEW) -->
-  <!-- ============================================ -->
-  <url>
-    <loc>https://www.flowerskw.com/flowers-in-kuwait</loc>
-    <lastmod>2026-01-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://www.flowerskw.com/flower-delivery-kuwait</loc>
-    <lastmod>2026-01-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://www.flowerskw.com/same-day-flower-delivery-kuwait</loc>
-    <lastmod>2026-01-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://www.flowerskw.com/birthday-flowers-kuwait</loc>
-    <lastmod>2026-01-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- ============================================ -->
-  <!-- FEATURED & OFFERS - HIGH PRIORITY -->
-  <!-- ============================================ -->
-  <url>
-    <loc>https://www.flowerskw.com/pick-for-you</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/offers</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- ============================================ -->
-  <!-- MAIN BOUQUET PAGES - HIGH PRIORITY -->
-  <!-- ============================================ -->
-  <url>
-    <loc>https://www.flowerskw.com/bouquets</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/flower-bouquets</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/hand-bouquets</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/grand-bouquet</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- ============================================ -->
-  <!-- OCCASION-BASED PAGES - HIGH PRIORITY -->
-  <!-- ============================================ -->
-  <url>
-    <loc>https://www.flowerskw.com/birthday-bouquet</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/birthday</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  
+  <!-- KEY LANDING PAGES -->
   <url>
     <loc>https://www.flowerskw.com/valentine-special</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-01-26</lastmod>
     <priority>0.9</priority>
   </url>
-  
+
+  <url>
+    <loc>https://www.flowerskw.com/birthday</loc>
+    <lastmod>2026-01-26</lastmod>
+    <priority>0.9</priority>
+  </url>
+
   <url>
     <loc>https://www.flowerskw.com/mothers-day</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/ramadan</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/eid-collection</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/anniversary</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-01-26</lastmod>
     <priority>0.8</priority>
   </url>
 
-  <!-- ============================================ -->
-  <!-- FLOWER TYPES - MEDIUM-HIGH PRIORITY -->
-  <!-- ============================================ -->
+  <!-- CATEGORY PAGES -->
   <url>
-    <loc>https://www.flowerskw.com/yellow-rose-bouquet</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://www.flowerskw.com/bouquets</loc>
+    <lastmod>2026-01-26</lastmod>
     <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/orchid-plants</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/lilium-bouquets</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/tulips</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/baby-roses</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/single-flower</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/roses-petals</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
   </url>
 
-  <!-- ============================================ -->
-  <!-- ARRANGEMENTS - MEDIUM PRIORITY -->
-  <!-- ============================================ -->
-  <url>
-    <loc>https://www.flowerskw.com/vase-arrangement</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/lilium-arrangement</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/holland-style</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/holland-small</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/flowers-vase-10-25</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/cylinder-vases</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <!-- ============================================ -->
-  <!-- COMBOS & GIFTS - MEDIUM-HIGH PRIORITY -->
-  <!-- ============================================ -->
   <url>
     <loc>https://www.flowerskw.com/combos</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/combos/flowers-perfume</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/combos/flowers-chocolates</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/flowers-perfume</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/flowers-mabkhar</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/cakes</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-01-26</lastmod>
     <priority>0.7</priority>
   </url>
 
-  <!-- ============================================ -->
-  <!-- ADD-ONS - MEDIUM PRIORITY -->
-  <!-- ============================================ -->
-  <url>
-    <loc>https://www.flowerskw.com/add-ons</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/add-ons/acrylic-toppers</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/add-ons/helium-balloons</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.flowerskw.com/add-ons/crown-for-head</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <!-- ============================================ -->
-  <!-- POLICY PAGES - LOW PRIORITY -->
-  <!-- ============================================ -->
-  <url>
-    <loc>https://www.flowerskw.com/refund-policy</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  
+  <!-- POLICY PAGES -->
   <url>
     <loc>https://www.flowerskw.com/privacy</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-  </url>
-
-  <url>
-    <loc>https://www.flowerskw.com/shipping-policy</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
     <loc>https://www.flowerskw.com/terms</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
 
