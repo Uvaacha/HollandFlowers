@@ -27,7 +27,7 @@ const ProductDetail = () => {
   const [addedProduct, setAddedProduct] = useState(null);
   
   // NEW: States for Number Balloon Customization
-  const [balloonColor, setBalloonColor] = useState(''); // 'gold', 'silver', 'both'
+  const [balloonColor, setBalloonColor] = useState(''); // 'gold', 'silver'
   const [selectedNumbers, setSelectedNumbers] = useState([]); // Array of selected numbers
 
   useEffect(() => {
@@ -8556,7 +8556,9 @@ const ProductDetail = () => {
       selectedVariant: selectedVariant,
       price: selectedVariant 
         ? product.variants?.find(v => v.nameEn === selectedVariant || v.nameAr === selectedVariant)?.price 
-        : (product.salePrice || product.originalPrice),
+        : (isNumberBalloonProduct() && selectedNumbers.length > 0 
+            ? (product.salePrice || product.originalPrice) * selectedNumbers.length 
+            : (product.salePrice || product.originalPrice)),
       deliveryDate: deliveryDate,
       deliveryTime: deliveryTime,
       cardMessage: cardMessage,
@@ -8567,7 +8569,7 @@ const ProductDetail = () => {
     if (isNumberBalloonProduct()) {
       cartOptions.balloonColor = balloonColor;
       cartOptions.selectedNumbers = selectedNumbers;
-      cartOptions.customizationText = `${balloonColor === 'both' ? 'Gold & Silver' : balloonColor === 'gold' ? 'Gold' : 'Silver'} - Numbers: ${selectedNumbers.join(', ')}`;
+      cartOptions.customizationText = `${balloonColor === 'gold' ? 'Gold' : 'Silver'} - Numbers: ${selectedNumbers.join(', ')} (${selectedNumbers.length} ${selectedNumbers.length === 1 ? 'balloon' : 'balloons'})`;
     }
     
     // Add to cart
@@ -8619,6 +8621,17 @@ const ProductDetail = () => {
   const currentPrice = product.salePrice;
   const today = new Date().toISOString().split('T')[0];
 
+  // Calculate dynamic price for number balloons (price per balloon)
+  const calculateBalloonPrice = () => {
+    if (isNumberBalloonProduct() && selectedNumbers.length > 0) {
+      const pricePerBalloon = product.salePrice || product.originalPrice || 0;
+      return pricePerBalloon * selectedNumbers.length;
+    }
+    return currentPrice;
+  };
+
+  const displayPrice = isNumberBalloonProduct() ? calculateBalloonPrice() : currentPrice;
+
   return (
     <div className={`product-detail-page ${currentLang === 'ar' ? 'rtl' : ''}`}>
       <div className="container">
@@ -8655,16 +8668,27 @@ const ProductDetail = () => {
                 </span>
               ) : (
                 <>
-                  {product.originalPrice && (
-                    <span className="original-price">
-                      {product.originalPrice.toFixed(3)} KWD
-                    </span>
-                  )}
-                  {currentPrice && (
-                    <span className="sale-price">{currentPrice.toFixed(3)} KWD</span>
-                  )}
-                  {product.discount > 0 && (
-                    <span className="discount-badge">{product.discount}% {currentLang === 'ar' ? 'خصم' : 'OFF'}</span>
+                  {isNumberBalloonProduct() && selectedNumbers.length > 0 ? (
+                    <>
+                      <span className="sale-price">{displayPrice.toFixed(3)} KWD</span>
+                      <span className="price-note" style={{ fontSize: '13px', color: '#666', marginLeft: '8px' }}>
+                        ({selectedNumbers.length} {selectedNumbers.length === 1 ? (currentLang === 'ar' ? 'بالون' : 'balloon') : (currentLang === 'ar' ? 'بالونات' : 'balloons')} × {currentPrice.toFixed(3)} KWD)
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      {product.originalPrice && (
+                        <span className="original-price">
+                          {product.originalPrice.toFixed(3)} KWD
+                        </span>
+                      )}
+                      {currentPrice && (
+                        <span className="sale-price">{currentPrice.toFixed(3)} KWD</span>
+                      )}
+                      {product.discount > 0 && (
+                        <span className="discount-badge">{product.discount}% {currentLang === 'ar' ? 'خصم' : 'OFF'}</span>
+                      )}
+                    </>
                   )}
                 </>
               )}
@@ -8699,14 +8723,6 @@ const ProductDetail = () => {
                     >
                       <span className="color-circle" style={{ background: 'linear-gradient(135deg, #C0C0C0, #A9A9A9)' }}></span>
                       <span>{currentLang === 'ar' ? 'فضي' : 'Silver'}</span>
-                    </button>
-                    <button
-                      type="button"
-                      className={`color-option ${balloonColor === 'both' ? 'selected' : ''}`}
-                      onClick={() => setBalloonColor('both')}
-                    >
-                      <span className="color-circle" style={{ background: 'linear-gradient(90deg, #FFD700 50%, #C0C0C0 50%)' }}></span>
-                      <span>{currentLang === 'ar' ? 'كلاهما' : 'Both'}</span>
                     </button>
                   </div>
                 </div>
