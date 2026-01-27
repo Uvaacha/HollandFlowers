@@ -861,7 +861,7 @@ const Account = () => {
         <div className="account-decor-section">
           <div className="decor-content">
             <div className="decor-logo">
-              <img src="/Holland Logo.png" alt="Holland Flowers" />
+              <img src="/Holland-Logo.png" alt="Holland Flowers" />
             </div>
             <h2>{currentLang === 'ar' ? 'هولاند فلاورز' : 'Holland Flowers'}</h2>
             <p>{currentLang === 'ar' ? 'أجمل الزهور الطازجة في الكويت' : 'The finest fresh flowers in Kuwait'}</p>

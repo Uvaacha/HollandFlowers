@@ -103,7 +103,7 @@ const PaymentSuccess = () => {
       <div className="payment-result-container">
         {/* Logo */}
         <Link to="/" className="result-logo">
-          <img src="/Holland Logo.jpg" alt="Holland Flowers" />
+          <img src="/Holland Logo.png" alt="Holland Flowers" />
         </Link>
 
         {/* Success Icon */}

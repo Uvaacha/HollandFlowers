@@ -238,8 +238,15 @@ const Cart = () => {
                         </div>
 
                         {/* Delivery & Card Info */}
-                        {(item.deliveryDate || item.deliveryTime || item.cardMessage || item.senderInfo) && (
+                        {(item.deliveryDate || item.deliveryTime || item.cardMessage || item.senderInfo || item.customizationText) && (
                           <div className="cart-item-extras">
+                            {item.customizationText && (
+                              <div className="extra-item customization-item">
+                                <span className="extra-icon">🎈</span>
+                                <span className="extra-label">{currentLang === 'ar' ? 'التخصيص:' : 'Customization:'}</span>
+                                <span className="extra-value">{item.customizationText}</span>
+                              </div>
+                            )}
                             {item.deliveryDate && (
                               <div className="extra-item">
                                 <span className="extra-icon">📅</span>

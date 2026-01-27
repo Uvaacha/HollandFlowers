@@ -133,7 +133,7 @@ const AdminLayout = ({ children, onLogout, adminUser }) => {
       <aside className={`admin-sidebar ${mobileMenuOpen ? 'mobile-open' : ''}`}>
         <div className="sidebar-header">
           <Link to="/admin" className="sidebar-logo">
-            <img src="/Holland-Logo.jpg" alt="Holland Flowers" />
+            <img src="/Holland-Logo.png" alt="Holland Flowers" />
             {!sidebarCollapsed && <span>Holland Admin</span>}
           </Link>
           <button 

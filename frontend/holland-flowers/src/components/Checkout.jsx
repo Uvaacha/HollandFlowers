@@ -502,7 +502,11 @@ const Checkout = () => {
           cardMessage: item.cardMessage || '',
           deliveryDate: item.deliveryDate || '',
           deliveryTimeSlot: item.deliveryTime || '',
-          specialInstructions: item.specialInstructions || ''
+          specialInstructions: item.specialInstructions || '',
+          // Number Balloon Customization
+          customizationText: item.customizationText || '',
+          balloonColor: item.balloonColor || '',
+          selectedNumbers: item.selectedNumbers || []
         };
       });
 
@@ -797,7 +801,7 @@ const Checkout = () => {
           <div className="checkout-header">
             <div className="checkout-logo">
               <Link to="/">
-                <img src="/Holland-Logo.jpg" alt="Holland Flowers" />
+                <img src="/Holland-Logo.png" alt="Holland Flowers" />
               </Link>
             </div>
             <Link to="/cart" className="back-to-cart-link">
@@ -1332,6 +1336,13 @@ const Checkout = () => {
                       )}
                       <span className="price-current">{text.kwd} {(item.price * item.quantity).toFixed(3)}</span>
                     </span>
+                    {item.customizationText && (
+                      <span className="product-meta-info customization-info">
+                        <span className="meta-icon">🎈</span>
+                        <span className="meta-label">{currentLang === 'ar' ? 'التخصيص:' : 'Customization:'}</span>
+                        <span className="meta-value customization-value">{item.customizationText}</span>
+                      </span>
+                    )}
                     {item.deliveryDate && (
                       <span className="product-meta-info">
                         <span className="meta-label">{text.deliveryDate}:</span>

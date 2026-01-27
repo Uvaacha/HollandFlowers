@@ -177,13 +177,18 @@ export const CartProvider = ({ children }) => {
       deliveryTime: options.deliveryTime || '',
       cardMessage: options.cardMessage || '',
       senderInfo: options.senderInfo || '',
+      // Number Balloon Customization
+      customizationText: options.customizationText || '',
+      balloonColor: options.balloonColor || '',
+      selectedNumbers: options.selectedNumbers || [],
     };
 
     // Update local state first (optimistic update)
     setCartItems(prevItems => {
       const existingIndex = prevItems.findIndex(
         item => item.id === newItem.id && 
-        item.selectedVariant === newItem.selectedVariant
+        item.selectedVariant === newItem.selectedVariant &&
+        item.customizationText === newItem.customizationText
       );
 
       if (existingIndex > -1) {
@@ -220,16 +225,16 @@ export const CartProvider = ({ children }) => {
   }, [isAuthenticated]);
 
   // Remove item from cart
-  const removeFromCart = useCallback(async (itemId, selectedVariant = null) => {
+  const removeFromCart = useCallback(async (itemId, selectedVariant = null, customizationText = '') => {
     // Find the item to get its cartItemId if available
     const itemToRemove = cartItems.find(
-      item => item.id === itemId && item.selectedVariant === selectedVariant
+      item => item.id === itemId && item.selectedVariant === selectedVariant && item.customizationText === customizationText
     );
 
     // Update local state first
     setCartItems(prevItems => 
       prevItems.filter(item => 
-        !(item.id === itemId && item.selectedVariant === selectedVariant)
+        !(item.id === itemId && item.selectedVariant === selectedVariant && item.customizationText === customizationText)
       )
     );
 
@@ -256,7 +261,8 @@ export const CartProvider = ({ children }) => {
 
     // Find the item to get its cartItemId
     const itemToUpdate = cartItems.find(
-      item => item.id === itemId && item.selectedVariant === selectedVariant
+      // eslint-disable-next-line no-undef
+      item => item.id === itemId && item.selectedVariant === selectedVariant && item.customizationText === customizationText
     );
 
     // Update local state first

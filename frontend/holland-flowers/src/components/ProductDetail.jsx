@@ -25,6 +25,10 @@ const ProductDetail = () => {
   // NEW: States for Add to Cart Modal
   const [showCartModal, setShowCartModal] = useState(false);
   const [addedProduct, setAddedProduct] = useState(null);
+  
+  // NEW: States for Number Balloon Customization
+  const [balloonColor, setBalloonColor] = useState(''); // 'gold', 'silver', 'both'
+  const [selectedNumbers, setSelectedNumbers] = useState([]); // Array of selected numbers
 
   useEffect(() => {
     const savedLang = localStorage.getItem('preferredLanguage') || 'en';
@@ -8520,6 +8524,18 @@ const ProductDetail = () => {
       deliveryTime: !deliveryTime
     };
     
+    // Additional validation for number balloon products
+    if (isNumberBalloonProduct()) {
+      if (!balloonColor) {
+        alert(currentLang === 'ar' ? 'الرجاء اختيار اللون' : 'Please select a color');
+        return;
+      }
+      if (selectedNumbers.length === 0) {
+        alert(currentLang === 'ar' ? 'الرجاء اختيار رقم واحد على الأقل' : 'Please select at least one number');
+        return;
+      }
+    }
+    
     setFormErrors(errors);
     
     // If there are errors, don't proceed
@@ -8547,6 +8563,13 @@ const ProductDetail = () => {
       senderInfo: senderInfo,
     };
     
+    // Add number balloon customization if applicable
+    if (isNumberBalloonProduct()) {
+      cartOptions.balloonColor = balloonColor;
+      cartOptions.selectedNumbers = selectedNumbers;
+      cartOptions.customizationText = `${balloonColor === 'both' ? 'Gold & Silver' : balloonColor === 'gold' ? 'Gold' : 'Silver'} - Numbers: ${selectedNumbers.join(', ')}`;
+    }
+    
     // Add to cart
     addToCart(product, 1, cartOptions);
     
@@ -8573,6 +8596,24 @@ const ProductDetail = () => {
       navigator.clipboard.writeText(window.location.href);
       alert(currentLang === 'ar' ? 'تم نسخ الرابط!' : 'Link copied!');
     }
+  };
+  
+  // Helper function to check if product is a number balloon product
+  const isNumberBalloonProduct = () => {
+    const nameEn = product.nameEn?.toLowerCase() || '';
+    const nameAr = product.nameAr || '';
+    return nameEn.includes('number') && (nameEn.includes('gold') || nameEn.includes('silver'));
+  };
+  
+  // Handler for number selection
+  const handleNumberToggle = (number) => {
+    setSelectedNumbers(prev => {
+      if (prev.includes(number)) {
+        return prev.filter(n => n !== number);
+      } else {
+        return [...prev, number].sort((a, b) => a - b);
+      }
+    });
   };
 
   const currentPrice = product.salePrice;
@@ -8633,6 +8674,69 @@ const ProductDetail = () => {
             <p className="shipping-info">
               <span className="shipping-link">{text.shipping}</span> {text.shippingCalc}
             </p>
+
+            {/* Number Balloon Customization */}
+            {isNumberBalloonProduct() && (
+              <div className="balloon-customization">
+                {/* Color Selection */}
+                <div className="form-group">
+                  <label className="form-label">
+                    {currentLang === 'ar' ? 'اختر اللون' : 'Select Color'} <span className="required-icon">*</span>
+                  </label>
+                  <div className="color-options">
+                    <button
+                      type="button"
+                      className={`color-option ${balloonColor === 'gold' ? 'selected' : ''}`}
+                      onClick={() => setBalloonColor('gold')}
+                    >
+                      <span className="color-circle" style={{ background: 'linear-gradient(135deg, #FFD700, #FFA500)' }}></span>
+                      <span>{currentLang === 'ar' ? 'ذهبي' : 'Gold'}</span>
+                    </button>
+                    <button
+                      type="button"
+                      className={`color-option ${balloonColor === 'silver' ? 'selected' : ''}`}
+                      onClick={() => setBalloonColor('silver')}
+                    >
+                      <span className="color-circle" style={{ background: 'linear-gradient(135deg, #C0C0C0, #A9A9A9)' }}></span>
+                      <span>{currentLang === 'ar' ? 'فضي' : 'Silver'}</span>
+                    </button>
+                    <button
+                      type="button"
+                      className={`color-option ${balloonColor === 'both' ? 'selected' : ''}`}
+                      onClick={() => setBalloonColor('both')}
+                    >
+                      <span className="color-circle" style={{ background: 'linear-gradient(90deg, #FFD700 50%, #C0C0C0 50%)' }}></span>
+                      <span>{currentLang === 'ar' ? 'كلاهما' : 'Both'}</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Number Selection */}
+                <div className="form-group">
+                  <label className="form-label">
+                    {currentLang === 'ar' ? 'اختر الأرقام' : 'Select Numbers'} <span className="required-icon">*</span>
+                  </label>
+                  <div className="number-options">
+                    {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
+                      <button
+                        key={num}
+                        type="button"
+                        className={`number-option ${selectedNumbers.includes(num) ? 'selected' : ''}`}
+                        onClick={() => handleNumberToggle(num)}
+                      >
+                        {num}
+                      </button>
+                    ))}
+                  </div>
+                  {selectedNumbers.length > 0 && (
+                    <p className="selected-numbers-display">
+                      {currentLang === 'ar' ? 'الأرقام المختارة: ' : 'Selected: '} 
+                      {selectedNumbers.join(', ')}
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
 
             {/* Delivery Date */}
             <div className="form-group">

@@ -86,7 +86,7 @@ const AdminLogin = ({ onLogin }) => {
           <div className="login-header">
             <div className="logo-wrapper">
               <img 
-                src="/Holland-Logo.jpg" 
+                src="/Holland-Logo.png" 
                 alt="Holland Flowers" 
                 className="admin-logo"
               />

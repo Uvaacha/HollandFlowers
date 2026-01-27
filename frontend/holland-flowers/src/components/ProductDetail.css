@@ -1639,3 +1639,157 @@ html {
   overscroll-behavior: none;
 }
 
+/* Number Balloon Customization Styles */
+.balloon-customization {
+  margin: 24px 0;
+  padding: 24px;
+  background: #f9f9f9;
+  border-radius: 12px;
+  border: 1px solid #e5e5e5;
+}
+
+.color-options,
+.number-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.color-option {
+  flex: 1;
+  min-width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 12px;
+  background: white;
+  border: 2px solid #e5e5e5;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #2d2d2d;
+}
+
+.color-option:hover {
+  border-color: #c4a574;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(196, 165, 116, 0.2);
+}
+
+.color-option.selected {
+  border-color: #c4a574;
+  background: #fff9f0;
+  box-shadow: 0 4px 12px rgba(196, 165, 116, 0.3);
+}
+
+.color-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #e5e5e5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.number-option {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 2px solid #e5e5e5;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2d2d2d;
+}
+
+.number-option:hover {
+  border-color: #c4a574;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(196, 165, 116, 0.2);
+}
+
+.number-option.selected {
+  border-color: #c4a574;
+  background: #c4a574;
+  color: white;
+  box-shadow: 0 4px 12px rgba(196, 165, 116, 0.4);
+}
+
+.selected-numbers-display {
+  margin-top: 12px;
+  padding: 12px 16px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e5e5e5;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #2d2d2d;
+  font-weight: 500;
+}
+
+/* RTL Support for Balloon Customization */
+.rtl .color-options,
+.rtl .number-options {
+  direction: rtl;
+}
+
+/* Responsive Design for Balloon Customization */
+@media (max-width: 768px) {
+  .balloon-customization {
+    padding: 20px 16px;
+  }
+  
+  .color-option {
+    min-width: 80px;
+    padding: 14px 10px;
+    font-size: 13px;
+  }
+  
+  .color-circle {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .number-option {
+    width: 45px;
+    height: 45px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .color-options {
+    gap: 8px;
+  }
+  
+  .color-option {
+    min-width: 70px;
+    padding: 12px 8px;
+    font-size: 12px;
+  }
+  
+  .color-circle {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .number-option {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+  }
+  
+  .number-options {
+    gap: 8px;
+  }
+}

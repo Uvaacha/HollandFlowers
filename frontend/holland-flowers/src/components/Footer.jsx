@@ -251,7 +251,7 @@ const Footer = () => {
             <div className="footer-column brand-column">
               <span onClick={() => handleLinkClick('/')} className="footer-logo">
                 <img 
-                  src="/Holland-Logo.jpg" 
+                  src="/Holland-Logo.png" 
                   alt={currentLang === 'ar' ? 'هولاند فلاورز' : 'Holland Flowers'} 
                   className="footer-logo-image"
                 />
