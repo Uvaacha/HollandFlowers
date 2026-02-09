@@ -8,7 +8,7 @@ const ProductsManager = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
-  const [offerFilter, setOfferFilter] = useState('all'); // Offer filter
+  const [offerFilter, setOfferFilter] = useState('all');
   const [showModal, setShowModal] = useState(false);
   const [showBulkOfferModal, setShowBulkOfferModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
@@ -16,6 +16,11 @@ const ProductsManager = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
+  
+  // NEW: Image upload states
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
+  
   const [formData, setFormData] = useState({
     categoryId: '',
     productName: '',
@@ -109,16 +114,12 @@ const ProductsManager = () => {
         
         // Apply offer/discount filter on client side
         if (offerFilter === 'no-offer') {
-          // No offer (0%)
           productsData = productsData.filter(p => !p.offerPercentage || p.offerPercentage === 0);
         } else if (offerFilter === 'any-offer') {
-          // Any offer (> 0%)
           productsData = productsData.filter(p => p.offerPercentage && p.offerPercentage > 0);
         } else if (offerFilter !== 'all') {
-          // Specific percentage (10, 15, 20, 25, 30, 50)
           const targetPercentage = parseInt(offerFilter);
           if (!isNaN(targetPercentage)) {
-            // Filter products with exact percentage match (with 2% tolerance for flexibility)
             productsData = productsData.filter(p => {
               const discount = p.offerPercentage || 0;
               return discount >= targetPercentage - 2 && discount <= targetPercentage + 2;
@@ -157,13 +158,11 @@ const ProductsManager = () => {
   // Generate next SKU number based on existing products
   const generateNextSKU = async () => {
     try {
-      // Fetch all products to find the maximum SKU
       const response = await productsAPI.getAll({ page: 0, size: 1000 });
       
       if (response.success && response.data) {
         const allProducts = response.data.content || response.data || [];
         
-        // Find the maximum numeric SKU
         let maxSKU = 0;
         allProducts.forEach(product => {
           if (product.sku) {
@@ -174,18 +173,120 @@ const ProductsManager = () => {
           }
         });
         
-        // Return next SKU (max + 1)
         return (maxSKU + 1).toString();
       }
       
-      // If no products found, start from 1
       return '1';
     } catch (error) {
       console.error('Failed to generate SKU:', error);
-      // Fallback to timestamp-based SKU if API fails
       return Date.now().toString().slice(-6);
     }
   };
+
+  // ==================== IMAGE UPLOAD FUNCTIONS ====================
+  
+  /**
+   * Handle file selection and preview
+   */
+  const handleImageSelect = (e) => {
+    const file = e.target.files[0];
+    
+    if (!file) return;
+    
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      alert('Please select a valid image file (JPG, PNG, WEBP, or GIF)');
+      return;
+    }
+    
+    // Validate file size (5MB max)
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      alert('File size must be less than 5MB');
+      return;
+    }
+    
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setImagePreview(e.target.result);
+    };
+    reader.readAsDataURL(file);
+    
+    // Upload the file
+    handleImageUpload(file);
+  };
+
+  /**
+   * Upload image to server
+   */
+  const handleImageUpload = async (file) => {
+    try {
+      setUploadingImage(true);
+      
+      // Get category name for organizing uploads
+      const selectedCategory = categories.find(cat => cat.categoryId === formData.categoryId);
+      const categoryName = selectedCategory?.categoryName || 'general';
+      
+      // Create form data
+      const formDataToUpload = new FormData();
+      formDataToUpload.append('file', file);
+      formDataToUpload.append('category', categoryName);
+      
+      // Get auth token
+      const token = localStorage.getItem('authToken');
+      
+      // Upload to server
+      const response = await fetch('http://localhost:8080/api/upload/product-image', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formDataToUpload
+      });
+      
+      const result = await response.json();
+      
+      if (result.success && result.data) {
+        // Update form data with the returned image URL
+        setFormData(prev => ({
+          ...prev,
+          imageUrl: result.data.imageUrl
+        }));
+        
+        alert('✓ Image uploaded successfully!');
+      } else {
+        throw new Error(result.message || 'Upload failed');
+      }
+      
+    } catch (error) {
+      console.error('Failed to upload image:', error);
+      alert('Failed to upload image: ' + error.message);
+      setImagePreview(null);
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  /**
+   * Clear the selected image
+   */
+  const handleClearImage = () => {
+    setImagePreview(null);
+    setFormData(prev => ({
+      ...prev,
+      imageUrl: ''
+    }));
+    
+    // Reset file input
+    const fileInput = document.getElementById('imageFileInput');
+    if (fileInput) {
+      fileInput.value = '';
+    }
+  };
+
+  // ==================== END IMAGE UPLOAD FUNCTIONS ====================
 
   const handleAddProduct = async () => {
     if (!isSuperAdmin) return;
@@ -194,6 +295,7 @@ const ProductsManager = () => {
     const nextSKU = await generateNextSKU();
     
     setEditingProduct(null);
+    setImagePreview(null); // Clear image preview
     setFormData({
       categoryId: categories[0]?.categoryId || '',
       productName: '',
@@ -215,6 +317,7 @@ const ProductsManager = () => {
   const handleEditProduct = (product) => {
     if (!isSuperAdmin) return;
     setEditingProduct(product);
+    setImagePreview(null); // Clear preview, will show existing image
     setFormData({
       categoryId: product.categoryId || '',
       productName: product.productName || '',
@@ -280,7 +383,7 @@ const ProductsManager = () => {
         shortDescription: formData.shortDescription?.trim() || null,
         actualPrice: parseFloat(formData.actualPrice),
         offerPercentage: parseFloat(formData.offerPercentage) || 0,
-        stockQuantity: 50, // Default stock value
+        stockQuantity: 50,
         imageUrl: formData.imageUrl?.trim() || null,
         additionalImages: formData.additionalImages || [],
         isFeatured: formData.isFeatured,
@@ -298,6 +401,7 @@ const ProductsManager = () => {
 
       if (response.success) {
         setShowModal(false);
+        setImagePreview(null);
         fetchProducts();
       }
     } catch (error) {
@@ -546,7 +650,6 @@ const ProductsManager = () => {
             </option>
           ))}
         </select>
-        {/* Discount Filter with Specific Percentages */}
         <select
           value={offerFilter}
           onChange={(e) => setOfferFilter(e.target.value)}
@@ -837,30 +940,81 @@ const ProductsManager = () => {
                 )}
               </div>
 
-              {/* Image */}
+              {/* Image Upload Section - UPDATED */}
               <div className="form-section">
                 <h3>Product Image</h3>
                 
-                <div className="image-section">
+                <div className="image-upload-section">
+                  {/* File Upload Option */}
+                  <div className="upload-option">
+                    <label className="upload-label">
+                      <input
+                        type="file"
+                        id="imageFileInput"
+                        accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
+                        onChange={handleImageSelect}
+                        style={{ display: 'none' }}
+                        disabled={uploadingImage}
+                      />
+                      <button 
+                        type="button"
+                        className="upload-btn"
+                        onClick={() => document.getElementById('imageFileInput').click()}
+                        disabled={uploadingImage}
+                      >
+                        {uploadingImage ? '⏳ Uploading...' : '📁 Upload Image'}
+                      </button>
+                    </label>
+                    <small>Click to browse and upload (Max 5MB, JPG/PNG/WEBP/GIF)</small>
+                  </div>
+                  
+                  <div className="upload-divider">
+                    <span>OR</span>
+                  </div>
+                  
+                  {/* Manual Path Entry Option */}
                   <div className="form-group">
-                    <label>Image Path</label>
+                    <label>Enter Image Path Manually</label>
                     <input
                       type="text"
                       name="imageUrl"
                       value={formData.imageUrl}
                       onChange={handleInputChange}
-                      placeholder="/images/picks-for-you/25 Red Roses.webp"
+                      placeholder="/images/products/flower.jpg"
+                      disabled={uploadingImage}
                     />
-                    <small>Enter path from public folder, e.g., /images/products/flower.jpg</small>
+                    <small>Enter path from public folder</small>
                   </div>
                   
-                  {formData.imageUrl && (
-                    <div className="image-preview">
-                      <img 
-                        src={formData.imageUrl} 
-                        alt="Preview"
-                        onError={(e) => e.target.style.display = 'none'}
-                      />
+                  {/* Image Preview */}
+                  {(formData.imageUrl || imagePreview) && (
+                    <div className="image-preview-container">
+                      <div className="image-preview-header">
+                        <span>Preview:</span>
+                        <button 
+                          type="button"
+                          className="clear-image-btn"
+                          onClick={handleClearImage}
+                          disabled={uploadingImage}
+                        >
+                          ✕ Clear
+                        </button>
+                      </div>
+                      <div className="image-preview">
+                        <img 
+                          src={imagePreview || formData.imageUrl} 
+                          alt="Preview"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            if (!imagePreview) {
+                              alert('Failed to load image from path: ' + formData.imageUrl);
+                            }
+                          }}
+                        />
+                      </div>
+                      {formData.imageUrl && !imagePreview && (
+                        <small className="image-path-display">Path: {formData.imageUrl}</small>
+                      )}
                     </div>
                   )}
                 </div>

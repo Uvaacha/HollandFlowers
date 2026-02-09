@@ -741,63 +741,6 @@
   cursor: not-allowed;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .products-manager {
-    padding: 16px;
-  }
-  
-  .page-header {
-    flex-direction: column;
-    gap: 16px;
-    align-items: stretch;
-  }
-  
-  .filters-bar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .search-box {
-    max-width: 100%;
-  }
-  
-  .filter-select {
-    width: 100%;
-  }
-  
-  .clear-filters-btn {
-    width: 100%;
-    text-align: center;
-  }
-  
-  .modal-box {
-    max-height: 95vh;
-  }
-  
-  .form-row,
-  .form-row.three {
-    grid-template-columns: 1fr;
-  }
-  
-  .image-section {
-    flex-direction: column;
-  }
-  
-  .image-preview {
-    width: 100%;
-    height: 150px;
-  }
-  
-  .product-badges {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
-/* ==========================================
-   NEW STYLES - Offer Filter, Bulk Offer Modal
-   ========================================== */
-
 /* Header Actions - Multiple Buttons */
 .header-actions {
   display: flex;
@@ -1030,101 +973,6 @@
   cursor: not-allowed;
 }
 
-/* Responsive for Bulk Offer */
-@media (max-width: 768px) {
-  .header-actions {
-    flex-direction: column;
-    width: 100%;
-  }
-  
-  .header-actions .btn {
-    width: 100%;
-    justify-content: center;
-  }
-  
-  .categories-grid {
-    grid-template-columns: 1fr;
-    max-height: 200px;
-  }
-  
-  .bulk-offer-footer {
-    flex-direction: column;
-    gap: 12px;
-  }
-  
-  .bulk-offer-footer .footer-right {
-    width: 100%;
-  }
-  
-  .bulk-offer-footer .btn-danger,
-  .bulk-offer-footer .btn-cancel,
-  .bulk-offer-footer .btn-save {
-    width: 100%;
-    text-align: center;
-  }
-}
-/* ==========================================
-   SKU Auto-Generation Styling
-   ========================================== */
-
-/* Read-only field styling */
-.read-only-field {
-  background-color: #f5f5f5 !important;
-  color: #666 !important;
-  cursor: not-allowed !important;
-  border: 1px solid #ddd !important;
-}
-
-.read-only-field:focus {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-/* Auto-generated label */
-.auto-label {
-  font-size: 11px;
-  font-weight: 500;
-  color: #10b981;
-  background: rgba(16, 185, 129, 0.1);
-  padding: 2px 8px;
-  border-radius: 4px;
-  margin-left: 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* Field hint */
-.field-hint {
-  display: block;
-  font-size: 12px;
-  color: #10b981;
-  margin-top: 4px;
-  font-weight: 500;
-}
-
-/* SKU display in form */
-input[name="sku"].read-only-field {
-  font-family: 'Courier New', monospace;
-  font-size: 16px;
-  font-weight: 600;
-  text-align: center;
-  letter-spacing: 1px;
-}
-
-/* Modal form group for SKU */
-.form-group:has(.read-only-field) {
-  position: relative;
-}
-
-.form-group:has(.read-only-field)::before {
-  content: '🔒';
-  position: absolute;
-  right: 12px;
-  top: 38px;
-  font-size: 14px;
-  opacity: 0.5;
-}
-
 /* =====================================================
    SKU FIELD - READ-ONLY STYLING
    ===================================================== */
@@ -1206,9 +1054,292 @@ input[name="sku"].read-only-field {
   box-shadow: 0 2px 8px rgba(14, 165, 233, 0.15) !important;
 }
 
-/* Success checkmark for auto-generated SKU */
-.field-hint::before {
+/* ==========================================
+   IMAGE UPLOAD SECTION STYLES
+   ========================================== */
+
+/* Image Upload Section */
+.image-upload-section {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  border: 2px dashed #dee2e6;
+}
+
+.upload-option {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.upload-label {
+  display: block;
+}
+
+.upload-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.upload-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.upload-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.upload-option small {
+  display: block;
+  margin-top: 8px;
+  color: #6c757d;
+  font-size: 12px;
+}
+
+.upload-divider {
+  text-align: center;
+  position: relative;
+  margin: 20px 0;
+}
+
+.upload-divider::before,
+.upload-divider::after {
   content: '';
-  display: inline-block;
-  margin-right: 4px;
+  position: absolute;
+  top: 50%;
+  width: 45%;
+  height: 1px;
+  background: #dee2e6;
+}
+
+.upload-divider::before {
+  left: 0;
+}
+
+.upload-divider::after {
+  right: 0;
+}
+
+.upload-divider span {
+  background: #f8f9fa;
+  padding: 0 15px;
+  color: #6c757d;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.image-preview-container {
+  margin-top: 20px;
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.image-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.image-preview-header span {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.clear-image-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.clear-image-btn:hover:not(:disabled) {
+  background: #c82333;
+}
+
+.clear-image-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.image-upload-section .image-preview {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  height: auto;
+  min-height: 200px;
+  border: none;
+}
+
+.image-upload-section .image-preview img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  max-height: 300px;
+}
+
+.image-path-display {
+  display: block;
+  margin-top: 10px;
+  padding: 8px;
+  background: #f8f9fa;
+  border-radius: 4px;
+  color: #495057;
+  font-size: 12px;
+  word-break: break-all;
+  font-family: 'Courier New', monospace;
+}
+
+/* Loading state */
+.upload-btn:disabled {
+  position: relative;
+  overflow: hidden;
+}
+
+.upload-btn:disabled::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Responsive for Bulk Offer */
+@media (max-width: 768px) {
+  .products-manager {
+    padding: 16px;
+  }
+  
+  .page-header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+  
+  .header-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .header-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .filters-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .search-box {
+    max-width: 100%;
+  }
+  
+  .filter-select {
+    width: 100%;
+  }
+  
+  .clear-filters-btn {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .modal-box {
+    max-height: 95vh;
+  }
+  
+  .form-row,
+  .form-row.three {
+    grid-template-columns: 1fr;
+  }
+  
+  .image-section {
+    flex-direction: column;
+  }
+  
+  .image-preview {
+    width: 100%;
+    height: 150px;
+  }
+  
+  .product-badges {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .categories-grid {
+    grid-template-columns: 1fr;
+    max-height: 200px;
+  }
+  
+  .bulk-offer-footer {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .bulk-offer-footer .footer-right {
+    width: 100%;
+  }
+  
+  .bulk-offer-footer .btn-danger,
+  .bulk-offer-footer .btn-cancel,
+  .bulk-offer-footer .btn-save {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .image-upload-section {
+    padding: 15px;
+  }
+  
+  .upload-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .image-upload-section .image-preview {
+    max-width: 100%;
+  }
 }
