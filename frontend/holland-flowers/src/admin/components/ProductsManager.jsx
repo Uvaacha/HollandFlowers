@@ -238,7 +238,7 @@ const ProductsManager = () => {
       const token = localStorage.getItem('authToken');
       
       // Upload to server
-      const response = await fetch('http://localhost:8080/api/upload/product-image', {
+      const response = await fetch('https://www.flowerskw.com/api/upload/product-image', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
