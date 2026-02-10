@@ -19,7 +19,7 @@ public class ApiResponse<T> {
     private String message;
     private String errorCode;
     private T data;
-    
+
     @Builder.Default
     private LocalDateTime timestamp = LocalDateTime.now();
 
