@@ -456,47 +456,46 @@ export const dashboardAPI = {
 // FILE UPLOAD
 // ============================================
 export const uploadAPI = {
-  uploadImage: async (file, folder = 'products') => {
+  uploadProductImage: async (file) => {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('folder', folder);
-    
     const token = localStorage.getItem('adminToken');
+    const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://www.flowerskw.com/api/v1';
     
-    const response = await fetch(`${API_BASE_URL}/upload/image`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-      body: formData,
-    });
-    
-    return response.json();
+    try {
+      const response = await fetch(`${API_BASE_URL}/admin/upload/product-image`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: formData,
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Upload failed');
+      return data;
+    } catch (error) {
+      console.error('Upload failed:', error);
+      throw error;
+    }
   },
   
-  uploadImages: async (files, folder = 'products') => {
+  uploadCategoryImage: async (file) => {
     const formData = new FormData();
-    files.forEach(file => formData.append('files', file));
-    formData.append('folder', folder);
-    
+    formData.append('file', file);
     const token = localStorage.getItem('adminToken');
+    const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://www.flowerskw.com/api/v1';
     
-    const response = await fetch(`${API_BASE_URL}/upload/images`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-      body: formData,
-    });
-    
-    return response.json();
-  },
-  
-  deleteImage: async (imageUrl) => {
-    return apiCall('/upload/delete', {
-      method: 'DELETE',
-      body: JSON.stringify({ imageUrl }),
-    });
+    try {
+      const response = await fetch(`${API_BASE_URL}/admin/upload/category-image`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: formData,
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Upload failed');
+      return data;
+    } catch (error) {
+      console.error('Upload failed:', error);
+      throw error;
+    }
   },
 };
 

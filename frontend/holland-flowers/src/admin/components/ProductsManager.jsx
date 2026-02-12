@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { productsAPI, categoriesAPI, authAPI } from '../services/api';
 import './ProductsManager.css';
+import ImageUpload from './ImageUpload';  // ← NEW IMPORT ADDED
 
 const ProductsManager = () => {
   const [products, setProducts] = useState([]);
@@ -837,33 +838,14 @@ const ProductsManager = () => {
                 )}
               </div>
 
-              {/* Image */}
+              {/* Image Upload Section - REPLACED WITH IMAGEUPLOAD COMPONENT */}
               <div className="form-section">
                 <h3>Product Image</h3>
-                
-                <div className="image-section">
-                  <div className="form-group">
-                    <label>Image Path</label>
-                    <input
-                      type="text"
-                      name="imageUrl"
-                      value={formData.imageUrl}
-                      onChange={handleInputChange}
-                      placeholder="/images/picks-for-you/25 Red Roses.webp"
-                    />
-                    <small>Enter path from public folder, e.g., /images/products/flower.jpg</small>
-                  </div>
-                  
-                  {formData.imageUrl && (
-                    <div className="image-preview">
-                      <img 
-                        src={formData.imageUrl} 
-                        alt="Preview"
-                        onError={(e) => e.target.style.display = 'none'}
-                      />
-                    </div>
-                  )}
-                </div>
+                <ImageUpload
+                  value={formData.imageUrl}
+                  onChange={handleInputChange}
+                  disabled={saving}
+                />
               </div>
 
               {/* Options */}
