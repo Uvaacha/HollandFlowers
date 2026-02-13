@@ -28,13 +28,7 @@ public class FileUploadController {
 
     private final StorageService storageService;
 
-    @PostMapping(value = "/product-image", consumes = {
-            MediaType.MULTIPART_FORM_DATA_VALUE,
-            MediaType.IMAGE_JPEG_VALUE,
-            MediaType.IMAGE_PNG_VALUE,
-            MediaType.IMAGE_GIF_VALUE,
-            "image/webp"
-    })
+    @PostMapping(value = "/product-image")
     @Operation(summary = "Upload product image")
     public Mono<ResponseEntity<ApiResponse<Map<String, String>>>> uploadProductImage(
             @RequestPart("file") FilePart file) {
@@ -48,13 +42,7 @@ public class FileUploadController {
                 });
     }
 
-    @PostMapping(value = "/category-image", consumes = {
-            MediaType.MULTIPART_FORM_DATA_VALUE,
-            MediaType.IMAGE_JPEG_VALUE,
-            MediaType.IMAGE_PNG_VALUE,
-            MediaType.IMAGE_GIF_VALUE,
-            "image/webp"
-    })
+    @PostMapping(value = "/category-image")
     @Operation(summary = "Upload category image")
     public Mono<ResponseEntity<ApiResponse<Map<String, String>>>> uploadCategoryImage(
             @RequestPart("file") FilePart file) {
