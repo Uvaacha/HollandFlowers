@@ -121,6 +121,7 @@ public class SecurityConfig {
                         .requestMatchers("/payments/**").authenticated()  // Other payment endpoints need auth
 
                         // ============ ADMIN ENDPOINTS ============
+                        .requestMatchers("/admin/upload/**").hasAnyRole("ADMIN", "SUPER_ADMIN")  // FILE UPLOAD
                         .requestMatchers("/admin/products/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
                         .requestMatchers("/admin/categories/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
                         .requestMatchers("/admin/orders/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
