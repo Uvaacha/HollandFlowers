@@ -58,7 +58,6 @@ import RefundPolicy from './components/RefundPolicy';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import ShippingPolicy from './components/ShippingPolicy';
 import TermsOfService from './components/TermsOfService';
-import ValentinePopup from './components/ValentinePopup';
 import './App.css';
 import './components/ProductDescription.css';
 
@@ -854,7 +853,6 @@ const AppContent = ({ currentLang }) => {
   return (
     <div className={`app ${currentLang === 'ar' ? 'rtl' : 'ltr'}`}>
       <ScrollToTop />
-      <ValentinePopup />
       <Header />
       
       <Routes>
