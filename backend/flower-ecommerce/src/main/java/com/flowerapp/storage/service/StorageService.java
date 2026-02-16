@@ -77,8 +77,8 @@ public class StorageService {
      * Upload file to Supabase Storage
      */
     private Mono<String> uploadFile(FilePart file, String fileName) {
-        String contentType = file.headers().getContentType() != null 
-                ? file.headers().getContentType().toString() 
+        String contentType = file.headers().getContentType() != null
+                ? file.headers().getContentType().toString()
                 : "application/octet-stream";
 
         return DataBufferUtils.join(file.content())
@@ -87,22 +87,48 @@ public class StorageService {
                     dataBuffer.read(bytes);
                     DataBufferUtils.release(dataBuffer);
 
-                    String uploadUrl = String.format("%s/storage/v1/object/%s/%s", 
+                    String uploadUrl = String.format("%s/storage/v1/object/%s/%s",
                             supabaseUrl, storageBucket, fileName);
+
+                    log.info("=== SUPABASE UPLOAD DEBUG ===");
+                    log.info("Upload URL: {}", uploadUrl);
+                    log.info("Bucket: {}", storageBucket);
+                    log.info("FileName: {}", fileName);
+                    log.info("Content-Type: {}", contentType);
+                    log.info("File size: {} bytes", bytes.length);
 
                     return webClient.post()
                             .uri(uploadUrl)
                             .header(HttpHeaders.AUTHORIZATION, "Bearer " + supabaseServiceKey)
-                            .header(HttpHeaders.CONTENT_TYPE, contentType)
+                            .header("Content-Type", contentType)
                             .header("x-upsert", "true")
                             .bodyValue(bytes)
                             .retrieve()
+                            .onStatus(
+                                    status -> status.is4xxClientError(),
+                                    response -> response.bodyToMono(String.class)
+                                            .flatMap(body -> {
+                                                log.error("Supabase 4xx error: {}", body);
+                                                return Mono.error(new RuntimeException("Supabase error: " + body));
+                                            })
+                            )
+                            .onStatus(
+                                    status -> status.is5xxServerError(),
+                                    response -> response.bodyToMono(String.class)
+                                            .flatMap(body -> {
+                                                log.error("Supabase 5xx error: {}", body);
+                                                return Mono.error(new RuntimeException("Supabase server error: " + body));
+                                            })
+                            )
                             .bodyToMono(String.class)
-                            .map(response -> getPublicUrl(fileName))
+                            .map(response -> {
+                                log.info("Supabase response: {}", response);
+                                return getPublicUrl(fileName);
+                            })
                             .doOnSuccess(url -> log.info("File uploaded successfully: {}", url))
                             .onErrorMap(e -> {
-                                log.error("Failed to upload file: {}", e.getMessage());
-                                return CustomException.internalError("Failed to upload file");
+                                log.error("Failed to upload file: {}", e.getMessage(), e);
+                                return CustomException.internalError("Failed to upload file: " + e.getMessage());
                             });
                 });
     }
@@ -113,7 +139,7 @@ public class StorageService {
     public Mono<Boolean> deleteFile(String fileUrl) {
         try {
             String fileName = extractFileNameFromUrl(fileUrl);
-            String deleteUrl = String.format("%s/storage/v1/object/%s/%s", 
+            String deleteUrl = String.format("%s/storage/v1/object/%s/%s",
                     supabaseUrl, storageBucket, fileName);
 
             return webClient.delete()
@@ -137,7 +163,7 @@ public class StorageService {
      * Get public URL for a file
      */
     public String getPublicUrl(String fileName) {
-        return String.format("%s/storage/v1/object/public/%s/%s", 
+        return String.format("%s/storage/v1/object/public/%s/%s",
                 supabaseUrl, storageBucket, fileName);
     }
 
@@ -146,7 +172,7 @@ public class StorageService {
      */
     private Mono<Boolean> validateFile(FilePart file) {
         MediaType contentType = file.headers().getContentType();
-        
+
         if (contentType == null || !ALLOWED_IMAGE_TYPES.contains(contentType.toString())) {
             return Mono.error(CustomException.badRequest(
                     "Invalid file type. Allowed types: JPEG, PNG, GIF, WebP"));
