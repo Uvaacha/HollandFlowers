@@ -176,6 +176,51 @@ export const uploadAPI = {
     headers: { 'Content-Type': 'multipart/form-data' }
   }),
   deleteImage: (url) => api.delete('/upload/image', { params: { url } }),
+  
+  // NEW: Product and Category Image Upload
+  uploadProductImage: async (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const token = TokenManager.getAccessToken();
+    
+    const response = await fetch(`${API_BASE_URL}/admin/upload/product-image`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+    });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Upload failed');
+    }
+    
+    return response.json();
+  },
+  
+  uploadCategoryImage: async (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const token = TokenManager.getAccessToken();
+    
+    const response = await fetch(`${API_BASE_URL}/admin/upload/category-image`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+    });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Upload failed');
+    }
+    
+    return response.json();
+  },
 };
 
 export default api;
