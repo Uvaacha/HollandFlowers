@@ -7,10 +7,8 @@
 // ============================================
 // API BASE URL CONFIGURATION
 // ============================================
-// Production URL as default - change localhost for local development
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://www.flowerskw.com/api/v1';
 
-// Log the API URL in development for debugging
 if (process.env.NODE_ENV === 'development') {
   console.log('🔧 Admin API Base URL:', API_BASE_URL);
 }
@@ -117,7 +115,7 @@ export const authAPI = {
       'view_orders',
       'view_customers',
       'view_dashboard',
-      'update_delivery_status'  // Admin can now update delivery status
+      'update_delivery_status'
     ];
     
     return user.roleName === 'ADMIN' && adminViewPermissions.includes(permission);
@@ -127,9 +125,8 @@ export const authAPI = {
     return authAPI.isSuperAdmin();
   },
 
-  // New: Both Admin and Super Admin can update delivery status
   canUpdateDeliveryStatus: () => {
-    return authAPI.isAdmin(); // Returns true for both ADMIN and SUPER_ADMIN
+    return authAPI.isAdmin();
   },
 
   canManageAdmins: () => {
@@ -316,7 +313,7 @@ export const customersAPI = {
 };
 
 // ============================================
-// USERS (Admin management of all users)
+// USERS
 // ============================================
 export const usersAPI = {
   getAll: async (params = {}) => {
@@ -453,26 +450,37 @@ export const dashboardAPI = {
 };
 
 // ============================================
-// FILE UPLOAD
+// FILE UPLOAD - CRITICAL FOR IMAGE UPLOADS
 // ============================================
 export const uploadAPI = {
   uploadProductImage: async (file) => {
     const formData = new FormData();
     formData.append('file', file);
-    const token = localStorage.getItem('adminToken');
-    const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://www.flowerskw.com/api/v1';
+    
+    const token = localStorage.getItem('adminToken') || localStorage.getItem('accessToken');
+    
+    if (!token) {
+      throw new Error('No authentication token found. Please login again.');
+    }
     
     try {
       const response = await fetch(`${API_BASE_URL}/admin/upload/product-image`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` },
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
         body: formData,
       });
+      
       const data = await response.json();
-      if (!response.ok) throw new Error(data.message || 'Upload failed');
+      
+      if (!response.ok) {
+        throw new Error(data.message || `Upload failed with status ${response.status}`);
+      }
+      
       return data;
     } catch (error) {
-      console.error('Upload failed:', error);
+      console.error('Product image upload failed:', error);
       throw error;
     }
   },
@@ -480,20 +488,31 @@ export const uploadAPI = {
   uploadCategoryImage: async (file) => {
     const formData = new FormData();
     formData.append('file', file);
-    const token = localStorage.getItem('adminToken');
-    const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://www.flowerskw.com/api/v1';
+    
+    const token = localStorage.getItem('adminToken') || localStorage.getItem('accessToken');
+    
+    if (!token) {
+      throw new Error('No authentication token found. Please login again.');
+    }
     
     try {
       const response = await fetch(`${API_BASE_URL}/admin/upload/category-image`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` },
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
         body: formData,
       });
+      
       const data = await response.json();
-      if (!response.ok) throw new Error(data.message || 'Upload failed');
+      
+      if (!response.ok) {
+        throw new Error(data.message || `Upload failed with status ${response.status}`);
+      }
+      
       return data;
     } catch (error) {
-      console.error('Upload failed:', error);
+      console.error('Category image upload failed:', error);
       throw error;
     }
   },
