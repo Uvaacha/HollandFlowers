@@ -34,12 +34,29 @@ const ImageUpload = ({ value, onChange, disabled = false }) => {
       if (response.success && response.data && response.data.url) {
         onChange({ target: { name: 'imageUrl', value: response.data.url } });
         setTimeout(() => setUploadProgress(0), 1000);
+      } else if (response.data && response.data.url) {
+        // Handle case where success flag might be missing
+        onChange({ target: { name: 'imageUrl', value: response.data.url } });
+        setTimeout(() => setUploadProgress(0), 1000);
       } else {
-        throw new Error('Upload failed');
+        throw new Error('Upload failed - no URL returned');
       }
     } catch (error) {
       console.error('Upload error:', error);
-      alert('Failed to upload image: ' + (error.message || 'Unknown error'));
+      const msg = error.message || 'Unknown error';
+      if (msg.toLowerCase().includes('login') || 
+          msg.toLowerCase().includes('unauthorized') || 
+          msg.toLowerCase().includes('session')) {
+        // Force fresh login
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('adminUser');
+        alert('Session expired. Please log in again.');
+        window.location.href = '/admin';
+      } else {
+        alert('Failed to upload image: ' + msg);
+      }
       setUploadProgress(0);
     } finally {
       setUploading(false);
