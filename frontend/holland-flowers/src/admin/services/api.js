@@ -7,14 +7,69 @@
 // ============================================
 // API BASE URL CONFIGURATION
 // ============================================
+// ============================================
+// API BASE URL CONFIGURATION
+// ⚠️ IMPORTANT: This URL must exactly match the one used in AdminLogin.jsx.
+// Mismatched URLs = tokens issued on one server rejected by another = 401 errors.
+// Always set REACT_APP_API_URL in your deployment environment (.env / Vercel settings).
+// ============================================
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://www.flowerskw.com/api/v1';
 
 if (process.env.NODE_ENV === 'development') {
   console.log('🔧 Admin API Base URL:', API_BASE_URL);
 }
 
+// ============================================
+// TOKEN REFRESH HELPER
+// ============================================
+let isRefreshing = false;
+let refreshSubscribers = [];
+
+const onTokenRefreshed = (newToken) => {
+  refreshSubscribers.forEach((callback) => callback(newToken));
+  refreshSubscribers = [];
+};
+
+const addRefreshSubscriber = (callback) => {
+  refreshSubscribers.push(callback);
+};
+
+const tryRefreshToken = async () => {
+  const refreshToken = localStorage.getItem('refreshToken');
+  if (!refreshToken) {
+    throw new Error('No refresh token available. Please login again.');
+  }
+
+  const response = await fetch(`${API_BASE_URL}/auth/refresh-token`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ refreshToken }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok || !data.success) {
+    // Clear all tokens and force re-login
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('adminUser');
+    throw new Error('Session expired. Please login again.');
+  }
+
+  const newToken = data.data.accessToken;
+  localStorage.setItem('adminToken', newToken);
+  localStorage.setItem('accessToken', newToken);
+
+  if (data.data.refreshToken) {
+    localStorage.setItem('refreshToken', data.data.refreshToken);
+  }
+
+  return newToken;
+};
+
 // Helper function for API calls
-const apiCall = async (endpoint, options = {}) => {
+const apiCall = async (endpoint, options = {}, isRetry = false) => {
   const token = localStorage.getItem('adminToken');
   
   const defaultHeaders = {
@@ -35,6 +90,33 @@ const apiCall = async (endpoint, options = {}) => {
     });
 
     const data = await response.json();
+
+    // Handle 401 - Token expired, try to refresh
+    if (response.status === 401 && !isRetry) {
+      if (!isRefreshing) {
+        isRefreshing = true;
+        try {
+          const newToken = await tryRefreshToken();
+          isRefreshing = false;
+          onTokenRefreshed(newToken);
+          // Retry the original request with the new token
+          return apiCall(endpoint, options, true);
+        } catch (refreshError) {
+          isRefreshing = false;
+          refreshSubscribers = [];
+          // Redirect to login
+          window.location.href = '/admin/login';
+          throw refreshError;
+        }
+      } else {
+        // Wait for the refresh to complete, then retry
+        return new Promise((resolve, reject) => {
+          addRefreshSubscriber((newToken) => {
+            resolve(apiCall(endpoint, options, true));
+          });
+        });
+      }
+    }
 
     if (!response.ok) {
       throw new Error(data.message || `API Error: ${response.status}`);
@@ -58,6 +140,7 @@ export const authAPI = {
     });
     
     if (response.success && response.data) {
+      // Store under BOTH keys so AdminLogin.jsx and api.js uploadAPI are always consistent
       localStorage.setItem('adminToken', response.data.accessToken);
       localStorage.setItem('accessToken', response.data.accessToken);
       localStorage.setItem('refreshToken', response.data.refreshToken);
@@ -452,33 +535,50 @@ export const dashboardAPI = {
 // ============================================
 // FILE UPLOAD - CRITICAL FOR IMAGE UPLOADS
 // ============================================
+
+// Internal helper for upload fetch calls with 401 retry support
+const uploadFetch = async (endpoint, formData, isRetry = false) => {
+  const token = localStorage.getItem('adminToken') || localStorage.getItem('accessToken');
+
+  if (!token) {
+    throw new Error('No authentication token found. Please login again.');
+  }
+
+  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  // Handle 401 - Token expired, try to refresh once
+  if (response.status === 401 && !isRetry) {
+    try {
+      await tryRefreshToken();
+      return uploadFetch(endpoint, formData, true); // Retry with new token
+    } catch (refreshError) {
+      window.location.href = '/admin/login';
+      throw new Error('Session expired. Please login again.');
+    }
+  }
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || `Upload failed with status ${response.status}`);
+  }
+
+  return data;
+};
+
 export const uploadAPI = {
   uploadProductImage: async (file) => {
     const formData = new FormData();
     formData.append('file', file);
-    
-    const token = localStorage.getItem('adminToken') || localStorage.getItem('accessToken');
-    
-    if (!token) {
-      throw new Error('No authentication token found. Please login again.');
-    }
-    
+
     try {
-      const response = await fetch(`${API_BASE_URL}/admin/upload/product-image`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-        body: formData,
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.message || `Upload failed with status ${response.status}`);
-      }
-      
-      return data;
+      return await uploadFetch('/admin/upload/product-image', formData);
     } catch (error) {
       console.error('Product image upload failed:', error);
       throw error;
@@ -488,29 +588,9 @@ export const uploadAPI = {
   uploadCategoryImage: async (file) => {
     const formData = new FormData();
     formData.append('file', file);
-    
-    const token = localStorage.getItem('adminToken') || localStorage.getItem('accessToken');
-    
-    if (!token) {
-      throw new Error('No authentication token found. Please login again.');
-    }
-    
+
     try {
-      const response = await fetch(`${API_BASE_URL}/admin/upload/category-image`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-        body: formData,
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.message || `Upload failed with status ${response.status}`);
-      }
-      
-      return data;
+      return await uploadFetch('/admin/upload/category-image', formData);
     } catch (error) {
       console.error('Category image upload failed:', error);
       throw error;

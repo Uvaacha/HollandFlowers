@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import './AdminLogin.css';
 
-// API URL - Make sure this matches your backend
-const API_URL = process.env.REACT_APP_API_URL || 'https://hollandflowers.onrender.com/api/v1';
+// ⚠️ IMPORTANT: This MUST match the API_BASE_URL in api.js exactly.
+// Both files must point to the same backend server so the token issued at
+// login is valid when used for uploads and other API calls.
+const API_URL = process.env.REACT_APP_API_URL || 'https://www.flowerskw.com/api/v1';
 
 const AdminLogin = ({ onLogin }) => {
   const [credentials, setCredentials] = useState({
@@ -54,8 +56,9 @@ const AdminLogin = ({ onLogin }) => {
           user.roleId === 3;
 
         if (isAdmin) {
-          // Store tokens
+          // Store tokens - save under BOTH keys for compatibility with api.js
           localStorage.setItem('adminToken', accessToken);
+          localStorage.setItem('accessToken', accessToken);  // ← also store as accessToken
           localStorage.setItem('refreshToken', refreshToken);
           localStorage.setItem('adminUser', JSON.stringify(user));
           
