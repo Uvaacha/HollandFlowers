@@ -39,7 +39,7 @@ const ImageUpload = ({ value, onChange, disabled = false }) => {
         onChange({ target: { name: 'imageUrl', value: response.data.url } });
         setTimeout(() => setUploadProgress(0), 1000);
       } else {
-        throw new Error('Upload failed - no URL returned');
+        alert('Upload failed. Please try again.');
       }
     } catch (error) {
       console.error('Upload error:', error);
