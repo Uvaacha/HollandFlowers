@@ -1,19 +1,27 @@
 package com.flowerapp.storage.service;
 
 import com.flowerapp.common.exception.CustomException;
+import io.netty.channel.ChannelOption;
+import io.netty.handler.timeout.ReadTimeoutHandler;
+import io.netty.handler.timeout.WriteTimeoutHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import reactor.netty.http.client.HttpClient;
+import reactor.util.retry.Retry;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
@@ -37,7 +45,18 @@ public class StorageService {
     private static final long MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 
     public StorageService(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.build();
+        // Configure HttpClient with timeouts to prevent "Connection reset by peer"
+        HttpClient httpClient = HttpClient.create()
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 30000) // 30s connect timeout
+                .responseTimeout(Duration.ofSeconds(60))              // 60s response timeout
+                .doOnConnected(conn ->
+                        conn.addHandlerLast(new ReadTimeoutHandler(60, TimeUnit.SECONDS))
+                                .addHandlerLast(new WriteTimeoutHandler(60, TimeUnit.SECONDS))
+                );
+
+        this.webClient = webClientBuilder
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .build();
     }
 
     /**
@@ -74,7 +93,7 @@ public class StorageService {
     }
 
     /**
-     * Upload file to Supabase Storage
+     * Upload file to Supabase Storage with retry on connection errors
      */
     private Mono<String> uploadFile(FilePart file, String fileName) {
         String contentType = file.headers().getContentType() != null
@@ -125,9 +144,29 @@ public class StorageService {
                                 log.info("Supabase response: {}", response);
                                 return getPublicUrl(fileName);
                             })
+                            // ✅ RETRY up to 3 times on connection errors (fixes "Connection reset by peer")
+                            .retryWhen(Retry.backoff(3, Duration.ofSeconds(2))
+                                    .filter(throwable -> {
+                                        String msg = throwable.getMessage();
+                                        boolean shouldRetry = msg != null && (
+                                                msg.contains("Connection reset") ||
+                                                        msg.contains("recvAddress") ||
+                                                        msg.contains("Connection refused") ||
+                                                        msg.contains("timeout") ||
+                                                        msg.contains("broken pipe")
+                                        );
+                                        if (shouldRetry) {
+                                            log.warn("Retrying Supabase upload due to: {}", msg);
+                                        }
+                                        return shouldRetry;
+                                    })
+                                    .doBeforeRetry(signal ->
+                                            log.info("Retry attempt #{} for Supabase upload",
+                                                    signal.totalRetries() + 1))
+                            )
                             .doOnSuccess(url -> log.info("File uploaded successfully: {}", url))
                             .onErrorMap(e -> {
-                                log.error("Failed to upload file: {}", e.getMessage(), e);
+                                log.error("Failed to upload file after retries: {}", e.getMessage(), e);
                                 return CustomException.internalError("Failed to upload file: " + e.getMessage());
                             });
                 });
